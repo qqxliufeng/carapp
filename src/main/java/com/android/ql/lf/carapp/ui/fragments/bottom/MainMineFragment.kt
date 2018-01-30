@@ -1,12 +1,13 @@
 package com.android.ql.lf.carapp.ui.fragments.bottom
 
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.activities.MainActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseFragment
+import com.android.ql.lf.carapp.ui.fragments.user.mine.MineGoodsCollectionFragment
+import com.android.ql.lf.carapp.ui.fragments.user.mine.MineStoreCollectionFragment
 import kotlinx.android.synthetic.main.fragment_main_mine_layout.*
 
 /**
@@ -28,5 +29,11 @@ class MainMineFragment : BaseFragment() {
         val param = mRlMineTitleContainer.layoutParams as ViewGroup.MarginLayoutParams
         param.topMargin = height
         mRlMineTitleContainer.layoutParams = param
+        mLlMainMineStoreContainer.setOnClickListener{
+            FragmentContainerActivity.startFragmentContainerActivity(mContext,"店铺收藏",true,false, MineStoreCollectionFragment::class.java)
+        }
+        mLlMainMineGoodsContainer.setOnClickListener{
+            FragmentContainerActivity.startFragmentContainerActivity(mContext,"商品收藏",true,false,MineGoodsCollectionFragment::class.java)
+        }
     }
 }

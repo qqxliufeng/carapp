@@ -123,6 +123,7 @@
                             android:paddingTop="@dimen/dp_10">
 
                             <LinearLayout
+                                android:id="@+id/mLlMainMineGoodsContainer"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -148,6 +149,7 @@
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/mLlMainMineStoreContainer"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -219,7 +221,7 @@
                         android:drawableTop="@drawable/img_icon_mine_shop_icon"
                         android:gravity="center"
                         android:text="购物订单"
-                        android:textColor="@color/text_deep_dark_color"
+                        android:textColor="#939393"
                         android:textSize="@dimen/sp_14" />
 
                     <TextView
@@ -233,7 +235,7 @@
                         android:drawableTop="@drawable/img_icon_mine_the_wallet_icon"
                         android:gravity="center"
                         android:text="我的钱包"
-                        android:textColor="@color/text_deep_dark_color"
+                        android:textColor="#939393"
                         android:textSize="@dimen/sp_14" />
 
                     <TextView
@@ -247,7 +249,7 @@
                         android:drawableTop="@drawable/img_icon_mine_comment_icon"
                         android:gravity="center"
                         android:text="我的帖子"
-                        android:textColor="@color/text_deep_dark_color"
+                        android:textColor="#939393"
                         android:textSize="@dimen/sp_14" />
 
                     <TextView
@@ -260,10 +262,79 @@
                         android:drawablePadding="@dimen/dp_10"
                         android:drawableTop="@drawable/img_icon_mine_evaluation_icon"
                         android:gravity="center"
-                        android:text="我的足迹"
-                        android:textColor="@color/text_deep_dark_color"
+                        android:text="我的评价"
+                        android:textColor="#939393"
                         android:textSize="@dimen/sp_14" />
                 </LinearLayout>
+
+                <TextView
+                    android:paddingLeft="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_10"
+                    android:background="@drawable/selector_press_bg"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:textColor="#646464"
+                    android:textSize="@dimen/sp_14"
+                    android:drawablePadding="@dimen/dp_10"
+                    android:drawableLeft="@drawable/img_mine_icon_record"
+                    android:drawableRight="@drawable/icon_inter1"
+                    android:layout_height="?actionBarSize"
+                    android:text="个人服务信息编辑"/>
+
+                <TextView
+                    android:paddingLeft="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_10"
+                    android:background="@drawable/selector_press_bg"
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:textColor="#646464"
+                    android:textSize="@dimen/sp_14"
+                    android:drawablePadding="@dimen/dp_10"
+                    android:drawableLeft="@drawable/img_mine_icon_level"
+                    android:drawableRight="@drawable/icon_inter1"
+                    android:layout_height="?actionBarSize"
+                    android:text="我的等级"/>
+                <TextView
+                    android:paddingLeft="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_10"
+                    android:background="@drawable/selector_press_bg"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:textColor="#646464"
+                    android:textSize="@dimen/sp_14"
+                    android:drawablePadding="@dimen/dp_10"
+                    android:drawableLeft="@drawable/img_mine_icon_store"
+                    android:drawableRight="@drawable/icon_inter1"
+                    android:layout_height="?actionBarSize"
+                    android:text="我的店铺"/>
+                <TextView
+                    android:paddingLeft="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_10"
+                    android:background="@drawable/selector_press_bg"
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:textColor="#646464"
+                    android:textSize="@dimen/sp_14"
+                    android:drawablePadding="@dimen/dp_10"
+                    android:drawableLeft="@drawable/img_mine_icon_qrcode"
+                    android:drawableRight="@drawable/icon_inter1"
+                    android:layout_height="?actionBarSize"
+                    android:text="我的邀请码"/>
+                <TextView
+                    android:paddingLeft="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_10"
+                    android:background="@drawable/selector_press_bg"
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:textColor="#646464"
+                    android:textSize="@dimen/sp_14"
+                    android:drawablePadding="@dimen/dp_10"
+                    android:drawableLeft="@drawable/img_mine_icon_file"
+                    android:drawableRight="@drawable/icon_inter1"
+                    android:layout_height="?actionBarSize"
+                    android:text="申请成为商家"/>
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
