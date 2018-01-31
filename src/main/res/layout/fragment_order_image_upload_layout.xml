@@ -17,7 +17,13 @@
         android:text="最多三张"
         android:textColor="@color/text_deep_dark_color" />
 
-    <include layout="@layout/fragment_base_recycler_view_layout" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/mRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
 
 
 </LinearLayout>

@@ -16,6 +16,7 @@ import android.view.MenuInflater
 import android.view.View
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.ui.adapter.OrderImageUpLoadAdapter
+import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -29,7 +30,12 @@ import kotlinx.android.synthetic.main.fragment_order_image_upload_layout.*
  * Created by lf on 18.1.29.
  * @author lf on 18.1.29
  */
-class OrderImageUpLoadFragment : BaseRecyclerViewFragment<Uri>() {
+class OrderImageUpLoadFragment : BaseNetWorkingFragment() {
+
+    private val mArrayList = arrayListOf<ImageBean>()
+    private val mBaseAdapter : BaseQuickAdapter<ImageBean,BaseViewHolder> by lazy {
+        OrderImageUpLoadAdapter(R.layout.adapter_order_image_up_load_item_layout, mArrayList)
+    }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -38,11 +44,7 @@ class OrderImageUpLoadFragment : BaseRecyclerViewFragment<Uri>() {
 
     override fun getLayoutId() = R.layout.fragment_order_image_upload_layout
 
-    override fun createAdapter(): BaseQuickAdapter<Uri, BaseViewHolder> =
-            OrderImageUpLoadAdapter(R.layout.adapter_order_image_up_load_item_layout, mArrayList)
-
     override fun initView(view: View?) {
-        super.initView(view)
         test.setOnClickListener {
             Matisse.from(this)
                     .choose(MimeType.allOf())
@@ -55,35 +57,26 @@ class OrderImageUpLoadFragment : BaseRecyclerViewFragment<Uri>() {
                     .theme(R.style.my_matisse_style)
                     .forResult(0)
         }
-        onRequestEnd(0)
-        setRefreshEnable(false)
-    }
-
-    override fun getLayoutManager(): RecyclerView.LayoutManager {
-        return GridLayoutManager(mContext, 2)
-    }
-
-    override fun getItemDecoration(): RecyclerView.ItemDecoration {
-        val itemDecoration = super.getItemDecoration() as DividerItemDecoration
-        itemDecoration.setDrawable(ColorDrawable(Color.TRANSPARENT))
-        return itemDecoration
+        mArrayList.add(ImageBean(R.drawable.img_icon_add_photo,null))
+        mRecyclerView.adapter = mBaseAdapter
+        mRecyclerView.layoutManager = GridLayoutManager(mContext, 2)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater!!.inflate(R.menu.upload_image_menu, menu)
     }
 
-    override fun onMyItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
-        super.onMyItemClick(adapter, view, position)
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
             val uris = Matisse.obtainResult(data)
-            mBaseAdapter.addData(uris)
-            setLoadEnable(false)
+            uris.forEach {
+                mArrayList.add(0,ImageBean(null,it))
+            }
+            mBaseAdapter.notifyDataSetChanged()
         }
     }
+
+    class ImageBean(var resId:Int?,var uriPath:Uri?)
 
 }
