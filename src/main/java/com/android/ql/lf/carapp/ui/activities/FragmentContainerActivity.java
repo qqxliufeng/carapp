@@ -20,10 +20,8 @@ import com.android.ql.lf.carapp.component.ApiServerModule;
 import com.android.ql.lf.carapp.component.DaggerApiServerComponent;
 import com.android.ql.lf.carapp.present.GetDataFromNetPresent;
 import com.android.ql.lf.carapp.utils.RxBus;
-import com.lzy.imagepicker.bean.ImageItem;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 

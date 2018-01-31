@@ -1,5 +1,9 @@
 package com.android.ql.lf.carapp.ui.fragments.order
 
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.ActivityInfo
+import android.util.Log
 import android.view.View
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
@@ -7,6 +11,11 @@ import com.android.ql.lf.carapp.ui.adapter.OrderListForMineForWaitingWorkAdapter
 import com.android.ql.lf.carapp.ui.fragments.AbstractLazyLoadFragment
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.zhihu.matisse.Matisse
+import com.zhihu.matisse.MimeType
+import com.zhihu.matisse.engine.impl.GlideEngine
+import com.zhihu.matisse.internal.entity.CaptureStrategy
+
 
 /**
  * Created by lf on 18.1.25.
@@ -41,4 +50,5 @@ class OrderListForMineForWaitingWorkFragment : AbstractLazyLoadFragment<String>(
             }
         }
     }
+
 }
