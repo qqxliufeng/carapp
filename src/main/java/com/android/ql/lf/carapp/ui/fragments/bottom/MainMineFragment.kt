@@ -7,6 +7,8 @@ import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.activities.MainActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseFragment
 import com.android.ql.lf.carapp.ui.fragments.user.mine.MineGoodsCollectionFragment
+import com.android.ql.lf.carapp.ui.fragments.user.mine.MineGradeFragment
+import com.android.ql.lf.carapp.ui.fragments.user.mine.MinePersonalServiceEditFragment
 import com.android.ql.lf.carapp.ui.fragments.user.mine.MineStoreCollectionFragment
 import kotlinx.android.synthetic.main.fragment_main_mine_layout.*
 
@@ -34,6 +36,14 @@ class MainMineFragment : BaseFragment() {
         }
         mLlMainMineGoodsContainer.setOnClickListener{
             FragmentContainerActivity.startFragmentContainerActivity(mContext,"商品收藏",true,false,MineGoodsCollectionFragment::class.java)
+        }
+        mSrlMainMineContainer.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
+        mTvMainMineGrade.setOnClickListener {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext,"我的等级",true,false,
+                    MineGradeFragment::class.java)
+        }
+        mTvMainServiceEdit.setOnClickListener {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext,"个人服务信息",true,false,MinePersonalServiceEditFragment::class.java)
         }
     }
 }
