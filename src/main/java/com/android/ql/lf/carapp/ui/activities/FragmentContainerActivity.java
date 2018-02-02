@@ -120,6 +120,7 @@ public class FragmentContainerActivity extends BaseActivity {
 
     @Override
     public void initView() {
+        ll_container.setPadding(0, getStatusHeight(), 0, 0);
         statusBarColor = ContextCompat.getColor(this, R.color.colorPrimary);
         parseExtraInfo();
     }

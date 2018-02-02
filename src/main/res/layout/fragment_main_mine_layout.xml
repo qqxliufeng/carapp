@@ -304,6 +304,7 @@
                         android:textSize="@dimen/sp_14" />
 
                     <TextView
+                        android:id="@+id/mTvMainMineStore"
                         android:layout_width="match_parent"
                         android:layout_height="?actionBarSize"
                         android:layout_marginTop="10dp"

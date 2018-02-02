@@ -6,10 +6,7 @@ import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.activities.MainActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseFragment
-import com.android.ql.lf.carapp.ui.fragments.user.mine.MineGoodsCollectionFragment
-import com.android.ql.lf.carapp.ui.fragments.user.mine.MineGradeFragment
-import com.android.ql.lf.carapp.ui.fragments.user.mine.MinePersonalServiceEditFragment
-import com.android.ql.lf.carapp.ui.fragments.user.mine.MineStoreCollectionFragment
+import com.android.ql.lf.carapp.ui.fragments.user.mine.*
 import kotlinx.android.synthetic.main.fragment_main_mine_layout.*
 
 /**
@@ -31,19 +28,22 @@ class MainMineFragment : BaseFragment() {
         val param = mRlMineTitleContainer.layoutParams as ViewGroup.MarginLayoutParams
         param.topMargin = height
         mRlMineTitleContainer.layoutParams = param
-        mLlMainMineStoreContainer.setOnClickListener{
-            FragmentContainerActivity.startFragmentContainerActivity(mContext,"店铺收藏",true,false, MineStoreCollectionFragment::class.java)
+        mLlMainMineStoreContainer.setOnClickListener {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "店铺收藏", true, false, MineStoreCollectionFragment::class.java)
         }
-        mLlMainMineGoodsContainer.setOnClickListener{
-            FragmentContainerActivity.startFragmentContainerActivity(mContext,"商品收藏",true,false,MineGoodsCollectionFragment::class.java)
+        mLlMainMineGoodsContainer.setOnClickListener {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "商品收藏", true, false, MineGoodsCollectionFragment::class.java)
         }
         mSrlMainMineContainer.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
         mTvMainMineGrade.setOnClickListener {
-            FragmentContainerActivity.startFragmentContainerActivity(mContext,"我的等级",true,false,
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的等级", true, false,
                     MineGradeFragment::class.java)
         }
         mTvMainServiceEdit.setOnClickListener {
-            FragmentContainerActivity.startFragmentContainerActivity(mContext,"个人服务信息",true,false,MinePersonalServiceEditFragment::class.java)
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "个人服务信息", true, false, MinePersonalServiceEditFragment::class.java)
+        }
+        mTvMainMineStore.setOnClickListener {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的店铺", true, false, MineStoreInfoFragment::class.java)
         }
     }
 }
