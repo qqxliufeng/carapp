@@ -45,5 +45,8 @@ class MainMineFragment : BaseFragment() {
         mTvMainMineStore.setOnClickListener {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的店铺", true, false, MineStoreInfoFragment::class.java)
         }
+        mTvMainMineQCode.setOnClickListener {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext,"我的邀请码",true,false,MineQCodeFragment::class.java)
+        }
     }
 }
