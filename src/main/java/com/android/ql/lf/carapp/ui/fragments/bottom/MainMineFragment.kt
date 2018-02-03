@@ -6,6 +6,7 @@ import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.activities.MainActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseFragment
+import com.android.ql.lf.carapp.ui.fragments.user.SettingFragment
 import com.android.ql.lf.carapp.ui.fragments.user.mine.*
 import kotlinx.android.synthetic.main.fragment_main_mine_layout.*
 
@@ -55,6 +56,9 @@ class MainMineFragment : BaseFragment() {
         }
         mLlMainMineFootPrintContainer.setOnClickListener {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的足迹", MineFootPrintFragment::class.java)
+        }
+        mTvMainMineSetting.setOnClickListener {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext,"设置", SettingFragment::class.java)
         }
     }
 }
