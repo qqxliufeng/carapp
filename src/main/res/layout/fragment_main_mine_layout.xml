@@ -8,7 +8,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:background="@color/colorPrimary" />
+        android:background="@drawable/shape_tool_bar_bg" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/mSrlMainMineContainer"
@@ -34,7 +34,7 @@
                     android:paddingRight="@dimen/dp_10"
                     android:text="设置"
                     android:textColor="#fff"
-                    android:textSize="@dimen/sp_16"
+                    android:textSize="18dp"
                     android:textStyle="bold" />
             </RelativeLayout>
 
@@ -58,10 +58,11 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:orientation="vertical">
 
                             <LinearLayout
+                                android:id="@+id/mLlMainMinePersonalInfoContainer"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
@@ -124,13 +125,12 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:orientation="horizontal"
-                                android:paddingBottom="@dimen/dp_10"
                                 android:paddingTop="@dimen/dp_10">
 
                                 <LinearLayout
                                     android:id="@+id/mLlMainMineGoodsContainer"
                                     android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="match_parent"
                                     android:layout_weight="1"
                                     android:orientation="vertical">
 
@@ -156,7 +156,7 @@
                                 <LinearLayout
                                     android:id="@+id/mLlMainMineStoreContainer"
                                     android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="match_parent"
                                     android:layout_weight="1"
                                     android:orientation="vertical">
 
@@ -180,8 +180,9 @@
                                 </LinearLayout>
 
                                 <LinearLayout
+                                    android:id="@+id/mLlMainMineFootPrintContainer"
                                     android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="match_parent"
                                     android:layout_weight="1"
                                     android:orientation="vertical">
 
@@ -230,6 +231,7 @@
                             android:textSize="@dimen/sp_14" />
 
                         <TextView
+                            android:id="@+id/mTvMainMineWallet"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"

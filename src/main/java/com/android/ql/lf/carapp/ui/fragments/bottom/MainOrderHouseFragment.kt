@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
+import com.android.ql.lf.carapp.ui.activities.MainActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseFragment
 import com.android.ql.lf.carapp.ui.fragments.message.MineMessageListFragment
 import com.android.ql.lf.carapp.ui.fragments.order.OrderListForAfterSaleFragment
@@ -35,6 +36,8 @@ class MainOrderHouseFragment : BaseFragment() {
     override fun getLayoutId() = R.layout.fragment_main_order_house_layout
 
     override fun initView(view: View?) {
+        val statusHeight = (mContext as MainActivity).statusHeight
+        mAlOrderHouse.setPadding(0, statusHeight, 0, 0)
         mVpOrderHouse.adapter = OrderHouseViewPagerAdapter(childFragmentManager)
         mTlOrderHouse.setupWithViewPager(mVpOrderHouse)
         val orderCountBadgeView = QBadgeView(mContext)

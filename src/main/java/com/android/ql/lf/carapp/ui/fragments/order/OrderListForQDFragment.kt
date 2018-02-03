@@ -1,5 +1,8 @@
 package com.android.ql.lf.carapp.ui.fragments.order
 
+import android.app.Dialog
+import android.graphics.drawable.ColorDrawable
+import android.support.v4.content.ContextCompat
 import android.view.View
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
@@ -42,7 +45,7 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<String>() {
 
     private fun showOrderNotifyDialog() {
 
-        FragmentContainerActivity.startFragmentContainerActivity(mContext,"登录",true,false,LoginFragment::class.java)
+//        FragmentContainerActivity.startFragmentContainerActivity(mContext,"登录",true,false,LoginFragment::class.java)
 
 //        val dialog = Dialog(mContext)
 //        dialog.setCancelable(true)
@@ -54,5 +57,19 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<String>() {
 //
 //        dialog.setContentView(contentView)
 //        dialog.show()
+
+
+        val dialog = Dialog(mContext)
+        dialog.setCancelable(true)
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.window.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(mContext, android.R.color.transparent)))
+        val contentView = View.inflate(mContext, R.layout.dialog_invite_code_layout, null)
+//        val tv_time_count = contentView.findViewById<TextView>(R.id.mTvOrderNotifyDialogTimeCount)
+//        val spannableString = SpannableString("5s")
+
+        dialog.setContentView(contentView)
+        dialog.show()
+
+
     }
 }

@@ -28,25 +28,33 @@ class MainMineFragment : BaseFragment() {
         val param = mRlMineTitleContainer.layoutParams as ViewGroup.MarginLayoutParams
         param.topMargin = height
         mRlMineTitleContainer.layoutParams = param
+        mSrlMainMineContainer.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
+        mLlMainMinePersonalInfoContainer.setOnClickListener {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "个人信息", MinePersonalInfoFragment::class.java)
+        }
         mLlMainMineStoreContainer.setOnClickListener {
-            FragmentContainerActivity.startFragmentContainerActivity(mContext, "店铺收藏", true, false, MineStoreCollectionFragment::class.java)
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "店铺收藏", MineStoreCollectionFragment::class.java)
         }
         mLlMainMineGoodsContainer.setOnClickListener {
-            FragmentContainerActivity.startFragmentContainerActivity(mContext, "商品收藏", true, false, MineGoodsCollectionFragment::class.java)
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "商品收藏", MineGoodsCollectionFragment::class.java)
         }
-        mSrlMainMineContainer.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
         mTvMainMineGrade.setOnClickListener {
-            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的等级", true, false,
-                    MineGradeFragment::class.java)
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的等级", MineGradeFragment::class.java)
         }
         mTvMainServiceEdit.setOnClickListener {
-            FragmentContainerActivity.startFragmentContainerActivity(mContext, "个人服务信息", true, false, MinePersonalServiceEditFragment::class.java)
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "个人服务信息", MinePersonalServiceEditFragment::class.java)
         }
         mTvMainMineStore.setOnClickListener {
-            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的店铺", true, false, MineStoreInfoFragment::class.java)
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的店铺", MineStoreInfoFragment::class.java)
         }
         mTvMainMineQCode.setOnClickListener {
-            FragmentContainerActivity.startFragmentContainerActivity(mContext,"我的邀请码",true,false,MineQCodeFragment::class.java)
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的邀请码", MineQCodeFragment::class.java)
+        }
+        mTvMainMineWallet.setOnClickListener {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的钱包", MineWalletFragment::class.java)
+        }
+        mLlMainMineFootPrintContainer.setOnClickListener {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的足迹", MineFootPrintFragment::class.java)
         }
     }
 }
