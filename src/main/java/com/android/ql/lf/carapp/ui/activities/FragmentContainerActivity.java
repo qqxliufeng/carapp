@@ -48,6 +48,7 @@ public class FragmentContainerActivity extends BaseActivity {
     GetDataFromNetPresent present;
 
     private int statusBarColor = Color.WHITE;
+    public int actionBarHeight = 0;
 
     public GetDataFromNetPresent getPresent() {
         return present;
@@ -157,7 +158,6 @@ public class FragmentContainerActivity extends BaseActivity {
     }
 
 
-
     public static <T> void startFragmentContainerActivity(Context context, String title, boolean isNetWorking, boolean isHiddenBar, Class<T> clazz) {
         IntentExtraInfo<T> intentExtraInfo = new IntentExtraInfo<>();
         intentExtraInfo.isHiddenToolBar = isHiddenBar;
@@ -167,7 +167,7 @@ public class FragmentContainerActivity extends BaseActivity {
         startFragmentContainerActivity(context, intentExtraInfo);
     }
 
-    public static <T> void startFragmentContainerActivity(Context context, String title,Class<T> clazz) {
+    public static <T> void startFragmentContainerActivity(Context context, String title, Class<T> clazz) {
         IntentExtraInfo<T> intentExtraInfo = new IntentExtraInfo<>();
         intentExtraInfo.isHiddenToolBar = false;
         intentExtraInfo.isNeedNetWorking = true;

@@ -2,12 +2,19 @@ package com.android.ql.lf.carapp.ui.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.android.ql.lf.carapp.ui.activities.BaseActivity;
+
+import org.jetbrains.anko.ScreenSize;
 
 import butterknife.ButterKnife;
 import rx.Subscription;
@@ -51,6 +58,28 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract void initView(View view);
 
+    protected ScreenSize getScreenSize(){
+        ScreenSize screenSize = new ScreenSize();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity)mContext).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        screenSize.width = displayMetrics.widthPixels;
+        screenSize.height = displayMetrics.heightPixels;
+        return screenSize;
+    }
+
+    protected int getStatusBarHeight(){
+        return ((BaseActivity)mContext).getStatusHeight();
+    }
+
+    protected int getActionBarHeight(){
+        TypedValue tv = new TypedValue();
+        int[] attribute = new int[] { android.R.attr.actionBarSize };
+        TypedArray array = mContext.obtainStyledAttributes(tv.resourceId, attribute);
+        int actionBarHeight1 = array.getDimensionPixelSize(0 /* index */, -1 /* default size */);
+        array.recycle();
+        return actionBarHeight1;
+    }
+
 
     public void finish() {
         ((Activity) mContext).finish();
@@ -63,4 +92,11 @@ public abstract class BaseFragment extends Fragment {
         }
         super.onDestroyView();
     }
+
+
+    public static class ScreenSize{
+        public int width;
+        public int height;
+    }
+
 }

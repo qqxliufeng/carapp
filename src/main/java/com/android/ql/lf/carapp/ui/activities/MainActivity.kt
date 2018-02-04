@@ -23,7 +23,7 @@ class MainActivity : BaseActivity() {
         BottomNavigationViewHelper.disableShiftMode(mMainNavigation)
         mMainNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         mMainContent.adapter = MainViewPagerAdapter(supportFragmentManager)
-        mMainContent.offscreenPageLimit = 4
+        mMainContent.offscreenPageLimit = 3
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -36,12 +36,12 @@ class MainActivity : BaseActivity() {
                 mMainContent.currentItem = 1
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_notifications -> {
-                mMainContent.currentItem = 2
-                return@OnNavigationItemSelectedListener true
-            }
+//            R.id.navigation_notifications -> {
+//                mMainContent.currentItem = 2
+//                return@OnNavigationItemSelectedListener true
+//            }
             R.id.navigation_message -> {
-                mMainContent.currentItem = 3
+                mMainContent.currentItem = 2
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -58,17 +58,18 @@ class MainActivity : BaseActivity() {
                 MainCommunityFragment.newInstance()
             }
             2 -> {
-                MainMallFragment.newInstance()
-            }
-            3 -> {
+//                MainMallFragment.newInstance()
                 MainMineFragment.newInstance()
             }
+            /*3 -> {
+                MainMineFragment.newInstance()
+            }*/
             else -> {
                 null
             }
         }
 
-        override fun getCount() = 4
+        override fun getCount() = 3
     }
 
 }

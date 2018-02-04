@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
@@ -27,7 +28,11 @@ class MineWalletFragment : BaseRecyclerViewFragment<String>() {
 
     override fun initView(view: View?) {
         super.initView(view)
-        mBaseAdapter.addHeaderView(View.inflate(mContext, R.layout.layout_top_mine_wallet_layout, null))
+        val topView = View.inflate(mContext, R.layout.layout_top_mine_wallet_layout, null)
+        topView.findViewById<TextView>(R.id.mTvMineWalletEnsureMoney).setOnClickListener {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext,"保证金交纳",MineEnsureMoneyFragment::class.java)
+        }
+        mBaseAdapter.addHeaderView(topView)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
