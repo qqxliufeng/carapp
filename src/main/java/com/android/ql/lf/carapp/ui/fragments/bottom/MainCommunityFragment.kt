@@ -7,13 +7,19 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import com.android.ql.lf.carapp.R
+import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.activities.MainActivity
+import com.android.ql.lf.carapp.ui.adapter.ArticleListAdapter
 import com.android.ql.lf.carapp.ui.adapter.OrderListForMineForWaitingWorkAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
+import com.android.ql.lf.carapp.ui.fragments.community.ArticleInfoFragment
+import com.android.ql.lf.carapp.ui.fragments.community.ArticleListFragment
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.sunfusheng.marqueeview.MarqueeView
 import com.youth.banner.BannerConfig
 import com.youth.banner.loader.ImageLoader
@@ -34,7 +40,7 @@ class MainCommunityFragment : BaseRecyclerViewFragment<String>() {
     }
 
     private val topList = arrayListOf<Int>()
-    private lateinit var topMarqueeView:MarqueeView
+    private lateinit var topMarqueeView: MarqueeView
 
     override fun getLayoutId() = R.layout.fragment_main_community_layout
 
@@ -62,6 +68,15 @@ class MainCommunityFragment : BaseRecyclerViewFragment<String>() {
         topMarqueeView = topView.findViewById<MarqueeView>(R.id.mMvMainCommunityTopContainer)
         topRecyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
         topRecyclerView.adapter = TopRecyclerViewAdapter(R.layout.layout_main_community_top_item_layout, topList)
+        topRecyclerView.addOnItemTouchListener(object : OnItemClickListener() {
+            override fun onSimpleItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
+                FragmentContainerActivity.startFragmentContainerActivity(mContext, "文章详情", ArticleInfoFragment::class.java)
+            }
+        })
+
+        topView.findViewById<TextView>(R.id.mTvMainCommunityTopMoreArticle).setOnClickListener {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "所有发布", ArticleListFragment::class.java)
+        }
 
         val info = ArrayList<String>()
         info.add("1. 大家好，我是孙福生。")

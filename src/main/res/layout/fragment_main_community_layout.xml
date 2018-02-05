@@ -69,6 +69,7 @@
             android:layout_marginBottom="20dp"
             android:layout_marginRight="20dp"
             android:clickable="true"
-            android:src="@drawable/img_edit_icon" />
+            android:src="@drawable/img_edit_icon"
+            app:layout_behavior="com.android.ql.lf.carapp.ui.views.FloatingBarBehavior" />
     </android.support.design.widget.CoordinatorLayout>
 </LinearLayout>

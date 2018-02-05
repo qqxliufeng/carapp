@@ -8,21 +8,7 @@
         android:layout_height="match_parent"
         android:background="#F5F5F5"
         android:orientation="vertical">
-        <!--<TextView
-            android:id="@+id/mTvPersonalInfoResetPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_10"
-            android:background="@drawable/selector_press_bg"
-            android:drawableRight="@drawable/icon_inter"
-            android:gravity="center_vertical"
-            android:text="修改密码"
-            android:paddingBottom="20dp"
-            android:paddingLeft="@dimen/dp_10"
-            android:paddingRight="@dimen/dp_10"
-            android:paddingTop="20dp"
-            android:textColor="#343434"
-            android:textSize="14sp" />-->
+
         <RelativeLayout
             android:id="@+id/mRlVersionUpContainer"
             android:layout_width="match_parent"
@@ -60,11 +46,11 @@
                 android:layout_marginRight="@dimen/dp_10"
                 android:layout_toLeftOf="@+id/mVersionName"
                 android:background="@drawable/shape_tv_bg11"
-                android:textColor="#fff"
+                android:gravity="center"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:gravity="center"
-                android:text="new" />
+                android:text="new"
+                android:textColor="#fff" />
 
         </RelativeLayout>
 
@@ -92,7 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:text="20.0M"
+                android:text="0M"
                 android:textColor="#909090"
                 android:textSize="14sp" />
         </RelativeLayout>
@@ -105,13 +91,29 @@
             android:background="@drawable/selector_press_bg"
             android:drawableRight="@drawable/icon_inter"
             android:gravity="center_vertical"
+            android:paddingBottom="20dp"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_10"
+            android:paddingTop="20dp"
+            android:text="修改密码"
+            android:textColor="#343434"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:background="@drawable/selector_press_bg"
+            android:drawableRight="@drawable/icon_inter"
+            android:gravity="center_vertical"
+            android:paddingBottom="20dp"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_10"
+            android:paddingTop="20dp"
             android:text="关于我们"
-            android:paddingBottom="20dp"
-            android:paddingLeft="@dimen/dp_10"
-            android:paddingRight="@dimen/dp_10"
-            android:paddingTop="20dp"
             android:textColor="#343434"
             android:textSize="14sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -119,13 +121,14 @@
             android:background="@drawable/selector_press_bg"
             android:drawableRight="@drawable/icon_inter"
             android:gravity="center_vertical"
+            android:paddingBottom="20dp"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_10"
+            android:paddingTop="20dp"
             android:text="使用指南"
-            android:paddingBottom="20dp"
-            android:paddingLeft="@dimen/dp_10"
-            android:paddingRight="@dimen/dp_10"
-            android:paddingTop="20dp"
             android:textColor="#343434"
             android:textSize="14sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -133,11 +136,11 @@
             android:background="@drawable/selector_press_bg"
             android:drawableRight="@drawable/icon_inter"
             android:gravity="center_vertical"
-            android:text="用户协议"
             android:paddingBottom="20dp"
             android:paddingLeft="@dimen/dp_10"
             android:paddingRight="@dimen/dp_10"
             android:paddingTop="20dp"
+            android:text="用户协议"
             android:textColor="#343434"
             android:textSize="14sp" />
     </LinearLayout>

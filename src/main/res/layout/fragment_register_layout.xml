@@ -142,13 +142,10 @@
     </RelativeLayout>
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
+        style="@style/style_button1"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:background="@drawable/shape_bt_bg1"
-        android:text="注册"
-        android:textColor="#fff" />
+        android:text="注册"/>
 
     <TextView
         android:layout_width="wrap_content"

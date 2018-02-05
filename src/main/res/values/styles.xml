@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -8,7 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppFragmentContainerTheme" parent="AppTheme"/>
+    <style name="AppFragmentContainerTheme" parent="AppTheme" />
 
     <style name="my_matisse_style" parent="Matisse.Zhihu">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -25,6 +25,16 @@
         <item name="android:textColor">#fff</item>
         <item name="android:layout_gravity">bottom</item>
         <item name="android:textSize">@dimen/sp_16</item>
+    </style>
+
+    <style name="CropImageTheme" parent="AppTheme" tools:ingore="NewApi">
+        <item name="cropImageStyle">@style/Widget.CropImageView</item>
+    </style>
+
+    <style name="Widget.CropImageView" parent="android:Widget">
+        <item name="showThirds">true</item>
+        <item name="showCircle">true</item>
+        <item name="showHandles">always</item>
     </style>
 
 </resources>

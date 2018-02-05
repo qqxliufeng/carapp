@@ -19,6 +19,7 @@ public class Constants {
     public static final String BASE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String APP_PATH = BASE_PATH + "/mzdj/";
     public static final String IMAGE_PATH = APP_PATH + "/image/";
+    public static final String FILE_PROVIDE_PATH = "com.android.ql.lf.carapp.fileProvider";
 
 
     private static final String APP_TOKEN = APP_ID + APP_SEC;

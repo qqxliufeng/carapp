@@ -12,6 +12,7 @@ import android.view.View
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.ui.adapter.OrderImageUpLoadAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
+import com.android.ql.lf.carapp.utils.Constants
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.listener.OnItemClickListener
@@ -58,7 +59,7 @@ class OrderImageUpLoadFragment : BaseNetWorkingFragment() {
                                 .imageEngine(GlideEngine())
                                 .capture(true)
                                 .maxSelectable(3 - (mBaseAdapter.itemCount - 1))
-                                .captureStrategy(CaptureStrategy(true, "com.android.ql.lf.carapp.fileProvider"))
+                                .captureStrategy(CaptureStrategy(true, Constants.FILE_PROVIDE_PATH))
                                 .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
                                 .thumbnailScale(0.85f)
                                 .theme(R.style.my_matisse_style)

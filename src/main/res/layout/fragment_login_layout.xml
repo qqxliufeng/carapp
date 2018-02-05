@@ -76,22 +76,19 @@
         android:background="#eee" />
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
+        style="@style/style_button1"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/shape_bt_bg1"
-        android:text="登录"
-        android:textColor="#fff" />
+        android:text="登录" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/dp_10"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:paddingTop="@dimen/dp_10"
-        android:paddingBottom="@dimen/dp_10">
+        android:paddingTop="@dimen/dp_10">
 
         <TextView
             android:id="@+id/mTvLoginRegister"
