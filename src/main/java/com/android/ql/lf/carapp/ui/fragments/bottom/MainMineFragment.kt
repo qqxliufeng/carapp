@@ -60,5 +60,8 @@ class MainMineFragment : BaseFragment() {
         mTvMainMineSetting.setOnClickListener {
             FragmentContainerActivity.startFragmentContainerActivity(mContext,"设置", SettingFragment::class.java)
         }
+        mTvMainMineArticle.setOnClickListener {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext,"我的帖子",MineArticleFragment::class.java)
+        }
     }
 }
