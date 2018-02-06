@@ -2,6 +2,8 @@ package com.android.ql.lf.carapp.ui.fragments.bottom
 
 import android.content.Context
 import android.graphics.Color
+import android.support.v4.content.ContextCompat
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -16,6 +18,7 @@ import com.android.ql.lf.carapp.ui.adapter.OrderListForMineForWaitingWorkAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
 import com.android.ql.lf.carapp.ui.fragments.community.ArticleInfoFragment
 import com.android.ql.lf.carapp.ui.fragments.community.ArticleListFragment
+import com.android.ql.lf.carapp.ui.fragments.community.WriteArticleFragment
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -32,14 +35,13 @@ import kotlinx.android.synthetic.main.fragment_main_community_layout.*
  */
 class MainCommunityFragment : BaseRecyclerViewFragment<String>() {
 
-
     companion object {
         fun newInstance(): MainCommunityFragment {
             return MainCommunityFragment()
         }
     }
 
-    private val topList = arrayListOf<Int>()
+    private val topList = arrayListOf(R.drawable.test_pic1, R.drawable.test_pic2, R.drawable.test_pic3, R.drawable.test_pic4, R.drawable.test_pic5)
     private lateinit var topMarqueeView: MarqueeView
 
     override fun getLayoutId() = R.layout.fragment_main_community_layout
@@ -50,19 +52,21 @@ class MainCommunityFragment : BaseRecyclerViewFragment<String>() {
         val param = mRlCommunityTitleContainer.layoutParams as ViewGroup.MarginLayoutParams
         param.topMargin = height
         mRlCommunityTitleContainer.layoutParams = param
+
+        mFabWriteNote.setOnClickListener {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "发布帖子", WriteArticleFragment::class.java)
+        }
         mBannerMainCommunity.setImageLoader(object : ImageLoader() {
             override fun displayImage(context: Context?, path: Any?, imageView: ImageView?) {
                 Glide.with(context).load(path as Int).into(imageView)
             }
         })
         mBannerMainCommunity
-                .setImages(arrayListOf(R.drawable.test_pic01, R.drawable.test_pic01, R.drawable.test_pic01, R.drawable.test_pic01))
+                .setImages(arrayListOf(R.drawable.test_banner))
                 .setDelayTime(3000)
                 .setBannerStyle(BannerConfig.CIRCLE_INDICATOR)
                 .start()
-        (0 until 10).forEach {
-            topList.add(R.drawable.test_pic01)
-        }
+
         val topView = View.inflate(mContext, R.layout.layout_main_community_top_layout, null)
         val topRecyclerView = topView.findViewById<RecyclerView>(R.id.mRvMainCommunityTopContainer)
         topMarqueeView = topView.findViewById<MarqueeView>(R.id.mMvMainCommunityTopContainer)
@@ -73,29 +77,32 @@ class MainCommunityFragment : BaseRecyclerViewFragment<String>() {
                 FragmentContainerActivity.startFragmentContainerActivity(mContext, "文章详情", ArticleInfoFragment::class.java)
             }
         })
-
         topView.findViewById<TextView>(R.id.mTvMainCommunityTopMoreArticle).setOnClickListener {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "所有发布", ArticleListFragment::class.java)
         }
-
         val info = ArrayList<String>()
-        info.add("1. 大家好，我是孙福生。")
-        info.add("2. 欢迎大家关注我哦！")
-        info.add("3. GitHub帐号：sfsheng0322")
-        info.add("4. 新浪微博：孙福生微博")
-        info.add("5. 个人博客：sunfusheng.com")
-        info.add("6. 微信公众号：孙福生")
+        info.add("大家好，我是孙福生。")
+        info.add("欢迎大家关注我哦！")
+        info.add("GitHub帐号：sfsheng0322")
+        info.add("新浪微博：孙福生微博")
+        info.add("个人博客：sunfusheng.com")
+        info.add("微信公众号：孙福生")
         topMarqueeView.startWithList(info)
-
         mBaseAdapter.addHeaderView(topView)
     }
 
     override fun createAdapter(): BaseQuickAdapter<String, BaseViewHolder> =
-            OrderListForMineForWaitingWorkAdapter(R.layout.adapter_order_list_for_mine_for_having_calculate_item_layout, mArrayList)
+            ArticleListAdapter(R.layout.adapter_article_item_layout, mArrayList)
 
     override fun onRefresh() {
         super.onRefresh()
         testAdd("")
+    }
+
+    override fun getItemDecoration(): RecyclerView.ItemDecoration {
+        val itemDecoration = super.getItemDecoration() as DividerItemDecoration
+        itemDecoration.setDrawable(ContextCompat.getDrawable(mContext, R.drawable.recycler_view_height_divider))
+        return itemDecoration
     }
 
     override fun onResume() {
@@ -108,6 +115,11 @@ class MainCommunityFragment : BaseRecyclerViewFragment<String>() {
         super.onStop()
         mBannerMainCommunity.stopAutoPlay()
         topMarqueeView.stopFlipping()
+    }
+
+    override fun onMyItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
+        super.onMyItemClick(adapter, view, position)
+        FragmentContainerActivity.startFragmentContainerActivity(mContext, "详情", ArticleInfoFragment::class.java)
     }
 
     class TopRecyclerViewAdapter(layoutId: Int, list: ArrayList<Int>) : BaseQuickAdapter<Int, BaseViewHolder>(layoutId, list) {

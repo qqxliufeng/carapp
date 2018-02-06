@@ -8,36 +8,40 @@ import android.widget.Button
 import android.widget.EditText
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
+import com.android.ql.lf.carapp.ui.adapter.ArticleCommentListAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
+import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
 import com.android.ql.lf.carapp.ui.views.PopupWindowDialog
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.fragment_article_info_layout.*
 
 /**
  * Created by lf on 18.2.5.
  * @author lf on 18.2.5
  */
-class ArticleInfoFragment : BaseNetWorkingFragment() {
+class ArticleInfoFragment : BaseRecyclerViewFragment<String>() {
 
     override fun getLayoutId() = R.layout.fragment_article_info_layout
 
+    override fun createAdapter(): BaseQuickAdapter<String, BaseViewHolder> =
+            ArticleCommentListAdapter(R.layout.adapter_article_comment_item_layout,mArrayList)
+
     override fun initView(view: View?) {
+        super.initView(view)
+        mBaseAdapter.addHeaderView(View.inflate(mContext,R.layout.layout_article_info_top_layout,null))
+        mBaseAdapter.setHeaderAndEmpty(true)
+        mBaseAdapter.setEmptyView(emptyLayoutId)
+//        emptyMessage = emptyMessage
+        mBaseAdapter.notifyDataSetChanged()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         (mContext as FragmentContainerActivity).window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-//        SoftKeyBoardListener.setListener(mContext as FragmentContainerActivity, object : SoftKeyBoardListener.OnSoftKeyBoardChangeListener {
-//            override fun keyBoardHide(height: Int) {
-//            }
-//
-//            override fun keyBoardShow(height: Int) {
-//            }
-//        })
-
-        mEtTest.setOnClickListener {
+        mTvArticleInfoReply.setOnClickListener {
             showReplyDialog()
         }
-
     }
 
     private fun showReplyDialog() {
