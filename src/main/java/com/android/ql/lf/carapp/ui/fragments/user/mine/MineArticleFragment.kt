@@ -8,11 +8,7 @@ import com.android.ql.lf.carapp.ui.fragments.BaseFragment
 import kotlinx.android.synthetic.main.fragment_mine_article_layout.*
 import org.jetbrains.anko.bundleOf
 import android.widget.LinearLayout
-import android.opengl.ETC1.getWidth
 import android.util.TypedValue
-import android.widget.TextView
-import java.lang.reflect.AccessibleObject.setAccessible
-import java.lang.reflect.AccessibleObject.setAccessible
 import android.support.design.widget.TabLayout
 import java.lang.reflect.Field
 
@@ -20,10 +16,10 @@ import java.lang.reflect.Field
 /**
  * Created by liufeng on 2018/2/5.
  */
-class MineArticleFragment :BaseFragment(){
+class MineArticleFragment : BaseFragment() {
 
     companion object {
-        val TITLES = listOf("发帖","回帖")
+        val TITLES = listOf("发帖", "回帖")
     }
 
     override fun getLayoutId() = R.layout.fragment_mine_article_layout
@@ -32,7 +28,7 @@ class MineArticleFragment :BaseFragment(){
         mVpMineArticleContainer.adapter = MineArticleAdapter(childFragmentManager)
         mTlMineArticleTitle.setupWithViewPager(mVpMineArticleContainer)
         mTlMineArticleTitle.post {
-            setIndicator(mTlMineArticleTitle,60,60)
+            setIndicator(mTlMineArticleTitle, 60, 60)
         }
     }
 
@@ -67,9 +63,19 @@ class MineArticleFragment :BaseFragment(){
         }
     }
 
-    class MineArticleAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager){
+    class MineArticleAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
 
-        override fun getItem(position: Int) = MineArticleItemFragment.newInstance(bundleOf(Pair("type",position)))
+        override fun getItem(position: Int) = when (position) {
+            0 -> {
+                MineArticleWriteItemFragment.newInstance()
+            }
+            1 -> {
+                MineArticleReplyItemFragment.newInstance()
+            }
+            else -> {
+                null
+            }
+        }
 
         override fun getCount() = TITLES.size
 

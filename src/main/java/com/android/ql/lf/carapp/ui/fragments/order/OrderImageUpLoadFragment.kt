@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.net.Uri
 import android.support.v7.widget.GridLayoutManager
 import android.view.Menu
 import android.view.MenuInflater
@@ -56,7 +55,7 @@ class OrderImageUpLoadFragment : BaseNetWorkingFragment() {
                 if (item != null) {
                     if (item.resId != null) {
                         Matisse.from(this@OrderImageUpLoadFragment)
-                                .choose(MimeType.ofAll())
+                                .choose(MimeType.ofImage())
                                 .imageEngine(GlideEngine())
                                 .capture(true)
                                 .maxSelectable(3 - (mBaseAdapter.itemCount - 1))
