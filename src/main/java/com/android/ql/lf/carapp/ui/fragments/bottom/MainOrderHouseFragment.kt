@@ -40,6 +40,9 @@ class MainOrderHouseFragment : BaseFragment() {
         mAlOrderHouse.setPadding(0, statusHeight, 0, 0)
         mVpOrderHouse.adapter = OrderHouseViewPagerAdapter(childFragmentManager)
         mTlOrderHouse.setupWithViewPager(mVpOrderHouse)
+        mIvMainOrderHouseCount.setOnClickListener {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "全部订单", OrderListForQDFragment::class.java)
+        }
         val orderCountBadgeView = QBadgeView(mContext)
         orderCountBadgeView.badgeNumber = 455
         val orderCountBadge = orderCountBadgeView.bindTarget(mIvMainOrderHouseCount)

@@ -1,6 +1,7 @@
 package com.android.ql.lf.carapp.utils;
 
 import android.os.Environment;
+import android.text.TextUtils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -13,19 +14,23 @@ import java.util.List;
 public class Constants {
     public static final String BASE_IP = "http://tshop.sdqlweb.com/";
 
-    private static final String APP_ID = "shop123";
+    private static final String APP_ID = "wrjt123";
     private static final String APP_SEC = "37b082a279e3b7a9403a16b4bb15073b";
 
     public static final String BASE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
-    public static final String APP_PATH = BASE_PATH + "/mzdj/";
+    public static final String APP_PATH = BASE_PATH + "/wrjt/";
     public static final String IMAGE_PATH = APP_PATH + "/image/";
     public static final String FILE_PROVIDE_PATH = "com.android.ql.lf.carapp.fileProvider";
 
 
     private static final String APP_TOKEN = APP_ID + APP_SEC;
+    private static String md5Token = null;
 
     public static String md5Token() {
         try {
+            if (!TextUtils.isEmpty(md5Token)) {
+                return md5Token;
+            }
             MessageDigest digest = MessageDigest.getInstance("md5");
             byte[] bs = digest.digest(APP_TOKEN.getBytes());
             String hexString = "";
@@ -37,12 +42,10 @@ public class Constants {
                     hexString = hexString + Integer.toHexString(temp);
                 }
             }
-            return hexString;
+            return md5Token = hexString;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
         return "";
     }
-
-
 }

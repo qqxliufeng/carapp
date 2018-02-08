@@ -339,6 +339,7 @@
                         android:textSize="@dimen/sp_14" />
 
                     <TextView
+                        android:id="@+id/mTvMainMineApplyMaster"
                         android:layout_width="match_parent"
                         android:layout_height="?actionBarSize"
                         android:background="@drawable/selector_press_bg"

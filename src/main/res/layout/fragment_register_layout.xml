@@ -16,18 +16,22 @@
         android:padding="@dimen/dp_10">
 
         <EditText
+            android:id="@+id/mEtRegisterPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
             android:drawableLeft="@drawable/img_icon_phone"
             android:drawablePadding="@dimen/dp_10"
             android:hint="请输入手机号"
+            android:inputType="phone"
             android:padding="@dimen/dp_10"
             android:textSize="@dimen/sp_14" />
 
         <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
+            android:id="@+id/mIvRegisterClearPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_10"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dp_10"
@@ -47,12 +51,14 @@
         android:padding="@dimen/dp_10">
 
         <EditText
+            android:id="@+id/mEtRegisterCode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
             android:drawableLeft="@drawable/img_icon_validation"
             android:drawablePadding="@dimen/dp_10"
             android:hint="请输入验证码"
+            android:inputType="number"
             android:padding="@dimen/dp_10"
             android:textSize="@dimen/sp_14" />
 
@@ -91,18 +97,22 @@
         android:padding="@dimen/dp_10">
 
         <EditText
+            android:id="@+id/mEtRegisterPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
             android:drawableLeft="@drawable/img_icon_lock"
             android:drawablePadding="@dimen/dp_10"
             android:hint="请输入密码"
+            android:inputType="textPassword"
             android:padding="@dimen/dp_10"
             android:textSize="@dimen/sp_14" />
 
         <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
+            android:id="@+id/mIvRegisterClearPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_10"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dp_10"
@@ -129,6 +139,7 @@
             android:id="@+id/mCbRegisterProtocol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="我同意"
             android:textColor="#9C9C9C" />
 
@@ -142,10 +153,11 @@
     </RelativeLayout>
 
     <Button
+        android:id="@+id/mBtRegister"
         style="@style/style_button1"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:text="注册"/>
+        android:text="注册" />
 
     <TextView
         android:layout_width="wrap_content"

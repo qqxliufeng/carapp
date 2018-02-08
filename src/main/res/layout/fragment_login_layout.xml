@@ -17,6 +17,7 @@
         android:padding="@dimen/dp_10">
 
         <EditText
+            android:id="@+id/mEtLoginName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
@@ -27,8 +28,10 @@
             android:textSize="@dimen/sp_14" />
 
         <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
+            android:id="@+id/mIvLoginClearName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_10"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dp_10"
@@ -49,18 +52,22 @@
         android:padding="@dimen/dp_10">
 
         <EditText
+            android:id="@+id/mEtLoginPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
             android:drawableLeft="@drawable/img_icon_lock"
             android:drawablePadding="@dimen/dp_10"
             android:hint="请输入密码"
+            android:inputType="textPassword"
             android:padding="@dimen/dp_10"
             android:textSize="@dimen/sp_14" />
 
         <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
+            android:id="@+id/mIvLoginClearPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_10"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dp_10"
@@ -76,6 +83,7 @@
         android:background="#eee" />
 
     <Button
+        android:id="@+id/mBtLogin"
         style="@style/style_button1"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
@@ -145,12 +153,14 @@
         android:layout_marginTop="@dimen/dp_10">
 
         <ImageView
+            android:id="@+id/mIvQQLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="100dp"
             android:src="@drawable/img_login_qq" />
 
         <ImageView
+            android:id="@+id/mIvWXLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
