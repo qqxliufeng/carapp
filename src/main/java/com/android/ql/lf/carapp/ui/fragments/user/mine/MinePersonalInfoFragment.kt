@@ -16,6 +16,7 @@ import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.utils.Constants
 import com.android.ql.lf.carapp.utils.GlideManager
 import com.android.ql.lf.carapp.utils.ImageFactory
+import com.android.ql.lf.carapp.utils.RequestParamsHelper
 import com.soundcloud.android.crop.Crop
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
@@ -46,11 +47,11 @@ class MinePersonalInfoFragment : BaseNetWorkingFragment() {
             builder.setTitle("修改昵称")
             builder.setNegativeButton("取消", null)
             builder.setPositiveButton("确定") { _, _ ->
-
             }
             val contentView = View.inflate(mContext, R.layout.layout_edit_personal_content_layout, null)
             val content = contentView.findViewById<EditText>(R.id.mEtEditPersonalInfo)
             content.setText(UserInfo.getInstance().memberName)
+            content.setSelection(UserInfo.getInstance().memberName.length)
             builder.setView(contentView)
             builder.create().show()
         }

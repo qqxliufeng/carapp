@@ -28,7 +28,7 @@ public class UserInfo {
 
     private String memberId;
     private String memberPhone;
-    private String memberName;
+    private String memberName = "";
     private String memberPic;
 
     public String getMemberId() {
