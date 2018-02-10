@@ -72,8 +72,9 @@
                                 android:orientation="horizontal">
 
                                 <ImageView
-                                    android:layout_width="60dp"
-                                    android:layout_height="60dp"
+                                    android:id="@+id/mIvMainMineFace"
+                                    android:layout_width="55dp"
+                                    android:layout_height="55dp"
                                     android:src="@drawable/img_default_mine_icon" />
 
                                 <LinearLayout
@@ -90,9 +91,10 @@
                                         android:orientation="horizontal">
 
                                         <TextView
+                                            android:id="@+id/mTvMainMineName"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="王大宝"
+                                            android:text="登录/注册"
                                             android:textColor="@color/text_deep_dark_color"
                                             android:textSize="@dimen/sp_16" />
 
@@ -106,10 +108,11 @@
                                     </LinearLayout>
 
                                     <TextView
+                                        android:id="@+id/mTvMainMinePhone"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="5dp"
-                                        android:text="158****1234"
+                                        android:text="暂无"
                                         android:textColor="#B2B2B2"
                                         android:textSize="@dimen/sp_14" />
                                 </LinearLayout>

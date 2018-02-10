@@ -50,6 +50,7 @@ public class FragmentContainerActivity extends BaseActivity {
     private int statusBarColor = Color.WHITE;
     public int actionBarHeight = 0;
 
+
     public GetDataFromNetPresent getPresent() {
         return present;
     }
@@ -157,7 +158,6 @@ public class FragmentContainerActivity extends BaseActivity {
         context.startActivity(intent);
     }
 
-
     public static <T> void startFragmentContainerActivity(Context context, String title, boolean isNetWorking, boolean isHiddenBar, Class<T> clazz) {
         IntentExtraInfo<T> intentExtraInfo = new IntentExtraInfo<>();
         intentExtraInfo.isHiddenToolBar = isHiddenBar;
@@ -186,6 +186,10 @@ public class FragmentContainerActivity extends BaseActivity {
         startFragmentContainerActivity(context, intentExtraInfo);
     }
 
+    public static IntentExtraInfo from(Context context) {
+        return new IntentExtraInfo(context);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -206,13 +210,13 @@ public class FragmentContainerActivity extends BaseActivity {
 
     public static class IntentExtraInfo<T> implements Parcelable {
 
-        private int fragmentId = 0x0;
+        private Context context = null;
         private Bundle extraBundle = null;
         private String title = "";
         private boolean isNeedNetWorking = false;
         private boolean isHiddenToolBar = false;
 
-        private Class<T> clazz;
+        private Class<T> clazz = null;
 
         public Class<T> getClazz() {
             return clazz;
@@ -220,15 +224,6 @@ public class FragmentContainerActivity extends BaseActivity {
 
         public IntentExtraInfo setClazz(Class<T> clazz) {
             this.clazz = clazz;
-            return this;
-        }
-
-        public int getFragmentId() {
-            return fragmentId;
-        }
-
-        public IntentExtraInfo setFragmentId(int fragmentId) {
-            this.fragmentId = fragmentId;
             return this;
         }
 
@@ -268,7 +263,23 @@ public class FragmentContainerActivity extends BaseActivity {
             return this;
         }
 
+        public IntentExtraInfo(Context context) {
+            this.context = context;
+        }
+
         public IntentExtraInfo() {
+        }
+
+        public void start() {
+            if (context == null) {
+                throw new NullPointerException("Context is null");
+            }
+            if (clazz == null) {
+                throw new NullPointerException("clazz is null");
+            }
+            Intent intent = new Intent(context, FragmentContainerActivity.class);
+            intent.putExtra(FragmentContainerActivity.EXTRA_INFO_FLAG, this);
+            context.startActivity(intent);
         }
 
         @Override
@@ -278,7 +289,6 @@ public class FragmentContainerActivity extends BaseActivity {
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
-            dest.writeInt(this.fragmentId);
             dest.writeBundle(this.extraBundle);
             dest.writeString(this.title);
             dest.writeByte(this.isNeedNetWorking ? (byte) 1 : (byte) 0);
@@ -287,7 +297,6 @@ public class FragmentContainerActivity extends BaseActivity {
         }
 
         protected IntentExtraInfo(Parcel in) {
-            this.fragmentId = in.readInt();
             this.extraBundle = in.readBundle();
             this.title = in.readString();
             this.isNeedNetWorking = in.readByte() != 0;

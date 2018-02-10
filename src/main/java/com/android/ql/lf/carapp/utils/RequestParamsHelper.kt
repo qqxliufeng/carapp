@@ -54,7 +54,7 @@ class RequestParamsHelper {
 
         fun getLoginParams(tel: String = "", pw: String = ""): ApiParams {
             val params = getBaseParams()
-            params.addParam("tel", tel).addParam("pw", pw)
+            params.addParam("tel", tel).addParam("pw", pw).addParam("stoken", "1")
             return params
         }
 

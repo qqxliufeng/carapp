@@ -14,7 +14,7 @@ import java.util.List;
 public class Constants {
     public static final String BASE_IP = "http://tshop.sdqlweb.com/";
 
-    private static final String APP_ID = "wrjt123";
+    private static final String APP_ID = "shop123";
     private static final String APP_SEC = "37b082a279e3b7a9403a16b4bb15073b";
 
     public static final String BASE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();

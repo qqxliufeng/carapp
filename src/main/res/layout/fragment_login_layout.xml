@@ -24,6 +24,8 @@
             android:drawableLeft="@drawable/img_icon_phone"
             android:drawablePadding="@dimen/dp_10"
             android:hint="请输入手机号"
+            android:inputType="phone"
+            android:maxLength="11"
             android:padding="@dimen/dp_10"
             android:textSize="@dimen/sp_14" />
 
@@ -31,10 +33,10 @@
             android:id="@+id/mIvLoginClearName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dp_10"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dp_10"
+            android:padding="@dimen/dp_10"
             android:src="@drawable/img_icon_delete" />
 
     </RelativeLayout>
@@ -67,10 +69,10 @@
             android:id="@+id/mIvLoginClearPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dp_10"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dp_10"
+            android:padding="@dimen/dp_10"
             android:src="@drawable/img_icon_delete" />
 
     </RelativeLayout>

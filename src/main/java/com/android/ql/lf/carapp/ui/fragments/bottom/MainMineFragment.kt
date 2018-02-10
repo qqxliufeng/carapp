@@ -4,12 +4,15 @@ import android.app.Fragment
 import android.view.View
 import android.view.ViewGroup
 import com.android.ql.lf.carapp.R
+import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.activities.MainActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseFragment
 import com.android.ql.lf.carapp.ui.fragments.user.LoginFragment
 import com.android.ql.lf.carapp.ui.fragments.user.SettingFragment
 import com.android.ql.lf.carapp.ui.fragments.user.mine.*
+import com.android.ql.lf.carapp.utils.GlideManager
+import com.android.ql.lf.carapp.utils.RxBus
 import kotlinx.android.synthetic.main.fragment_main_mine_layout.*
 
 /**
@@ -32,8 +35,22 @@ class MainMineFragment : BaseFragment() {
         param.topMargin = height
         mRlMineTitleContainer.layoutParams = param
         mSrlMainMineContainer.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
+
+        //登录成功，刷新界面
+        RxBus.getDefault().toObservable(UserInfo::class.java).subscribe {
+            GlideManager.loadFaceCircleImage(mContext, it.memberPic, mIvMainMineFace)
+            mTvMainMineName.text = it.memberName
+            mTvMainMinePhone.text = it.memberPhone.let {
+                it.substring(0, 3) + "****" + it.substring(7, it.length)
+            }
+        }
+
         mLlMainMinePersonalInfoContainer.setOnClickListener {
-            FragmentContainerActivity.startFragmentContainerActivity(mContext, "个人信息", LoginFragment::class.java)
+            if (UserInfo.getInstance().isLogin) {
+                FragmentContainerActivity.from(mContext).setClazz(MinePersonalInfoFragment::class.java).setTitle("个人中心").start()
+            } else {
+                FragmentContainerActivity.from(mContext).setClazz(LoginFragment::class.java).setTitle("登录").setNeedNetWorking(true).start()
+            }
         }
         mLlMainMineStoreContainer.setOnClickListener {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "店铺收藏", MineStoreCollectionFragment::class.java)

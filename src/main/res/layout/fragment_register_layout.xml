@@ -25,6 +25,7 @@
             android:hint="请输入手机号"
             android:inputType="phone"
             android:padding="@dimen/dp_10"
+            android:maxLength="11"
             android:textSize="@dimen/sp_14" />
 
         <ImageView
@@ -69,9 +70,11 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dp_10"
+            android:minWidth="70dp"
             android:src="@drawable/img_icon_delete"
             android:text="获取验证码"
-            android:textColor="@color/text_color" />
+            android:gravity="center"
+            android:textColor="@color/select_bt_text_color_2" />
 
         <View
             android:layout_width="2dp"
@@ -80,7 +83,6 @@
             android:layout_marginRight="20dp"
             android:layout_toLeftOf="@+id/mTvRegisterGetCode"
             android:background="@color/text_color" />
-
 
     </RelativeLayout>
 
@@ -144,6 +146,7 @@
             android:textColor="#9C9C9C" />
 
         <TextView
+            android:id="@+id/mTvRegisterProtocol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

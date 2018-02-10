@@ -1,16 +1,18 @@
 package com.android.ql.lf.carapp.ui.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 
 import com.android.ql.lf.carapp.application.CarApplication;
 import com.android.ql.lf.carapp.component.DaggerApiServerComponent;
+import com.android.ql.lf.carapp.data.BaseNetResult;
 import com.android.ql.lf.carapp.present.GetDataFromNetPresent;
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity;
-import com.android.ql.lf.carapp.ui.views.MyProgressDialog;
 import com.android.ql.lf.electronicbusiness.interfaces.INetDataPresenter;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
+
 
 import javax.inject.Inject;
 
@@ -21,10 +23,15 @@ import javax.inject.Inject;
 
 public abstract class BaseNetWorkingFragment extends BaseFragment implements INetDataPresenter {
 
+    public final String RESULT_CODE = "code";
+    public final String RESULT_OBJECT = "result";
+    public final String SUCCESS_CODE = "200";
+
     @Inject
     public GetDataFromNetPresent mPresent;
 
-    public MyProgressDialog progressDialog;
+    public ProgressDialog progressDialog;
+
 
     @Override
     public void onAttach(Context context) {
@@ -68,20 +75,17 @@ public abstract class BaseNetWorkingFragment extends BaseFragment implements INe
     }
 
 
-    public <T> JSONObject checkResultCode(T json) {
+    public <T> BaseNetResult checkResultCode(T json) {
         try {
             if (json != null) {
                 JSONObject jsonObject = new JSONObject(json.toString());
-                if ("200".equals(jsonObject.optString("code"))) {
-                    return jsonObject;
-                }
+                return new BaseNetResult(jsonObject.optString(RESULT_CODE), jsonObject);
             }
             return null;
         } catch (Exception e) {
             return null;
         }
     }
-
 
     @Override
     public void onDestroyView() {
@@ -91,4 +95,5 @@ public abstract class BaseNetWorkingFragment extends BaseFragment implements INe
             mPresent = null;
         }
     }
+
 }

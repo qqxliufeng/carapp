@@ -1,12 +1,20 @@
 package com.android.ql.lf.carapp.action
 
+import org.json.JSONObject
+
 /**
  * Created by lf on 18.2.8.
  * @author lf on 18.2.8
  */
 interface IViewUserAction {
 
-    fun onLogin(result: String) {
-    }
+    fun onLogin(result: JSONObject): Boolean
+
+    fun onRegister(result: JSONObject)
+
+    fun onForgetPassword(result: JSONObject)
+
+    fun onResetPassword(result: JSONObject)
+
 
 }
