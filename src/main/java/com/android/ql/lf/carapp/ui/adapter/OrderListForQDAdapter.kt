@@ -1,5 +1,6 @@
 package com.android.ql.lf.carapp.ui.adapter
 
+import com.android.ql.lf.carapp.R
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 
@@ -10,5 +11,6 @@ import com.chad.library.adapter.base.BaseViewHolder
 class OrderListForQDAdapter(layoutId: Int, list: ArrayList<String>) : BaseQuickAdapter<String, BaseViewHolder>(layoutId, list) {
 
     override fun convert(helper: BaseViewHolder?, item: String?) {
+        helper!!.addOnClickListener(R.id.mBtOrderListForQDItem)
     }
 }

@@ -9,6 +9,7 @@ import com.android.ql.lf.carapp.ui.fragments.bottom.MainMallFragment
 import com.android.ql.lf.carapp.ui.fragments.bottom.MainMineFragment
 import com.android.ql.lf.carapp.ui.fragments.bottom.MainOrderHouseFragment
 import com.android.ql.lf.carapp.utils.BottomNavigationViewHelper
+import com.android.ql.lf.carapp.utils.toast
 import kotlinx.android.synthetic.main.activity_main_layout.*
 
 /**
@@ -17,14 +18,18 @@ import kotlinx.android.synthetic.main.activity_main_layout.*
  */
 class MainActivity : BaseActivity() {
 
+    private var exitTime: Long = 0L
+
     override fun getLayoutId() = R.layout.activity_main_layout
 
     override fun initView() {
+        setSwipeBackEnable(false)
         BottomNavigationViewHelper.disableShiftMode(mMainNavigation)
         mMainNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         mMainContent.adapter = MainViewPagerAdapter(supportFragmentManager)
         mMainContent.offscreenPageLimit = 3
     }
+
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -48,6 +53,15 @@ class MainActivity : BaseActivity() {
         false
     }
 
+    override fun onBackPressed() {
+        if (System.currentTimeMillis() - exitTime > 2000) {
+            toast("再按一次退出")
+            exitTime = System.currentTimeMillis()
+        } else {
+            finish()
+        }
+    }
+
     inner class MainViewPagerAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
 
         override fun getItem(position: Int) = when (position) {
@@ -61,9 +75,9 @@ class MainActivity : BaseActivity() {
 //                MainMallFragment.newInstance()
                 MainMineFragment.newInstance()
             }
-            /*3 -> {
-                MainMineFragment.newInstance()
-            }*/
+        /*3 -> {
+            MainMineFragment.newInstance()
+        }*/
             else -> {
                 null
             }

@@ -32,7 +32,7 @@ class MineArticleFragment : BaseFragment() {
         }
     }
 
-    fun setIndicator(tabs: TabLayout, leftDip: Int, rightDip: Int) {
+    private fun setIndicator(tabs: TabLayout, leftDip: Int, rightDip: Int) {
         val tabLayout = tabs.javaClass
         var tabStrip: Field? = null
         try {

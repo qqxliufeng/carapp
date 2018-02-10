@@ -78,9 +78,11 @@
             android:textSize="@dimen/sp_14" />
 
         <Button
+            android:id="@+id/mBtOrderListForQDItem"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="@dimen/dp_10"
+            android:enabled="false"
             android:background="@drawable/selector_bt_bg1"
             android:text="抢单"
             android:textColor="#fff"

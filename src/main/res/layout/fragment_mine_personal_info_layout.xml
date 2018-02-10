@@ -3,15 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff"
-    android:orientation="vertical"
-    android:paddingLeft="20dp"
-    android:paddingRight="10dp">
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/mFaceContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_10"
         android:background="@drawable/selector_press_bg">
 
         <TextView
@@ -30,13 +30,14 @@
             android:src="@drawable/icon_inter1" />
 
         <ImageView
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:id="@+id/mTvPersonalInfoFace"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="30dp"
+            android:layout_marginRight="20dp"
             android:src="@drawable/img_default_mine_icon" />
-
     </RelativeLayout>
 
     <RelativeLayout
@@ -46,8 +47,7 @@
         android:layout_below="@+id/mFaceContainer"
         android:layout_marginTop="@dimen/dp_10"
         android:background="@drawable/selector_press_bg"
-        android:paddingBottom="@dimen/dp_10"
-        android:paddingTop="@dimen/dp_10">
+        android:padding="@dimen/dp_10">
 
 
         <TextView
@@ -77,8 +77,7 @@
         android:layout_below="@+id/mNickNameContainer"
         android:layout_marginTop="@dimen/dp_10"
         android:background="@drawable/selector_press_bg"
-        android:paddingBottom="@dimen/dp_10"
-        android:paddingTop="@dimen/dp_10">
+        android:padding="@dimen/dp_10">
 
         <TextView
             android:layout_width="wrap_content"
@@ -94,7 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:gravity="center"
-            android:text="18666666666"
+            android:text="暂无"
             android:textColor="@color/text_dark_color" />
     </RelativeLayout>
 
@@ -105,8 +104,7 @@
         android:layout_below="@+id/mPhoneContainer"
         android:layout_marginTop="@dimen/dp_10"
         android:background="@drawable/selector_press_bg"
-        android:paddingBottom="@dimen/dp_10"
-        android:paddingTop="@dimen/dp_10">
+        android:padding="@dimen/dp_10">
 
         <TextView
             android:layout_width="wrap_content"
@@ -122,7 +120,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:gravity="center"
-            android:text="18666666666"
+            android:text="暂无"
             android:textColor="@color/text_dark_color" />
     </RelativeLayout>
 
@@ -136,8 +134,7 @@
         android:drawablePadding="@dimen/dp_10"
         android:drawableRight="@drawable/icon_inter1"
         android:gravity="center_vertical"
-        android:paddingBottom="@dimen/dp_10"
-        android:paddingTop="@dimen/dp_10"
+        android:padding="@dimen/dp_10"
         android:text="收货地址管理"
         android:textColor="@color/text_deep_dark_color"
         android:textSize="@dimen/sp_14" />

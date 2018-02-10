@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_tv_bg7"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:padding="@dimen/dp_10"
+        android:singleLine="true"
+        android:text="您当前帐号未认证成为维修师傅，暂无法接单，请立即认证"
+        android:textColor="#ff7400" />
+
+    <include layout="@layout/fragment_base_recycler_view_layout" />
+
+
+</LinearLayout>
