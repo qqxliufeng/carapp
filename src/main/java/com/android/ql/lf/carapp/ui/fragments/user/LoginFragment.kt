@@ -87,6 +87,7 @@ class LoginFragment : BaseNetWorkingFragment() {
                 userPresent.onLogin(jsonObject.optJSONObject("result"))
                 finish()
             } else {
+
                 toast(jsonObject.optString("msg"))
             }
         } else {
