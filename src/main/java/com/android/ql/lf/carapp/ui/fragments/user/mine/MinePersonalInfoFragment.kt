@@ -48,8 +48,10 @@ class MinePersonalInfoFragment : BaseNetWorkingFragment() {
             builder.setPositiveButton("确定") { _, _ ->
 
             }
-            val mEtContent = EditText(mContext)
-            builder.setView(mEtContent)
+            val contentView = View.inflate(mContext, R.layout.layout_edit_personal_content_layout, null)
+            val content = contentView.findViewById<EditText>(R.id.mEtEditPersonalInfo)
+            content.setText(UserInfo.getInstance().memberName)
+            builder.setView(contentView)
             builder.create().show()
         }
     }
