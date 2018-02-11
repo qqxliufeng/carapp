@@ -37,6 +37,17 @@
                     android:textColor="#fff"
                     android:textSize="18dp"
                     android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/mIvMainMessageNotifyCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:padding="@dimen/dp_10"
+                    android:src="@drawable/img_icon_notice" />
             </RelativeLayout>
 
             <android.support.v4.widget.NestedScrollView

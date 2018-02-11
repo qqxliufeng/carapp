@@ -15,6 +15,7 @@ import com.android.ql.lf.carapp.ui.fragments.message.MineMessageListFragment
 import com.android.ql.lf.carapp.ui.fragments.order.OrderListForAfterSaleFragment
 import com.android.ql.lf.carapp.ui.fragments.order.OrderListForMineFragment
 import com.android.ql.lf.carapp.ui.fragments.order.OrderListForQDFragment
+import com.android.ql.lf.carapp.utils.RxBus
 import kotlinx.android.synthetic.main.fragment_main_order_house_layout.*
 import q.rorbin.badgeview.QBadgeView
 
@@ -31,6 +32,12 @@ class MainOrderHouseFragment : BaseFragment() {
 
         val TITLES = listOf("抢单", "我的订单", "售后订单")
 
+    }
+
+    private val messageSubscription by lazy {
+        RxBus.getDefault().toObservable(String::class.java).subscribe {
+
+        }
     }
 
     override fun getLayoutId() = R.layout.fragment_main_order_house_layout
@@ -80,6 +87,14 @@ class MainOrderHouseFragment : BaseFragment() {
 
         override fun getPageTitle(position: Int) = MainOrderHouseFragment.TITLES[position]
 
+    }
+
+
+    override fun onDestroyView() {
+        if (messageSubscription!=null && !messageSubscription.isUnsubscribed){
+            messageSubscription.unsubscribe()
+        }
+        super.onDestroyView()
     }
 
 }

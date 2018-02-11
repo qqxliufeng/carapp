@@ -7,22 +7,30 @@ import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.activities.MainActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseFragment
+import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.ui.fragments.user.LoginFragment
 import com.android.ql.lf.carapp.ui.fragments.user.SettingFragment
 import com.android.ql.lf.carapp.ui.fragments.user.mine.*
 import com.android.ql.lf.carapp.utils.GlideManager
 import com.android.ql.lf.carapp.utils.RxBus
 import kotlinx.android.synthetic.main.fragment_main_mine_layout.*
+import q.rorbin.badgeview.QBadgeView
 
 /**
  * Created by lf on 18.1.24.
  * @author lf on 18.1.24
  */
-class MainMineFragment : BaseFragment() {
+class MainMineFragment : BaseNetWorkingFragment() {
 
     companion object {
         fun newInstance(): MainMineFragment {
             return MainMineFragment()
+        }
+    }
+
+    private val messageSubscription by lazy {
+        RxBus.getDefault().toObservable(String::class.java).subscribe {
+
         }
     }
 
@@ -35,15 +43,14 @@ class MainMineFragment : BaseFragment() {
         mRlMineTitleContainer.layoutParams = param
         mSrlMainMineContainer.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
 
+        val notifyBadgeView = QBadgeView(mContext)
+        notifyBadgeView.badgeNumber = -1
+        val notifyBadge = notifyBadgeView.bindTarget(mIvMainMessageNotifyCount)
+        notifyBadge.isShowShadow = false
+        notifyBadge.setGravityOffset(8.0f, 5.0f, true)
+
         //登录成功，刷新界面
-        subscription = RxBus.getDefault().toObservable(UserInfo::class.java).subscribe {
-            GlideManager.loadFaceCircleImage(mContext, it.memberPic, mIvMainMineFace)
-            mTvMainMineEditNameNotify.visibility = View.VISIBLE
-            mTvMainMineName.text = it.memberName
-            mTvMainMinePhone.text = it.memberPhone.let {
-                it.substring(0, 3) + "****" + it.substring(7, it.length)
-            }
-        }
+        registerLoginSuccessBus()
 
         mLlMainMinePersonalInfoContainer.setOnClickListener {
             if (UserInfo.getInstance().isLogin) {
@@ -86,4 +93,21 @@ class MainMineFragment : BaseFragment() {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "申请成为商家", MineApplyMasterFragment::class.java)
         }
     }
+
+    override fun onLoginSuccess(it: UserInfo?) {
+        GlideManager.loadFaceCircleImage(mContext, it!!.memberPic, mIvMainMineFace)
+        mTvMainMineEditNameNotify.visibility = View.VISIBLE
+        mTvMainMineName.text = it.memberName
+        mTvMainMinePhone.text = it.memberPhone.let {
+            it.substring(0, 3) + "****" + it.substring(7, it.length)
+        }
+    }
+
+    override fun onDestroyView() {
+        if (messageSubscription!=null && !messageSubscription.isUnsubscribed){
+            messageSubscription.unsubscribe()
+        }
+        super.onDestroyView()
+    }
+
 }
