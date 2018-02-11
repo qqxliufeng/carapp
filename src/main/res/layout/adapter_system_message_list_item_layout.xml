@@ -11,6 +11,7 @@
         android:layout_height="wrap_content">
 
         <CheckedTextView
+            android:id="@+id/mCtvSystemMessageItemNotify"
             android:checked="true"
             android:layout_width="8dp"
             android:layout_height="8dp"
@@ -18,27 +19,27 @@
             android:background="@drawable/selector_ctv_bg1" />
 
         <TextView
+            android:id="@+id/mTvSystemMessageItemTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:text="收益到账提醒"
             android:textColor="#484848"
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/mTvSystemMessageItemTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="2017-12-25"
             android:textColor="#afafaf"
             android:textSize="@dimen/sp_12" />
     </RelativeLayout>
 
     <TextView
+        android:id="@+id/mTvSystemMessageItemDescription"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="您好，您的收益已经到账，立即查看吧，还有诸多权益等着您！"
         android:textColor="#646464"
         android:textSize="@dimen/sp_14" />
 

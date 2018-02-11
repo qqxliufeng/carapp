@@ -4,6 +4,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import com.android.ql.lf.carapp.R
+import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.ui.fragments.bottom.MainCommunityFragment
 import com.android.ql.lf.carapp.ui.fragments.bottom.MainMallFragment
 import com.android.ql.lf.carapp.ui.fragments.bottom.MainMineFragment
@@ -29,7 +30,6 @@ class MainActivity : BaseActivity() {
         mMainContent.adapter = MainViewPagerAdapter(supportFragmentManager)
         mMainContent.offscreenPageLimit = 3
     }
-
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -58,6 +58,7 @@ class MainActivity : BaseActivity() {
             toast("再按一次退出")
             exitTime = System.currentTimeMillis()
         } else {
+            UserInfo.getInstance().loginOut()
             finish()
         }
     }

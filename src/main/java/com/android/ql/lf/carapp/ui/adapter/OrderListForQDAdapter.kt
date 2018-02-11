@@ -1,6 +1,8 @@
 package com.android.ql.lf.carapp.ui.adapter
 
+import android.widget.Button
 import com.android.ql.lf.carapp.R
+import com.android.ql.lf.carapp.data.UserInfo
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 
@@ -12,5 +14,8 @@ class OrderListForQDAdapter(layoutId: Int, list: ArrayList<String>) : BaseQuickA
 
     override fun convert(helper: BaseViewHolder?, item: String?) {
         helper!!.addOnClickListener(R.id.mBtOrderListForQDItem)
+        val bt_qd = helper.getView<Button>(R.id.mBtOrderListForQDItem)
+        bt_qd.isEnabled = !UserInfo.getInstance().isLogin
+        helper.setText(R.id.mTvOrderListForQDItemName,item)
     }
 }

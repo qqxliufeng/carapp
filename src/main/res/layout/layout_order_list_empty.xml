@@ -12,6 +12,7 @@
         android:drawableTop="@drawable/img_icon_noorder"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/sp_14"
+        android:gravity="center"
         android:drawablePadding="@dimen/dp_10"/>
 
 

@@ -6,8 +6,10 @@ import android.content.Context;
 import com.android.ql.lf.carapp.application.CarApplication;
 import com.android.ql.lf.carapp.component.DaggerApiServerComponent;
 import com.android.ql.lf.carapp.data.BaseNetResult;
+import com.android.ql.lf.carapp.data.UserInfo;
 import com.android.ql.lf.carapp.present.GetDataFromNetPresent;
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity;
+import com.android.ql.lf.carapp.utils.RxBus;
 import com.android.ql.lf.electronicbusiness.interfaces.INetDataPresenter;
 
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +17,8 @@ import org.json.JSONObject;
 
 
 import javax.inject.Inject;
+
+import rx.functions.Action1;
 
 /**
  * @author Administrator
@@ -32,6 +36,18 @@ public abstract class BaseNetWorkingFragment extends BaseFragment implements INe
 
     public ProgressDialog progressDialog;
 
+
+    public void registerLoginSuccessBus(){
+        subscription = RxBus.getDefault().toObservable(UserInfo.class).subscribe(new Action1<UserInfo>() {
+            @Override
+            public void call(UserInfo userInfo) {
+                onLoginSuccess(userInfo);
+            }
+        });
+    }
+
+    public void onLoginSuccess(UserInfo userInfo){
+    }
 
     @Override
     public void onAttach(Context context) {

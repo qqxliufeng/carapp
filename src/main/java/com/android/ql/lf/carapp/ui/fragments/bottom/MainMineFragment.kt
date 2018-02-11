@@ -1,6 +1,5 @@
 package com.android.ql.lf.carapp.ui.fragments.bottom
 
-import android.app.Fragment
 import android.view.View
 import android.view.ViewGroup
 import com.android.ql.lf.carapp.R
@@ -37,8 +36,9 @@ class MainMineFragment : BaseFragment() {
         mSrlMainMineContainer.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
 
         //登录成功，刷新界面
-        RxBus.getDefault().toObservable(UserInfo::class.java).subscribe {
+        subscription = RxBus.getDefault().toObservable(UserInfo::class.java).subscribe {
             GlideManager.loadFaceCircleImage(mContext, it.memberPic, mIvMainMineFace)
+            mTvMainMineEditNameNotify.visibility = View.VISIBLE
             mTvMainMineName.text = it.memberName
             mTvMainMinePhone.text = it.memberPhone.let {
                 it.substring(0, 3) + "****" + it.substring(7, it.length)

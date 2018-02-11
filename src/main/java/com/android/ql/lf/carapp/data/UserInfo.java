@@ -67,6 +67,14 @@ public class UserInfo {
         return !TextUtils.isEmpty(memberId);
     }
 
+    public boolean isMaster(){
+        return true;
+    }
+
+    public boolean isPayEnsureMoney(){
+        return false;
+    }
+
     public void loginOut() {
         memberId = null;
         instance = null;

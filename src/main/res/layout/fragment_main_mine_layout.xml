@@ -99,11 +99,13 @@
                                             android:textSize="@dimen/sp_16" />
 
                                         <TextView
+                                            android:id="@+id/mTvMainMineEditNameNotify"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginLeft="5dp"
                                             android:text="(点击修改)"
                                             android:textColor="#B2B2B2"
+                                            android:visibility="gone"
                                             android:textSize="@dimen/sp_12" />
                                     </LinearLayout>
 
@@ -243,6 +245,7 @@
                             android:drawablePadding="@dimen/dp_10"
                             android:drawableTop="@drawable/img_icon_mine_the_wallet_icon"
                             android:gravity="center"
+                            android:background="@drawable/selector_press_bg"
                             android:paddingBottom="@dimen/dp_10"
                             android:paddingTop="@dimen/dp_10"
                             android:text="我的钱包"
@@ -258,6 +261,7 @@
                             android:drawablePadding="@dimen/dp_10"
                             android:drawableTop="@drawable/img_icon_mine_comment_icon"
                             android:gravity="center"
+                            android:background="@drawable/selector_press_bg"
                             android:paddingBottom="@dimen/dp_10"
                             android:paddingTop="@dimen/dp_10"
                             android:text="我的帖子"
@@ -272,6 +276,7 @@
                             android:drawablePadding="@dimen/dp_10"
                             android:drawableTop="@drawable/img_icon_mine_evaluation_icon"
                             android:gravity="center"
+                            android:background="@drawable/selector_press_bg"
                             android:paddingBottom="@dimen/dp_10"
                             android:paddingTop="@dimen/dp_10"
                             android:text="我的评价"
