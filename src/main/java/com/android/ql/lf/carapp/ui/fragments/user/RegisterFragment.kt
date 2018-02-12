@@ -1,5 +1,6 @@
 package com.android.ql.lf.carapp.ui.fragments.user
 
+import android.app.ProgressDialog
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.CountDownTimer
@@ -11,6 +12,7 @@ import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.utils.*
 import kotlinx.android.synthetic.main.fragment_register_layout.*
 import org.jetbrains.anko.bundleOf
+import org.json.JSONObject
 
 /**
  * Created by lf on 18.1.24.
@@ -20,7 +22,7 @@ class RegisterFragment : BaseNetWorkingFragment() {
 
     private var code: String? = null
     private val timeCount: CountDownTimer by lazy {
-        object : CountDownTimer(1000 * 10, 1000) {
+        object : CountDownTimer(1000 * 60, 1000) {
             override fun onFinish() {
                 mTvRegisterGetCode.text = "没有收到验证码？"
                 mTvRegisterGetCode.isEnabled = true
@@ -58,10 +60,10 @@ class RegisterFragment : BaseNetWorkingFragment() {
             }
             mTvRegisterGetCode.isEnabled = false
             timeCount.start()
-//            mPresent.getDataByPost(0,
-//                    RequestParamsHelper.LOGIN_MODEL,
-//                    RequestParamsHelper.ACT_CODE,
-//                    RequestParamsHelper.getCodeParams(mEtRegisterPhone.text.toString()))
+            mPresent.getDataByPost(0,
+                    RequestParamsHelper.LOGIN_MODEL,
+                    RequestParamsHelper.ACT_CODE,
+                    RequestParamsHelper.getCodeParams(mEtRegisterPhone.text.toString()))
         }
         mBtRegister.setOnClickListener {
             if (mEtRegisterPhone.isEmpty()) {
@@ -84,8 +86,12 @@ class RegisterFragment : BaseNetWorkingFragment() {
                 mEtRegisterPassword.showSnackBar("请输入密码")
                 return@setOnClickListener
             }
+            if (!mCbRegisterProtocol.isChecked) {
+                mEtRegisterPassword.showSnackBar("请先同意用户服务协议")
+                return@setOnClickListener
+            }
             mPresent.getDataByPost(
-                    1,
+                    0x1,
                     RequestParamsHelper.LOGIN_MODEL,
                     RequestParamsHelper.ACT_REGISTER,
                     RequestParamsHelper.getRegisterParams(mEtRegisterPhone.text.toString(), mEtRegisterPassword.text.toString()))
@@ -97,6 +103,42 @@ class RegisterFragment : BaseNetWorkingFragment() {
                     .setExtraBundle(bundleOf(Pair(WebViewContentFragment.PATH_FLAG, "http://www.baidu.com")))
                     .setClazz(WebViewContentFragment::class.java)
                     .start()
+        }
+    }
+
+    override fun onRequestStart(requestID: Int) {
+        super.onRequestStart(requestID)
+        if (requestID == 0x1) {
+            progressDialog = ProgressDialog.show(mContext, null, "正在注册……")
+        }
+    }
+
+    override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
+        if (result != null) {
+            if (requestID == 0x0) {
+                val messageResultJson = JSONObject(result.toString())
+                if (SUCCESS_CODE == messageResultJson.optString("status")) {
+                    code = messageResultJson.optString("code")
+                    toast("短信已经发送，请注意查收")
+                }
+            } else if (requestID == 0x1) {
+                val baseNetResult = checkResultCode(result)
+                if (SUCCESS_CODE == baseNetResult.code) {
+                    toast("注册成功，请登录")
+                    finish()
+                } else {
+                    toast((baseNetResult.obj as JSONObject).optString("msg"))
+                }
+            }
+        }
+    }
+
+    override fun onRequestFail(requestID: Int, e: Throwable) {
+        super.onRequestFail(requestID, e)
+        if (requestID == 0x0) {
+            toast("获取验证码失败，请稍后重试")
+        } else if (requestID == 0x1) {
+            toast("注册失败，请稍后重试")
         }
     }
 

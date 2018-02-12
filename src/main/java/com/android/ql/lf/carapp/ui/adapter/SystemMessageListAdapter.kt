@@ -16,6 +16,6 @@ class SystemMessageListAdapter(layoutId: Int, list: ArrayList<SystemMessageListF
         helper.setText(R.id.mTvSystemMessageItemDescription, item.description)
         helper.setText(R.id.mTvSystemMessageItemTime, item.time)
         val ctvNotify = helper.getView<CheckedTextView>(R.id.mCtvSystemMessageItemNotify)
-        ctvNotify.isChecked = item.isRead
+        ctvNotify.isChecked = !item.isRead
     }
 }

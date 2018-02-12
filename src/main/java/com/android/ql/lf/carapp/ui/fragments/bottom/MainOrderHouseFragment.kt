@@ -26,6 +26,9 @@ import q.rorbin.badgeview.QBadgeView
 class MainOrderHouseFragment : BaseFragment() {
 
     companion object {
+
+        val FIRST_LEVEL_ALL_MESSAGE_HAVE_READ_FLAG = "first level all message have read flag"
+
         fun newInstance(): MainOrderHouseFragment {
             return MainOrderHouseFragment()
         }
@@ -36,7 +39,11 @@ class MainOrderHouseFragment : BaseFragment() {
 
     private val messageSubscription by lazy {
         RxBus.getDefault().toObservable(String::class.java).subscribe {
-
+            if (FIRST_LEVEL_ALL_MESSAGE_HAVE_READ_FLAG == it) {
+                if (mViewMainOrderHouseMessageNotify.visibility == View.VISIBLE) {
+                    mViewMainOrderHouseMessageNotify.visibility = View.GONE
+                }
+            }
         }
     }
 
@@ -51,23 +58,18 @@ class MainOrderHouseFragment : BaseFragment() {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "全部订单", OrderListForQDFragment::class.java)
         }
         val orderCountBadgeView = QBadgeView(mContext)
-        orderCountBadgeView.badgeNumber = 455
+        orderCountBadgeView.badgeNumber = 2
         val orderCountBadge = orderCountBadgeView.bindTarget(mIvMainOrderHouseCount)
         orderCountBadge.badgeBackgroundColor = Color.WHITE
         orderCountBadge.badgeTextColor = ContextCompat.getColor(mContext, R.color.main_color)
         orderCountBadge.setBadgeTextSize(8.0f, true)
-
-        val notifyBadgeView = QBadgeView(mContext)
-        notifyBadgeView.badgeNumber = -1
-        val notifyBadge = notifyBadgeView.bindTarget(mIvMainNotifyCount)
-        notifyBadge.isShowShadow = false
-        notifyBadge.setGravityOffset(8.0f, 5.0f, true)
-        mIvMainNotifyCount.setOnClickListener {
+        mFlMainMainOrderHouseNotifyContainer.setOnClickListener {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的消息", true, false, MineMessageListFragment::class.java)
         }
         mAlOrderHouse.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             mTlOrderHouseTitleContainer.alpha = 1 - Math.abs(verticalOffset).toFloat() / appBarLayout.totalScrollRange.toFloat()
         }
+        messageSubscription
     }
 
     class OrderHouseViewPagerAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
@@ -89,9 +91,8 @@ class MainOrderHouseFragment : BaseFragment() {
 
     }
 
-
     override fun onDestroyView() {
-        if (messageSubscription!=null && !messageSubscription.isUnsubscribed){
+        if (messageSubscription != null && !messageSubscription.isUnsubscribed) {
             messageSubscription.unsubscribe()
         }
         super.onDestroyView()

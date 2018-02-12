@@ -21,6 +21,15 @@ public class ViewUserAction implements IViewUserAction {
             UserInfo.getInstance().setMemberName(result.optString("member_name"));
             UserInfo.getInstance().setMemberPhone(result.optString("member_phone"));
             UserInfo.getInstance().setMemberPic(result.optString("member_pic"));
+            UserInfo.getInstance().setMemberAddress(result.optString("member_address"));
+            UserInfo.getInstance().setMemberGrade(result.optString("member_grade"));
+            UserInfo.getInstance().setMemberInviteCode(result.optString("member_invite_code"));
+            UserInfo.getInstance().setMemberOrderNum(result.optString("member_order_num"));
+            UserInfo.getInstance().setMemberMyInviteCode(result.optString("member_mycode"));
+            UserInfo.getInstance().setMemberIsEnsureMoney(result.optString("member_is_ensure_money"));
+            UserInfo.getInstance().setMemberIsMaster(result.optString("member_ismaster"));
+            UserInfo.getInstance().setMemberOpenid(result.optString("member_openid"));
+            UserInfo.getInstance().setMemberRank(result.optString("member_rank"));
             return true;
         } catch (Exception e) {
             return false;

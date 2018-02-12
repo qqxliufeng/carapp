@@ -18,8 +18,8 @@ class SystemMessageListFragment :BaseRecyclerViewFragment<SystemMessageListFragm
             SystemMessageListAdapter(R.layout.adapter_system_message_list_item_layout,mArrayList)
 
     override fun onRefresh() {
-        (0 .. 3).forEach {
-            mArrayList.add(SystemMessageItem("this is title","this is description","2018-10-10",true))
+        (0 .. 1).forEach {
+            mArrayList.add(SystemMessageItem("this is title","this is description","2018-10-10",false))
         }
         mBaseAdapter.notifyDataSetChanged()
         mBaseAdapter.disableLoadMoreIfNotFullPage()
@@ -29,12 +29,12 @@ class SystemMessageListFragment :BaseRecyclerViewFragment<SystemMessageListFragm
     override fun onMyItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
         super.onMyItemClick(adapter, view, position)
         val item = mArrayList[position]
-        if (item.isRead) {
-            item.isRead = false
+        if (!item.isRead) {
+            item.isRead = true
             mBaseAdapter.notifyItemChanged(position)
         }
-        if(mArrayList.none { it.isRead }){
-            RxBus.getDefault().post(MineMessageListFragment.ALL_MESSAGE_HAVE_RED_FLAG)
+        if(mArrayList.none { !it.isRead }){
+            RxBus.getDefault().post(MineMessageListFragment.SECOND_LEVEL_ALL_MESSAGE_HAVE_RED_FLAG)
         }
     }
 

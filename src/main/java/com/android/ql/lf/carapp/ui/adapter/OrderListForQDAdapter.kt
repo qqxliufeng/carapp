@@ -15,7 +15,7 @@ class OrderListForQDAdapter(layoutId: Int, list: ArrayList<String>) : BaseQuickA
     override fun convert(helper: BaseViewHolder?, item: String?) {
         helper!!.addOnClickListener(R.id.mBtOrderListForQDItem)
         val bt_qd = helper.getView<Button>(R.id.mBtOrderListForQDItem)
-        bt_qd.isEnabled = !UserInfo.getInstance().isLogin
-        helper.setText(R.id.mTvOrderListForQDItemName,item)
+        bt_qd.isEnabled = UserInfo.getInstance().isLogin && UserInfo.getInstance().isMaster && UserInfo.getInstance().isPayEnsureMoney
+        helper.setText(R.id.mTvOrderListForQDItemName, item)
     }
 }

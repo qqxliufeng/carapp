@@ -2,11 +2,16 @@ package com.android.ql.lf.carapp.ui.fragments.order
 
 import android.view.View
 import com.android.ql.lf.carapp.R
+import com.android.ql.lf.carapp.data.EventIsMasterAndMoneyBean
 import com.android.ql.lf.carapp.data.UserInfo
+import com.android.ql.lf.carapp.present.ServiceOrderPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.adapter.OrderListForQDAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
 import com.android.ql.lf.carapp.ui.fragments.user.LoginFragment
+import com.android.ql.lf.carapp.ui.fragments.user.mine.MineApplyMasterFragment
+import com.android.ql.lf.carapp.ui.fragments.user.mine.MineApplyMasterInfoSubmitFragment
+import com.android.ql.lf.carapp.utils.RxBus
 import com.android.ql.lf.carapp.utils.toast
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -24,6 +29,17 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<String>() {
         }
     }
 
+    private val serviceOrderPresent by lazy {
+        ServiceOrderPresent()
+    }
+
+    //接收是否谁为师傅和是否交纳保证金的事件
+    private val masterAndMoneySubscription by lazy {
+        RxBus.getDefault().toObservable(EventIsMasterAndMoneyBean::class.java).subscribe {
+            showNotify()
+        }
+    }
+
     override fun getLayoutId() = R.layout.fragment_order_for_qd_layout
 
     override fun createAdapter(): BaseQuickAdapter<String, BaseViewHolder>
@@ -32,6 +48,7 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<String>() {
     override fun initView(view: View?) {
         super.initView(view)
         registerLoginSuccessBus()
+        masterAndMoneySubscription
         showNotify()
         testAdd("111")
     }
@@ -43,11 +60,24 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<String>() {
     private fun showNotify() {
         if (!mArrayList.isEmpty()) {
             if (UserInfo.getInstance().isLogin) {
-                mTvOrderQDNotify.requestFocus()
-                mTvOrderQDNotify.isSelected = true
+                if (UserInfo.getInstance().isPayEnsureMoney && UserInfo.getInstance().isMaster) {
+                    mTvOrderQDNotify.visibility = View.GONE
+                    mBaseAdapter.notifyDataSetChanged()
+                    return
+                }
                 mTvOrderQDNotify.visibility = View.VISIBLE
+                mTvOrderQDNotify.setOnClickListener {
+                    if (!UserInfo.getInstance().isMaster) {
+                        FragmentContainerActivity.from(mContext).setTitle("申请成为商家").setNeedNetWorking(true).setClazz(MineApplyMasterInfoSubmitFragment::class.java).start()
+                        return@setOnClickListener
+                    }
+                    if (!UserInfo.getInstance().isPayEnsureMoney) {
+                        serviceOrderPresent.doAuthEnsureMoney()
+                        return@setOnClickListener
+                    }
+                }
                 if (!UserInfo.getInstance().isMaster) {
-                    mTvOrderQDNotify.text = "您当前帐号未认证成为维修师傅，暂无法接单，请立即认证"
+                    mTvOrderQDNotify.text = "当前帐号未认证，暂无法接单，请立即认证"
                 } else if (!UserInfo.getInstance().isPayEnsureMoney) {
                     mTvOrderQDNotify.text = "您还没有交纳保证金，暂无法接单，请立即交纳"
                 }
@@ -126,7 +156,13 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<String>() {
 //
 //        dialog.setContentView(contentView)
 //        dialog.show()
-
-
     }
+
+    override fun onDestroyView() {
+        if (!masterAndMoneySubscription.isUnsubscribed) {
+            masterAndMoneySubscription.unsubscribe()
+        }
+        super.onDestroyView()
+    }
+
 }

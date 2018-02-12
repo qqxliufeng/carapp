@@ -6,13 +6,27 @@
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp">
 
+        <TextView
+            android:padding="@dimen/dp_10"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败加载失败"
+            android:textSize="@dimen/sp_14" />
     </android.support.v4.widget.NestedScrollView>
 
     <ProgressBar
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center" />
+
+    <Button
+        style="@style/style_button1"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:text="申请成为师傅" />
 
 </FrameLayout>

@@ -30,7 +30,11 @@ class MainMineFragment : BaseNetWorkingFragment() {
 
     private val messageSubscription by lazy {
         RxBus.getDefault().toObservable(String::class.java).subscribe {
-
+            if (MainOrderHouseFragment.FIRST_LEVEL_ALL_MESSAGE_HAVE_READ_FLAG == it) {
+                if (mViewMainMineMessageNotify.visibility == View.VISIBLE) {
+                    mViewMainMineMessageNotify.visibility = View.GONE
+                }
+            }
         }
     }
 
@@ -43,14 +47,9 @@ class MainMineFragment : BaseNetWorkingFragment() {
         mRlMineTitleContainer.layoutParams = param
         mSrlMainMineContainer.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
 
-        val notifyBadgeView = QBadgeView(mContext)
-        notifyBadgeView.badgeNumber = -1
-        val notifyBadge = notifyBadgeView.bindTarget(mIvMainMessageNotifyCount)
-        notifyBadge.isShowShadow = false
-        notifyBadge.setGravityOffset(8.0f, 5.0f, true)
-
         //登录成功，刷新界面
         registerLoginSuccessBus()
+        messageSubscription
 
         mLlMainMinePersonalInfoContainer.setOnClickListener {
             if (UserInfo.getInstance().isLogin) {
@@ -104,7 +103,7 @@ class MainMineFragment : BaseNetWorkingFragment() {
     }
 
     override fun onDestroyView() {
-        if (messageSubscription!=null && !messageSubscription.isUnsubscribed){
+        if (messageSubscription != null && !messageSubscription.isUnsubscribed) {
             messageSubscription.unsubscribe()
         }
         super.onDestroyView()

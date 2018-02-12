@@ -42,8 +42,8 @@
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:theme="@style/AppFragmentContainerTheme" />
 
-        <activity android:name="com.soundcloud.android.crop.CropImageActivity"
-            android:theme="@style/CropImageTheme"/>
+        <!--<activity android:name="com.soundcloud.android.crop.CropImageActivity"
+            android:theme="@style/CropImageTheme"/>-->
 
         <provider
             android:name="android.support.v4.content.FileProvider"

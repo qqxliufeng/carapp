@@ -8,4 +8,8 @@ package com.android.ql.lf.carapp.action;
 
 public interface IViewServiceOrderAction {
 
+    public void doAuthMaster();
+
+    public void doAuthEnsureMoney();
+
 }
