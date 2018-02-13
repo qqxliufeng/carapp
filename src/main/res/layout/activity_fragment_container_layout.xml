@@ -18,6 +18,7 @@
             android:layout_height="?actionBarSize"
             android:theme="@style/ThemeOverlay.AppCompat.Dark"
             app:title="FragmentContainerActivity"
+            app:contentInsetStartWithNavigation="0dp"
             app:titleTextAppearance="?android:attr/textAppearanceMedium"
             app:titleTextColor="#fff" />
     </LinearLayout>

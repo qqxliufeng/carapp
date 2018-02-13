@@ -9,10 +9,8 @@ import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.adapter.OrderListForQDAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
 import com.android.ql.lf.carapp.ui.fragments.user.LoginFragment
-import com.android.ql.lf.carapp.ui.fragments.user.mine.MineApplyMasterFragment
 import com.android.ql.lf.carapp.ui.fragments.user.mine.MineApplyMasterInfoSubmitFragment
 import com.android.ql.lf.carapp.utils.RxBus
-import com.android.ql.lf.carapp.utils.toast
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.fragment_order_for_qd_layout.*
@@ -40,6 +38,15 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<String>() {
         }
     }
 
+    //接收退出登录事件
+    private val userLogoutSubscription by lazy {
+        RxBus.getDefault().toObservable(String::class.java).subscribe {
+            if (it == UserInfo.LOGOUT_FLAG) {
+                onLogoutSuccess()
+            }
+        }
+    }
+
     override fun getLayoutId() = R.layout.fragment_order_for_qd_layout
 
     override fun createAdapter(): BaseQuickAdapter<String, BaseViewHolder>
@@ -49,12 +56,18 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<String>() {
         super.initView(view)
         registerLoginSuccessBus()
         masterAndMoneySubscription
+        userLogoutSubscription
         showNotify()
         testAdd("111")
     }
 
     override fun onLoginSuccess(userInfo: UserInfo?) {
         showNotify()
+    }
+
+    private fun onLogoutSuccess() {
+        showNotify()
+        mBaseAdapter.notifyDataSetChanged()
     }
 
     private fun showNotify() {
@@ -68,7 +81,7 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<String>() {
                 mTvOrderQDNotify.visibility = View.VISIBLE
                 mTvOrderQDNotify.setOnClickListener {
                     if (!UserInfo.getInstance().isMaster) {
-                        FragmentContainerActivity.from(mContext).setTitle("申请成为商家").setNeedNetWorking(true).setClazz(MineApplyMasterInfoSubmitFragment::class.java).start()
+                        FragmentContainerActivity.from(mContext).setTitle("申请成为师傅").setNeedNetWorking(true).setClazz(MineApplyMasterInfoSubmitFragment::class.java).start()
                         return@setOnClickListener
                     }
                     if (!UserInfo.getInstance().isPayEnsureMoney) {
@@ -78,8 +91,6 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<String>() {
                 }
                 if (!UserInfo.getInstance().isMaster) {
                     mTvOrderQDNotify.text = "当前帐号未认证，暂无法接单，请立即认证"
-                } else if (!UserInfo.getInstance().isPayEnsureMoney) {
-                    mTvOrderQDNotify.text = "您还没有交纳保证金，暂无法接单，请立即交纳"
                 }
                 mBaseAdapter.notifyDataSetChanged()
             } else {
@@ -108,7 +119,6 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<String>() {
 //        mRecyclerView.smoothScrollToPosition(0)
     }
 
-
     override fun onMyItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
         if (view!!.id == R.id.mBtOrderListForQDItem) {
             if (!UserInfo.getInstance().isLogin) {
@@ -122,7 +132,6 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<String>() {
             }
         }
     }
-
 
     private fun showOrderNotifyDialog() {
 
@@ -161,6 +170,9 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<String>() {
     override fun onDestroyView() {
         if (!masterAndMoneySubscription.isUnsubscribed) {
             masterAndMoneySubscription.unsubscribe()
+        }
+        if (userLogoutSubscription != null && userLogoutSubscription.isUnsubscribed) {
+            userLogoutSubscription.unsubscribe()
         }
         super.onDestroyView()
     }

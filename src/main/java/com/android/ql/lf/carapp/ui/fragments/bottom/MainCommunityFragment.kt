@@ -18,12 +18,17 @@ import com.android.ql.lf.carapp.ui.adapter.OrderListForMineForWaitingWorkAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
 import com.android.ql.lf.carapp.ui.fragments.community.ArticleInfoFragment
 import com.android.ql.lf.carapp.ui.fragments.community.ArticleListFragment
+import com.android.ql.lf.carapp.ui.fragments.community.ArticleSearchFragment
 import com.android.ql.lf.carapp.ui.fragments.community.WriteArticleFragment
+import com.android.ql.lf.carapp.ui.fragments.user.mine.MineApplyMasterFragment
+import com.android.ql.lf.carapp.ui.fragments.user.mine.MineArticleFragment
+import com.android.ql.lf.carapp.ui.views.VerticalTextView
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.sunfusheng.marqueeview.MarqueeView
+import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
 import com.youth.banner.loader.ImageLoader
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
@@ -43,6 +48,7 @@ class MainCommunityFragment : BaseRecyclerViewFragment<String>() {
 
     private val topList = arrayListOf(R.drawable.test_pic1, R.drawable.test_pic2, R.drawable.test_pic3, R.drawable.test_pic4, R.drawable.test_pic5)
     private lateinit var topMarqueeView: MarqueeView
+    private var mBannerMainCommunity: Banner? = null
 
     override fun getLayoutId() = R.layout.fragment_main_community_layout
 
@@ -52,9 +58,28 @@ class MainCommunityFragment : BaseRecyclerViewFragment<String>() {
         val param = mRlCommunityTitleContainer.layoutParams as ViewGroup.MarginLayoutParams
         param.topMargin = height
         mRlCommunityTitleContainer.layoutParams = param
-
         mFabWriteNote.setOnClickListener {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "发布帖子", WriteArticleFragment::class.java)
+        }
+        mIvMainCommunityMine.setOnClickListener {
+            FragmentContainerActivity.from(mContext).setClazz(MineArticleFragment::class.java).setTitle("我的帖子").start()
+        }
+        mIvMainCommunitySearch.setOnClickListener {
+            FragmentContainerActivity.from(mContext).setClazz(ArticleSearchFragment::class.java).setNeedNetWorking(true).setHiddenToolBar(true).start()
+        }
+        val topView = View.inflate(mContext, R.layout.layout_main_community_top_layout, null)
+        val topRecyclerView = topView.findViewById<RecyclerView>(R.id.mRvMainCommunityTopContainer)
+        val mBannerMainCommunity = topView.findViewById<Banner>(R.id.mBannerMainCommunity)
+        topMarqueeView = topView.findViewById(R.id.mMvMainCommunityTopContainer)
+        topRecyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
+        topRecyclerView.adapter = TopRecyclerViewAdapter(R.layout.layout_main_community_top_item_layout, topList)
+        topRecyclerView.addOnItemTouchListener(object : OnItemClickListener() {
+            override fun onSimpleItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
+                FragmentContainerActivity.startFragmentContainerActivity(mContext, "文章详情", ArticleInfoFragment::class.java)
+            }
+        })
+        topView.findViewById<TextView>(R.id.mTvMainCommunityTopMoreArticle).setOnClickListener {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "所有发布", ArticleListFragment::class.java)
         }
         mBannerMainCommunity.setImageLoader(object : ImageLoader() {
             override fun displayImage(context: Context?, path: Any?, imageView: ImageView?) {
@@ -66,20 +91,6 @@ class MainCommunityFragment : BaseRecyclerViewFragment<String>() {
                 .setDelayTime(3000)
                 .setBannerStyle(BannerConfig.CIRCLE_INDICATOR)
                 .start()
-
-        val topView = View.inflate(mContext, R.layout.layout_main_community_top_layout, null)
-        val topRecyclerView = topView.findViewById<RecyclerView>(R.id.mRvMainCommunityTopContainer)
-        topMarqueeView = topView.findViewById<MarqueeView>(R.id.mMvMainCommunityTopContainer)
-        topRecyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
-        topRecyclerView.adapter = TopRecyclerViewAdapter(R.layout.layout_main_community_top_item_layout, topList)
-        topRecyclerView.addOnItemTouchListener(object : OnItemClickListener() {
-            override fun onSimpleItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
-                FragmentContainerActivity.startFragmentContainerActivity(mContext, "文章详情", ArticleInfoFragment::class.java)
-            }
-        })
-        topView.findViewById<TextView>(R.id.mTvMainCommunityTopMoreArticle).setOnClickListener {
-            FragmentContainerActivity.startFragmentContainerActivity(mContext, "所有发布", ArticleListFragment::class.java)
-        }
         val info = ArrayList<String>()
         info.add("大家好，我是孙福生。")
         info.add("欢迎大家关注我哦！")
@@ -88,15 +99,18 @@ class MainCommunityFragment : BaseRecyclerViewFragment<String>() {
         info.add("个人博客：sunfusheng.com")
         info.add("微信公众号：孙福生")
         topMarqueeView.startWithList(info)
+
         mBaseAdapter.addHeaderView(topView)
+        mBaseAdapter.setHeaderAndEmpty(true)
     }
 
     override fun createAdapter(): BaseQuickAdapter<String, BaseViewHolder> =
             ArticleListAdapter(R.layout.adapter_article_item_layout, mArrayList)
 
     override fun onRefresh() {
-        super.onRefresh()
+//        super.onRefresh()
         testAdd("")
+//        setEmptyView()
     }
 
     override fun getItemDecoration(): RecyclerView.ItemDecoration {
@@ -105,15 +119,15 @@ class MainCommunityFragment : BaseRecyclerViewFragment<String>() {
         return itemDecoration
     }
 
-    override fun onResume() {
-        super.onResume()
-        mBannerMainCommunity.startAutoPlay()
+    override fun onStart() {
+        super.onStart()
+        mBannerMainCommunity?.startAutoPlay()
         topMarqueeView.startFlipping()
     }
 
     override fun onStop() {
         super.onStop()
-        mBannerMainCommunity.stopAutoPlay()
+        mBannerMainCommunity?.stopAutoPlay()
         topMarqueeView.stopFlipping()
     }
 
@@ -132,4 +146,5 @@ class MainCommunityFragment : BaseRecyclerViewFragment<String>() {
             imageView.setColorFilter(Color.parseColor("#77000000"))
         }
     }
+
 }

@@ -17,6 +17,16 @@
             android:layout_height="wrap_content"
             android:minHeight="?actionBarSize">
 
+            <ImageView
+                android:id="@+id/mIvMainCommunityMine"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:padding="@dimen/dp_10"
+                android:background="?android:attr/selectableItemBackground"
+                android:src="@drawable/img_article_icon_face"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -26,27 +36,23 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
+            <ImageView
+                android:id="@+id/mIvMainCommunitySearch"
+                android:layout_alignParentRight="true"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:padding="@dimen/dp_10"
+                android:background="?android:attr/selectableItemBackground"
+                android:src="@drawable/img_icon_search"/>
+
         </RelativeLayout>
     </LinearLayout>
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent">
-
-            <com.youth.banner.Banner
-                android:id="@+id/mBannerMainCommunity"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                app:indicator_drawable_selected="@drawable/shape_banner_selected_bg"
-                app:indicator_drawable_unselected="@drawable/shape_banner_unselected_bg"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed" />
-
-        </android.support.design.widget.AppBarLayout>
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/id_srl_base_recycler_view"

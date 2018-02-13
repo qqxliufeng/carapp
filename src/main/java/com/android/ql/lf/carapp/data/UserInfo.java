@@ -10,6 +10,14 @@ import android.text.TextUtils;
 
 public class UserInfo {
 
+    public static final String LOGOUT_FLAG = "user_logout_flag";
+
+    public static String loginToken = "NONE";
+
+    public static void resetLoginSuccessDoActionToken(){
+        loginToken = "NONE";
+    }
+
     private UserInfo() {
     }
 
@@ -39,6 +47,7 @@ public class UserInfo {
     private String memberIsMaster;
     private String memberGrade;
     private String memberOrderNum;
+    private String memberIdCard;
 
 
     public String getMemberId() {
@@ -133,7 +142,6 @@ public class UserInfo {
         this.memberIsMaster = memberIsMaster;
     }
 
-
     public String getMemberGrade() {
         return memberGrade;
     }
@@ -150,8 +158,22 @@ public class UserInfo {
         this.memberOrderNum = memberOrderNum;
     }
 
+    public String getMemberIdCard() {
+        return memberIdCard;
+    }
+
+    public void setMemberIdCard(String memberIdCard) {
+        this.memberIdCard = memberIdCard;
+    }
+
     public void loginOut() {
         memberId = null;
-        instance = null;
     }
+
+    public void exitApp() {
+        if (instance != null) {
+            instance = null;
+        }
+    }
+
 }

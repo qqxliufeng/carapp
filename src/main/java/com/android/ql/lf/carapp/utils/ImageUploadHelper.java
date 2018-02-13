@@ -36,7 +36,7 @@ public class ImageUploadHelper {
         this.onImageUploadListener = onImageUploadListener;
     }
 
-    public void upload(final ArrayList<ImageBean> list) {
+    public void upload(final ArrayList<ImageBean> list,final int maxSize) {
         final File dir = new File(Constants.IMAGE_PATH);
         if (!dir.exists()) {
             dir.mkdirs();
@@ -47,7 +47,7 @@ public class ImageUploadHelper {
             public String call(ImageBean imageItem) {
                 String path = dir + File.separator + System.currentTimeMillis() + ".jpg";
                 try {
-                    ImageFactory.compressAndGenImage(imageItem.getUriPath().getPath(), path, 200, false);
+                    ImageFactory.compressAndGenImage(imageItem.getUriPath(), path, maxSize, false);
                 } catch (IOException e) {
                     return null;
                 }

@@ -5,6 +5,9 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.EditText
 import com.android.ql.lf.carapp.R
+import com.android.ql.lf.carapp.data.UserInfo
+import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
+import com.android.ql.lf.carapp.ui.fragments.user.LoginFragment
 import java.util.regex.Pattern
 
 /**
@@ -13,7 +16,6 @@ import java.util.regex.Pattern
  */
 
 val PHONE_REG = "^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\\d{8}\$"
-
 
 /**
  * 显示SnackBar
@@ -34,3 +36,20 @@ fun EditText.isEmpty(): Boolean {
 fun EditText.isPhone(): Boolean {
     return Pattern.compile(PHONE_REG).matcher(this.text).matches()
 }
+
+fun View.doClickWithUserStatusStart(token: String, action: (view: View) -> Unit) {
+    setOnClickListener {
+        if (UserInfo.getInstance().isLogin) {
+            action(this)
+        } else {
+            UserInfo.loginToken = token
+            FragmentContainerActivity.from(this.context).setClazz(LoginFragment::class.java).setTitle("登录").setNeedNetWorking(true).start()
+        }
+    }
+}
+
+fun View.doClickWithUseStatusEnd() {
+    performClick()
+    UserInfo.resetLoginSuccessDoActionToken()
+}
+
