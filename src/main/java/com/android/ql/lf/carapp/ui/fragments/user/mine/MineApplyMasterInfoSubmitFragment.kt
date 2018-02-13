@@ -3,9 +3,7 @@ package com.android.ql.lf.carapp.ui.fragments.user.mine
 import android.app.Activity
 import android.content.Intent
 import android.support.v7.widget.LinearLayoutManager
-import android.text.Editable
 import android.text.TextUtils
-import android.text.TextWatcher
 import android.view.View
 import android.widget.ImageView
 import com.android.ql.lf.carapp.R
@@ -15,6 +13,7 @@ import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.utils.isEmpty
 import com.android.ql.lf.carapp.utils.isPhone
 import com.android.ql.lf.carapp.utils.toast
+import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.zhihu.matisse.Matisse
@@ -143,19 +142,19 @@ class MineApplyMasterInfoSubmitFragment : BaseNetWorkingFragment() {
         if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
             when (currentImageFlag) {
                 0 -> {
-                    Matisse.obtainResult(data).forEach {
+                    Matisse.obtainPathResult(data).forEach {
                         storeImagesList.add(ImageBean(null, it))
                     }
                     storeImagesAdapter.notifyDataSetChanged()
                 }
                 1 -> {
-                    Matisse.obtainResult(data).forEach {
+                    Matisse.obtainPathResult(data).forEach {
                         idCardImageList.add(ImageBean(null, it))
                     }
                     idCardImagesAdapter.notifyDataSetChanged()
                 }
                 2 -> {
-                    Matisse.obtainResult(data).forEach {
+                    Matisse.obtainPathResult(data).forEach {
                         licenceImageList.add(ImageBean(null, it))
                     }
                     licenceImagesAdapter.notifyDataSetChanged()
@@ -167,7 +166,7 @@ class MineApplyMasterInfoSubmitFragment : BaseNetWorkingFragment() {
     class ImageAdapter(resId: Int, list: ArrayList<ImageBean>) : BaseQuickAdapter<ImageBean, BaseViewHolder>(resId, list) {
         override fun convert(helper: BaseViewHolder?, item: ImageBean?) {
             val imageView = helper!!.getView<ImageView>(R.id.mIvApplyMasterImageInfoItem)
-            imageView.setImageURI(item!!.uriPath)
+            Glide.with(mContext).load(item!!.uriPath).into(imageView)
         }
     }
 }

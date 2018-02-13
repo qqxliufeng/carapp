@@ -88,7 +88,7 @@ public abstract class BaseFragment extends Fragment {
         return actionBarHeight1;
     }
 
-    protected void openImageChoose(Set<MimeType> mimeTypes,int maxSelectable) {
+    protected void openImageChoose(Set<MimeType> mimeTypes, int maxSelectable) {
         Matisse.from(this)
                 .choose(mimeTypes)
                 .imageEngine(new GlideEngine())
@@ -107,10 +107,14 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
+        unsubscribe(subscription);
+        super.onDestroyView();
+    }
+
+    public void unsubscribe(Subscription subscription) {
         if (subscription != null && !subscription.isUnsubscribed()) {
             subscription.unsubscribe();
         }
-        super.onDestroyView();
     }
 
 

@@ -29,11 +29,11 @@
                 android:textSize="@dimen/sp_16" />
 
             <TextView
+                android:id="@+id/mTvMineInviteCode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:text="ASDVAL"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
 
@@ -65,17 +65,9 @@
                 android:textColor="@color/text_dark_color" />
 
             <Button
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="20dp"
+                style="@style/style_button1"
                 android:layout_marginTop="@dimen/dp_10"
-                android:background="@drawable/shape_bt_bg1"
-                android:text="立即邀请"
-                android:textColor="#fff"
-                android:textSize="@dimen/sp_16"
-                android:textStyle="bold" />
+                android:text="立即邀请"/>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

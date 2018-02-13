@@ -77,7 +77,7 @@ class OrderImageUpLoadFragment : BaseNetWorkingFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
-            val uris = Matisse.obtainResult(data)
+            val uris = Matisse.obtainPathResult(data)
             uris.forEach {
                 mArrayList.add(0, ImageBean(null, it))
             }

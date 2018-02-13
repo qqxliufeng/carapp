@@ -10,6 +10,8 @@ interface IViewUserAction {
 
     fun onLogin(result: JSONObject): Boolean
 
+    fun onLogout(): Boolean
+
     fun onRegister(result: JSONObject)
 
     fun onForgetPassword(result: JSONObject)

@@ -27,8 +27,18 @@ public class UserPresent {
         }
     }
 
+    public void onLogout() {
+        if (userAction.onLogout()) {
+            sendLogoutSuccessMessage();
+        }
+    }
+
     public void sendLoginSuccessMessage() {
         RxBus.getDefault().post(UserInfo.getInstance());
+    }
+
+    public void sendLogoutSuccessMessage() {
+        RxBus.getDefault().post(UserInfo.LOGOUT_FLAG);
     }
 
     public void getCode(String phone) {

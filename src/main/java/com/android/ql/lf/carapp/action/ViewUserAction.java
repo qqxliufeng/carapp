@@ -37,6 +37,12 @@ public class ViewUserAction implements IViewUserAction {
     }
 
     @Override
+    public boolean onLogout() {
+        UserInfo.getInstance().loginOut();
+        return true;
+    }
+
+    @Override
     public void onRegister(@NotNull JSONObject result) {
     }
 
@@ -47,4 +53,5 @@ public class ViewUserAction implements IViewUserAction {
     @Override
     public void onResetPassword(@NotNull JSONObject result) {
     }
+
 }

@@ -6,6 +6,14 @@
     android:background="#fff"
     android:orientation="vertical">
 
+    <com.youth.banner.Banner
+        android:id="@+id/mBannerMainCommunity"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        app:indicator_drawable_selected="@drawable/shape_banner_selected_bg"
+        app:indicator_drawable_unselected="@drawable/shape_banner_unselected_bg"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/mRvMainCommunityTopContainer"
         android:layout_width="match_parent"
@@ -47,6 +55,7 @@
             app:mvSingleLine="true"
             app:mvTextColor="@color/text_deep_dark_color"
             app:mvTextSize="14sp" />
+
     </LinearLayout>
 
     <View
