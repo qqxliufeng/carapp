@@ -7,10 +7,12 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 
 import com.android.ql.lf.carapp.R;
+import com.android.ql.lf.carapp.ui.fragments.user.LoginFragment;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
@@ -50,13 +52,19 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseNetWorkingFragment
         return R.layout.fragment_base_recycler_view_layout;
     }
 
+
+    //设置空View相关的方法    start
     protected int getEmptyLayoutId() {
         return R.layout.layout_list_empty_layout;
     }
 
     protected void setEmptyMessage(String emptyMessage) {
-        TextView tv_empty = mBaseAdapter.getEmptyView().findViewById(R.id.mTvRecyclerViewEmpty);
+        TextView tv_empty = getEmptyTextView();
         tv_empty.setText(emptyMessage);
+    }
+
+    protected TextView getEmptyTextView(){
+        return mBaseAdapter.getEmptyView().findViewById(R.id.mTvRecyclerViewEmpty);
     }
 
     protected String getEmptyMessage() {
@@ -68,6 +76,24 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseNetWorkingFragment
         setEmptyMessage(getEmptyMessage());
         mBaseAdapter.notifyDataSetChanged();
     }
+
+    protected void setEmptyViewStatus(){
+        onRequestEnd(-1);
+        setRefreshEnable(false);
+        setEmptyView();
+        TextView emptyTextView = getEmptyTextView();
+        emptyTextView.setBackgroundResource(R.drawable.shape_bt_bg4);
+        emptyTextView.setTextColor(ContextCompat.getColor(mContext,R.color.colorPrimary));
+        int paddingLeft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,10.0f, getResources().getDisplayMetrics());
+        emptyTextView.setPadding(paddingLeft,paddingLeft/2,paddingLeft,paddingLeft/2);
+        emptyTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginFragment.Companion.startLogin(mContext);
+            }
+        });
+    }
+    //设置空View相关的方法    end
 
     @Override
     @CallSuper

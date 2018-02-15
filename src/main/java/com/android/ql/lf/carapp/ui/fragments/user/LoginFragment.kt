@@ -1,6 +1,7 @@
 package com.android.ql.lf.carapp.ui.fragments.user
 
 import android.app.ProgressDialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.view.View
@@ -17,6 +18,12 @@ import org.json.JSONObject
  * @author lf on 18.1.24
  */
 class LoginFragment : BaseNetWorkingFragment() {
+
+    companion object {
+        fun startLogin(context:Context){
+            FragmentContainerActivity.from(context).setClazz(LoginFragment::class.java).setNeedNetWorking(true).setTitle("登录").start()
+        }
+    }
 
     private val userPresent: UserPresent by lazy {
         UserPresent()

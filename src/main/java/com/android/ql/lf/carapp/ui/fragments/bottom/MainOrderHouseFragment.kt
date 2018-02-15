@@ -5,9 +5,11 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.content.ContextCompat
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import com.android.ql.lf.carapp.R
+import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.activities.MainActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseFragment
@@ -47,6 +49,24 @@ class MainOrderHouseFragment : BaseFragment() {
         }
     }
 
+    private val loginSubscription by lazy {
+        RxBus.getDefault().toObservable(UserInfo::class.java).subscribe {
+            mTvMainOrderHouseAddress.text = if (!TextUtils.isEmpty(UserInfo.getInstance().memberAddress)) {
+                UserInfo.getInstance().memberAddress
+            } else {
+                "暂无"
+            }
+        }
+    }
+
+    private val userLogoutSubscription by lazy {
+        RxBus.getDefault().toObservable(String::class.java).subscribe {
+            if (it == UserInfo.LOGOUT_FLAG) {
+                mTvMainOrderHouseAddress.text = "暂无"
+            }
+        }
+    }
+
     override fun getLayoutId() = R.layout.fragment_main_order_house_layout
 
     override fun initView(view: View?) {
@@ -69,6 +89,8 @@ class MainOrderHouseFragment : BaseFragment() {
         mAlOrderHouse.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             mTlOrderHouseTitleContainer.alpha = 1 - Math.abs(verticalOffset).toFloat() / appBarLayout.totalScrollRange.toFloat()
         }
+        loginSubscription
+        userLogoutSubscription
         messageSubscription
     }
 
@@ -92,9 +114,9 @@ class MainOrderHouseFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
-        if (messageSubscription != null && !messageSubscription.isUnsubscribed) {
-            messageSubscription.unsubscribe()
-        }
+        unsubscribe(messageSubscription)
+        unsubscribe(loginSubscription)
+        unsubscribe(userLogoutSubscription)
         super.onDestroyView()
     }
 

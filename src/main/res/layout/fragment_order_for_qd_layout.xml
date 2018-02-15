@@ -14,7 +14,7 @@
         android:marqueeRepeatLimit="marquee_forever"
         android:padding="@dimen/dp_10"
         android:singleLine="true"
-        android:text="您当前帐号未认证成为维修师傅，暂无法接单，请立即认证"
+        android:text="当前帐号未认证，暂无法接单，请立即认证"
         android:textColor="#ff7400" />
 
     <include layout="@layout/fragment_base_recycler_view_layout" />
