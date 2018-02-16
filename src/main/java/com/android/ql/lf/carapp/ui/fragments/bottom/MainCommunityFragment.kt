@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.android.ql.lf.carapp.R
+import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.activities.MainActivity
 import com.android.ql.lf.carapp.ui.adapter.ArticleListAdapter
@@ -23,6 +24,8 @@ import com.android.ql.lf.carapp.ui.fragments.community.WriteArticleFragment
 import com.android.ql.lf.carapp.ui.fragments.user.mine.MineApplyMasterFragment
 import com.android.ql.lf.carapp.ui.fragments.user.mine.MineArticleFragment
 import com.android.ql.lf.carapp.ui.views.VerticalTextView
+import com.android.ql.lf.carapp.utils.doClickWithUseStatusEnd
+import com.android.ql.lf.carapp.utils.doClickWithUserStatusStart
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -41,6 +44,9 @@ import kotlinx.android.synthetic.main.fragment_main_community_layout.*
 class MainCommunityFragment : BaseRecyclerViewFragment<String>() {
 
     companion object {
+        val COMMUNITY_SEND_ARTICLE_FLAG = "community_send_article_flag"
+        val COMMUNITY_MY_ARTICLE_FLAG = "community_my_article_flag"
+
         fun newInstance(): MainCommunityFragment {
             return MainCommunityFragment()
         }
@@ -58,10 +64,11 @@ class MainCommunityFragment : BaseRecyclerViewFragment<String>() {
         val param = mRlCommunityTitleContainer.layoutParams as ViewGroup.MarginLayoutParams
         param.topMargin = height
         mRlCommunityTitleContainer.layoutParams = param
-        mFabWriteNote.setOnClickListener {
+        registerLoginSuccessBus()
+        mFabWriteNote.doClickWithUserStatusStart(COMMUNITY_SEND_ARTICLE_FLAG) {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "发布帖子", WriteArticleFragment::class.java)
         }
-        mIvMainCommunityMine.setOnClickListener {
+        mIvMainCommunityMine.doClickWithUserStatusStart(COMMUNITY_MY_ARTICLE_FLAG) {
             FragmentContainerActivity.from(mContext).setClazz(MineArticleFragment::class.java).setTitle("我的帖子").start()
         }
         mIvMainCommunitySearch.setOnClickListener {
@@ -135,6 +142,19 @@ class MainCommunityFragment : BaseRecyclerViewFragment<String>() {
         super.onMyItemClick(adapter, view, position)
         FragmentContainerActivity.startFragmentContainerActivity(mContext, "详情", ArticleInfoFragment::class.java)
     }
+
+    override fun onLoginSuccess(userInfo: UserInfo?) {
+        super.onLoginSuccess(userInfo)
+        when(UserInfo.loginToken){
+            COMMUNITY_SEND_ARTICLE_FLAG->{
+                mFabWriteNote.doClickWithUseStatusEnd()
+            }
+            COMMUNITY_MY_ARTICLE_FLAG->{
+                mIvMainCommunityMine.doClickWithUseStatusEnd()
+            }
+        }
+    }
+
 
     class TopRecyclerViewAdapter(layoutId: Int, list: ArrayList<Int>) : BaseQuickAdapter<Int, BaseViewHolder>(layoutId, list) {
         override fun convert(helper: BaseViewHolder?, item: Int?) {
