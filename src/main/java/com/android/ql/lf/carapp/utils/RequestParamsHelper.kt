@@ -98,10 +98,16 @@ class RequestParamsHelper {
         /**              qaa model  start           **/
         val QAA_MODEL = "qaa"
         val ACT_QUIZ = "quiz"
+
         fun getQuizParam(ktype: Int, page: Int): ApiParams {
             val param = getWithPageParams(page)
             param.addParam("ktype", ktype)
             return param
+        }
+
+        val ACT_COMMUNITY_LUNBO_DETAIL = "community_lunbo_detail"
+        fun getCommunityLunboDetail(lid:String):ApiParams{
+            return getWithIdParams().addParam("lid",lid)
         }
 
         /**              qaa model  end           **/

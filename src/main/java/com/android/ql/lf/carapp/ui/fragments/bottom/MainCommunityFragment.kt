@@ -16,6 +16,7 @@ import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.activities.MainActivity
 import com.android.ql.lf.carapp.ui.adapter.ArticleListAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
+import com.android.ql.lf.carapp.ui.fragments.DetailContentFragment
 import com.android.ql.lf.carapp.ui.fragments.community.ArticleInfoFragment
 import com.android.ql.lf.carapp.ui.fragments.community.ArticleListFragment
 import com.android.ql.lf.carapp.ui.fragments.community.ArticleSearchFragment
@@ -33,6 +34,7 @@ import com.youth.banner.BannerConfig
 import com.youth.banner.loader.ImageLoader
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.fragment_main_community_layout.*
+import org.jetbrains.anko.bundleOf
 import org.json.JSONObject
 
 /**
@@ -91,7 +93,7 @@ class MainCommunityFragment : BaseRecyclerViewFragment<ArticleBean>() {
         }
         mBannerMainCommunity!!.setImageLoader(object : ImageLoader() {
             override fun displayImage(context: Context?, path: Any?, imageView: ImageView?) {
-                GlideManager.loadImage(mContext, path as String, imageView)
+                GlideManager.loadImage(mContext, (path as BannerImageBean).lunbo_pic, imageView)
             }
         })
         mBaseAdapter.addHeaderView(topView)
@@ -117,18 +119,29 @@ class MainCommunityFragment : BaseRecyclerViewFragment<ArticleBean>() {
                     communityContainerBean.arr1.forEach {
                         firstNewsList.add(it.quiz_title)
                     }
-                    val bannerList = ArrayList<String>()
-                    communityContainerBean.arr2.forEach {
-                        bannerList.add(it.lunbo_pic)
-                    }
                     topList.clear()
                     topList.addAll(communityContainerBean.arr)
                     topRecycleViewAdapter.notifyDataSetChanged()
-                    mBannerMainCommunity!!.setImages(bannerList)
+                    mBannerMainCommunity!!.setImages(communityContainerBean.arr2)
                             .setDelayTime(3000)
                             .setBannerStyle(BannerConfig.CIRCLE_INDICATOR)
                             .start()
+                    mBannerMainCommunity?.setOnBannerListener {
+                        FragmentContainerActivity.from(mContext)
+                                .setTitle("详情")
+                                .setNeedNetWorking(true)
+                                .setClazz(DetailContentFragment::class.java)
+                                .setExtraBundle(bundleOf(
+                                        Pair(DetailContentFragment.MODEL_NAME_FLAG,RequestParamsHelper.QAA_MODEL),
+                                        Pair(DetailContentFragment.ACT_NAME_FLAG,RequestParamsHelper.ACT_COMMUNITY_LUNBO_DETAIL),
+                                        Pair(DetailContentFragment.PARAM_FLAG, mapOf(Pair("lid",communityContainerBean.arr2[it].lunbo_id)))
+                                ))
+                                .start()
+                    }
                     topMarqueeView.startWithList(firstNewsList)
+                    topMarqueeView.setOnItemClickListener { position, textView ->
+
+                    }
                     processList(check.obj as JSONObject, ArticleBean::class.java)
                 }
             }
@@ -182,6 +195,11 @@ class MainCommunityFragment : BaseRecyclerViewFragment<ArticleBean>() {
                 mIvMainCommunityMine.doClickWithUseStatusEnd()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        mBannerMainCommunity?.releaseBanner()
+        super.onDestroyView()
     }
 
     class TopRecyclerViewAdapter(layoutId: Int, list: ArrayList<CommunityTagBean>) : BaseQuickAdapter<CommunityTagBean, BaseViewHolder>(layoutId, list) {
