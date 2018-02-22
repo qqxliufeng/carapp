@@ -1,23 +1,28 @@
 package com.android.ql.lf.carapp.ui.fragments.user.mine
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.EditText
 import com.android.ql.lf.carapp.R
+import com.android.ql.lf.carapp.data.ImageBean
 import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.present.UserPresent
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
-import com.android.ql.lf.carapp.utils.Constants
-import com.android.ql.lf.carapp.utils.GlideManager
-import com.android.ql.lf.carapp.utils.ImageFactory
+import com.android.ql.lf.carapp.utils.*
 import com.soundcloud.android.crop.Crop
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import kotlinx.android.synthetic.main.fragment_mine_personal_info_layout.*
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import org.jetbrains.anko.support.v4.toast
+import org.json.JSONObject
 import java.io.File
+import java.util.ArrayList
 
 /**
  * Created by lf on 18.2.3.
@@ -29,6 +34,9 @@ class MinePersonalInfoFragment : BaseNetWorkingFragment() {
         UserPresent()
     }
 
+    //0  用户名   1 手机号    2 头像
+    private var currentToken = 0
+
     override fun getLayoutId() = R.layout.fragment_mine_personal_info_layout
 
     override fun initView(view: View?) {
@@ -36,12 +44,15 @@ class MinePersonalInfoFragment : BaseNetWorkingFragment() {
         mTvPersonalInfoNickName.text = UserInfo.getInstance().memberName
         mTvPersonalInfoPhone.text = UserInfo.getInstance().memberPhone.let { "${it.substring(0, 3)}****${it.substring(7, it.length)}" }
         mFaceContainer.setOnClickListener {
+            currentToken = 2
             openImageChoose(MimeType.ofImage(), 1)
         }
         mNickNameContainer.setOnClickListener {
+            currentToken = 0
             showEditInfoDialog("修改昵称", UserInfo.getInstance().memberName)
         }
         mIdCardContainer.setOnClickListener {
+            currentToken = 1
             showEditInfoDialog("修改身份证号", UserInfo.getInstance().memberIdCard ?: "")
         }
     }
@@ -58,9 +69,44 @@ class MinePersonalInfoFragment : BaseNetWorkingFragment() {
             if (oldInfo == content.text.toString().trim()) {
                 return@setPositiveButton
             }
+            mPresent.getDataByPost(0x0, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_EDIT_PERSONAL, RequestParamsHelper.getEditPersonalParam(content.getTextString()))
         }
         builder.setView(contentView)
         builder.create().show()
+    }
+
+    override fun onRequestStart(requestID: Int) {
+        super.onRequestStart(requestID)
+        if (requestID == 0x0) {
+            getFastProgressDialog("正在修改……")
+        }
+    }
+
+    override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
+        super.onRequestSuccess(requestID, result)
+        val check = checkResultCode(result)
+        if (check != null) {
+            if (SUCCESS_CODE == check.code) {
+                when (currentToken) {
+                    0 -> {
+                        val nameResult = (check.obj as JSONObject).optJSONObject("result").optString("member_name")
+                        mTvPersonalInfoNickName.text = nameResult
+                        userPresent.modifyInfoForName(nameResult)
+                    }
+                    1 -> {
+
+                    }
+                    2 -> {
+                        val picResult = (check.obj as JSONObject).optJSONObject("result").optString("member_pic")
+                        GlideManager.loadFaceCircleImage(mContext, picResult, mTvPersonalInfoFace)
+                        userPresent.modifyInfoForPic(picResult)
+                    }
+                }
+
+            } else {
+                toast((check.obj as JSONObject).optString("msg"))
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -77,8 +123,24 @@ class MinePersonalInfoFragment : BaseNetWorkingFragment() {
             }
         } else if (requestCode == Crop.REQUEST_CROP) {
             val uri = Crop.getOutput(data)
-            val desPath = File("${Constants.IMAGE_PATH}face/${System.currentTimeMillis()}_1.jpg")
-            ImageFactory.compressAndGenImage(uri.path, desPath.absolutePath, 100, true)
+            ImageUploadHelper(object : ImageUploadHelper.OnImageUploadListener {
+                override fun onActionFailed() {
+                    toast("头像上传失败，请稍后重试！")
+                }
+
+                override fun onActionStart() {
+                    progressDialog = ProgressDialog.show(mContext, null, "正在上传头像……")
+                }
+
+                override fun onActionEnd(paths: ArrayList<String>) {
+                    val builder = ImageUploadHelper.createMultipartBody()
+                    paths.forEachIndexed { index, s ->
+                        val file = File(s)
+                        builder.addFormDataPart("$index", file.name, RequestBody.create(MultipartBody.FORM, file))
+                    }
+                    mPresent.uploadFile(0x1, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_EDIT_PERSONAL, builder.build().parts())
+                }
+            }).upload(arrayListOf(ImageBean(null, uri.path)), 100)
         }
     }
 }

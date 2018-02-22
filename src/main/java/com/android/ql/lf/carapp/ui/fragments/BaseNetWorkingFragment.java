@@ -37,7 +37,7 @@ public abstract class BaseNetWorkingFragment extends BaseFragment implements INe
     public ProgressDialog progressDialog;
 
 
-    public void registerLoginSuccessBus(){
+    public void registerLoginSuccessBus() {
         subscription = RxBus.getDefault().toObservable(UserInfo.class).subscribe(new Action1<UserInfo>() {
             @Override
             public void call(UserInfo userInfo) {
@@ -46,7 +46,7 @@ public abstract class BaseNetWorkingFragment extends BaseFragment implements INe
         });
     }
 
-    public void onLoginSuccess(UserInfo userInfo){
+    public void onLoginSuccess(UserInfo userInfo) {
     }
 
     @Override
@@ -67,6 +67,10 @@ public abstract class BaseNetWorkingFragment extends BaseFragment implements INe
         if (mPresent != null) {
             this.mPresent.setNetDataPresenter(this);
         }
+    }
+
+    public void getFastProgressDialog(String message) {
+        progressDialog = ProgressDialog.show(mContext, null, message);
     }
 
     @Override

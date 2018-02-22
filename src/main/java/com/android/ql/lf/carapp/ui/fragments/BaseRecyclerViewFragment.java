@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.android.ql.lf.carapp.R;
+import com.android.ql.lf.carapp.data.lists.ListParseHelper;
 import com.android.ql.lf.carapp.ui.fragments.user.LoginFragment;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -234,7 +235,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseNetWorkingFragment
         });
     }
 
-    /*public void processList(JSONObject json, Class<T> clazz) {
+    public void processList(JSONObject json, Class<T> clazz) {
         try {
             if (json != null) {
                 ArrayList<T> tempList = new ListParseHelper<T>().fromJson(json.toString(), clazz);
@@ -262,6 +263,6 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseNetWorkingFragment
         } catch (Exception e) {
             setEmptyView();
         }
-    }*/
+    }
 
 }

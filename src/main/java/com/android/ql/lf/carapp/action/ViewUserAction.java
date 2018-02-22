@@ -54,4 +54,23 @@ public class ViewUserAction implements IViewUserAction {
     public void onResetPassword(@NotNull JSONObject result) {
     }
 
+    @Override
+    public boolean modifyInfoForName(@NotNull String name) {
+        try {
+            UserInfo.getInstance().setMemberName(name);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean modifyInfoForPic(@NotNull String result) {
+        try {
+            UserInfo.getInstance().setMemberPic(result);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

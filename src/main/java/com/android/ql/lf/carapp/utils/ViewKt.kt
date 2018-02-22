@@ -30,11 +30,15 @@ fun View.showSnackBar(message: String) {
  * 校验输入框是否为空
  */
 fun EditText.isEmpty(): Boolean {
-    return TextUtils.isEmpty(this.text.toString())
+    return TextUtils.isEmpty(this.text.toString().trim())
 }
 
 fun EditText.isPhone(): Boolean {
     return Pattern.compile(PHONE_REG).matcher(this.text).matches()
+}
+
+fun EditText.getTextString(): String {
+    return this.text.toString().trim()
 }
 
 fun View.doClickWithUserStatusStart(token: String, action: (view: View) -> Unit) {

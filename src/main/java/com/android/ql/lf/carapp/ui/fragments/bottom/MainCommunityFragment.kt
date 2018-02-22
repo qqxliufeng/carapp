@@ -11,37 +11,35 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.android.ql.lf.carapp.R
-import com.android.ql.lf.carapp.data.UserInfo
+import com.android.ql.lf.carapp.data.*
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.activities.MainActivity
 import com.android.ql.lf.carapp.ui.adapter.ArticleListAdapter
-import com.android.ql.lf.carapp.ui.adapter.OrderListForMineForWaitingWorkAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
 import com.android.ql.lf.carapp.ui.fragments.community.ArticleInfoFragment
 import com.android.ql.lf.carapp.ui.fragments.community.ArticleListFragment
 import com.android.ql.lf.carapp.ui.fragments.community.ArticleSearchFragment
 import com.android.ql.lf.carapp.ui.fragments.community.WriteArticleFragment
-import com.android.ql.lf.carapp.ui.fragments.user.mine.MineApplyMasterFragment
 import com.android.ql.lf.carapp.ui.fragments.user.mine.MineArticleFragment
-import com.android.ql.lf.carapp.ui.views.VerticalTextView
-import com.android.ql.lf.carapp.utils.doClickWithUseStatusEnd
-import com.android.ql.lf.carapp.utils.doClickWithUserStatusStart
+import com.android.ql.lf.carapp.utils.*
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.listener.OnItemClickListener
+import com.google.gson.Gson
 import com.sunfusheng.marqueeview.MarqueeView
 import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
 import com.youth.banner.loader.ImageLoader
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.fragment_main_community_layout.*
+import org.json.JSONObject
 
 /**
  * Created by lf on 18.1.24.
  * @author lf on 18.1.24
  */
-class MainCommunityFragment : BaseRecyclerViewFragment<String>() {
+class MainCommunityFragment : BaseRecyclerViewFragment<ArticleBean>() {
 
     companion object {
         val COMMUNITY_SEND_ARTICLE_FLAG = "community_send_article_flag"
@@ -52,9 +50,12 @@ class MainCommunityFragment : BaseRecyclerViewFragment<String>() {
         }
     }
 
-    private val topList = arrayListOf(R.drawable.test_pic1, R.drawable.test_pic2, R.drawable.test_pic3, R.drawable.test_pic4, R.drawable.test_pic5)
+    private val topList = arrayListOf<CommunityTagBean>()
     private lateinit var topMarqueeView: MarqueeView
     private var mBannerMainCommunity: Banner? = null
+    private val topRecycleViewAdapter by lazy {
+        TopRecyclerViewAdapter(R.layout.layout_main_community_top_item_layout, topList)
+    }
 
     override fun getLayoutId() = R.layout.fragment_main_community_layout
 
@@ -76,10 +77,10 @@ class MainCommunityFragment : BaseRecyclerViewFragment<String>() {
         }
         val topView = View.inflate(mContext, R.layout.layout_main_community_top_layout, null)
         val topRecyclerView = topView.findViewById<RecyclerView>(R.id.mRvMainCommunityTopContainer)
-        val mBannerMainCommunity = topView.findViewById<Banner>(R.id.mBannerMainCommunity)
+        mBannerMainCommunity = topView.findViewById(R.id.mBannerMainCommunity)
         topMarqueeView = topView.findViewById(R.id.mMvMainCommunityTopContainer)
         topRecyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
-        topRecyclerView.adapter = TopRecyclerViewAdapter(R.layout.layout_main_community_top_item_layout, topList)
+        topRecyclerView.adapter = topRecycleViewAdapter
         topRecyclerView.addOnItemTouchListener(object : OnItemClickListener() {
             override fun onSimpleItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
                 FragmentContainerActivity.startFragmentContainerActivity(mContext, "文章详情", ArticleInfoFragment::class.java)
@@ -88,36 +89,64 @@ class MainCommunityFragment : BaseRecyclerViewFragment<String>() {
         topView.findViewById<TextView>(R.id.mTvMainCommunityTopMoreArticle).setOnClickListener {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "所有发布", ArticleListFragment::class.java)
         }
-        mBannerMainCommunity.setImageLoader(object : ImageLoader() {
+        mBannerMainCommunity!!.setImageLoader(object : ImageLoader() {
             override fun displayImage(context: Context?, path: Any?, imageView: ImageView?) {
-                Glide.with(context).load(path as Int).into(imageView)
+                GlideManager.loadImage(mContext, path as String, imageView)
             }
         })
-        mBannerMainCommunity
-                .setImages(arrayListOf(R.drawable.test_banner))
-                .setDelayTime(3000)
-                .setBannerStyle(BannerConfig.CIRCLE_INDICATOR)
-                .start()
-        val info = ArrayList<String>()
-        info.add("大家好，我是孙福生。")
-        info.add("欢迎大家关注我哦！")
-        info.add("GitHub帐号：sfsheng0322")
-        info.add("新浪微博：孙福生微博")
-        info.add("个人博客：sunfusheng.com")
-        info.add("微信公众号：孙福生")
-        topMarqueeView.startWithList(info)
-
         mBaseAdapter.addHeaderView(topView)
         mBaseAdapter.setHeaderAndEmpty(true)
     }
 
-    override fun createAdapter(): BaseQuickAdapter<String, BaseViewHolder> =
+    override fun createAdapter(): BaseQuickAdapter<ArticleBean, BaseViewHolder> =
             ArticleListAdapter(R.layout.adapter_article_item_layout, mArrayList)
 
     override fun onRefresh() {
-//        super.onRefresh()
-        testAdd("")
-//        setEmptyView()
+        super.onRefresh()
+        mPresent.getDataByPost(0x0, RequestParamsHelper.QAA_MODEL, RequestParamsHelper.ACT_QUIZ, RequestParamsHelper.getQuizParam(1, currentPage))
+    }
+
+    override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
+        super.onRequestSuccess(requestID, result)
+        val check = checkResultCode(result)
+        if (requestID == 0x0) {
+            if (check != null) {
+                if (SUCCESS_CODE == check.code) {
+                    val communityContainerBean = Gson().fromJson(result.toString(), CommunityContainerBean::class.java)
+                    val firstNewsList = ArrayList<String>()
+                    communityContainerBean.arr1.forEach {
+                        firstNewsList.add(it.quiz_title)
+                    }
+                    val bannerList = ArrayList<String>()
+                    communityContainerBean.arr2.forEach {
+                        bannerList.add(it.lunbo_pic)
+                    }
+                    topList.clear()
+                    topList.addAll(communityContainerBean.arr)
+                    topRecycleViewAdapter.notifyDataSetChanged()
+                    mBannerMainCommunity!!.setImages(bannerList)
+                            .setDelayTime(3000)
+                            .setBannerStyle(BannerConfig.CIRCLE_INDICATOR)
+                            .start()
+                    topMarqueeView.startWithList(firstNewsList)
+                    processList(check.obj as JSONObject, ArticleBean::class.java)
+                }
+            }
+        } else {
+            if (check != null) {
+                processList(check.obj as JSONObject, ArticleBean::class.java)
+            }
+        }
+    }
+
+    override fun onRequestFail(requestID: Int, e: Throwable) {
+        super.onRequestFail(requestID, e)
+        toast("加载失败……")
+    }
+
+    override fun onLoadMore() {
+        super.onLoadMore()
+        mPresent.getDataByPost(0x1, RequestParamsHelper.QAA_MODEL, RequestParamsHelper.ACT_QUIZ, RequestParamsHelper.getQuizParam(1, currentPage))
     }
 
     override fun getItemDecoration(): RecyclerView.ItemDecoration {
@@ -145,26 +174,36 @@ class MainCommunityFragment : BaseRecyclerViewFragment<String>() {
 
     override fun onLoginSuccess(userInfo: UserInfo?) {
         super.onLoginSuccess(userInfo)
-        when(UserInfo.loginToken){
-            COMMUNITY_SEND_ARTICLE_FLAG->{
+        when (UserInfo.loginToken) {
+            COMMUNITY_SEND_ARTICLE_FLAG -> {
                 mFabWriteNote.doClickWithUseStatusEnd()
             }
-            COMMUNITY_MY_ARTICLE_FLAG->{
+            COMMUNITY_MY_ARTICLE_FLAG -> {
                 mIvMainCommunityMine.doClickWithUseStatusEnd()
             }
         }
     }
 
-
-    class TopRecyclerViewAdapter(layoutId: Int, list: ArrayList<Int>) : BaseQuickAdapter<Int, BaseViewHolder>(layoutId, list) {
-        override fun convert(helper: BaseViewHolder?, item: Int?) {
+    class TopRecyclerViewAdapter(layoutId: Int, list: ArrayList<CommunityTagBean>) : BaseQuickAdapter<CommunityTagBean, BaseViewHolder>(layoutId, list) {
+        override fun convert(helper: BaseViewHolder?, item: CommunityTagBean?) {
             val imageView = helper!!.getView<ImageView>(R.id.mIvMainCommunityTopItemImage)
             Glide.with(mContext)
-                    .load(item)
+                    .load(Constants.BASE_IP + item!!.tag_pic)
                     .bitmapTransform(RoundedCornersTransformation(mContext, 8, 0))
                     .into(imageView)
             imageView.setColorFilter(Color.parseColor("#77000000"))
+            helper.setText(R.id.mTvMainCommunityTopItemTitle, item.tag_title)
         }
+    }
+
+    class CommunityContainerBean {
+        lateinit var result: ArrayList<ArticleBean>
+
+        lateinit var arr: ArrayList<CommunityTagBean>
+
+        lateinit var arr1: ArrayList<FirstNewsBean>
+
+        lateinit var arr2: ArrayList<BannerImageBean>
     }
 
 }

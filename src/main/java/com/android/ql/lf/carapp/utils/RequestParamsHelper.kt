@@ -1,5 +1,7 @@
 package com.android.ql.lf.carapp.utils
 
+import com.android.ql.lf.carapp.data.UserInfo
+
 /**
  * Created by lf on 2017/11/13 0013.
  * @author lf on 2017/11/13 0013
@@ -14,27 +16,25 @@ class RequestParamsHelper {
             return params
         }
 
-//        private fun getWithIdParams(): ApiParams {
-//            val params = getBaseParams()
-//            params.addParam("uid", UserInfo.getInstance().memberId)
-//            return params
-//        }
-//
-//        private fun getWithPageParams(page: Int, pageSize: Int = 10): ApiParams {
-//            val param = if (UserInfo.getInstance().isLogin) {
-//                getWithIdParams()
-//            } else {
-//                getBaseParams()
-//            }
-//            param.addParam("page", page)
-//            param.addParam("pagesize", pageSize)
-//            return param
-//        }
+        private fun getWithIdParams(): ApiParams {
+            val params = getBaseParams()
+            params.addParam("uid", UserInfo.getInstance().memberId)
+            return params
+        }
+
+        private fun getWithPageParams(page: Int, pageSize: Int = 10): ApiParams {
+            val param = if (UserInfo.getInstance().isLogin) {
+                getWithIdParams()
+            } else {
+                getBaseParams()
+            }
+            param.addParam("page", page)
+            param.addParam("pagesize", pageSize)
+            return param
+        }
 
         /**              login model  start           **/
         val LOGIN_MODEL = "login"
-
-
         val ACT_REGISTER = "Register"
         val ACT_CODE = "getcode"
         val ACT_LOGIN = "Login"
@@ -74,7 +74,39 @@ class RequestParamsHelper {
             return params
         }
 
+        /**              login model  end           **/
+
+
+        /**              member model  start           **/
+
+        val MEMBER_MODEL = "member"
+        val ACT_EDIT_PW = "edit_pw"
+        fun getEditPWParams(pw: String, newpw: String): ApiParams {
+            val param = getWithIdParams()
+            return param.addParam("pw", pw).addParam("newpw", newpw)
+        }
+
+        val ACT_EDIT_PERSONAL = "edit_personal"
+        fun getEditPersonalParam(account: String): ApiParams {
+            return getWithIdParams().addParam("account", account)
+        }
+
+
+        /**              member model  end           **/
+
+
+        /**              qaa model  start           **/
+        val QAA_MODEL = "qaa"
+        val ACT_QUIZ = "quiz"
+        fun getQuizParam(ktype: Int, page: Int): ApiParams {
+            val param = getWithPageParams(page)
+            param.addParam("ktype", ktype)
+            return param
+        }
+
+        /**              qaa model  end           **/
+
     }
-    /**              login model  end           **/
+
 
 }

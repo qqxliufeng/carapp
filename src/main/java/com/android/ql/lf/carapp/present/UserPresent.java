@@ -33,12 +33,28 @@ public class UserPresent {
         }
     }
 
+    public void modifyInfoForName(String result) {
+        if (userAction.modifyInfoForName(result)) {
+            sendModifyInfoSuccessMessage();
+        }
+    }
+
+    public void modifyInfoForPic(String result) {
+        if (userAction.modifyInfoForPic(result)) {
+            sendModifyInfoSuccessMessage();
+        }
+    }
+
     public void sendLoginSuccessMessage() {
         RxBus.getDefault().post(UserInfo.getInstance());
     }
 
     public void sendLogoutSuccessMessage() {
         RxBus.getDefault().post(UserInfo.LOGOUT_FLAG);
+    }
+
+    public void sendModifyInfoSuccessMessage() {
+        RxBus.getDefault().post("modify info success");
     }
 
     public void getCode(String phone) {

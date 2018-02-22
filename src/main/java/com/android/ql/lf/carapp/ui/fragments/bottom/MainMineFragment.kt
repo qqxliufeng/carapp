@@ -49,10 +49,20 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
             }
         }
     }
+
     private val userLogoutSubscription by lazy {
         RxBus.getDefault().toObservable(String::class.java).subscribe {
             if (it == UserInfo.LOGOUT_FLAG) {
                 onLogoutSuccess()
+            }
+        }
+    }
+
+    private val modifyInfoSubscription by lazy {
+        RxBus.getDefault().toObservable(String::class.java).subscribe {
+            if (it == "modify info success") {
+                mTvMainMineName.text = UserInfo.getInstance().memberName
+                GlideManager.loadFaceCircleImage(mContext, UserInfo.getInstance().memberPic, mIvMainMineFace)
             }
         }
     }
@@ -73,9 +83,12 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
         messageSubscription
         //注册用户退出事件
         userLogoutSubscription
+        //修改个人信息
+        modifyInfoSubscription
+
 
         mLlMainMinePersonalInfoContainer.doClickWithUserStatusStart(MINE_PERSONAL_INFO_TOKEN) {
-            FragmentContainerActivity.from(mContext).setClazz(MinePersonalInfoFragment::class.java).setTitle("个人中心").start()
+            FragmentContainerActivity.from(mContext).setClazz(MinePersonalInfoFragment::class.java).setTitle("个人中心").setNeedNetWorking(true).start()
         }
         mLlMainMineStoreContainer.doClickWithUserStatusStart(MINE_STORE_COLLECTION_TOKEN) {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "店铺收藏", MineStoreCollectionFragment::class.java)
@@ -185,6 +198,7 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
     override fun onDestroyView() {
         unsubscribe(messageSubscription)
         unsubscribe(userLogoutSubscription)
+        unsubscribe(modifyInfoSubscription)
         super.onDestroyView()
     }
 }

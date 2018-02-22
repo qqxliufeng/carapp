@@ -18,5 +18,8 @@ interface IViewUserAction {
 
     fun onResetPassword(result: JSONObject)
 
+    fun modifyInfoForName(result: String):Boolean
+
+    fun modifyInfoForPic(result: String):Boolean
 
 }
