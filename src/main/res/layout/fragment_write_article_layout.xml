@@ -138,6 +138,7 @@
                 style="@style/style_button1"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="20dp"
+                android:enabled="false"
                 android:text="确定提交" />
         </LinearLayout>
 

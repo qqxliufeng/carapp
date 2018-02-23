@@ -98,67 +98,15 @@ class RequestParamsHelper {
         /**              qaa model  start           **/
         val QAA_MODEL = "qaa"
         val ACT_QUIZ = "quiz"
-
         fun getQuizParam(ktype: Int, page: Int): ApiParams {
             val param = getWithPageParams(page)
             param.addParam("ktype", ktype)
             return param
         }
 
-        val ACT_COMMUNITY_LUNBO_DETAIL = "community_lunbo_detail"
-        fun getCommunityLunboDetail(lid: String): ApiParams {
-            return getWithIdParams().addParam("lid", lid)
-        }
-
-        val ACT_QUIZ_DETAIL = "quiz_detail"
-        fun getQuizDetailParams(qid: String, page: Int): ApiParams {
-            return getWithPageParams(page).addParam("qid", qid)
-        }
-
-        val ACT_QUIZ_LOOK = "quiz_look"
-        fun getQuizLookParams(qid: String): ApiParams {
-            return getWithIdParams().addParam("qid", qid)
-        }
-
-        val ACT_ADD_ANSWER = "add_answer"
-        fun getAddAnswerParams(qid: String, content: String): ApiParams {
-            return getWithIdParams().addParam("qid", qid).addParam("content", content)
-        }
-
-        val ACT_GET_MYQUIZ = "get_myquiz"
-        fun getGetMyQuizParam() = getWithIdParams()
-
-        val ACT_GET_MYANSWER = "get_myanswer"
-        fun getGetMyAnswerParam() = getWithIdParams()
-
-        val ACT_DEL_QAA = "del_qaa"
-        fun getDelQaaParam(qid: String = "", aid: String = ""): ApiParams {
-            return getWithIdParams().addParam("qid", qid).addParam("aid", aid)
-        }
-
-        val ACT_TAG = "tag"
-        fun getTagParam() = getBaseParams()
-
-        val ACT_ADD_QUIZ = "add_quiz"
-        fun getAddQuizParam(title: String, content: String, type: String): ApiParams {
-            return getWithIdParams().addParam("title", title).addParam("content", content).addParam("type", type)
-        }
-
-        val ACT_QUIZ_TYPE_SEARCH = "quiz_type_search"
-        fun getQuizTypeSearchParam(type: String = "", page: Int): ApiParams {
-            return getWithPageParams(page).addParam("type", type)
-        }
-
-        val ACT_QUIZ_SEARCH = "quiz_search"
-        fun getQuizSearchParam(keyword: String): ApiParams {
-            return getBaseParams().addParam("keyword", keyword)
-        }
-
-        val ACT_PRAISE = "praise"
-        fun getPraiseParams(aid: String): ApiParams {
-            return getWithIdParams().addParam("aid", aid)
-        }
-
         /**              qaa model  end           **/
+
     }
+
+
 }

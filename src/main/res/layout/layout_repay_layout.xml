@@ -29,6 +29,7 @@
             android:background="@drawable/shape_et_bg2"
             android:minHeight="40dp"
             android:paddingLeft="@dimen/dp_10"
+            android:textColorHint="@color/text_dark_color"
             android:textSize="@dimen/sp_14" />
 
         <Button

@@ -12,16 +12,19 @@ import com.android.ql.lf.carapp.present.CommunityPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.adapter.OrderImageUpLoadAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
-import com.android.ql.lf.carapp.utils.ImageUploadHelper
-import com.android.ql.lf.carapp.utils.isEmpty
-import com.android.ql.lf.carapp.utils.toast
+import com.android.ql.lf.carapp.utils.*
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.google.android.flexbox.FlexboxLayout
+import com.google.gson.Gson
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import kotlinx.android.synthetic.main.fragment_write_article_layout.*
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import org.json.JSONObject
+import java.io.File
 import java.util.*
 
 /**
@@ -30,8 +33,16 @@ import java.util.*
  */
 class WriteArticleFragment : BaseNetWorkingFragment() {
 
+    companion object {
+        val ARTICLE_SEND_SUCCESS_FLAG = "article send success"
+    }
+
     private val images = arrayListOf<ImageBean>()
     private var currentTag: String? = null
+    private val tags by lazy {
+        arrayListOf<ArticleTagBean>()
+    }
+
     private val mBaseAdapter: BaseQuickAdapter<ImageBean, BaseViewHolder> by lazy {
         OrderImageUpLoadAdapter(R.layout.adapter_write_article_image_up_load_item_layout, images)
     }
@@ -61,25 +72,6 @@ class WriteArticleFragment : BaseNetWorkingFragment() {
                 }
             }
         })
-        (0..10).forEach {
-            val textView = CheckedTextView(mContext)
-            val layoutParams = FlexboxLayout.LayoutParams(FlexboxLayout.LayoutParams.WRAP_CONTENT, FlexboxLayout.LayoutParams.WRAP_CONTENT)
-            val margin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5.0f, resources.displayMetrics).toInt()
-            layoutParams.setMargins(margin, margin, margin, margin)
-            textView.setBackgroundResource(R.drawable.selector_ctv_bg2)
-            textView.setTextColor(resources.getColorStateList(R.color.select_ctv_1))
-            textView.layoutParams = layoutParams
-            textView.setOnClickListener { view ->
-                currentTag = textView.text.toString()
-                (0 until mFlWriteArticleTag.childCount)
-                        .map { mFlWriteArticleTag.getChildAt(it) as CheckedTextView }
-                        .filter { it != view }
-                        .forEach { it.isChecked = false }
-                (view as CheckedTextView).isChecked = !view.isChecked
-            }
-            textView.text = if (it % 2 == 0) "item item is $it" else "item is $it"
-            mFlWriteArticleTag.addView(textView)
-        }
         mCbWriteArticleProtocol.isChecked = true
         mBtWriteArticleSubmit.setOnClickListener {
             if (mEtWriteArticleTitle.isEmpty()) {
@@ -98,22 +90,88 @@ class WriteArticleFragment : BaseNetWorkingFragment() {
                 toast("请先确认同意${mTvWriteArticleProtocol.text}")
                 return@setOnClickListener
             }
+            //images size == 1 说明没有选择任何图片
             if (images.size == 1) {
-
+                mPresent.getDataByPost(0x1,
+                        RequestParamsHelper.QAA_MODEL,
+                        RequestParamsHelper.ACT_ADD_QUIZ,
+                        RequestParamsHelper.getAddQuizParam(mEtWriteArticleTitle.getTextString(), mEtWriteArticleContent.getTextString(), currentTag!!))
             } else {
                 communityPresent.onUploadArticle(
                         images.filter { it.uriPath != null } as ArrayList<ImageBean>,
                         150,
                         object : ImageUploadHelper.OnImageUploadListener {
                             override fun onActionStart() {
+                                getFastProgressDialog("正在发布……")
                             }
 
                             override fun onActionEnd(paths: ArrayList<String>?) {
+                                val builder = ImageUploadHelper.createMultipartBody()
+                                builder.addFormDataPart("title", mEtWriteArticleTitle.getTextString())
+                                builder.addFormDataPart("content", mEtWriteArticleContent.getTextString())
+                                builder.addFormDataPart("type", currentTag!!)
+                                paths!!.forEachIndexed { index, s ->
+                                    val file = File(s)
+                                    builder.addFormDataPart("$index", file.name, RequestBody.create(MultipartBody.FORM, file))
+                                }
+                                mPresent.uploadFile(0x2, RequestParamsHelper.QAA_MODEL,
+                                        RequestParamsHelper.ACT_ADD_QUIZ, builder.build().parts())
                             }
 
                             override fun onActionFailed() {
+                                toast("发布失败……")
                             }
                         })
+            }
+        }
+        mPresent.getDataByPost(0x0, RequestParamsHelper.QAA_MODEL, RequestParamsHelper.ACT_TAG, RequestParamsHelper.getTagParam())
+    }
+
+    override fun onRequestStart(requestID: Int) {
+        super.onRequestStart(requestID)
+        if (requestID == 0x0) {
+            getFastProgressDialog("正在获取标签……")
+        } else if (requestID == 0x1) {
+            getFastProgressDialog("正在发布……")
+        }
+    }
+
+    override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
+        super.onRequestSuccess(requestID, result)
+        if (requestID == 0x0) {
+            val check = checkResultCode(result)
+            if (check != null && SUCCESS_CODE == check.code) {
+                val jsonArray = (check.obj as JSONObject).optJSONArray("result")
+                (0 until jsonArray.length()).forEach {
+                    tags.add(Gson().fromJson(jsonArray.optJSONObject(it).toString(), ArticleTagBean::class.java))
+                    val textView = CheckedTextView(mContext)
+                    val layoutParams = FlexboxLayout.LayoutParams(FlexboxLayout.LayoutParams.WRAP_CONTENT, FlexboxLayout.LayoutParams.WRAP_CONTENT)
+                    val margin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5.0f, resources.displayMetrics).toInt()
+                    layoutParams.setMargins(margin, margin, margin, margin)
+                    textView.setBackgroundResource(R.drawable.selector_ctv_bg2)
+                    textView.setTextColor(resources.getColorStateList(R.color.select_ctv_1))
+                    textView.layoutParams = layoutParams
+                    textView.setOnClickListener { view ->
+                        currentTag = textView.text.toString()
+                        (0 until mFlWriteArticleTag.childCount)
+                                .map { mFlWriteArticleTag.getChildAt(it) as CheckedTextView }
+                                .filter { it != view }
+                                .forEach { it.isChecked = false }
+                        (view as CheckedTextView).isChecked = !view.isChecked
+                    }
+                    textView.text = tags[it].tag_title
+                    mFlWriteArticleTag.addView(textView)
+                }
+                mBtWriteArticleSubmit.isEnabled = true
+            }
+        } else if (requestID == 0x1 || requestID == 0x2) {
+            val check = checkResultCode(result)
+            if (check != null && check.code == SUCCESS_CODE) {
+                toast("发布成功")
+                RxBus.getDefault().post(ARTICLE_SEND_SUCCESS_FLAG)
+                finish()
+            } else {
+                toast("发布失败")
             }
         }
     }
@@ -128,4 +186,20 @@ class WriteArticleFragment : BaseNetWorkingFragment() {
             mBaseAdapter.notifyDataSetChanged()
         }
     }
+
+    class ArticleTagBean {
+        var tag_id: String? = null
+        var tag_title: String? = null
+        var tag_content: String? = null
+        var tag_pid: String? = null
+        var tag_path: String? = null
+        var tag_token: String? = null
+        var tag_url: String? = null
+        var tag_pic: String? = null
+        var tag_sort: String? = null
+        var tag_url1: String? = null
+        var tag_time: String? = null
+        var tag_sign: String? = null
+    }
+
 }

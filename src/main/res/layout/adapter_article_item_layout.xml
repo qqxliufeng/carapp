@@ -17,39 +17,41 @@
             android:id="@+id/mIvArticleItemUserFace"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/test_face" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_glide_circle_load_default" />
 
         <TextView
+            android:id="@+id/mTvArticleItemUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_toRightOf="@+id/mIvArticleItemUserFace"
-            android:text="王小宝"
             android:textColor="@color/text_deep_dark_color"
             android:textSize="@dimen/sp_14" />
 
         <TextView
+            android:id="@+id/mTvArticleItemTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:text="2017-18-55"
-            android:drawablePadding="@dimen/dp_10"
             android:drawableLeft="@drawable/img_article_icon_time"
+            android:drawablePadding="@dimen/dp_10"
             android:textColor="@color/text_dark_color"
             android:textSize="@dimen/sp_12" />
     </RelativeLayout>
 
     <TextView
+        android:id="@+id/mTvArticleItemContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
-        android:text="轮毂改装，如何更换汽车轮毂，如何升级汽车轮毂"
         android:textColor="@color/text_deep_dark_color"
         android:textSize="@dimen/sp_14" />
 
     <com.android.ql.lf.carapp.ui.views.ImageContainerLinearLayout
+        android:id="@+id/mLlArticleItemImageContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
@@ -76,9 +78,9 @@
             android:gravity="center">
 
             <CheckedTextView
+                android:id="@+id/mCtvArticleItemSeeCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="3"
                 android:drawableLeft="@drawable/img_article_icon_eye"
                 android:drawablePadding="@dimen/dp_10"
                 android:textColor="@color/text_dark_color"
@@ -93,11 +95,11 @@
             android:gravity="center">
 
             <CheckedTextView
+                android:id="@+id/mCtvArticleItemCommentCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="3"
-                android:drawablePadding="@dimen/dp_10"
                 android:drawableLeft="@drawable/img_article_icon_chat"
+                android:drawablePadding="@dimen/dp_10"
                 android:textColor="@color/text_dark_color"
                 android:textSize="@dimen/sp_12" />
         </LinearLayout>
@@ -109,17 +111,14 @@
             android:gravity="center">
 
             <CheckedTextView
+                android:id="@+id/mCtvArticleItemPraiseCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="3"
-                android:gravity="center_vertical"
                 android:drawableLeft="@drawable/img_article_icon_praise"
                 android:drawablePadding="@dimen/dp_10"
+                android:gravity="center_vertical"
                 android:textColor="@color/text_dark_color"
                 android:textSize="@dimen/sp_12" />
         </LinearLayout>
-
     </LinearLayout>
-
-
 </LinearLayout>

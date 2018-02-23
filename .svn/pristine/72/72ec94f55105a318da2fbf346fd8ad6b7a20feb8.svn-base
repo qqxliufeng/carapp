@@ -60,37 +60,17 @@ wrjt.sdqlweb.com/interface.php/v1/member/edit_personal       请求方式：post
 修改密码api:
 wrjt.sdqlweb.com/interface.php/v1/member/edit_pw             请求方式：post  参数 : uid,pw,newpw 用户ID,新密码,旧密码
 
-个人服务中心api:
-wrjt.sdqlweb.com/interface.php/v1/member/personal_service    请求方式：post  参数 : uid 用户ID
-
-修改个人服务中心api:
-wrjt.sdqlweb.com/interface.php/v1/member/edit_personal_service  请求方式：post  参数 : sid,address,ppa,starttime,endtime,content 店铺ID,服务地址,主营,营业开始时间,营业结束时间,服务简介
-
-我的等级api:
-wrjt.sdqlweb.com/interface.php/v1/member/my_grades           请求方式：post  参数 : uid 用户ID
-
-我的钱包 历史收入api:
-wrjt.sdqlweb.com/interface.php/v1/member/integral            请求方式：post  参数 : page,pagesize,uid 第多少页,每页显示多少条,用户ID
-
-我的钱包 绑定提现账户api:
-wrjt.sdqlweb.com/interface.php/v1/member/bind_account        请求方式：post  参数 : uid 用户ID
-
-我的钱包 绑定支付宝提现账户api:
-wrjt.sdqlweb.com/interface.php/v1/member/bind_alipay         请求方式：post  参数 : uid,account 用户ID,支付宝账号
 
 ======== 抢单管理 =====================================
-
-抢单api:
-wrjt.sdqlweb.com/interface.php/v1/order/qorder                请求方式：post  参数 : uid,location 用户ID,店铺地址
 
 抢单api:
 wrjt.sdqlweb.com/interface.php/v1/order/order_receiving       请求方式：post  参数 : uid,oid 用户ID,订单ID
 
 我的抢单api:
-wrjt.sdqlweb.com/interface.php/v1/order/my_qorder             请求方式：post  参数 : uid,status 用户ID,订单状态 施工状态 0  待抢单 1 待施工  2 已施工  3  待结算 4 已结算 5  申请退款中  6  已退款 token  为空 是全部订单
+wrjt.sdqlweb.com/interface.php/v1/order/my_qorder             请求方式：post  参数 : uid,token 用户ID,订单状态 施工状态 0  待抢单 1 待施工  2 已施工  3  待结算 4 已结算 5  申请退款中  6  已退款 token  为空 是全部订单
 
 修改抢单状态api:
-wrjt.sdqlweb.com/interface.php/v1/order/edit_qorder_status    请求方式：post  参数 : oid,status 抢单ID,订单状态 施工状态 0  待抢单 1 待施工  2 已施工  3  待结算 4 已结算 5  申请退款中  6  已退款 token  为空 是全部订单
+wrjt.sdqlweb.com/interface.php/v1/order/edit_qorder_status    请求方式：post  参数 : oid,token 抢单ID,订单状态 施工状态 0  待抢单 1 待施工  2 已施工  3  待结算 4 已结算 5  申请退款中  6  已退款 token  为空 是全部订单
 
 抢单拍照api:
 wrjt.sdqlweb.com/interface.php/v1/order/play_pic              请求方式：post  参数 : oid,pic 抢单ID,图片
@@ -106,12 +86,11 @@ wrjt.sdqlweb.com/interface.php/v1/order/qorder_deposit        请求方式：pos
 
 ======== 社区管理 =====================================
 
+社区轮播图api:
+wrjt.sdqlweb.com/interface.php/v1/qaa/community_lunbo    请求方式：post  参数 : ktype  轮播类型 1  社区   2 商城
 
 社区轮播图详情api:
 wrjt.sdqlweb.com/interface.php/v1/qaa/community_lunbo_detail    请求方式：post  参数 : lid  轮播id 
-
-标签类型api:
-wrjt.sdqlweb.com/interface.php/v1/qaa/tag                请求方式：post   
 
 发表帖子api:
 wrjt.sdqlweb.com/interface.php/v1/qaa/add_quiz           请求方式：post  参数 : title,content,pic,uid,type  帖子,帖子内容,图片（或视频）,用户ID,类型
@@ -144,8 +123,8 @@ wrjt.sdqlweb.com/interface.php/v1/qaa/del_qaa            请求方式：post  �
 wrjt.sdqlweb.com/interface.php/v1/qaa/add_answer         请求方式：post  参数 : qid,content,uid  回答问题ID,回答内容,用户ID
 
 帖子点赞api:
-wrjt.sdqlweb.com/interface.php/v1/qaa/quiz_praise             请求方式：post  参数 : uid,qid  用户ID,帖子ID
+wrjt.sdqlweb.com/interface.php/v1/qaa/praise             请求方式：post  参数 : uid,qid  用户ID,帖子ID
 
 点赞回答api:
-wrjt.sdqlweb.com/interface.php/v1/qaa/praise       请求方式：post  参数 : uid,aid  用户ID,回答ID
+wrjt.sdqlweb.com/interface.php/v1/qaa/quiz_praise        请求方式：post  参数 : uid,aid  用户ID,回答ID
  

@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.android.ql.lf.carapp.R;
-import com.android.ql.lf.carapp.data.BaseNetResult;
 import com.android.ql.lf.carapp.data.lists.ListParseHelper;
 import com.android.ql.lf.carapp.ui.fragments.user.LoginFragment;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -23,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import butterknife.BindView;
 
@@ -66,7 +64,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseNetWorkingFragment
         tv_empty.setText(emptyMessage);
     }
 
-    protected TextView getEmptyTextView() {
+    protected TextView getEmptyTextView(){
         return mBaseAdapter.getEmptyView().findViewById(R.id.mTvRecyclerViewEmpty);
     }
 
@@ -80,15 +78,15 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseNetWorkingFragment
         mBaseAdapter.notifyDataSetChanged();
     }
 
-    protected void setEmptyViewStatus() {
+    protected void setEmptyViewStatus(){
         onRequestEnd(-1);
         setRefreshEnable(false);
         setEmptyView();
         TextView emptyTextView = getEmptyTextView();
         emptyTextView.setBackgroundResource(R.drawable.shape_bt_bg4);
-        emptyTextView.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
-        int paddingLeft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10.0f, getResources().getDisplayMetrics());
-        emptyTextView.setPadding(paddingLeft, paddingLeft / 2, paddingLeft, paddingLeft / 2);
+        emptyTextView.setTextColor(ContextCompat.getColor(mContext,R.color.colorPrimary));
+        int paddingLeft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,10.0f, getResources().getDisplayMetrics());
+        emptyTextView.setPadding(paddingLeft,paddingLeft/2,paddingLeft,paddingLeft/2);
         emptyTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -235,24 +233,6 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseNetWorkingFragment
                 onRefresh();
             }
         });
-    }
-
-    public void processList(String result, Class<T> clazz) {
-        try {
-            BaseNetResult baseNetResult = checkResultCode(result);
-            if (baseNetResult != null && Objects.equals(baseNetResult.code, SUCCESS_CODE)) {
-                processList(((JSONObject) baseNetResult.obj), clazz);
-            }else {
-                if (currentPage == 0) {
-                    setEmptyView();
-                } else {
-                    mBaseAdapter.loadMoreEnd();
-                    mBaseAdapter.notifyDataSetChanged();
-                }
-            }
-        } catch (Exception e) {
-            setEmptyView();
-        }
     }
 
     public void processList(JSONObject json, Class<T> clazz) {

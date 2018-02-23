@@ -1,5 +1,9 @@
 package com.android.ql.lf.carapp.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -8,7 +12,7 @@ import java.util.List;
  * @author lf on 18.2.22
  */
 
-public class ArticleBean {
+public class ArticleBean implements Parcelable {
 
     private String quiz_id;
     private String quiz_content;
@@ -20,7 +24,11 @@ public class ArticleBean {
     private String quiz_click;
     private String quiz_video;
     private String quiz_look;
-    private List<String> quiz_pic;
+    private String quiz_replies;
+    private String member_id;
+    private String member_name;
+    private String member_pic;
+    private ArrayList<String> quiz_pic;
 
     public String getQuiz_id() {
         return quiz_id;
@@ -102,11 +110,100 @@ public class ArticleBean {
         this.quiz_look = quiz_look;
     }
 
-    public List<String> getQuiz_pic() {
+    public String getQuiz_replies() {
+        return quiz_replies;
+    }
+
+    public void setQuiz_replies(String quiz_replies) {
+        this.quiz_replies = quiz_replies;
+    }
+
+    public String getMember_id() {
+        return member_id;
+    }
+
+    public void setMember_id(String member_id) {
+        this.member_id = member_id;
+    }
+
+    public String getMember_name() {
+        return member_name;
+    }
+
+    public void setMember_name(String member_name) {
+        this.member_name = member_name;
+    }
+
+    public String getMember_pic() {
+        return member_pic;
+    }
+
+    public void setMember_pic(String member_pic) {
+        this.member_pic = member_pic;
+    }
+
+    public ArrayList<String> getQuiz_pic() {
         return quiz_pic;
     }
 
-    public void setQuiz_pic(List<String> quiz_pic) {
+    public void setQuiz_pic(ArrayList<String> quiz_pic) {
         this.quiz_pic = quiz_pic;
     }
+
+    public ArticleBean() {
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.quiz_id);
+        dest.writeString(this.quiz_content);
+        dest.writeString(this.quiz_type);
+        dest.writeString(this.quiz_uid);
+        dest.writeString(this.quiz_time);
+        dest.writeString(this.quiz_token);
+        dest.writeString(this.quiz_title);
+        dest.writeString(this.quiz_click);
+        dest.writeString(this.quiz_video);
+        dest.writeString(this.quiz_look);
+        dest.writeString(this.quiz_replies);
+        dest.writeString(this.member_id);
+        dest.writeString(this.member_name);
+        dest.writeString(this.member_pic);
+        dest.writeStringList(this.quiz_pic);
+    }
+
+    protected ArticleBean(Parcel in) {
+        this.quiz_id = in.readString();
+        this.quiz_content = in.readString();
+        this.quiz_type = in.readString();
+        this.quiz_uid = in.readString();
+        this.quiz_time = in.readString();
+        this.quiz_token = in.readString();
+        this.quiz_title = in.readString();
+        this.quiz_click = in.readString();
+        this.quiz_video = in.readString();
+        this.quiz_look = in.readString();
+        this.quiz_replies = in.readString();
+        this.member_id = in.readString();
+        this.member_name = in.readString();
+        this.member_pic = in.readString();
+        this.quiz_pic = in.createStringArrayList();
+    }
+
+    public static final Creator<ArticleBean> CREATOR = new Creator<ArticleBean>() {
+        @Override
+        public ArticleBean createFromParcel(Parcel source) {
+            return new ArticleBean(source);
+        }
+
+        @Override
+        public ArticleBean[] newArray(int size) {
+            return new ArticleBean[size];
+        }
+    };
 }

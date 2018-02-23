@@ -16,12 +16,10 @@ import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.activities.MainActivity
 import com.android.ql.lf.carapp.ui.adapter.ArticleListAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
-import com.android.ql.lf.carapp.ui.fragments.DetailContentFragment
 import com.android.ql.lf.carapp.ui.fragments.community.ArticleInfoFragment
 import com.android.ql.lf.carapp.ui.fragments.community.ArticleListFragment
 import com.android.ql.lf.carapp.ui.fragments.community.ArticleSearchFragment
 import com.android.ql.lf.carapp.ui.fragments.community.WriteArticleFragment
-import com.android.ql.lf.carapp.ui.fragments.user.LoginFragment
 import com.android.ql.lf.carapp.ui.fragments.user.mine.MineArticleFragment
 import com.android.ql.lf.carapp.utils.*
 import com.bumptech.glide.Glide
@@ -35,7 +33,6 @@ import com.youth.banner.BannerConfig
 import com.youth.banner.loader.ImageLoader
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.fragment_main_community_layout.*
-import org.jetbrains.anko.bundleOf
 import org.json.JSONObject
 
 /**
@@ -47,7 +44,6 @@ class MainCommunityFragment : BaseRecyclerViewFragment<ArticleBean>() {
     companion object {
         val COMMUNITY_SEND_ARTICLE_FLAG = "community_send_article_flag"
         val COMMUNITY_MY_ARTICLE_FLAG = "community_my_article_flag"
-        val ARTICLE_DETAIL_FLAG = "article_detail_flag"
 
         fun newInstance(): MainCommunityFragment {
             return MainCommunityFragment()
@@ -57,17 +53,8 @@ class MainCommunityFragment : BaseRecyclerViewFragment<ArticleBean>() {
     private val topList = arrayListOf<CommunityTagBean>()
     private lateinit var topMarqueeView: MarqueeView
     private var mBannerMainCommunity: Banner? = null
-    private var currentArticle: ArticleBean? = null
     private val topRecycleViewAdapter by lazy {
         TopRecyclerViewAdapter(R.layout.layout_main_community_top_item_layout, topList)
-    }
-
-    private val articleSubscription by lazy {
-        RxBus.getDefault().toObservable(String::class.java).subscribe {
-            if (it == WriteArticleFragment.ARTICLE_SEND_SUCCESS_FLAG) {
-                onPostRefresh()
-            }
-        }
     }
 
     override fun getLayoutId() = R.layout.fragment_main_community_layout
@@ -79,7 +66,6 @@ class MainCommunityFragment : BaseRecyclerViewFragment<ArticleBean>() {
         param.topMargin = height
         mRlCommunityTitleContainer.layoutParams = param
         registerLoginSuccessBus()
-        articleSubscription
         mFabWriteNote.doClickWithUserStatusStart(COMMUNITY_SEND_ARTICLE_FLAG) {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "发布帖子", WriteArticleFragment::class.java)
         }
@@ -97,25 +83,15 @@ class MainCommunityFragment : BaseRecyclerViewFragment<ArticleBean>() {
         topRecyclerView.adapter = topRecycleViewAdapter
         topRecyclerView.addOnItemTouchListener(object : OnItemClickListener() {
             override fun onSimpleItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
-                FragmentContainerActivity.from(mContext)
-                        .setClazz(ArticleListFragment::class.java)
-                        .setTitle(topList[position].tag_title)
-                        .setNeedNetWorking(true)
-                        .setExtraBundle(bundleOf(Pair("type", topList[position].tag_title)))
-                        .start()
+                FragmentContainerActivity.startFragmentContainerActivity(mContext, "文章详情", ArticleInfoFragment::class.java)
             }
         })
         topView.findViewById<TextView>(R.id.mTvMainCommunityTopMoreArticle).setOnClickListener {
-            FragmentContainerActivity.from(mContext)
-                    .setClazz(ArticleListFragment::class.java)
-                    .setTitle("全部")
-                    .setNeedNetWorking(true)
-                    .setExtraBundle(bundleOf(Pair("type", "")))
-                    .start()
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "所有发布", ArticleListFragment::class.java)
         }
         mBannerMainCommunity!!.setImageLoader(object : ImageLoader() {
             override fun displayImage(context: Context?, path: Any?, imageView: ImageView?) {
-                GlideManager.loadImage(mContext, (path as BannerImageBean).lunbo_pic, imageView)
+                GlideManager.loadImage(mContext, path as String, imageView)
             }
         })
         mBaseAdapter.addHeaderView(topView)
@@ -141,29 +117,18 @@ class MainCommunityFragment : BaseRecyclerViewFragment<ArticleBean>() {
                     communityContainerBean.arr1.forEach {
                         firstNewsList.add(it.quiz_title)
                     }
+                    val bannerList = ArrayList<String>()
+                    communityContainerBean.arr2.forEach {
+                        bannerList.add(it.lunbo_pic)
+                    }
                     topList.clear()
                     topList.addAll(communityContainerBean.arr)
                     topRecycleViewAdapter.notifyDataSetChanged()
-                    mBannerMainCommunity!!.setImages(communityContainerBean.arr2)
+                    mBannerMainCommunity!!.setImages(bannerList)
                             .setDelayTime(3000)
                             .setBannerStyle(BannerConfig.CIRCLE_INDICATOR)
                             .start()
-                    mBannerMainCommunity?.setOnBannerListener {
-                        FragmentContainerActivity.from(mContext)
-                                .setTitle("详情")
-                                .setNeedNetWorking(true)
-                                .setClazz(DetailContentFragment::class.java)
-                                .setExtraBundle(bundleOf(
-                                        Pair(DetailContentFragment.MODEL_NAME_FLAG, RequestParamsHelper.QAA_MODEL),
-                                        Pair(DetailContentFragment.ACT_NAME_FLAG, RequestParamsHelper.ACT_COMMUNITY_LUNBO_DETAIL),
-                                        Pair(DetailContentFragment.PARAM_FLAG, mapOf(Pair("lid", communityContainerBean.arr2[it].lunbo_id)))
-                                ))
-                                .start()
-                    }
                     topMarqueeView.startWithList(firstNewsList)
-                    topMarqueeView.setOnItemClickListener { position, textView ->
-
-                    }
                     processList(check.obj as JSONObject, ArticleBean::class.java)
                 }
             }
@@ -204,23 +169,7 @@ class MainCommunityFragment : BaseRecyclerViewFragment<ArticleBean>() {
 
     override fun onMyItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
         super.onMyItemClick(adapter, view, position)
-        currentArticle = mArrayList[position]
-        if (UserInfo.getInstance().isLogin) {
-            interArticleInfo()
-        } else {
-            UserInfo.loginToken = ARTICLE_DETAIL_FLAG
-            LoginFragment.startLogin(mContext)
-        }
-    }
-
-    private fun interArticleInfo() {
-        FragmentContainerActivity
-                .from(mContext)
-                .setTitle("详情")
-                .setClazz(ArticleInfoFragment::class.java)
-                .setNeedNetWorking(true)
-                .setExtraBundle(bundleOf(Pair(ArticleInfoFragment.ARTICLE_BEAN_FLAG, currentArticle!!)))
-                .start()
+        FragmentContainerActivity.startFragmentContainerActivity(mContext, "详情", ArticleInfoFragment::class.java)
     }
 
     override fun onLoginSuccess(userInfo: UserInfo?) {
@@ -232,16 +181,7 @@ class MainCommunityFragment : BaseRecyclerViewFragment<ArticleBean>() {
             COMMUNITY_MY_ARTICLE_FLAG -> {
                 mIvMainCommunityMine.doClickWithUseStatusEnd()
             }
-            ARTICLE_DETAIL_FLAG -> {
-                interArticleInfo()
-            }
         }
-    }
-
-    override fun onDestroyView() {
-        mBannerMainCommunity?.releaseBanner()
-        unsubscribe(articleSubscription)
-        super.onDestroyView()
     }
 
     class TopRecyclerViewAdapter(layoutId: Int, list: ArrayList<CommunityTagBean>) : BaseQuickAdapter<CommunityTagBean, BaseViewHolder>(layoutId, list) {

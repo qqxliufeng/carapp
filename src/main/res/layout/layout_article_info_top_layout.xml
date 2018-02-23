@@ -8,9 +8,9 @@
     android:padding="@dimen/dp_10">
 
     <TextView
+        android:id="@+id/mTvAnswerTopViewTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="感恩流年中的每一次相遇"
         android:textColor="@color/text_deep_dark_color"
         android:textSize="@dimen/sp_16" />
 
@@ -21,27 +21,26 @@
         android:layout_marginTop="@dimen/dp_10">
 
         <ImageView
-            android:id="@+id/mImArticleInfoFace"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/test_face" />
+            android:id="@+id/mIvAnswerTopViewFace"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/img_glide_circle_load_default" />
 
         <TextView
-            android:id="@+id/mImArticleInfoName"
+            android:id="@+id/mTvAnswerTopViewName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp_10"
-            android:layout_toRightOf="@+id/mImArticleInfoFace"
-            android:text="SALE" />
+            android:layout_toRightOf="@+id/mIvAnswerTopViewFace" />
 
         <TextView
+            android:id="@+id/mTvAnswerTopViewTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="30dp"
-            android:layout_toRightOf="@+id/mImArticleInfoName"
-            android:text="2017.10.10"
+            android:layout_toRightOf="@+id/mTvAnswerTopViewName"
             android:textColor="@color/text_dark_color"
             android:textSize="@dimen/sp_14" />
 
@@ -49,41 +48,16 @@
 
 
     <TextView
+        android:id="@+id/mTvAnswerTopViewContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:lineSpacingExtra="3dp"
-        android:text="暖暖的午后，睡梦中惊醒，懒懒的将手机拿至眼前，习惯性的快速浏览一下朋友圈，一篇暖文《生命，是一场等待》瞬间定格了我的眼球，文章中有一句话我非常喜欢：“人这一生，有过多少前行，就有多少等待，正如黑夜和白昼一样的长。有些事，不得不等，有些人，不能不等。” 　　我深思：如若生命是一场烟火，那么相遇便是最美的绽放。在似水流年的光阴里行走，会经历形形色色的人，会历经风风雨雨的人生。不同的境遇成就着生命的绚丽多彩，这一生，虞城行走，心怀感恩。踏遍万水千山，只为与你相遇。 　　出现在你生命里的人，都绝非偶然。有的是来欣赏你，有的是来心疼你，有的是来帮助你，有的是来利用你，有的是来修炼你，有的是来教育你，但无论如何你都要感激遇见的每一个人，因为他们最终成全了你，完善了你，让你学会了感恩，学会了坚强，学会了珍惜，学会了思考，学会了分辨，学会了看淡，有时候总需要在生命中等一等，时间会让你明白一切！然而，这一切都是最好的安排！感恩一路走来遇到的每一个人。"
         android:textColor="#646464" />
 
-    <!--<com.android.ql.lf.carapp.ui.views.ImageContainerLinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />-->
-
-    <LinearLayout
+    <com.android.ql.lf.carapp.ui.views.ImageContainerLinearLayout
+        android:id="@+id/mLlAnswerTopViewPics"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_weight="1"
-            android:src="@drawable/test_pic1" />
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_marginRight="@dimen/dp_10"
-            android:layout_weight="1"
-            android:src="@drawable/test_pic1" />
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_weight="1"
-            android:src="@drawable/test_pic1" />
-    </LinearLayout>
+        android:layout_height="wrap_content" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -91,37 +65,68 @@
         android:padding="@dimen/dp_10">
 
         <TextView
+            android:id="@+id/mTvAnswerTopViewSeeCount"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="28dp"
+            android:layout_centerVertical="true"
             android:background="@drawable/shape_tv_bg5"
             android:drawableLeft="@drawable/img_article_icon_eye2"
             android:drawablePadding="@dimen/dp_10"
-            android:text="111"
             android:textColor="@color/text_deep_dark_color"
             android:textSize="@dimen/sp_12" />
 
         <TextView
+            android:id="@+id/mTvAnswerTopViewCommentCount"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="28dp"
             android:layout_centerInParent="true"
             android:background="@drawable/shape_tv_bg5"
             android:drawableLeft="@drawable/img_article_icon_chat2"
             android:drawablePadding="@dimen/dp_10"
-            android:text="111"
             android:textColor="@color/text_deep_dark_color"
             android:textSize="@dimen/sp_12" />
 
-        <TextView
+        <com.android.ql.lf.carapp.ui.views.PraiseView
+            android:id="@+id/mPraiseView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="28dp"
             android:layout_alignParentRight="true"
-            android:background="@drawable/shape_tv_bg5"
-            android:drawableLeft="@drawable/img_article_icon_praise2"
-            android:drawablePadding="@dimen/dp_10"
-            android:gravity="center_vertical"
-            android:text="122"
-            android:textColor="@color/text_deep_dark_color"
-            android:textSize="@dimen/sp_12" />
+            android:background="@drawable/shape_tv_bg5">
+
+            <LinearLayout
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.CheckableImageButton
+                    android:id="@+id/mIvPraiseIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:src="@drawable/selector_praise_bg2" />
+
+                <TextView
+                    android:id="@+id/mTvPraiseText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="赞"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/text_deep_dark_color" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/mTvPraiseFly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:text="+1"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/sp_12"
+                android:visibility="invisible" />
+        </com.android.ql.lf.carapp.ui.views.PraiseView>
     </RelativeLayout>
 
 </LinearLayout>
