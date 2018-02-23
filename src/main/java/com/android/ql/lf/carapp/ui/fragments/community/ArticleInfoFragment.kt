@@ -56,6 +56,10 @@ class ArticleInfoFragment : BaseRecyclerViewFragment<ArticleAnswerBean>() {
         mBaseAdapter.setHeaderAndEmpty(true)
         mPraiseView.setOnClickListener {
             mPraiseView.toggle()
+            mPresent.getDataByPost(0x4,
+                    RequestParamsHelper.QAA_MODEL,
+                    RequestParamsHelper.ACT_ARTICLE_PRAISE,
+                    RequestParamsHelper.getArticlePraiseParam(articleBean!!.quiz_id))
         }
     }
 
@@ -71,6 +75,14 @@ class ArticleInfoFragment : BaseRecyclerViewFragment<ArticleAnswerBean>() {
         topView.findViewById<TextView>(R.id.mTvAnswerTopViewCommentCount).text = articleBean!!.quiz_replies
         topView.findViewById<TextView>(R.id.mTvPraiseText).text = articleBean!!.quiz_click
         topView.findViewById<ImageContainerLinearLayout>(R.id.mLlAnswerTopViewPics).setImages(articleBean!!.quiz_pic)
+        val praiseView = topView.findViewById<PraiseView>(R.id.mAnswerTopViewPraiseView)
+        praiseView.setOnClickListener{
+            praiseView.toggle()
+            mPresent.getDataByPost(0x4,
+                    RequestParamsHelper.QAA_MODEL,
+                    RequestParamsHelper.ACT_ARTICLE_PRAISE,
+                    RequestParamsHelper.getArticlePraiseParam(articleBean!!.quiz_id))
+        }
         mTvAnswerInfoSeeCount.text = articleBean!!.quiz_look
         mTvAnswerInfoCommentCount.text = articleBean!!.quiz_replies
         mTvPraiseText.text = articleBean!!.quiz_click

@@ -1,10 +1,12 @@
 package com.android.ql.lf.carapp.ui.fragments.user.mine
 
+import android.os.Bundle
 import android.view.View
 import com.android.ql.lf.carapp.R
-import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
+import com.android.ql.lf.carapp.utils.RequestParamsHelper
 import kotlinx.android.synthetic.main.fragment_mine_grade_layout.*
+import org.json.JSONObject
 
 /**
  * Created by liufeng on 2018/2/1.
@@ -27,10 +29,33 @@ class MineGradeFragment : BaseNetWorkingFragment() {
     override fun getLayoutId() = R.layout.fragment_mine_grade_layout
 
     override fun initView(view: View?) {
-        val grade = gradePair[UserInfo.getInstance().memberRank]
-        mTvMineGradeCurrentGrade.text = "会员当前等级：$grade"
-        mTvMineGradeGrade.text = grade
-        mTvMineGradeComment.text = UserInfo.getInstance().memberGrade
-        mTvMineGradeOrderNum.text = UserInfo.getInstance().memberOrderNum
+
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        mPresent.getDataByPost(0x0,
+                RequestParamsHelper.MEMBER_MODEL,
+                RequestParamsHelper.ACT_MY_GRADES,
+                RequestParamsHelper.getMyGradesParam())
+    }
+
+    override fun onRequestStart(requestID: Int) {
+        super.onRequestStart(requestID)
+        getFastProgressDialog("正在加载……")
+    }
+
+    override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
+        super.onRequestSuccess(requestID, result)
+        val check = checkResultCode(result)
+        if (check!=null && SUCCESS_CODE == check.code){
+            val json = check.obj as JSONObject
+            val resultJson = json.optJSONObject("result")
+            val rank = resultJson.optString("member_rank")
+            mTvMineGradeCurrentGrade.text = "会员当前等级：${gradePair[rank]}"
+            mTvMineGradeGrade.text = gradePair[rank]
+            mTvMineGradeComment.text = resultJson.optString("member_grade")
+            mTvMineGradeOrderNum.text = resultJson.optString("member_order_num")
+        }
     }
 }

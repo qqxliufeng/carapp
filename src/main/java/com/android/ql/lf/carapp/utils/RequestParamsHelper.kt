@@ -91,6 +91,10 @@ class RequestParamsHelper {
             return getWithIdParams().addParam("account", account)
         }
 
+        val ACT_MY_GRADES = "my_grades"
+        fun getMyGradesParam() = getWithIdParams()
+
+
 
         /**              member model  end           **/
 
@@ -159,6 +163,19 @@ class RequestParamsHelper {
             return getWithIdParams().addParam("aid", aid)
         }
 
+        val ACT_ARTICLE_PRAISE = "quiz_praise"
+        fun getArticlePraiseParam(qid:String):ApiParams{
+            return getWithIdParams().addParam("qid",qid)
+        }
+
         /**              qaa model  end           **/
+        /**              order model start        **/
+
+        val ORDER_MODEL = "order"
+        val ACT_QORDER = "qorder"
+        fun getQorderParam(location:String):ApiParams{
+            return getWithIdParams().addParam("location",location)
+        }
+        /**              order model end        **/
     }
 }

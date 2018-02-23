@@ -10,6 +10,7 @@ import com.android.ql.lf.carapp.ui.adapter.OrderListForQDAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
 import com.android.ql.lf.carapp.ui.fragments.user.LoginFragment
 import com.android.ql.lf.carapp.ui.fragments.user.mine.MineApplyMasterInfoSubmitFragment
+import com.android.ql.lf.carapp.utils.RequestParamsHelper
 import com.android.ql.lf.carapp.utils.RxBus
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -58,7 +59,6 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<String>() {
         masterAndMoneySubscription
         userLogoutSubscription
         showNotify()
-        testAdd("111")
     }
 
     override fun onLoginSuccess(userInfo: UserInfo?) {
@@ -108,15 +108,8 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<String>() {
     override fun getEmptyLayoutId() = R.layout.layout_order_list_empty
 
     override fun onRefresh() {
-//        super.onRefresh()
-        onRequestEnd(1)
-//        setEmptyView()
-//        val tempList = arrayListOf<String>()
-//        (0 .. 2).forEach {
-//            tempList.add("item new $it")
-//        }
-//        mBaseAdapter.addData(0, tempList)
-//        mRecyclerView.smoothScrollToPosition(0)
+        super.onRefresh()
+        mPresent.getDataByPost(0x0,RequestParamsHelper.ORDER_MODEL,RequestParamsHelper.ACT_QORDER,RequestParamsHelper.getQorderParam(""))
     }
 
     override fun onMyItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
@@ -134,7 +127,6 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<String>() {
     }
 
     private fun showOrderNotifyDialog() {
-
         FragmentContainerActivity
                 .from(mContext)
                 .setClazz(LoginFragment::class.java)

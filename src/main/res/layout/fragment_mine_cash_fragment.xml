@@ -210,19 +210,9 @@
             android:textColor="@color/text_dark_color" />
 
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/style_button1"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="20dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:background="@drawable/shape_bt_bg1"
-            android:text="立即提交"
-            android:textColor="#fff"
-            android:textSize="@dimen/sp_16" />
-
-
+            android:text="立即提交"/>
     </RelativeLayout>
-
-
 </LinearLayout>
