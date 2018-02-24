@@ -3,6 +3,7 @@ package com.android.ql.lf.carapp.ui.fragments.order
 import android.view.View
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.EventIsMasterAndMoneyBean
+import com.android.ql.lf.carapp.data.OrderBean
 import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.present.ServiceOrderPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
@@ -12,6 +13,7 @@ import com.android.ql.lf.carapp.ui.fragments.user.LoginFragment
 import com.android.ql.lf.carapp.ui.fragments.user.mine.MineApplyMasterInfoSubmitFragment
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
 import com.android.ql.lf.carapp.utils.RxBus
+import com.android.ql.lf.carapp.utils.toast
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.fragment_order_for_qd_layout.*
@@ -20,9 +22,12 @@ import kotlinx.android.synthetic.main.fragment_order_for_qd_layout.*
  * Created by lf on 18.1.24.
  * @author lf on 18.1.24
  */
-class OrderListForQDFragment : BaseRecyclerViewFragment<String>() {
+class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
 
     companion object {
+
+        val RECEIVER_ORDER_FLAG = "receiver order"
+
         fun newInstance(): OrderListForQDFragment {
             return OrderListForQDFragment()
         }
@@ -50,7 +55,7 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<String>() {
 
     override fun getLayoutId() = R.layout.fragment_order_for_qd_layout
 
-    override fun createAdapter(): BaseQuickAdapter<String, BaseViewHolder>
+    override fun createAdapter(): BaseQuickAdapter<OrderBean, BaseViewHolder>
             = OrderListForQDAdapter(R.layout.adapter_order_list_for_qd_item_layout, mArrayList)
 
     override fun initView(view: View?) {
@@ -63,6 +68,7 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<String>() {
 
     override fun onLoginSuccess(userInfo: UserInfo?) {
         showNotify()
+        onPostRefresh()
     }
 
     private fun onLogoutSuccess() {
@@ -71,33 +77,37 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<String>() {
     }
 
     private fun showNotify() {
-        if (!mArrayList.isEmpty()) {
-            if (UserInfo.getInstance().isLogin) {
-                if (UserInfo.getInstance().isPayEnsureMoney && UserInfo.getInstance().isMaster) {
-                    mTvOrderQDNotify.visibility = View.GONE
-                    mBaseAdapter.notifyDataSetChanged()
-                    return
-                }
-                mTvOrderQDNotify.visibility = View.VISIBLE
-                mTvOrderQDNotify.setOnClickListener {
-                    if (!UserInfo.getInstance().isMaster) {
-                        FragmentContainerActivity.from(mContext).setTitle("申请成为师傅").setNeedNetWorking(true).setClazz(MineApplyMasterInfoSubmitFragment::class.java).start()
-                        return@setOnClickListener
-                    }
-                    if (!UserInfo.getInstance().isPayEnsureMoney) {
-                        serviceOrderPresent.doAuthEnsureMoney()
-                        return@setOnClickListener
-                    }
-                }
-                if (!UserInfo.getInstance().isMaster) {
-                    mTvOrderQDNotify.text = "当前帐号未认证，暂无法接单，请立即认证"
-                }
-                mBaseAdapter.notifyDataSetChanged()
-            } else {
+        if (UserInfo.getInstance().isLogin) {
+            if (UserInfo.getInstance().isMaster) {
                 mTvOrderQDNotify.visibility = View.GONE
+                mBaseAdapter.notifyDataSetChanged()
+                return
             }
+            mTvOrderQDNotify.setOnClickListener {
+                if (!UserInfo.getInstance().isMaster) {
+                    FragmentContainerActivity.from(mContext).setTitle("申请成为师傅").setNeedNetWorking(true).setClazz(MineApplyMasterInfoSubmitFragment::class.java).start()
+                    return@setOnClickListener
+                }
+                if (!UserInfo.getInstance().isPayEnsureMoney) {
+                    serviceOrderPresent.doAuthEnsureMoney()
+                    return@setOnClickListener
+                }
+            }
+            mTvOrderQDNotify.visibility = View.VISIBLE
+            if (!UserInfo.getInstance().isMaster) {
+                mTvOrderQDNotify.text = "当前帐号未认证，暂无法接单，请立即认证"
+            }
+            if (UserInfo.getInstance().isCheckingMaster) {
+                mTvOrderQDNotify.text = "当前帐号正在认证中……"
+            }
+            mBaseAdapter.notifyDataSetChanged()
         } else {
-            mTvOrderQDNotify.visibility = View.GONE
+            mTvOrderQDNotify.visibility = View.VISIBLE
+            mTvOrderQDNotify.text = "登录后显示订单"
+            mTvOrderQDNotify.setOnClickListener {
+                UserInfo.loginToken = RECEIVER_ORDER_FLAG
+                LoginFragment.startLogin(mContext)
+            }
         }
     }
 
@@ -109,19 +119,33 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<String>() {
 
     override fun onRefresh() {
         super.onRefresh()
-        mPresent.getDataByPost(0x0,RequestParamsHelper.ORDER_MODEL,RequestParamsHelper.ACT_QORDER,RequestParamsHelper.getQorderParam(""))
+        if (UserInfo.getInstance().isLogin) {
+            mPresent.getDataByPost(0x0, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_QORDER, RequestParamsHelper.getQorderParam(page = currentPage))
+        } else {
+            showNotify()
+            onRequestFail(-1, IllegalStateException("状态异常"))
+            onRequestEnd(-1)
+        }
+    }
+
+    override fun onLoadMore() {
+        super.onLoadMore()
+        mPresent.getDataByPost(0x0, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_QORDER, RequestParamsHelper.getQorderParam(page = currentPage))
+    }
+
+    override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
+        super.onRequestSuccess(requestID, result)
+        processList(result as String, OrderBean::class.java)
     }
 
     override fun onMyItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
         if (view!!.id == R.id.mBtOrderListForQDItem) {
-            if (!UserInfo.getInstance().isLogin) {
-                FragmentContainerActivity
-                        .from(mContext)
-                        .setClazz(LoginFragment::class.java)
-                        .setTitle("登录")
-                        .setHiddenToolBar(false)
-                        .setNeedNetWorking(true)
-                        .start()
+            if (UserInfo.getInstance().isCheckingMaster) {
+                toast("正在认证中，成功后方可接单……")
+            } else {
+                if (!UserInfo.getInstance().isMaster) {
+                    FragmentContainerActivity.from(mContext).setTitle("申请成为师傅").setNeedNetWorking(true).setClazz(MineApplyMasterInfoSubmitFragment::class.java).start()
+                }
             }
         }
     }
@@ -160,12 +184,8 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<String>() {
     }
 
     override fun onDestroyView() {
-        if (!masterAndMoneySubscription.isUnsubscribed) {
-            masterAndMoneySubscription.unsubscribe()
-        }
-        if (userLogoutSubscription != null && userLogoutSubscription.isUnsubscribed) {
-            userLogoutSubscription.unsubscribe()
-        }
+        unsubscribe(masterAndMoneySubscription)
+        unsubscribe(userLogoutSubscription)
         super.onDestroyView()
     }
 

@@ -14,7 +14,7 @@ public class UserInfo {
 
     public static String loginToken = "NONE";
 
-    public static void resetLoginSuccessDoActionToken(){
+    public static void resetLoginSuccessDoActionToken() {
         loginToken = "NONE";
     }
 
@@ -47,7 +47,8 @@ public class UserInfo {
     private String memberIsMaster;
     private String memberGrade;
     private String memberOrderNum;
-    private String memberIdCard;
+    private String memberIdCard = "";
+    private String memberAuthentication; // 0 已经提交过师傅资料，正在审核
 
 
     public String getMemberId() {
@@ -87,7 +88,7 @@ public class UserInfo {
     }
 
     public boolean isMaster() {
-        return "1".equals(memberIsMaster);
+        return "1".equals(memberIsMaster) && !"0".equals(memberAuthentication);
     }
 
     public boolean isPayEnsureMoney() {
@@ -164,6 +165,14 @@ public class UserInfo {
 
     public void setMemberIdCard(String memberIdCard) {
         this.memberIdCard = memberIdCard;
+    }
+
+    public boolean isCheckingMaster() {
+        return "0".equals(memberAuthentication);
+    }
+
+    public void setMemberAuthentication(String memberAuthentication) {
+        this.memberAuthentication = memberAuthentication;
     }
 
     public void loginOut() {

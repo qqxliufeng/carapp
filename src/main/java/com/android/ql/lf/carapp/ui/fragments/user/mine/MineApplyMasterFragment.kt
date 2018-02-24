@@ -1,15 +1,27 @@
 package com.android.ql.lf.carapp.ui.fragments.user.mine
 
+import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
+import android.text.Html
 import android.util.TypedValue
 import android.view.View
 import android.widget.LinearLayout
+import com.a.WebViewContentFragment
 import com.android.ql.lf.carapp.R
+import com.android.ql.lf.carapp.data.ProtocolBean
+import com.android.ql.lf.carapp.data.UserInfo
+import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseFragment
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
+import com.android.ql.lf.carapp.utils.RequestParamsHelper
+import com.android.ql.lf.carapp.utils.toast
+import com.google.gson.Gson
+import kotlinx.android.synthetic.main.fragment_mine_apply_master_item_layout.*
 import kotlinx.android.synthetic.main.fragment_mine_apply_master_layout.*
+import org.jetbrains.anko.bundleOf
+import org.json.JSONObject
 import java.lang.reflect.Field
 
 /**
@@ -63,7 +75,7 @@ class MineApplyMasterFragment : BaseFragment() {
 
     class ApplyMasterViewPagerAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
 
-        override fun getItem(position: Int) = MineApplyMasterItemFragment()
+        override fun getItem(position: Int) = MineApplyMasterItemFragment.newInstance(bundleOf(Pair("TYPE", position + 1)))
 
         override fun getCount() = TITLES.size
 
@@ -73,9 +85,51 @@ class MineApplyMasterFragment : BaseFragment() {
 
 class MineApplyMasterItemFragment : BaseNetWorkingFragment() {
 
+    companion object {
+        fun newInstance(bundle: Bundle): MineApplyMasterItemFragment {
+            val fragment = MineApplyMasterItemFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
+    }
+
     override fun getLayoutId() = R.layout.fragment_mine_apply_master_item_layout
 
     override fun initView(view: View?) {
+        if (arguments.getInt("TYPE", 1) == 1) { // 师傅
+            if (UserInfo.getInstance().isCheckingMaster) {
+                mBtApplyMasterApply.text = "资料正在审核中……"
+            }
+            if (UserInfo.getInstance().isMaster) {
+                mBtApplyMasterApply.text = "已经成为师傅"
+            }
+            mBtApplyMasterApply.isEnabled = !UserInfo.getInstance().isMaster && !UserInfo.getInstance().isCheckingMaster
+            mBtApplyMasterApply.setOnClickListener {
+                FragmentContainerActivity.from(mContext).setTitle("申请成为师傅").setNeedNetWorking(true).setClazz(MineApplyMasterInfoSubmitFragment::class.java).start()
+                finish()
+            }
+            mPresent.getDataByPost(0x0, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_PTGG, RequestParamsHelper.getPtggParam("3"))
+        } else { //商家
+            mTvApplyMasterInfo.text = "此功能暂未开放"
+            mBtApplyMasterApply.text = "申请成为商家"
+            mBtApplyMasterApply.isEnabled = false
+        }
+    }
+
+    override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
+        super.onRequestSuccess(requestID, result)
+        val check = checkResultCode(result)
+        if (check != null && check.code == SUCCESS_CODE) {
+            val protocolBean = Gson().fromJson((check.obj as JSONObject).optJSONObject("result").toString(), ProtocolBean::class.java)
+            mTvApplyMasterInfo.text = Html.fromHtml(protocolBean.ptgg_content)
+        } else {
+            mTvApplyMasterInfo.text = "加载失败"
+        }
+    }
+
+    override fun onRequestFail(requestID: Int, e: Throwable) {
+        super.onRequestFail(requestID, e)
+        mTvApplyMasterInfo.text = "加载失败"
     }
 
 }

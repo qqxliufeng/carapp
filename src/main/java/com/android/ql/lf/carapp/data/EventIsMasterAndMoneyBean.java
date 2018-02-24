@@ -42,4 +42,5 @@ public class EventIsMasterAndMoneyBean {
     public void setEnsureMoney(boolean ensureMoney) {
         isEnsureMoney = ensureMoney;
     }
+
 }

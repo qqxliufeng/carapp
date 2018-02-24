@@ -1,15 +1,16 @@
 package com.android.ql.lf.carapp.ui.fragments.user
 
-import android.app.ProgressDialog
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.CountDownTimer
 import android.view.View
 import com.a.WebViewContentFragment
 import com.android.ql.lf.carapp.R
+import com.android.ql.lf.carapp.data.ProtocolBean
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.utils.*
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_register_layout.*
 import org.jetbrains.anko.bundleOf
 import org.json.JSONObject
@@ -58,7 +59,6 @@ class RegisterFragment : BaseNetWorkingFragment() {
                 mEtRegisterPhone.showSnackBar("请输入正确的手机号")
                 return@setOnClickListener
             }
-            mTvRegisterGetCode.isEnabled = false
             timeCount.start()
             mPresent.getDataByPost(0,
                     RequestParamsHelper.LOGIN_MODEL,
@@ -97,19 +97,16 @@ class RegisterFragment : BaseNetWorkingFragment() {
                     RequestParamsHelper.getRegisterParams(mEtRegisterPhone.text.toString(), mEtRegisterPassword.text.toString()))
         }
         mTvRegisterProtocol.setOnClickListener {
-            FragmentContainerActivity.from(mContext)
-                    .setNeedNetWorking(true)
-                    .setTitle("用户服务协议")
-                    .setExtraBundle(bundleOf(Pair(WebViewContentFragment.PATH_FLAG, "http://www.baidu.com")))
-                    .setClazz(WebViewContentFragment::class.java)
-                    .start()
+            mPresent.getDataByPost(0x2, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_PTGG, RequestParamsHelper.getPtggParam("11"))
         }
     }
 
     override fun onRequestStart(requestID: Int) {
         super.onRequestStart(requestID)
         if (requestID == 0x1) {
-            progressDialog = ProgressDialog.show(mContext, null, "正在注册……")
+            getFastProgressDialog("正在注册……")
+        } else if (requestID == 0x2) {
+            getFastProgressDialog("正在加载……")
         }
     }
 
@@ -128,6 +125,19 @@ class RegisterFragment : BaseNetWorkingFragment() {
                     finish()
                 } else {
                     toast((baseNetResult.obj as JSONObject).optString("msg"))
+                }
+            } else if (requestID == 0x2) {
+                val check = checkResultCode(result)
+                if (check != null && check.code == SUCCESS_CODE) {
+                    val protocolBean = Gson().fromJson((check.obj as JSONObject).optJSONObject("result").toString(), ProtocolBean::class.java)
+                    FragmentContainerActivity.from(mContext)
+                            .setNeedNetWorking(true)
+                            .setTitle(protocolBean.ptgg_title)
+                            .setExtraBundle(bundleOf(Pair(WebViewContentFragment.PATH_FLAG, protocolBean.ptgg_content)))
+                            .setClazz(WebViewContentFragment::class.java)
+                            .start()
+                } else {
+                    toast("获取服务协议失败")
                 }
             }
         }

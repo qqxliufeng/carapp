@@ -34,7 +34,7 @@ class MinePersonalInfoFragment : BaseNetWorkingFragment() {
         UserPresent()
     }
 
-    //0  用户名   1 手机号    2 头像
+    //0  用户名   1 身份证号    2 头像
     private var currentToken = 0
 
     override fun getLayoutId() = R.layout.fragment_mine_personal_info_layout
@@ -43,6 +43,7 @@ class MinePersonalInfoFragment : BaseNetWorkingFragment() {
         GlideManager.loadFaceCircleImage(mContext, UserInfo.getInstance().memberPic, mTvPersonalInfoFace)
         mTvPersonalInfoNickName.text = UserInfo.getInstance().memberName
         mTvPersonalInfoPhone.text = UserInfo.getInstance().memberPhone.let { "${it.substring(0, 3)}****${it.substring(7, it.length)}" }
+        mTvPersonalInfoIdCard.text = UserInfo.getInstance().memberIdCard ?: "暂无"
         mFaceContainer.setOnClickListener {
             currentToken = 2
             openImageChoose(MimeType.ofImage(), 1)
@@ -69,7 +70,22 @@ class MinePersonalInfoFragment : BaseNetWorkingFragment() {
             if (oldInfo == content.text.toString().trim()) {
                 return@setPositiveButton
             }
-            mPresent.getDataByPost(0x0, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_EDIT_PERSONAL, RequestParamsHelper.getEditPersonalParam(content.getTextString()))
+            var nickName = ""
+            var idCard = ""
+            when (currentToken) {
+                0 -> {
+                    nickName = content.getTextString()
+                }
+                1 -> {
+                    if (!content.isIdCard()) {
+                        toast("请输入正确的身份证号")
+                        return@setPositiveButton
+                    }
+                    idCard = content.getTextString()
+                }
+            }
+            mPresent.getDataByPost(0x0, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_EDIT_PERSONAL,
+                    RequestParamsHelper.getEditPersonalParam(account = nickName, idcard = idCard))
         }
         builder.setView(contentView)
         builder.create().show()
@@ -94,7 +110,8 @@ class MinePersonalInfoFragment : BaseNetWorkingFragment() {
                         userPresent.modifyInfoForName(nameResult)
                     }
                     1 -> {
-
+                        val idCardResult = (check.obj as JSONObject).optJSONObject("result").optString("member_idcard")
+                        mTvPersonalInfoIdCard.text = idCardResult
                     }
                     2 -> {
                         val picResult = (check.obj as JSONObject).optJSONObject("result").optString("member_pic")

@@ -1,6 +1,5 @@
 package com.android.ql.lf.carapp.utils
 
-import android.text.TextUtils
 import com.android.ql.lf.carapp.data.UserInfo
 
 /**
@@ -75,10 +74,6 @@ class RequestParamsHelper {
             return params
         }
 
-        val ACT_QQLOGIN = "qqlogin"
-        fun getQQloginParam(phone: String, openid: String, accessToken: String) =
-                getBaseParams().addParam("phone", phone).addParam("openid", openid).addParam("access_token", accessToken)
-
         /**              login model  end           **/
 
 
@@ -92,41 +87,8 @@ class RequestParamsHelper {
         }
 
         val ACT_EDIT_PERSONAL = "edit_personal"
-        fun getEditPersonalParam(account: String = "", idcard: String = ""): ApiParams {
-            val params = getWithIdParams()
-            if (!TextUtils.isEmpty(account)) {
-                params.addParam("account", account)
-            }
-            if (!TextUtils.isEmpty(idcard)) {
-                params.addParam("idcard", idcard)
-            }
-            return params
-        }
-
-        val ACT_MY_GRADES = "my_grades"
-        fun getMyGradesParam() = getWithIdParams()
-
-        val ACT_PTGG = "ptgg"
-        fun getPtggParam(pid: String) = getBaseParams().addParam("pid", pid)
-
-        val ACT_INTEGRAL = "integral"
-        fun getIntegralParam(page: Int) = getWithPageParams(page)
-
-        val ACT_PERSONAL_SERVICE = "personal_service"
-        fun getPersonalServiceParam() = getWithIdParams()
-
-        val ACT_APPLY = "apply"
-        fun getApplyParam(type: String, name: String, mpic: ArrayList<String>, sypic: ArrayList<String>, phone: String, address: String, num: String, content: String): ApiParams {
-            val param = getWithIdParams()
-            param.addParam("type", type)
-            param.addParam("name", name)
-            param.addParam("mpic", mpic.toString().removePrefix("[").removeSuffix("]"))
-            param.addParam("sypic", sypic.toString().removePrefix("[").removeSuffix("]"))
-            param.addParam("phone", phone)
-            param.addParam("address", address)
-            param.addParam("num", num)
-            param.addParam("content", content)
-            return param
+        fun getEditPersonalParam(account: String): ApiParams {
+            return getWithIdParams().addParam("account", account)
         }
 
 
@@ -167,7 +129,7 @@ class RequestParamsHelper {
         fun getGetMyQuizParam() = getWithIdParams()
 
         val ACT_GET_MYANSWER = "get_myanswer"
-        fun getGetMyAnswerParam(page: Int) = getWithPageParams(page)
+        fun getGetMyAnswerParam() = getWithIdParams()
 
         val ACT_DEL_QAA = "del_qaa"
         fun getDelQaaParam(qid: String = "", aid: String = ""): ApiParams {
@@ -197,19 +159,6 @@ class RequestParamsHelper {
             return getWithIdParams().addParam("aid", aid)
         }
 
-        val ACT_ARTICLE_PRAISE = "quiz_praise"
-        fun getArticlePraiseParam(qid: String): ApiParams {
-            return getWithIdParams().addParam("qid", qid)
-        }
-
         /**              qaa model  end           **/
-        /**              order model start        **/
-
-        val ORDER_MODEL = "order"
-        val ACT_QORDER = "qorder"
-        fun getQorderParam(location: String = "", page: Int): ApiParams {
-            return getWithPageParams(page).addParam("location", location)
-        }
-        /**              order model end        **/
     }
 }

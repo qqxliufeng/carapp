@@ -33,12 +33,7 @@ class MineArticleReplyItemFragment : BaseRecyclerViewFragment<ArticleAnswerBean>
 
     override fun onRefresh() {
         super.onRefresh()
-        mPresent.getDataByPost(0x0, RequestParamsHelper.QAA_MODEL, RequestParamsHelper.ACT_GET_MYANSWER, RequestParamsHelper.getGetMyAnswerParam(currentPage))
-    }
-
-    override fun onLoadMore() {
-        super.onLoadMore()
-        mPresent.getDataByPost(0x0, RequestParamsHelper.QAA_MODEL, RequestParamsHelper.ACT_GET_MYANSWER, RequestParamsHelper.getGetMyAnswerParam(currentPage))
+        mPresent.getDataByPost(0x0, RequestParamsHelper.QAA_MODEL, RequestParamsHelper.ACT_GET_MYANSWER, RequestParamsHelper.getGetMyAnswerParam())
     }
 
     override fun getItemDecoration(): RecyclerView.ItemDecoration {
@@ -53,7 +48,7 @@ class MineArticleReplyItemFragment : BaseRecyclerViewFragment<ArticleAnswerBean>
         super.onRequestSuccess(requestID, result)
         if (requestID == 0x0) {
             processList(result as String, ArticleAnswerBean::class.java)
-        } else if (requestID == 0x1) {
+        }else if (requestID ==0x1){
             val check = checkResultCode(result)
             if (check != null && check.code == SUCCESS_CODE) {
                 toast("删除成功")

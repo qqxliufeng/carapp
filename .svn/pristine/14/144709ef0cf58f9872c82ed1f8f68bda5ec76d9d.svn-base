@@ -17,7 +17,7 @@ wrjt.sdqlweb.com/interface.php/v1/t/app_update        请求方式：post  参�
 
 
 规则api:
-wrjt.sdqlweb.com/interface.php/v1/member/ptgg                请求方式：post  参数 : pid  保证金缴纳介绍 1  用户注册服务协议 11 帖子发布规则 2  修理师傅简介 3 商家简介 12 
+wrjt.sdqlweb.com/interface.php/v1/member/ptgg                请求方式：post  参数 : pid  保证金缴纳介绍 1  用户注册服务协议 11 帖子发布规则 2  
 
 
 ======== 登录 =======================================
@@ -26,7 +26,7 @@ wrjt.sdqlweb.com/interface.php/v1/member/ptgg                请求方式：post
 wrjt.sdqlweb.com/interface.php/v1/login/Register   请求方式：post  参数 : tel,pw,pt 手机号,密码,注册终端
 
 登陆api:
-wrjt.sdqlweb.com/interface.php/v1/login/Login      请求方式：post  参数 : tel,pw    手机号,密码 返回 member_authentication 0 师傅待审核 1 已是师傅 2 师傅审核失败 3 暂无师傅店铺信息
+wrjt.sdqlweb.com/interface.php/v1/login/Login      请求方式：post  参数 : tel,pw,stoken    手机号,密码,类型  1  账号密码登录  2 手机短信验证码登录（注： pw 字段必须为空） 
 
 微信登陆api:
 wrjt.sdqlweb.com/interface.php/v1/t/wxlogin        请求方式：get   参数 : code      授权code
@@ -93,18 +93,12 @@ wrjt.sdqlweb.com/interface.php/v1/member/integral            请求方式：post
 wrjt.sdqlweb.com/interface.php/v1/member/bind_account        请求方式：post  参数 : uid 用户ID
 
 我的钱包 绑定支付宝提现账户api:
-wrjt.sdqlweb.com/interface.php/v1/member/bind_alipay         请求方式：post  参数 : uid,account,autonym 用户ID,支付宝账号,用户真实姓名
-
-我的钱包 绑定微信提现账户api:
-wrjt.sdqlweb.com/interface.php/v1/member/bind_wxpay          请求方式：post  参数 : uid,idcard,autonym 用户ID,身份证号,用户真实姓名
-
-我的钱包 绑定微信提现账户 拉取授权api:
-wrjt.sdqlweb.com/interface.php/v1/member/wx_authorization    请求方式：post  参数 : uid,code 用户ID,会话code
+wrjt.sdqlweb.com/interface.php/v1/member/bind_alipay         请求方式：post  参数 : uid,account 用户ID,支付宝账号
 
 ======== 抢单管理 =====================================
 
 抢单api:
-wrjt.sdqlweb.com/interface.php/v1/order/qorder                请求方式：post  参数 : page,pagesize,uid,location 页数,每页最大数量，用户ID,店铺地址
+wrjt.sdqlweb.com/interface.php/v1/order/qorder                请求方式：post  参数 : uid,location 用户ID,店铺地址
 
 抢单api:
 wrjt.sdqlweb.com/interface.php/v1/order/order_receiving       请求方式：post  参数 : uid,oid 用户ID,订单ID

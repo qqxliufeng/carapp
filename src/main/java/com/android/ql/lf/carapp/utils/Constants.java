@@ -22,6 +22,8 @@ public class Constants {
     public static final String IMAGE_PATH = APP_PATH + "/image/";
     public static final String FILE_PROVIDE_PATH = "com.android.ql.lf.carapp.fileProvider";
 
+    public static final String TENCENT_ID = "1106743534";
+
 
     private static final String APP_TOKEN = APP_ID + APP_SEC;
     private static String md5Token = null;

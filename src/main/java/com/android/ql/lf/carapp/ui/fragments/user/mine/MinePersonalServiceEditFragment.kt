@@ -7,6 +7,7 @@ import android.widget.TimePicker
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
+import com.android.ql.lf.carapp.utils.RequestParamsHelper
 import com.android.ql.lf.carapp.utils.toast
 import kotlinx.android.synthetic.main.fragment_mine_personal_service_layout.*
 import java.util.*
@@ -62,5 +63,17 @@ class MinePersonalServiceEditFragment : BaseNetWorkingFragment() {
             timePicker.setTitle("请选择结束时间")
             timePicker.show()
         }
+        mPresent.getDataByPost(0x0,RequestParamsHelper.MEMBER_MODEL,RequestParamsHelper.ACT_PERSONAL_SERVICE,RequestParamsHelper.getPersonalServiceParam())
+    }
+
+    override fun onRequestStart(requestID: Int) {
+        super.onRequestStart(requestID)
+        if (requestID == 0x0){
+            getFastProgressDialog("正在加载……")
+        }
+    }
+
+    override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
+        super.onRequestSuccess(requestID, result)
     }
 }

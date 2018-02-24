@@ -30,6 +30,8 @@ public class ViewUserAction implements IViewUserAction {
             UserInfo.getInstance().setMemberIsMaster(result.optString("member_ismaster"));
             UserInfo.getInstance().setMemberOpenid(result.optString("member_openid"));
             UserInfo.getInstance().setMemberRank(result.optString("member_rank"));
+            UserInfo.getInstance().setMemberIdCard(result.optString("member_idcard"));
+            UserInfo.getInstance().setMemberAuthentication(result.optString("member_authentication"));
             return true;
         } catch (Exception e) {
             return false;

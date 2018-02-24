@@ -144,7 +144,9 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="50dp"
                 android:background="@null"
+                android:gravity="right"
                 android:hint="请输入店铺名"
+                android:text="1111"
                 android:textColor="@color/text_deep_dark_color"
                 android:textSize="@dimen/sp_14" />
 
@@ -178,8 +180,10 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="50dp"
                 android:background="@null"
+                android:gravity="right"
                 android:hint="请输入手机号"
                 android:inputType="phone"
+                android:text="15910101117"
                 android:textColor="@color/text_deep_dark_color"
                 android:textSize="@dimen/sp_14" />
 
@@ -213,7 +217,9 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="50dp"
                 android:background="@null"
+                android:gravity="right"
                 android:hint="请输入店铺地址"
+                android:text="22222"
                 android:textColor="@color/text_deep_dark_color"
                 android:textSize="@dimen/sp_14" />
 
@@ -247,8 +253,10 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="50dp"
                 android:background="@null"
+                android:gravity="right"
                 android:hint="请输入您店铺师傅人数"
                 android:inputType="number"
+                android:text="20"
                 android:textColor="@color/text_deep_dark_color"
                 android:textSize="@dimen/sp_14" />
         </RelativeLayout>
@@ -278,6 +286,7 @@
             android:maxLength="150"
             android:minLines="5"
             android:padding="@dimen/dp_10"
+            android:text="this is content"
             android:textSize="@dimen/sp_14" />
 
         <View

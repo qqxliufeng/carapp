@@ -7,18 +7,21 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.ImageView
 import com.android.ql.lf.carapp.R
+import com.android.ql.lf.carapp.data.EventIsMasterAndMoneyBean
 import com.android.ql.lf.carapp.data.ImageBean
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
-import com.android.ql.lf.carapp.utils.isEmpty
-import com.android.ql.lf.carapp.utils.isPhone
-import com.android.ql.lf.carapp.utils.toast
+import com.android.ql.lf.carapp.utils.*
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import kotlinx.android.synthetic.main.fragment_mine_apply_master_info_submit_layout.*
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import org.json.JSONArray
+import java.io.File
 
 /**
  * Created by lf on 18.2.12.
@@ -50,7 +53,21 @@ class MineApplyMasterInfoSubmitFragment : BaseNetWorkingFragment() {
         ImageAdapter(R.layout.adapter_apply_master_info_image_item_layout, licenceImageList)
     }
 
+    private val formStoreImagesList by lazy {
+        arrayListOf<String>()
+    }
+
+    private val formIdCardImagesList by lazy {
+        arrayListOf<String>()
+    }
+
+    private val formLicenceImagesList by lazy {
+        arrayListOf<String>()
+    }
+
     private var currentImageFlag = 0
+
+    private var statueCode = true
 
     override fun getLayoutId() = R.layout.fragment_mine_apply_master_info_submit_layout
 
@@ -118,7 +135,7 @@ class MineApplyMasterInfoSubmitFragment : BaseNetWorkingFragment() {
                 toast("请输入店铺名称")
                 return@setOnClickListener
             }
-            if (mEtMasterInfoPhone.isPhone()) {
+            if (!mEtMasterInfoPhone.isPhone()) {
                 toast("请输入合法的手机号")
                 return@setOnClickListener
             }
@@ -134,7 +151,102 @@ class MineApplyMasterInfoSubmitFragment : BaseNetWorkingFragment() {
                 toast("请输入店铺师傅数量")
                 return@setOnClickListener
             }
+            uploadImage(0x0, storeImagesList, "正在上传门店图片……")
         }
+    }
+
+    private fun uploadImage(requestID: Int, tempList: ArrayList<ImageBean>, message: String) {
+        ImageUploadHelper(object : ImageUploadHelper.OnImageUploadListener {
+            override fun onActionStart() {
+                getFastProgressDialog(message)
+            }
+
+            override fun onActionEnd(paths: java.util.ArrayList<String>?) {
+                val builder = ImageUploadHelper.createMultipartBody()
+                paths!!.forEachIndexed { index, s ->
+                    val file = File(s)
+                    builder.addFormDataPart("$index", file.name, RequestBody.create(MultipartBody.FORM, file))
+                }
+                mPresent.uploadFile(requestID, "t",
+                        "pictime", builder.build().parts())
+            }
+
+            override fun onActionFailed() {
+                statueCode = false
+            }
+        }).upload(tempList, 150)
+    }
+
+    override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
+        super.onRequestSuccess(requestID, result)
+        when (requestID) {
+            0x0 -> {
+                if (result != null && statueCode) {
+                    val imageJsonArray = JSONArray(result as String)
+                    (0 until imageJsonArray.length()).forEach {
+                        formStoreImagesList.add(imageJsonArray[it] as String)
+                    }
+                    mBtMasterInfoSubmit.post {
+                        uploadImage(0x1, idCardImageList, "正在上传身份证图片……")
+                    }
+                }
+            }
+            0x1 -> {
+                if (result != null && statueCode) {
+                    val imageJsonArray = JSONArray(result as String)
+                    (0 until imageJsonArray.length()).forEach {
+                        formIdCardImagesList.add(imageJsonArray[it] as String)
+                    }
+                    mBtMasterInfoSubmit.post {
+                        uploadImage(0x2, idCardImageList, "正在上传营业执照图片……")
+                    }
+                }
+            }
+            0x2 -> {
+                if (result != null && statueCode) {
+                    val imageJsonArray = JSONArray(result as String)
+                    (0 until imageJsonArray.length()).forEach {
+                        formLicenceImagesList.add(imageJsonArray[it] as String)
+                    }
+                    formIdCardImagesList.addAll(formLicenceImagesList)
+                    mBtMasterInfoSubmit.post {
+                        mPresent.getDataByPost(0x3,
+                                RequestParamsHelper.MEMBER_MODEL,
+                                RequestParamsHelper.ACT_APPLY,
+                                RequestParamsHelper.getApplyParam("1",
+                                        mEtMasterInfoStoreName.getTextString(),
+                                        formStoreImagesList,
+                                        formIdCardImagesList,
+                                        mEtMasterInfoPhone.getTextString(),
+                                        mEtMasterInfoAddress.getTextString(),
+                                        mEtMasterInfoMasterNum.getTextString(),
+                                        mEtMasterInfoStoreIntroduce.getTextString()))
+                    }
+                }
+            }
+            0x3 -> {
+                val check = checkResultCode(result)
+                if (check != null && check.code == SUCCESS_CODE) {
+                    toast("上传成功，等待后台审核")
+                    RxBus.getDefault().post(EventIsMasterAndMoneyBean.getInstance())
+                    finish()
+                } else {
+                    toast("上传失败")
+                }
+            }
+        }
+    }
+
+    override fun onRequestStart(requestID: Int) {
+        super.onRequestStart(requestID)
+        if (requestID == 0x3) {
+            getFastProgressDialog("正在上传信息……")
+        }
+    }
+
+    override fun onRequestFail(requestID: Int, e: Throwable) {
+        super.onRequestFail(requestID, e)
+        statueCode = false
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -6,10 +6,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.TypedValue
 import android.view.View
 import android.widget.CheckedTextView
-import com.a.WebViewContentFragment
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.ImageBean
-import com.android.ql.lf.carapp.data.ProtocolBean
 import com.android.ql.lf.carapp.present.CommunityPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.adapter.OrderImageUpLoadAdapter
@@ -25,7 +23,6 @@ import com.zhihu.matisse.MimeType
 import kotlinx.android.synthetic.main.fragment_write_article_layout.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import org.jetbrains.anko.bundleOf
 import org.json.JSONObject
 import java.io.File
 import java.util.*
@@ -127,9 +124,6 @@ class WriteArticleFragment : BaseNetWorkingFragment() {
                         })
             }
         }
-        mTvWriteArticleProtocol.setOnClickListener {
-            mPresent.getDataByPost(0x3, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_PTGG, RequestParamsHelper.getPtggParam("2"))
-        }
         mPresent.getDataByPost(0x0, RequestParamsHelper.QAA_MODEL, RequestParamsHelper.ACT_TAG, RequestParamsHelper.getTagParam())
     }
 
@@ -144,57 +138,40 @@ class WriteArticleFragment : BaseNetWorkingFragment() {
 
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
         super.onRequestSuccess(requestID, result)
-        when(requestID){
-            0x0->{
-                val check = checkResultCode(result)
-                if (check != null && SUCCESS_CODE == check.code) {
-                    val jsonArray = (check.obj as JSONObject).optJSONArray("result")
-                    (0 until jsonArray.length()).forEach {
-                        tags.add(Gson().fromJson(jsonArray.optJSONObject(it).toString(), ArticleTagBean::class.java))
-                        val textView = CheckedTextView(mContext)
-                        val layoutParams = FlexboxLayout.LayoutParams(FlexboxLayout.LayoutParams.WRAP_CONTENT, FlexboxLayout.LayoutParams.WRAP_CONTENT)
-                        val margin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5.0f, resources.displayMetrics).toInt()
-                        layoutParams.setMargins(margin, margin, margin, margin)
-                        textView.setBackgroundResource(R.drawable.selector_ctv_bg2)
-                        textView.setTextColor(resources.getColorStateList(R.color.select_ctv_1))
-                        textView.layoutParams = layoutParams
-                        textView.setOnClickListener { view ->
-                            currentTag = textView.text.toString()
-                            (0 until mFlWriteArticleTag.childCount)
-                                    .map { mFlWriteArticleTag.getChildAt(it) as CheckedTextView }
-                                    .filter { it != view }
-                                    .forEach { it.isChecked = false }
-                            (view as CheckedTextView).isChecked = !view.isChecked
-                        }
-                        textView.text = tags[it].tag_title
-                        mFlWriteArticleTag.addView(textView)
+        if (requestID == 0x0) {
+            val check = checkResultCode(result)
+            if (check != null && SUCCESS_CODE == check.code) {
+                val jsonArray = (check.obj as JSONObject).optJSONArray("result")
+                (0 until jsonArray.length()).forEach {
+                    tags.add(Gson().fromJson(jsonArray.optJSONObject(it).toString(), ArticleTagBean::class.java))
+                    val textView = CheckedTextView(mContext)
+                    val layoutParams = FlexboxLayout.LayoutParams(FlexboxLayout.LayoutParams.WRAP_CONTENT, FlexboxLayout.LayoutParams.WRAP_CONTENT)
+                    val margin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5.0f, resources.displayMetrics).toInt()
+                    layoutParams.setMargins(margin, margin, margin, margin)
+                    textView.setBackgroundResource(R.drawable.selector_ctv_bg2)
+                    textView.setTextColor(resources.getColorStateList(R.color.select_ctv_1))
+                    textView.layoutParams = layoutParams
+                    textView.setOnClickListener { view ->
+                        currentTag = textView.text.toString()
+                        (0 until mFlWriteArticleTag.childCount)
+                                .map { mFlWriteArticleTag.getChildAt(it) as CheckedTextView }
+                                .filter { it != view }
+                                .forEach { it.isChecked = false }
+                        (view as CheckedTextView).isChecked = !view.isChecked
                     }
-                    mBtWriteArticleSubmit.isEnabled = true
+                    textView.text = tags[it].tag_title
+                    mFlWriteArticleTag.addView(textView)
                 }
+                mBtWriteArticleSubmit.isEnabled = true
             }
-            0x1,0x2->{
-                val check = checkResultCode(result)
-                if (check != null && check.code == SUCCESS_CODE) {
-                    toast("发布成功")
-                    RxBus.getDefault().post(ARTICLE_SEND_SUCCESS_FLAG)
-                    finish()
-                } else {
-                    toast("发布失败")
-                }
-            }
-            0x3->{
-                val check = checkResultCode(result)
-                if (check != null && check.code == SUCCESS_CODE) {
-                    val protocolBean = Gson().fromJson((check.obj as JSONObject).optJSONObject("result").toString(), ProtocolBean::class.java)
-                    FragmentContainerActivity.from(mContext)
-                            .setNeedNetWorking(true)
-                            .setTitle(protocolBean.ptgg_title)
-                            .setExtraBundle(bundleOf(Pair(WebViewContentFragment.PATH_FLAG, protocolBean.ptgg_content)))
-                            .setClazz(WebViewContentFragment::class.java)
-                            .start()
-                } else {
-                    toast("获取服务协议失败")
-                }
+        } else if (requestID == 0x1 || requestID == 0x2) {
+            val check = checkResultCode(result)
+            if (check != null && check.code == SUCCESS_CODE) {
+                toast("发布成功")
+                RxBus.getDefault().post(ARTICLE_SEND_SUCCESS_FLAG)
+                finish()
+            } else {
+                toast("发布失败")
             }
         }
     }
