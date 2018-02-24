@@ -10,10 +10,7 @@ import com.android.ql.lf.carapp.ui.activities.MainActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.ui.fragments.user.SettingFragment
 import com.android.ql.lf.carapp.ui.fragments.user.mine.*
-import com.android.ql.lf.carapp.utils.GlideManager
-import com.android.ql.lf.carapp.utils.RxBus
-import com.android.ql.lf.carapp.utils.doClickWithUseStatusEnd
-import com.android.ql.lf.carapp.utils.doClickWithUserStatusStart
+import com.android.ql.lf.carapp.utils.*
 import kotlinx.android.synthetic.main.fragment_main_mine_layout.*
 
 /**
@@ -90,30 +87,52 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
         mLlMainMinePersonalInfoContainer.doClickWithUserStatusStart(MINE_PERSONAL_INFO_TOKEN) {
             FragmentContainerActivity.from(mContext).setClazz(MinePersonalInfoFragment::class.java).setTitle("个人中心").setNeedNetWorking(true).start()
         }
-        mLlMainMineStoreContainer.doClickWithUserStatusStart(MINE_STORE_COLLECTION_TOKEN) {
-            FragmentContainerActivity.startFragmentContainerActivity(mContext, "店铺收藏", MineStoreCollectionFragment::class.java)
+        mLlMainMineStoreContainer.setOnClickListener {
+            toast(Constants.NO_FUNCTION_NOTIFY_MESSAGE)
         }
-        mLlMainMineGoodsContainer.doClickWithUserStatusStart(MINE_GOODS_COLLECTION_TOKEN) {
-            FragmentContainerActivity.startFragmentContainerActivity(mContext, "商品收藏", MineGoodsCollectionFragment::class.java)
+//        mLlMainMineStoreContainer.doClickWithUserStatusStart(MINE_STORE_COLLECTION_TOKEN) {
+//            FragmentContainerActivity.startFragmentContainerActivity(mContext, "店铺收藏", MineStoreCollectionFragment::class.java)
+//        }
+        mLlMainMineGoodsContainer.setOnClickListener {
+            toast(Constants.NO_FUNCTION_NOTIFY_MESSAGE)
         }
+//        mLlMainMineGoodsContainer.doClickWithUserStatusStart(MINE_GOODS_COLLECTION_TOKEN) {
+//            FragmentContainerActivity.startFragmentContainerActivity(mContext, "商品收藏", MineGoodsCollectionFragment::class.java)
+//        }
         mTvMainMineGrade.doClickWithUserStatusStart(MINE_GRADE_TOKEN) {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的等级", MineGradeFragment::class.java)
         }
         mTvMainServiceEdit.doClickWithUserStatusStart(MINE_PERSONAL_EDIT_INFO_TOKEN) {
+            if (UserInfo.getInstance().isCheckingMaster){
+                toast("认证资料正在审核中……")
+                return@doClickWithUserStatusStart
+            }
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "个人服务信息", MinePersonalServiceEditFragment::class.java)
         }
-        mTvMainMineStore.doClickWithUserStatusStart(MINE_STORE_INFO_TOKEN) {
-            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的店铺", MineStoreInfoFragment::class.java)
+        mTvMainMineStore.setOnClickListener {
+            toast(Constants.NO_FUNCTION_NOTIFY_MESSAGE)
         }
+//        mTvMainMineStore.doClickWithUserStatusStart(MINE_STORE_INFO_TOKEN) {
+//            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的店铺", MineStoreInfoFragment::class.java)
+//        }
         mTvMainMineQCode.doClickWithUserStatusStart(MINE_Q_CODE_TOKEN) {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的邀请码", MineQCodeFragment::class.java)
         }
+
+        mTvMainMineShopOrder.setOnClickListener {
+            toast(Constants.NO_FUNCTION_NOTIFY_MESSAGE)
+        }
+
         mTvMainMineWallet.doClickWithUserStatusStart(MINE_MY_WALLET_TOKEN) {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的钱包", MineWalletFragment::class.java)
         }
-        mLlMainMineFootPrintContainer.doClickWithUserStatusStart(MINE_FOOT_PRINT_TOKEN) {
-            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的足迹", MineFootPrintFragment::class.java)
+
+        mLlMainMineFootPrintContainer.setOnClickListener {
+            toast(Constants.NO_FUNCTION_NOTIFY_MESSAGE)
         }
+//        mLlMainMineFootPrintContainer.doClickWithUserStatusStart(MINE_FOOT_PRINT_TOKEN) {
+//            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的足迹", MineFootPrintFragment::class.java)
+//        }
         mTvMainMineSetting.doClickWithUserStatusStart(MINE_SETTING_TOKEN) {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "设置", SettingFragment::class.java)
         }

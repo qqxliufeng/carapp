@@ -253,6 +253,7 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/mTvMainMineShopOrder"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"

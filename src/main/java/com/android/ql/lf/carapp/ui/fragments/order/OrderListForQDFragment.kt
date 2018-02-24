@@ -84,6 +84,9 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
                 return
             }
             mTvOrderQDNotify.setOnClickListener {
+                if (UserInfo.getInstance().isCheckingMaster){
+                    return@setOnClickListener
+                }
                 if (!UserInfo.getInstance().isMaster) {
                     FragmentContainerActivity.from(mContext).setTitle("申请成为师傅").setNeedNetWorking(true).setClazz(MineApplyMasterInfoSubmitFragment::class.java).start()
                     return@setOnClickListener

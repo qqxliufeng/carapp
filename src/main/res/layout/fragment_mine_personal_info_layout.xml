@@ -119,6 +119,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:drawablePadding="@dimen/dp_10"
+            android:drawableRight="@drawable/icon_inter1"
             android:gravity="center"
             android:text="暂无"
             android:textColor="@color/text_dark_color" />

@@ -1,9 +1,9 @@
 package com.android.ql.lf.carapp.ui.adapter
 
-import android.widget.Button
+import android.support.v4.content.ContextCompat
+import android.text.Html
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.OrderBean
-import com.android.ql.lf.carapp.data.UserInfo
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 
@@ -15,8 +15,11 @@ class OrderListForQDAdapter(layoutId: Int, list: ArrayList<OrderBean>) : BaseQui
 
     override fun convert(helper: BaseViewHolder?, item: OrderBean?) {
         helper!!.addOnClickListener(R.id.mBtOrderListForQDItem)
-        val bt_qd = helper.getView<Button>(R.id.mBtOrderListForQDItem)
-        bt_qd.isEnabled = UserInfo.getInstance().isLogin /*&& UserInfo.getInstance().isMaster*/
         helper.setText(R.id.mTvOrderListForQDItemName, item!!.qorder_name)
+        helper.setText(R.id.mTvOrderListForQDItemSendTime, item.qorder_time ?: "暂无")
+        helper.setText(R.id.mTvOrderListForQDItemTime,item.qorder_jendtime)
+        helper.setText(R.id.mTvOrderListForQDItemTitle, Html.fromHtml("<font color='${ContextCompat.getColor(mContext, R.color.colorPrimary)}'>项目：</font>${item.qorder_project}"))
+        helper.setText(R.id.mTvOrderListForQDItemMoney, "￥${item.qorder_price}")
+        helper.setText(R.id.mTvOrderListForQDItemContent,Html.fromHtml("<font color='${ContextCompat.getColor(mContext, R.color.colorPrimary)}'>备注：</font>${item.qorder_content}"))
     }
 }

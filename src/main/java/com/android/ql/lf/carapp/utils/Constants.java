@@ -24,6 +24,8 @@ public class Constants {
 
     public static final String TENCENT_ID = "1106743534";
 
+    public static final String NO_FUNCTION_NOTIFY_MESSAGE = "此功能暂未开放！";
+
 
     private static final String APP_TOKEN = APP_ID + APP_SEC;
     private static String md5Token = null;

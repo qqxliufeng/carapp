@@ -56,6 +56,9 @@ class MinePersonalInfoFragment : BaseNetWorkingFragment() {
             currentToken = 1
             showEditInfoDialog("修改身份证号", UserInfo.getInstance().memberIdCard ?: "")
         }
+        mTvSettingAddressManager.setOnClickListener {
+            toast(Constants.NO_FUNCTION_NOTIFY_MESSAGE)
+        }
     }
 
     private fun showEditInfoDialog(title: String, oldInfo: String) {

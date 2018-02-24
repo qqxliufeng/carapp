@@ -36,6 +36,8 @@ class LoginFragment : BaseNetWorkingFragment(), IUiListener {
         UserPresent()
     }
 
+    private lateinit var qqLoginInfo:ThirdLoginManager.QQLoginInfoBean
+
     override fun getLayoutId() = R.layout.fragment_login_layout
 
     override fun initView(view: View?) {
@@ -92,7 +94,7 @@ class LoginFragment : BaseNetWorkingFragment(), IUiListener {
 
     override fun onRequestStart(requestID: Int) {
         super.onRequestStart(requestID)
-        progressDialog = ProgressDialog.show(mContext, null, "正在登录……")
+        getFastProgressDialog("正在登录……")
     }
 
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
@@ -110,6 +112,23 @@ class LoginFragment : BaseNetWorkingFragment(), IUiListener {
                 }
             } else {
                 toast("登录失败，请稍后重试……")
+            }
+        }else if (requestID == 0x1){
+            val check = checkResultCode(result)
+            if (check!=null){
+                when(check.code){
+                    SUCCESS_CODE ->{
+                        userPresent.onLogin((check.obj as JSONObject).optJSONObject("result"))
+                    }
+                    "202"->{
+                        FragmentContainerActivity.from(mContext)
+                                .setNeedNetWorking(true)
+                                .setTitle("完善资料")
+                                .setExtraBundle(bundleOf(Pair("info", qqLoginInfo)))
+                                .setClazz(ThirdLoginCompleteInfoFragment::class.java)
+                                .start()
+                    }
+                }
             }
         }
     }
@@ -142,13 +161,13 @@ class LoginFragment : BaseNetWorkingFragment(), IUiListener {
             toast("QQ登录失败")
             return
         }
-        val qqLoginInfo = ThirdLoginManager.getQQLoginInfo(jsonResponse)
-        FragmentContainerActivity.from(mContext)
-                .setNeedNetWorking(true)
-                .setTitle("完善资料")
-                .setExtraBundle(bundleOf(Pair("info", qqLoginInfo)))
-                .setClazz(ThirdLoginCompleteInfoFragment::class.java)
-                .start()
+        qqLoginInfo = ThirdLoginManager.getQQLoginInfo(jsonResponse)
+        mPresent.getDataByPost(0x1,
+                RequestParamsHelper.LOGIN_MODEL,
+                RequestParamsHelper.ACT_QQLOGIN,
+                RequestParamsHelper.getQQloginParam("",
+                        qqLoginInfo.openid,
+                        qqLoginInfo.access_token))
     }
 
     override fun onCancel() {
