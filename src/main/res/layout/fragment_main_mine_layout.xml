@@ -302,6 +302,7 @@
                             android:textSize="@dimen/sp_12" />
 
                         <TextView
+                            android:id="@+id/mTvMainMineEvaluate"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"

@@ -129,6 +129,15 @@ class RequestParamsHelper {
             return param
         }
 
+        val ACT_MY_WITHDRAW = "my_withdraw"
+        fun getMyWithdrawParam() = getWithIdParams()
+
+        val ACT_MY_WITHDRAW_RECORD = "my_withdraw_record"
+        fun getMyWithdrawRecordParam() = getWithIdParams()
+
+        val ACT_MY_WITHDRAW_OPERATION = "my_withdraw_operation"
+        fun getMyWithdrawOperationParam(price:String,type:String) = getWithIdParams().addParam("price",price).addParam("type",type)
+
 
         /**              member model  end           **/
 

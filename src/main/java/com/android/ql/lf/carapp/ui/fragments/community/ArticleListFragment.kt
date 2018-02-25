@@ -9,8 +9,11 @@ import com.android.ql.lf.carapp.ui.adapter.ArticleListAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
 import com.android.ql.lf.carapp.ui.fragments.user.LoginFragment
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
+import com.android.ql.lf.carapp.utils.doClickWithUseStatusEnd
+import com.android.ql.lf.carapp.utils.doClickWithUserStatusStart
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import kotlinx.android.synthetic.main.fragment_article_list_layout.*
 import org.jetbrains.anko.bundleOf
 
 /**
@@ -21,6 +24,7 @@ class ArticleListFragment : BaseRecyclerViewFragment<ArticleBean>() {
 
     companion object {
         val ARTICLE_DETAIL_FLAG_FOR_ALL = "article_detail_flag_for_all"
+        val COMMUNITY_LIST_SEND_ARTICLE_FLAG = "community_list_send_article_flag"
     }
 
     private var currentArticle: ArticleBean? = null
@@ -33,10 +37,18 @@ class ArticleListFragment : BaseRecyclerViewFragment<ArticleBean>() {
     override fun initView(view: View?) {
         super.initView(view)
         registerLoginSuccessBus()
+        mFabWriteNote.doClickWithUserStatusStart(COMMUNITY_LIST_SEND_ARTICLE_FLAG) {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "发布帖子", WriteArticleFragment::class.java)
+        }
     }
 
     override fun onRefresh() {
         super.onRefresh()
+        mPresent.getDataByPost(0x0, RequestParamsHelper.QAA_MODEL, RequestParamsHelper.ACT_QUIZ_TYPE_SEARCH, RequestParamsHelper.getQuizTypeSearchParam(arguments.getString("type", ""), currentPage))
+    }
+
+    override fun onLoadMore() {
+        super.onLoadMore()
         mPresent.getDataByPost(0x0, RequestParamsHelper.QAA_MODEL, RequestParamsHelper.ACT_QUIZ_TYPE_SEARCH, RequestParamsHelper.getQuizTypeSearchParam(arguments.getString("type", ""), currentPage))
     }
 
@@ -73,6 +85,9 @@ class ArticleListFragment : BaseRecyclerViewFragment<ArticleBean>() {
         when(UserInfo.loginToken){
             ARTICLE_DETAIL_FLAG_FOR_ALL -> {
                 interArticleInfo()
+            }
+            COMMUNITY_LIST_SEND_ARTICLE_FLAG->{
+                mFabWriteNote.doClickWithUseStatusEnd()
             }
         }
     }

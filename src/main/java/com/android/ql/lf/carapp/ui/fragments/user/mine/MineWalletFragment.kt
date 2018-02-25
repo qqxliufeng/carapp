@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
+import com.android.ql.lf.carapp.ui.fragments.user.MineWalletAccountFragment
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -39,7 +40,7 @@ class MineWalletFragment : BaseRecyclerViewFragment<MineWalletFragment.HistoryWa
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "保证金交纳", MineEnsureMoneyFragment::class.java)
         }
         topView.findViewById<TextView>(R.id.mTvMineWalletMoneyAccount).setOnClickListener {
-
+            FragmentContainerActivity.from(mContext).setTitle("收款账号绑定").setClazz(MineWalletAccountFragment::class.java).start()
         }
         mBaseAdapter.addHeaderView(topView)
     }

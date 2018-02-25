@@ -32,6 +32,8 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
         val MINE_SETTING_TOKEN = "setting_token"
         val MINE_MY_ARTICLE_TOKEN = "my_article_token"
         val MINE_APPLY_MASTER_TOKEN = "apply_master_token"
+        val MINE_EVALUATE_TOKEN = "mine_evaluate_token"
+
         fun newInstance(): MainMineFragment {
             return MainMineFragment()
         }
@@ -142,6 +144,14 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
         mTvMainMineApplyMaster.doClickWithUserStatusStart(MINE_APPLY_MASTER_TOKEN) {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "申请成为商家", MineApplyMasterFragment::class.java)
         }
+
+        mTvMainMineEvaluate.setOnClickListener {
+            toast(Constants.NO_FUNCTION_NOTIFY_MESSAGE)
+        }
+
+//        mTvMainMineEvaluate.doClickWithUserStatusStart(MINE_EVALUATE_TOKEN){
+//            FragmentContainerActivity.from(mContext).setClazz(MimeEvaluateFragment::class.java).setTitle("我的评价").start()
+//        }
     }
 
     override fun onRefresh() {
@@ -198,6 +208,9 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
             }
             MINE_APPLY_MASTER_TOKEN -> {
                 mTvMainMineApplyMaster.doClickWithUseStatusEnd()
+            }
+            MINE_EVALUATE_TOKEN->{
+                mTvMainMineEvaluate.doClickWithUseStatusEnd()
             }
         }
     }
