@@ -60,7 +60,7 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
     override fun getLayoutId() = R.layout.fragment_order_for_qd_layout
 
     override fun createAdapter(): BaseQuickAdapter<OrderBean, BaseViewHolder>
-            = OrderListForQDAdapter(R.layout.adapter_order_list_for_qd_item_layout, mArrayList)
+            = OrderListForQDAdapter(mContext,R.layout.adapter_order_list_for_qd_item_layout, mArrayList)
 
     override fun initView(view: View?) {
         super.initView(view)

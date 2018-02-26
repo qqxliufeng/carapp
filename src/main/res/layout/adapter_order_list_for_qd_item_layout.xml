@@ -37,12 +37,11 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/sp_14" />
 
-            <!--<com.android.ql.lf.carapp.ui.views.EasyCountDownTextureView
-                android:id="@+id/mCDTVTime"
+            <cn.iwgang.countdownview.CountdownView
+                android:id="@+id/mCvOrderListForQDItemTime"
+                android:layout_toRightOf="@id/mTvOrderListForQDItemCountTime"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/mTvOrderListForQDItemCountTime"
-                app:easyCountBackgroundColor="@color/colorPrimary" />-->
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/mTvOrderListForQDItemMoney"
