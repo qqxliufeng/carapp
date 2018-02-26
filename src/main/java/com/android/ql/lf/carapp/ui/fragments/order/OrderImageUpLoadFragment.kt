@@ -7,12 +7,15 @@ import android.content.pm.ActivityInfo
 import android.support.v7.widget.GridLayoutManager
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.ImageBean
 import com.android.ql.lf.carapp.ui.adapter.OrderImageUpLoadAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.utils.Constants
+import com.android.ql.lf.carapp.utils.ImageUploadHelper
+import com.android.ql.lf.carapp.utils.RequestParamsHelper
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.listener.OnItemClickListener
@@ -21,7 +24,11 @@ import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.engine.impl.GlideEngine
 import com.zhihu.matisse.internal.entity.CaptureStrategy
 import kotlinx.android.synthetic.main.fragment_order_image_upload_layout.*
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.jetbrains.anko.support.v4.toast
+import java.io.File
+import java.util.ArrayList
 
 /**
  * Created by lf on 18.1.29.
@@ -74,6 +81,34 @@ class OrderImageUpLoadFragment : BaseNetWorkingFragment() {
         inflater!!.inflate(R.menu.upload_image_menu, menu)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item!!.itemId == R.id.upload) {
+            if (mArrayList.size == 1) {
+                return true
+            }
+            ImageUploadHelper(object : ImageUploadHelper.OnImageUploadListener {
+                override fun onActionStart() {
+                    getFastProgressDialog("正在上传照片……")
+                }
+
+                override fun onActionEnd(paths: ArrayList<String>?) {
+                    val builder = ImageUploadHelper.createMultipartBody()
+                    builder.addFormDataPart("oid", arguments.getString("oid"))
+                    paths!!.forEachIndexed { index, s ->
+                        val file = File(s)
+                        builder.addFormDataPart("$index", file.name, RequestBody.create(MultipartBody.FORM, file))
+                    }
+                    mPresent.uploadFile(0x0, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_PLAY_PIC, builder.build().parts())
+                }
+
+                override fun onActionFailed() {
+                    toast("上传失败……")
+                }
+            }).upload(mArrayList.filter { it.uriPath != null } as ArrayList<ImageBean>, 150)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
@@ -84,4 +119,21 @@ class OrderImageUpLoadFragment : BaseNetWorkingFragment() {
             mBaseAdapter.notifyDataSetChanged()
         }
     }
+
+    override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
+        super.onRequestSuccess(requestID, result)
+        val check = checkResultCode(result)
+        if (check != null && check.code == SUCCESS_CODE) {
+            toast("上传成功")
+            finish()
+        } else {
+            toast("上传失败")
+        }
+    }
+
+    override fun onRequestFail(requestID: Int, e: Throwable) {
+        super.onRequestFail(requestID, e)
+        toast("上传失败")
+    }
+
 }

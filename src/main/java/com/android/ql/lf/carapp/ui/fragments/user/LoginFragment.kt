@@ -1,6 +1,5 @@
 package com.android.ql.lf.carapp.ui.fragments.user
 
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color

@@ -1,6 +1,9 @@
 package com.android.ql.lf.carapp.data;
 
+import android.content.Context;
 import android.text.TextUtils;
+
+import com.android.ql.lf.carapp.utils.PreferenceUtils;
 
 /**
  * Created by lf on 18.2.10.
@@ -9,6 +12,8 @@ import android.text.TextUtils;
  */
 
 public class UserInfo {
+
+    public static final String USER_ID_FLAG = "user_id";
 
     public static final String LOGOUT_FLAG = "user_logout_flag";
 
@@ -47,8 +52,9 @@ public class UserInfo {
     private String memberIsMaster;
     private String memberGrade;
     private String memberOrderNum;
-    private String memberIdCard = "";
-    private String memberAuthentication; // 0 已经提交过师傅资料，正在审核
+    private String memberIdCard = null;
+    private String memberAuthentication; // 0 师傅待审核 1 已是师傅 2 师傅审核失败 3 暂无师傅店铺信息
+    private String memberQQOpenid;
 
 
     public String getMemberId() {
@@ -88,7 +94,7 @@ public class UserInfo {
     }
 
     public boolean isMaster() {
-        return "1".equals(memberIsMaster) && !"0".equals(memberAuthentication);
+        return "1".equals(memberIsMaster) && "1".equals(memberAuthentication);
     }
 
     public boolean isPayEnsureMoney() {
@@ -175,14 +181,39 @@ public class UserInfo {
         this.memberAuthentication = memberAuthentication;
     }
 
+    public int getAuthenticationStatus() {
+        return Integer.parseInt(memberAuthentication);
+    }
+
+    public String getMemberQQOpenid() {
+        return memberQQOpenid;
+    }
+
+    public void setMemberQQOpenid(String memberQQOpenid) {
+        this.memberQQOpenid = memberQQOpenid;
+    }
+
     public void loginOut() {
         memberId = null;
+        instance = null;
     }
 
     public void exitApp() {
         if (instance != null) {
             instance = null;
         }
+    }
+
+    public static void clearUserCache(Context context) {
+        PreferenceUtils.setPrefString(context, USER_ID_FLAG, "");
+    }
+
+    public static boolean isCacheUserId(Context context) {
+        return PreferenceUtils.hasKey(context, USER_ID_FLAG) && !TextUtils.isEmpty(PreferenceUtils.getPrefString(context, USER_ID_FLAG, ""));
+    }
+
+    public static String getUserIdFromCache(Context context) {
+        return PreferenceUtils.getPrefString(context, USER_ID_FLAG, "");
     }
 
 }

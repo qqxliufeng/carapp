@@ -1,6 +1,5 @@
 package com.android.ql.lf.carapp.ui.fragments.order
 
-import android.support.v4.content.ContextCompat
 import android.view.View
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.UserInfo
@@ -36,13 +35,17 @@ class OrderListForAfterSaleFragment : BaseRecyclerViewFragment<String>() {
     }!!
 
     override fun onRefresh() {
-//        super.onRefresh()
+        super.onRefresh()
         if (!UserInfo.getInstance().isLogin) {
             setEmptyViewStatus()
         } else {
-//            testAdd("")
-            setEmptyView()
+            testAdd("")
         }
+    }
+
+    override fun onLoadMore() {
+        super.onLoadMore()
+        testAdd("")
     }
 
     override fun onLoginSuccess(userInfo: UserInfo?) {

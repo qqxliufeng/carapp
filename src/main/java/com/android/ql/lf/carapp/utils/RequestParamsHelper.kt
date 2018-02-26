@@ -136,7 +136,10 @@ class RequestParamsHelper {
         fun getMyWithdrawRecordParam() = getWithIdParams()
 
         val ACT_MY_WITHDRAW_OPERATION = "my_withdraw_operation"
-        fun getMyWithdrawOperationParam(price:String,type:String) = getWithIdParams().addParam("price",price).addParam("type",type)
+        fun getMyWithdrawOperationParam(price: String, type: String) = getWithIdParams().addParam("price", price).addParam("type", type)
+
+        val ACT_BIND_ALIPAY = "bind_alipay"
+        fun getBindAlipayParam(account: String, autonym: String) = getWithIdParams().addParam("account", account).addParam("autonym", autonym)
 
 
         /**              member model  end           **/
@@ -219,6 +222,19 @@ class RequestParamsHelper {
         fun getQorderParam(location: String = "", page: Int): ApiParams {
             return getWithPageParams(page).addParam("location", location)
         }
+
+        val ACT_ORDER_RECEIVING = "order_receiving"
+        fun getOrderReceivingParam(oid: String) = getWithIdParams().addParam("oid",oid)
+
+        val ACT_MY_QORDER = "my_qorder"
+        fun getMyQorderParam(status:String,page: Int) = getWithPageParams(page).addParam("status",status)
+
+        val ACT_PLAY_PIC = "play_pic"
+
+        val ACT_EDIT_QORDER_STATUS = "edit_qorder_status"
+        fun getEditQorderStatusParam(oid:String,status:String) = getWithIdParams().addParam("oid",oid).addParam("status",status)
+
+
         /**              order model end        **/
     }
 }

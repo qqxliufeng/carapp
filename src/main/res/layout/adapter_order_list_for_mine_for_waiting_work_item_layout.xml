@@ -35,6 +35,7 @@
                 android:textSize="@dimen/sp_14" />
 
             <Button
+                android:id="@+id/mBtOrderListForWaitingWorkComplete"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:background="@drawable/shape_bt_bg4"

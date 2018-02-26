@@ -9,6 +9,7 @@ import android.widget.ImageView
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.EventIsMasterAndMoneyBean
 import com.android.ql.lf.carapp.data.ImageBean
+import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.utils.*
@@ -112,7 +113,6 @@ class MineApplyMasterInfoSubmitFragment : BaseNetWorkingFragment() {
             currentImageFlag = 2
             openImageChoose(MimeType.ofImage(), 1 - licenceImageList.size)
         }
-
 
         mBtMasterInfoSubmit.setOnClickListener {
             if (storeImagesList.size <= 0) {
@@ -228,6 +228,7 @@ class MineApplyMasterInfoSubmitFragment : BaseNetWorkingFragment() {
                 val check = checkResultCode(result)
                 if (check != null && check.code == SUCCESS_CODE) {
                     toast("上传成功，等待后台审核")
+                    UserInfo.getInstance().setMemberAuthentication("0")
                     RxBus.getDefault().post(EventIsMasterAndMoneyBean.getInstance())
                     finish()
                 } else {

@@ -9,7 +9,6 @@ import android.widget.TextView
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
-import com.android.ql.lf.carapp.ui.fragments.user.MineWalletAccountFragment
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -43,6 +42,7 @@ class MineWalletFragment : BaseRecyclerViewFragment<MineWalletFragment.HistoryWa
             FragmentContainerActivity.from(mContext).setTitle("收款账号绑定").setClazz(MineWalletAccountFragment::class.java).start()
         }
         mBaseAdapter.addHeaderView(topView)
+        mBaseAdapter.setHeaderAndEmpty(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -71,11 +71,19 @@ class MineWalletFragment : BaseRecyclerViewFragment<MineWalletFragment.HistoryWa
         super.onRequestSuccess(requestID, result)
         val check = checkResultCode(result)
         if (check != null && check.code == SUCCESS_CODE) {
-            mTvReleaseMoney!!.text = (check.obj as JSONObject).optString("arr") ?: "暂无"
-            processList(result as String,HistoryWalletBean::class.java)
+            mTvReleaseMoney!!.text = (check.obj as JSONObject).optString("arr") ?: "0.0"
+        } else {
+            mTvReleaseMoney!!.text = "0.0"
         }
+        processList(result as String, HistoryWalletBean::class.java)
     }
 
+    override fun onRequestFail(requestID: Int, e: Throwable) {
+        super.onRequestFail(requestID, e)
+        mTvReleaseMoney!!.text = "0.0"
+    }
+
+    override fun getEmptyMessage() = "暂无信息"
 
     class MineWalletListAdapter(resId: Int, list: ArrayList<HistoryWalletBean>) : BaseQuickAdapter<HistoryWalletBean, BaseViewHolder>(resId, list) {
         override fun convert(helper: BaseViewHolder?, item: HistoryWalletBean?) {

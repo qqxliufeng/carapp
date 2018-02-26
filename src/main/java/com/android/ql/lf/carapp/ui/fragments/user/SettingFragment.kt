@@ -4,10 +4,11 @@ import android.support.v7.app.AlertDialog
 import android.view.View
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.present.UserPresent
-import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.utils.CacheDataManager
+import com.android.ql.lf.carapp.utils.Constants
 import kotlinx.android.synthetic.main.fragment_setting_layout.*
+import org.jetbrains.anko.support.v4.toast
 
 /**
  * Created by liufeng on 2018/2/3.
@@ -26,9 +27,6 @@ class SettingFragment : BaseNetWorkingFragment() {
         mVersionName.text = "V$versionName"
         val cacheSize = CacheDataManager.getTotalCacheSize(mContext)
         mCacheSize.text = "$cacheSize"
-        mTvPersonalInfoResetPassword.setOnClickListener {
-            FragmentContainerActivity.startFragmentContainerActivity(mContext, "修改密码", ResetPasswordFragment::class.java)
-        }
         mCacheSizeContainer.setOnClickListener {
             CacheDataManager.clearAllCache(mContext)
             mCacheSize.text = "暂无缓存"
@@ -42,6 +40,9 @@ class SettingFragment : BaseNetWorkingFragment() {
             }
             builder.setMessage("是否要退出登录？")
             builder.create().show()
+        }
+        mTvSettingAddressManager.setOnClickListener {
+            toast(Constants.NO_FUNCTION_NOTIFY_MESSAGE)
         }
     }
 }

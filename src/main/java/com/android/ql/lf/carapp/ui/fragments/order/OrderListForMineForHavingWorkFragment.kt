@@ -2,6 +2,7 @@ package com.android.ql.lf.carapp.ui.fragments.order
 
 import android.view.View
 import com.android.ql.lf.carapp.R
+import com.android.ql.lf.carapp.data.OrderBean
 import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.adapter.OrderListForMineForWaitingWorkAdapter
@@ -13,7 +14,7 @@ import com.chad.library.adapter.base.BaseViewHolder
  * Created by lf on 18.1.25.
  * @author lf on 18.1.25
  */
-class OrderListForMineForHavingWorkFragment : AbstractLazyLoadFragment<String>() {
+class OrderListForMineForHavingWorkFragment : AbstractLazyLoadFragment<OrderBean>() {
 
     companion object {
         fun newInstance(): OrderListForMineForHavingWorkFragment {
@@ -26,7 +27,7 @@ class OrderListForMineForHavingWorkFragment : AbstractLazyLoadFragment<String>()
         registerLoginSuccessBus()
     }
 
-    override fun createAdapter(): BaseQuickAdapter<String, BaseViewHolder>
+    override fun createAdapter(): BaseQuickAdapter<OrderBean, BaseViewHolder>
             = OrderListForMineForWaitingWorkAdapter(R.layout.adapter_order_list_for_mine_for_having_work_item_layout, mArrayList)
 
     override fun getEmptyMessage() = if (!UserInfo.getInstance().isLogin) {

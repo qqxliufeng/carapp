@@ -1,6 +1,8 @@
 package com.android.ql.lf.carapp.action;
 
+import com.android.ql.lf.carapp.application.CarApplication;
 import com.android.ql.lf.carapp.data.UserInfo;
+import com.android.ql.lf.carapp.utils.PreferenceUtils;
 import com.android.ql.lf.carapp.utils.RxBus;
 
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +34,8 @@ public class ViewUserAction implements IViewUserAction {
             UserInfo.getInstance().setMemberRank(result.optString("member_rank"));
             UserInfo.getInstance().setMemberIdCard(result.optString("member_idcard"));
             UserInfo.getInstance().setMemberAuthentication(result.optString("member_authentication"));
+            UserInfo.getInstance().setMemberQQOpenid(result.optString("member_qqopenid"));
+            PreferenceUtils.setPrefString(CarApplication.application, UserInfo.USER_ID_FLAG, UserInfo.getInstance().getMemberId());
             return true;
         } catch (Exception e) {
             return false;
@@ -41,6 +45,7 @@ public class ViewUserAction implements IViewUserAction {
     @Override
     public boolean onLogout() {
         UserInfo.getInstance().loginOut();
+        UserInfo.clearUserCache(CarApplication.application);
         return true;
     }
 

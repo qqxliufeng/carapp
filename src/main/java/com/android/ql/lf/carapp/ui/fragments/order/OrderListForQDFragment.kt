@@ -9,6 +9,7 @@ import com.android.ql.lf.carapp.present.ServiceOrderPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.adapter.OrderListForQDAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
+import com.android.ql.lf.carapp.ui.fragments.bottom.MainOrderHouseFragment
 import com.android.ql.lf.carapp.ui.fragments.user.LoginFragment
 import com.android.ql.lf.carapp.ui.fragments.user.mine.MineApplyMasterInfoSubmitFragment
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
@@ -17,6 +18,7 @@ import com.android.ql.lf.carapp.utils.toast
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.fragment_order_for_qd_layout.*
+import org.json.JSONObject
 
 /**
  * Created by lf on 18.1.24.
@@ -36,6 +38,8 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
     private val serviceOrderPresent by lazy {
         ServiceOrderPresent()
     }
+
+    private var currentOrderBean: OrderBean? = null
 
     //接收是否谁为师傅和是否交纳保证金的事件
     private val masterAndMoneySubscription by lazy {
@@ -73,6 +77,7 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
 
     private fun onLogoutSuccess() {
         showNotify()
+        mArrayList.clear()
         mBaseAdapter.notifyDataSetChanged()
     }
 
@@ -83,25 +88,23 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
                 mBaseAdapter.notifyDataSetChanged()
                 return
             }
-            mTvOrderQDNotify.setOnClickListener {
-                if (UserInfo.getInstance().isCheckingMaster){
-                    return@setOnClickListener
-                }
-                if (!UserInfo.getInstance().isMaster) {
-                    FragmentContainerActivity.from(mContext).setTitle("申请成为师傅").setNeedNetWorking(true).setClazz(MineApplyMasterInfoSubmitFragment::class.java).start()
-                    return@setOnClickListener
-                }
-                if (!UserInfo.getInstance().isPayEnsureMoney) {
-                    serviceOrderPresent.doAuthEnsureMoney()
-                    return@setOnClickListener
-                }
-            }
             mTvOrderQDNotify.visibility = View.VISIBLE
-            if (!UserInfo.getInstance().isMaster) {
-                mTvOrderQDNotify.text = "当前帐号未认证，暂无法接单，请立即认证"
-            }
-            if (UserInfo.getInstance().isCheckingMaster) {
-                mTvOrderQDNotify.text = "当前帐号正在认证中……"
+            when (UserInfo.getInstance().authenticationStatus) {
+                0 -> {
+                    mTvOrderQDNotify.text = "当前帐号正在认证中……"
+                }
+                2 -> {
+                    mTvOrderQDNotify.text = "审核失败，请重新提交资料……"
+                    mTvOrderQDNotify.setOnClickListener {
+                        FragmentContainerActivity.from(mContext).setTitle("申请成为师傅").setNeedNetWorking(true).setClazz(MineApplyMasterInfoSubmitFragment::class.java).start()
+                    }
+                }
+                3 -> {
+                    mTvOrderQDNotify.text = "当前帐号未认证，暂无法接单，请立即认证"
+                    mTvOrderQDNotify.setOnClickListener {
+                        FragmentContainerActivity.from(mContext).setTitle("申请成为师傅").setNeedNetWorking(true).setClazz(MineApplyMasterInfoSubmitFragment::class.java).start()
+                    }
+                }
             }
             mBaseAdapter.notifyDataSetChanged()
         } else {
@@ -136,18 +139,69 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
         mPresent.getDataByPost(0x0, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_QORDER, RequestParamsHelper.getQorderParam(page = currentPage))
     }
 
+    override fun onRequestStart(requestID: Int) {
+        super.onRequestStart(requestID)
+        if (requestID == 0x1) {
+            getFastProgressDialog("正在抢单……")
+        }
+    }
+
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
         super.onRequestSuccess(requestID, result)
-        processList(result as String, OrderBean::class.java)
+        if (requestID == 0x0) {
+            processList(result as String, OrderBean::class.java)
+            val check = checkResultCode(result)
+            if (check != null) {
+                val arrInfo = (check.obj as JSONObject).optJSONObject("arr")
+                if (arrInfo != null) {
+                    val address = arrInfo.optString("shop_address")
+                    (parentFragment as MainOrderHouseFragment).updateAddress(address)
+                }
+            }
+        } else if (requestID == 0x1) {
+            val check = checkResultCode(result)
+            if (check != null && check.code == SUCCESS_CODE) {
+                toast("恭喜，抢单成功，祝您工作愉快！")
+                serviceOrderPresent.updateOrderStatus(1)
+            } else {
+                toast("该订单已被抢了~~")
+            }
+            val position = mArrayList.indexOf(currentOrderBean)
+            mArrayList.remove(currentOrderBean)
+            mBaseAdapter.notifyItemRemoved(position)
+        }
+    }
+
+    override fun onRequestFail(requestID: Int, e: Throwable) {
+        super.onRequestFail(requestID, e)
+        if (requestID == 0x1) {
+            toast("抢单失败")
+        }
     }
 
     override fun onMyItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
         if (view!!.id == R.id.mBtOrderListForQDItem) {
-            if (UserInfo.getInstance().isCheckingMaster) {
-                toast("正在认证中，成功后方可接单……")
-            } else {
-                if (!UserInfo.getInstance().isMaster) {
-                    FragmentContainerActivity.from(mContext).setTitle("申请成为师傅").setNeedNetWorking(true).setClazz(MineApplyMasterInfoSubmitFragment::class.java).start()
+            when (UserInfo.getInstance().authenticationStatus) {
+                0 -> {
+                    mTvOrderQDNotify.text = "当前帐号正在认证中……"
+                }
+                1 -> {
+                    if (UserInfo.getInstance().isMaster) {
+                        currentOrderBean = mArrayList[position]
+                        mPresent.getDataByPost(0x1, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_ORDER_RECEIVING, RequestParamsHelper.getOrderReceivingParam(currentOrderBean!!.qorder_id))
+                    }
+                }
+                2 -> {
+                    mTvOrderQDNotify.text = "审核失败，请重新提交资料……"
+                    mTvOrderQDNotify.setOnClickListener {
+                        FragmentContainerActivity.from(mContext).setTitle("申请成为师傅").setNeedNetWorking(true).setClazz(MineApplyMasterInfoSubmitFragment::class.java).start()
+                    }
+                }
+                3 -> {
+                    mTvOrderQDNotify.text = "当前帐号未认证，暂无法接单，请立即认证"
+                    mTvOrderQDNotify.setOnClickListener {
+                        FragmentContainerActivity.from(mContext).setTitle("申请成为师傅").setNeedNetWorking(true).setClazz(MineApplyMasterInfoSubmitFragment::class.java).start()
+                    }
                 }
             }
         }

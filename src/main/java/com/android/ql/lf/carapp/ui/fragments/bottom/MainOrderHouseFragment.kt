@@ -94,6 +94,10 @@ class MainOrderHouseFragment : BaseFragment() {
         messageSubscription
     }
 
+    fun updateAddress(address: String) {
+        mTvMainOrderHouseAddress.text = address
+    }
+
     class OrderHouseViewPagerAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
         override fun getItem(position: Int) = when (position) {
             0 -> {

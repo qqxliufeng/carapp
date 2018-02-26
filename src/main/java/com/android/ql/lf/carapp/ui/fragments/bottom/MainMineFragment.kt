@@ -1,6 +1,7 @@
 package com.android.ql.lf.carapp.ui.fragments.bottom
 
 import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.app.AlertDialog
 import android.view.View
 import android.view.ViewGroup
 import com.android.ql.lf.carapp.R
@@ -105,11 +106,22 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的等级", MineGradeFragment::class.java)
         }
         mTvMainServiceEdit.doClickWithUserStatusStart(MINE_PERSONAL_EDIT_INFO_TOKEN) {
-            if (UserInfo.getInstance().isCheckingMaster){
-                toast("认证资料正在审核中……")
-                return@doClickWithUserStatusStart
+            when (UserInfo.getInstance().authenticationStatus) {
+                0 -> {
+                    toast("认证资料正在审核中……")
+                }
+                1 -> {
+                    if (UserInfo.getInstance().isMaster) {
+                        FragmentContainerActivity.startFragmentContainerActivity(mContext, "个人服务信息", MinePersonalServiceEditFragment::class.java)
+                    }
+                }
+                2 -> {
+                    toast("资料审核失败，请重新提交……")
+                }
+                3 -> {
+                    FragmentContainerActivity.from(mContext).setTitle("申请成为师傅").setNeedNetWorking(true).setClazz(MineApplyMasterInfoSubmitFragment::class.java).start()
+                }
             }
-            FragmentContainerActivity.startFragmentContainerActivity(mContext, "个人服务信息", MinePersonalServiceEditFragment::class.java)
         }
         mTvMainMineStore.setOnClickListener {
             toast(Constants.NO_FUNCTION_NOTIFY_MESSAGE)
@@ -209,7 +221,7 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
             MINE_APPLY_MASTER_TOKEN -> {
                 mTvMainMineApplyMaster.doClickWithUseStatusEnd()
             }
-            MINE_EVALUATE_TOKEN->{
+            MINE_EVALUATE_TOKEN -> {
                 mTvMainMineEvaluate.doClickWithUseStatusEnd()
             }
         }

@@ -84,20 +84,21 @@
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/mTvPersonalInfoResetPassword"
+            android:id="@+id/mTvSettingAddressManager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_10"
             android:background="@drawable/selector_press_bg"
-            android:drawableRight="@drawable/icon_inter"
+            android:drawablePadding="@dimen/dp_10"
+            android:drawableRight="@drawable/icon_inter1"
             android:gravity="center_vertical"
-            android:paddingBottom="20dp"
             android:paddingLeft="@dimen/dp_10"
             android:paddingRight="@dimen/dp_10"
+            android:text="收货地址管理"
+            android:paddingBottom="20dp"
             android:paddingTop="20dp"
-            android:text="修改密码"
-            android:textColor="#343434"
-            android:textSize="14sp" />
+            android:textColor="@color/text_deep_dark_color"
+            android:textSize="@dimen/sp_14" />
 
         <TextView
             android:layout_width="match_parent"

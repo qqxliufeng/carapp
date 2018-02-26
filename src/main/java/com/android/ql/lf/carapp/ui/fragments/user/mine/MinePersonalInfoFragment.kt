@@ -5,13 +5,16 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.support.v7.app.AlertDialog
+import android.text.TextUtils
 import android.view.View
 import android.widget.EditText
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.ImageBean
 import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.present.UserPresent
+import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
+import com.android.ql.lf.carapp.ui.fragments.user.ResetPasswordFragment
 import com.android.ql.lf.carapp.utils.*
 import com.soundcloud.android.crop.Crop
 import com.zhihu.matisse.Matisse
@@ -43,7 +46,11 @@ class MinePersonalInfoFragment : BaseNetWorkingFragment() {
         GlideManager.loadFaceCircleImage(mContext, UserInfo.getInstance().memberPic, mTvPersonalInfoFace)
         mTvPersonalInfoNickName.text = UserInfo.getInstance().memberName
         mTvPersonalInfoPhone.text = UserInfo.getInstance().memberPhone.let { "${it.substring(0, 3)}****${it.substring(7, it.length)}" }
-        mTvPersonalInfoIdCard.text = UserInfo.getInstance().memberIdCard ?: "暂无"
+        mTvPersonalInfoIdCard.text = if (!TextUtils.isEmpty(UserInfo.getInstance().memberIdCard)) {
+            UserInfo.getInstance().memberIdCard
+        } else {
+            "暂无"
+        }
         mFaceContainer.setOnClickListener {
             currentToken = 2
             openImageChoose(MimeType.ofImage(), 1)
@@ -56,8 +63,8 @@ class MinePersonalInfoFragment : BaseNetWorkingFragment() {
             currentToken = 1
             showEditInfoDialog("修改身份证号", UserInfo.getInstance().memberIdCard ?: "")
         }
-        mTvSettingAddressManager.setOnClickListener {
-            toast(Constants.NO_FUNCTION_NOTIFY_MESSAGE)
+        mTvPersonalInfoResetPassword.setOnClickListener {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "修改密码", ResetPasswordFragment::class.java)
         }
     }
 
