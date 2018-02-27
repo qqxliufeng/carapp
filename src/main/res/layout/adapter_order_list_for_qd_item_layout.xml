@@ -28,20 +28,16 @@
                 android:textColor="#333"
                 android:textSize="@dimen/sp_14" />
 
-            <TextView
-                android:id="@+id/mTvOrderListForQDItemCountTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_toRightOf="@+id/mTvOrderListForQDItemName"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/sp_14" />
-
             <cn.iwgang.countdownview.CountdownView
                 android:id="@+id/mCvOrderListForQDItemTime"
-                android:layout_toRightOf="@id/mTvOrderListForQDItemCountTime"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/mTvOrderListForQDItemName"
+                app:suffixTextColor="@color/colorPrimary"
+                app:timeTextColor="@color/colorPrimary"
+                android:layout_marginLeft="@dimen/dp_10"
+                app:timeTextSize="@dimen/sp_14" />
 
             <TextView
                 android:id="@+id/mTvOrderListForQDItemMoney"

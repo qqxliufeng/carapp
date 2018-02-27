@@ -4,8 +4,10 @@ import android.view.View
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.OrderBean
 import com.android.ql.lf.carapp.data.UserInfo
-import com.android.ql.lf.carapp.ui.adapter.OrderListForMineForWaitingWorkAdapter
+import com.android.ql.lf.carapp.present.ServiceOrderPresent
+import com.android.ql.lf.carapp.ui.adapter.OrderListForMineForWaitingCalculateAdapter
 import com.android.ql.lf.carapp.ui.fragments.AbstractLazyLoadFragment
+import com.android.ql.lf.carapp.utils.RequestParamsHelper
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 
@@ -22,7 +24,7 @@ class OrderListForMineForWaitingCalculateFragment : AbstractLazyLoadFragment<Ord
     }
 
     override fun createAdapter(): BaseQuickAdapter<OrderBean, BaseViewHolder>
-            = OrderListForMineForWaitingWorkAdapter(R.layout.adapter_order_list_for_mine_for_waiting_calculate_item_layout, mArrayList)
+            = OrderListForMineForWaitingCalculateAdapter(R.layout.adapter_order_list_for_mine_for_waiting_calculate_item_layout, mArrayList)
 
     override fun initView(view: View?) {
         super.initView(view)
@@ -40,14 +42,24 @@ class OrderListForMineForWaitingCalculateFragment : AbstractLazyLoadFragment<Ord
             setEmptyViewStatus()
         } else {
             isLoad = true
-//            testAdd("")
-            setEmptyView()
+            setRefreshEnable(true)
+            mPresent.getDataByPost(0x0, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_MY_QORDER, RequestParamsHelper.getMyQorderParam(ServiceOrderPresent.OrderStatus.WAITING_CALCULATE.index, currentPage))
         }
+    }
+
+    override fun onLoadMore() {
+        super.onLoadMore()
+        mPresent.getDataByPost(0x0, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_MY_QORDER, RequestParamsHelper.getMyQorderParam(ServiceOrderPresent.OrderStatus.WAITING_CALCULATE.index, currentPage))
     }
 
     override fun onLoginSuccess(userInfo: UserInfo?) {
         super.onLoginSuccess(userInfo)
         loadData()
+    }
+
+    override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
+        super.onRequestSuccess(requestID, result)
+        processList(result as String,OrderBean::class.java)
     }
 
 }

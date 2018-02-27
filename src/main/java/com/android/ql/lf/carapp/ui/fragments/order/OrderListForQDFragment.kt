@@ -60,7 +60,7 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
     override fun getLayoutId() = R.layout.fragment_order_for_qd_layout
 
     override fun createAdapter(): BaseQuickAdapter<OrderBean, BaseViewHolder>
-            = OrderListForQDAdapter(mContext,R.layout.adapter_order_list_for_qd_item_layout, mArrayList)
+            = OrderListForQDAdapter(mContext, R.layout.adapter_order_list_for_qd_item_layout, mArrayList)
 
     override fun initView(view: View?) {
         super.initView(view)
@@ -150,6 +150,13 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
         super.onRequestSuccess(requestID, result)
         if (requestID == 0x0) {
             processList(result as String, OrderBean::class.java)
+            if (!mArrayList.isEmpty()) {
+                //校对时间
+                val currentTime = System.currentTimeMillis()
+                mArrayList.forEach {
+                    it.endTime = currentTime + (it.qorder_remaining_time * 1000)
+                }
+            }
             val check = checkResultCode(result)
             if (check != null) {
                 val arrInfo = (check.obj as JSONObject).optJSONObject("arr")
@@ -162,7 +169,7 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
             val check = checkResultCode(result)
             if (check != null && check.code == SUCCESS_CODE) {
                 toast("恭喜，抢单成功，祝您工作愉快！")
-                serviceOrderPresent.updateOrderStatus(1)
+                serviceOrderPresent.updateOrderStatus(ServiceOrderPresent.OrderStatus.WAITING_WORK.index.toInt())
             } else {
                 toast("该订单已被抢了~~")
             }

@@ -34,4 +34,33 @@ public class ServiceOrderPresent {
         RxBus.getDefault().post(new EventOrderStatusBean(status));
     }
 
+    public enum OrderStatus {
+        //0  待抢单 1 待施工  2 待确认  3  已施工 4 待结算 5  已结算  6  退款中 7 已退款  8 已过期 token  为空 是全部订单
+        QD("0", "待抢单"),
+        WAITING_WORK("1", "待施工"),
+        WAITING_CONFIRM("2", "订单待确认"),
+        HAVING_WORK("3", "已施工"),
+        WAITING_CALCULATE("4", "待结算"),
+        HAVING_CALCULATE("5", "已结算"),
+        BACK_MONEY("6", "退款中"),
+        HAD_BACK_MONEY("7", "已退款"),
+        HAD_EXPIRE("8", "已过期"),
+        ALL("-1", "");
+        public String index;
+        public String description;
+
+        private OrderStatus(String index, String description) {
+            this.index = index;
+            this.description = description;
+        }
+
+        public static String getDescriptionByIndex(String index) {
+            for (OrderStatus status : OrderStatus.values()) {
+                if (index.equals(status.index)) {
+                    return status.description;
+                }
+            }
+            return "";
+        }
+    }
 }

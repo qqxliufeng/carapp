@@ -224,15 +224,24 @@ class RequestParamsHelper {
         }
 
         val ACT_ORDER_RECEIVING = "order_receiving"
-        fun getOrderReceivingParam(oid: String) = getWithIdParams().addParam("oid",oid)
+        fun getOrderReceivingParam(oid: String) = getWithIdParams().addParam("oid", oid)
 
         val ACT_MY_QORDER = "my_qorder"
-        fun getMyQorderParam(status:String,page: Int) = getWithPageParams(page).addParam("status",status)
+        fun getMyQorderParam(status: String, page: Int) = getWithPageParams(page).addParam("status", status)
+
+        val ACT_MY_ROADWORK_QORDER = "my_roadwork_qorder"
+        fun getMyRoadworkQorder(page: Int) = getWithPageParams(page)
 
         val ACT_PLAY_PIC = "play_pic"
 
         val ACT_EDIT_QORDER_STATUS = "edit_qorder_status"
-        fun getEditQorderStatusParam(oid:String,status:String) = getWithIdParams().addParam("oid",oid).addParam("status",status)
+        fun getEditQorderStatusParam(oid: String, status: String) = getWithIdParams().addParam("oid", oid).addParam("status", status)
+
+        val ACT_QORDER_DETAIL = "qorder_detail"
+        fun getOrderDetailParam(oid: String) = getWithIdParams().addParam("oid", oid)
+
+        val ACT_QORDER_DEPOSIT = "qorder_deposit"
+        fun getQorderDepositParam(oid: String) = getWithIdParams().addParam("oid", oid)
 
 
         /**              order model end        **/

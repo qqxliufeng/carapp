@@ -10,6 +10,12 @@ wrjt.sdqlweb.com/interface.php/v1/t/pictime        请求方式：post  参数 :
 客服电话api:
 wrjt.sdqlweb.com/interface.php/v1/t/kf_tel        请求方式：post  参数 : 
 
+关于我们 api:
+wrjt.sdqlweb.com/interface.php/v1/member/about        请求方式：post  参数 : 
+
+使用指南 api:
+wrjt.sdqlweb.com/interface.php/v1/member/help        请求方式：post  参数 : 
+
 app 更新获取版本号 api:
 wrjt.sdqlweb.com/interface.php/v1/t/app_update        请求方式：post  参数 : 
 
@@ -17,7 +23,7 @@ wrjt.sdqlweb.com/interface.php/v1/t/app_update        请求方式：post  参�
 
 
 规则api:
-wrjt.sdqlweb.com/interface.php/v1/member/ptgg                请求方式：post  参数 : pid  保证金缴纳介绍 1  用户注册服务协议 11 帖子发布规则 2  修理师傅简介 3 商家简介 12 
+wrjt.sdqlweb.com/interface.php/v1/member/ptgg                请求方式：post  参数 : pid  保证金缴纳介绍 1  用户注册服务协议 11 帖子发布规则 2  修理师傅简介 3 商家简介 12  用户协议 13
 
 
 ======== 登录 =======================================
@@ -109,11 +115,14 @@ wrjt.sdqlweb.com/interface.php/v1/order/qorder                请求方式：pos
 抢单api:
 wrjt.sdqlweb.com/interface.php/v1/order/order_receiving       请求方式：post  参数 : uid,oid 用户ID,订单ID
 
+请求我的已施工订单api:
+wrjt.sdqlweb.com/interface.php/v1/order/my_roadwork_qorder    请求方式：post  参数 : uid 用户ID
+
 我的抢单api:
-wrjt.sdqlweb.com/interface.php/v1/order/my_qorder             请求方式：post  参数 : uid,status 用户ID,订单状态 施工状态 0  待抢单 1 待施工  2 已施工  3  待结算 4 已结算 5  申请退款中  6  已退款 token  为空 是全部订单
+wrjt.sdqlweb.com/interface.php/v1/order/my_qorder             请求方式：post  参数 : uid,status,page,pagesize 用户ID,订单状态 施工状态 0  待抢单 1 待施工  2 待确认  3  已施工 4 待结算 5  已结算  6  退款中 7 已退款  8 已过期 token  为空 是全部订单
 
 修改抢单状态api:
-wrjt.sdqlweb.com/interface.php/v1/order/edit_qorder_status    请求方式：post  参数 : oid,status 抢单ID,订单状态 施工状态 0  待抢单 1 待施工  2 已施工  3  待结算 4 已结算 5  申请退款中  6  已退款 token  为空 是全部订单
+wrjt.sdqlweb.com/interface.php/v1/order/edit_qorder_status    请求方式：post  参数 : oid,status 抢单ID,订单状态 施工状态 0  待抢单 1 待施工  2 待确认  3  已施工 4 待结算 5  已结算  6  退款中 7 已退款  8 已过期 token  为空 是全部订单
 
 抢单拍照api:
 wrjt.sdqlweb.com/interface.php/v1/order/play_pic              请求方式：post  参数 : oid,pic 抢单ID,图片
@@ -155,10 +164,10 @@ wrjt.sdqlweb.com/interface.php/v1/qaa/quiz_detail        请求方式：post  �
 wrjt.sdqlweb.com/interface.php/v1/qaa/quiz_look          请求方式：post  参数 : qid  帖子ID
 
 我的发帖api:
-wrjt.sdqlweb.com/interface.php/v1/qaa/get_myquiz         请求方式：post  参数 :  uid 用户ID  返回 quiz_replies字段 回复数量
+wrjt.sdqlweb.com/interface.php/v1/qaa/get_myquiz         请求方式：post  参数 :  uid，page，pagesize 用户ID，页数，每页最大显示数量  返回 quiz_replies字段 回复数量
 
 我的回帖api:
-wrjt.sdqlweb.com/interface.php/v1/qaa/get_myanswer       请求方式：post  参数 :  uid 用户ID
+wrjt.sdqlweb.com/interface.php/v1/qaa/get_myanswer       请求方式：post  参数 :  uid，page，pagesize 用户ID，页数，每页最大显示数量
 
 帖子删除api:
 wrjt.sdqlweb.com/interface.php/v1/qaa/del_qaa            请求方式：post  参数 :  qid，aid 发帖ID，回帖ID

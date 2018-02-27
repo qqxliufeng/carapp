@@ -16,6 +16,7 @@ import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.utils.Constants
 import com.android.ql.lf.carapp.utils.ImageUploadHelper
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
+import com.android.ql.lf.carapp.utils.toast
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.listener.OnItemClickListener
@@ -26,7 +27,6 @@ import com.zhihu.matisse.internal.entity.CaptureStrategy
 import kotlinx.android.synthetic.main.fragment_order_image_upload_layout.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import org.jetbrains.anko.support.v4.toast
 import java.io.File
 import java.util.ArrayList
 

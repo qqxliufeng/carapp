@@ -5,14 +5,18 @@ import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.EventOrderStatusBean
 import com.android.ql.lf.carapp.data.OrderBean
 import com.android.ql.lf.carapp.data.UserInfo
+import com.android.ql.lf.carapp.present.ServiceOrderPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.adapter.OrderListForMineForWaitingWorkAdapter
 import com.android.ql.lf.carapp.ui.fragments.AbstractLazyLoadFragment
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
 import com.android.ql.lf.carapp.utils.RxBus
+import com.android.ql.lf.carapp.utils.startPhone
+import com.android.ql.lf.carapp.utils.toast
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import org.jetbrains.anko.bundleOf
+import org.json.JSONObject
 
 
 /**
@@ -29,10 +33,14 @@ class OrderListForMineForWaitingWorkFragment : AbstractLazyLoadFragment<OrderBea
 
     private val updateOrderStatusSubscription by lazy {
         RxBus.getDefault().toObservable(EventOrderStatusBean::class.java).subscribe {
-            if (it.orderStatus == 1) {
+            if (it.orderStatus == ServiceOrderPresent.OrderStatus.WAITING_WORK.index.toInt()) {
                 loadData()
             }
         }
+    }
+
+    private val serviceOrderPresent by lazy {
+        ServiceOrderPresent()
     }
 
     override fun createAdapter(): BaseQuickAdapter<OrderBean, BaseViewHolder>
@@ -56,13 +64,13 @@ class OrderListForMineForWaitingWorkFragment : AbstractLazyLoadFragment<OrderBea
         } else {
             isLoad = true
             setRefreshEnable(true)
-            mPresent.getDataByPost(0x0, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_MY_QORDER, RequestParamsHelper.getMyQorderParam("1", currentPage))
+            mPresent.getDataByPost(0x0, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_MY_QORDER, RequestParamsHelper.getMyQorderParam(ServiceOrderPresent.OrderStatus.WAITING_WORK.index, currentPage))
         }
     }
 
     override fun onLoadMore() {
         super.onLoadMore()
-        mPresent.getDataByPost(0x0, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_MY_QORDER, RequestParamsHelper.getMyQorderParam("1", currentPage))
+        mPresent.getDataByPost(0x0, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_MY_QORDER, RequestParamsHelper.getMyQorderParam(ServiceOrderPresent.OrderStatus.WAITING_WORK.index, currentPage))
     }
 
     override fun onLoginSuccess(userInfo: UserInfo?) {
@@ -70,18 +78,49 @@ class OrderListForMineForWaitingWorkFragment : AbstractLazyLoadFragment<OrderBea
         loadData()
     }
 
+    override fun onRequestStart(requestID: Int) {
+        super.onRequestStart(requestID)
+        if (requestID == 0x1) {
+            getFastProgressDialog("正在提交……")
+        }
+    }
+
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
         super.onRequestSuccess(requestID, result)
         if (requestID == 0x0) {
             processList(result as String, OrderBean::class.java)
-        }else if (requestID == 0x1){
+        } else if (requestID == 0x1) {
+            val check = checkResultCode(result)
+            if (check != null) {
+                when {
+                    check.code == SUCCESS_CODE -> {
+                        toast("确认完成")
+                        serviceOrderPresent.updateOrderStatus(ServiceOrderPresent.OrderStatus.HAVING_WORK.index.toInt())
+                        onPostRefresh()
+                    }
+                    check.code == "400" -> toast((check.obj as JSONObject).optString("msg"))
+                    else -> toast("确认失败，请稍后重试……")
+                }
+            }
+        }
+    }
 
+    override fun onRequestFail(requestID: Int, e: Throwable) {
+        super.onRequestFail(requestID, e)
+        if (requestID == 0x1) {
+            toast("确认失败，请稍后重试……")
         }
     }
 
     override fun onMyItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
         super.onMyItemClick(adapter, view, position)
-        FragmentContainerActivity.startFragmentContainerActivity(mContext, "订单详情", true, false, OrderDetailForWaitingWorkFragment::class.java)
+        FragmentContainerActivity
+                .from(mContext)
+                .setTitle("订单详情")
+                .setNeedNetWorking(true)
+                .setExtraBundle(bundleOf(Pair(OrderDetailForWaitingWorkFragment.ORDER_BEAN_FLAG, mArrayList[position].qorder_id)))
+                .setClazz(OrderDetailForWaitingWorkFragment::class.java)
+                .start()
     }
 
     override fun onMyItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
@@ -100,7 +139,10 @@ class OrderListForMineForWaitingWorkFragment : AbstractLazyLoadFragment<OrderBea
                 mPresent.getDataByPost(0x1,
                         RequestParamsHelper.ORDER_MODEL,
                         RequestParamsHelper.ACT_EDIT_QORDER_STATUS,
-                        RequestParamsHelper.getEditQorderStatusParam(mArrayList[position].qorder_id, "2"))
+                        RequestParamsHelper.getEditQorderStatusParam(mArrayList[position].qorder_id, ServiceOrderPresent.OrderStatus.WAITING_CONFIRM.index))
+            }
+            R.id.mTvOrderListForItemName -> {
+                startPhone(mArrayList[position].qorder_phone)
             }
         }
     }

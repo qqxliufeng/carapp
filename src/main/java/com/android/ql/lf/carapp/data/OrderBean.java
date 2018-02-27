@@ -1,5 +1,7 @@
 package com.android.ql.lf.carapp.data;
 
+import java.util.ArrayList;
+
 /**
  * Created by lf on 18.2.24.
  *
@@ -22,16 +24,18 @@ public class OrderBean {
     private String qorder_time;
     private String qorder_token;
     private String qorder_price;
-    private String qorder_sendtime;
-    private String qorder_jendtime;
+    private String qorder_work_finish_time;
+    private String qorder_calculate_finish_time;
     private String qorder_uid;
-    private String qorder_tendtime;
-    private String qorder_pic;
+    private String qorder_withdraw_apply_time;
+    private ArrayList<String> qorder_pic;
     private String qorder_ytime;
     private String qorder_bcode;
     private String qorder_mprice;
     private String qorder_code;
     private String qorder_d;
+    private long qorder_remaining_time;
+    private long endTime;
 
     public String getQorder_id() {
         return qorder_id;
@@ -145,20 +149,20 @@ public class OrderBean {
         this.qorder_price = qorder_price;
     }
 
-    public String getQorder_sendtime() {
-        return qorder_sendtime;
+    public String getQorder_work_finish_time() {
+        return qorder_work_finish_time;
     }
 
-    public void setQorder_sendtime(String qorder_sendtime) {
-        this.qorder_sendtime = qorder_sendtime;
+    public void setQorder_work_finish_time(String qorder_work_finish_time) {
+        this.qorder_work_finish_time = qorder_work_finish_time;
     }
 
-    public String getQorder_jendtime() {
-        return qorder_jendtime;
+    public String getQorder_calculate_finish_time() {
+        return qorder_calculate_finish_time;
     }
 
-    public void setQorder_jendtime(String qorder_jendtime) {
-        this.qorder_jendtime = qorder_jendtime;
+    public void setQorder_calculate_finish_time(String qorder_calculate_finish_time) {
+        this.qorder_calculate_finish_time = qorder_calculate_finish_time;
     }
 
     public String getQorder_uid() {
@@ -169,19 +173,19 @@ public class OrderBean {
         this.qorder_uid = qorder_uid;
     }
 
-    public String getQorder_tendtime() {
-        return qorder_tendtime;
+    public String getQorder_withdraw_apply_time() {
+        return qorder_withdraw_apply_time;
     }
 
-    public void setQorder_tendtime(String qorder_tendtime) {
-        this.qorder_tendtime = qorder_tendtime;
+    public void setQorder_withdraw_apply_time(String qorder_withdraw_apply_time) {
+        this.qorder_withdraw_apply_time = qorder_withdraw_apply_time;
     }
 
-    public String getQorder_pic() {
+    public ArrayList<String> getQorder_pic() {
         return qorder_pic;
     }
 
-    public void setQorder_pic(String qorder_pic) {
+    public void setQorder_pic(ArrayList<String> qorder_pic) {
         this.qorder_pic = qorder_pic;
     }
 
@@ -223,5 +227,21 @@ public class OrderBean {
 
     public void setQorder_d(String qorder_d) {
         this.qorder_d = qorder_d;
+    }
+
+    public long getQorder_remaining_time() {
+        return qorder_remaining_time;
+    }
+
+    public void setQorder_remaining_time(long qorder_remaining_time) {
+        this.qorder_remaining_time = qorder_remaining_time;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
     }
 }
