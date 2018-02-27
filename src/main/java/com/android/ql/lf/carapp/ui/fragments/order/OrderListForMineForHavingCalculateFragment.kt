@@ -12,6 +12,8 @@ import com.android.ql.lf.carapp.ui.fragments.AbstractLazyLoadFragment
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import kotlinx.android.synthetic.main.activity_fragment_container_layout.*
+import org.jetbrains.anko.bundleOf
 
 /**
  * Created by lf on 18.1.25.
@@ -61,12 +63,20 @@ class OrderListForMineForHavingCalculateFragment : AbstractLazyLoadFragment<Orde
 
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
         super.onRequestSuccess(requestID, result)
-        processList(result as String,OrderBean::class.java)
+        processList(result as String, OrderBean::class.java)
     }
 
-    override fun onMyItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
-        super.onMyItemClick(adapter, view, position)
-        FragmentContainerActivity.startFragmentContainerActivity(mContext,"订单详情",true,false,OrderDetailForHavingCalculateFragment::class.java)
+    override fun onMyItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
+        super.onMyItemChildClick(adapter, view, position)
+        if (view!!.id == R.id.mBtOrderListForHavingCalculateSubmit){
+            FragmentContainerActivity
+                    .from(mContext)
+                    .setTitle("订单详情")
+                    .setNeedNetWorking(true)
+                    .setExtraBundle(bundleOf(Pair(OrderDetailForHavingWorkFragment.ORDER_BEAN_FLAG, mArrayList[position].qorder_id)))
+                    .setClazz(OrderDetailForHavingWorkFragment::class.java)
+                    .start()
+        }
     }
 
 }

@@ -1,7 +1,10 @@
 package com.android.ql.lf.carapp.ui.fragments.order
 
 import android.text.TextUtils
+import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.OrderBean
@@ -59,9 +62,17 @@ class OrderDetailForHavingWorkFragment : BaseNetWorkingFragment() {
                 setText(mTvOrderDetailForHavingWorkOrderName, orderBean?.qorder_name)
                 setText(mTvOrderDetailForHavingWorkSN, orderBean?.qorder_sn)
                 setText(mTvOrderDetailForHavingWorkOrderTime, orderBean?.qorder_time)
-                setText(mTvOrderDetailForHavingWorkOrderCompleteTime, orderBean?.qorder_work_finish_time)
                 setText(mTvOrderDetailForHavingWorkAllMoney, "总价：￥${orderBean?.qorder_price}")
                 setText(mTvOrderDetailForHavingWorkName, orderBean?.qorder_name)
+                if (!TextUtils.isEmpty(orderBean?.qorder_work_finish_time)){
+                    addTimes("施工完成时间",orderBean?.qorder_work_finish_time)
+                }
+                if (!TextUtils.isEmpty(orderBean?.qorder_withdraw_apply_time)){
+                    addTimes("申请提现时间",orderBean?.qorder_withdraw_apply_time)
+                }
+                if (!TextUtils.isEmpty(orderBean?.qorder_calculate_finish_time)){
+                    addTimes("结算完成时间",orderBean?.qorder_calculate_finish_time)
+                }
                 if (orderBean != null && !orderBean!!.qorder_pic.isEmpty()) {
                     mICllOrderDetailImageContainer.visibility = View.VISIBLE
                     mICllOrderDetailImageContainer.setImages(orderBean!!.qorder_pic)
@@ -81,6 +92,16 @@ class OrderDetailForHavingWorkFragment : BaseNetWorkingFragment() {
         } else {
             text
         }
+    }
+
+    fun addTimes(title:String,time:String?){
+        val times = View.inflate(mContext,R.layout.layout_order_detail_times_layout,null)
+        val margiParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        margiParams.topMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,10.0f,resources.displayMetrics).toInt()
+        times.layoutParams = margiParams
+        times.findViewById<TextView>(R.id.mTvOrderDetailTimesTitle).text = title
+        setText(times.findViewById(R.id.mTvOrderDetailTimesTime),time)
+        mLlOrderDetailTimesContainer.addView(times)
     }
 
     override fun onRequestFail(requestID: Int, e: Throwable) {

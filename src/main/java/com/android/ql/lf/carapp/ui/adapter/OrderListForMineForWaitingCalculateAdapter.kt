@@ -21,5 +21,6 @@ class OrderListForMineForWaitingCalculateAdapter(layoutId: Int, list: ArrayList<
         helper.setText(R.id.mTvOrderListForItemProjectTime, item.qorder_time)
         helper.setText(R.id.mTvOrderListForItemProjectPrice, "￥${item.qorder_price}")
         helper.setText(R.id.mTvOrderListForItemStatus, ServiceOrderPresent.OrderStatus.getDescriptionByIndex(item.qorder_token))
+        helper.addOnClickListener(R.id.mBtOrderListForWaitingCalculateSubmit)
     }
 }

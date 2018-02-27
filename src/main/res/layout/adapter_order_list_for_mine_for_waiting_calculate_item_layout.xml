@@ -19,6 +19,7 @@
         <include layout="@layout/layout_order_common_item" />
 
         <Button
+            android:id="@+id/mBtOrderListForWaitingCalculateSubmit"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:layout_gravity="right"

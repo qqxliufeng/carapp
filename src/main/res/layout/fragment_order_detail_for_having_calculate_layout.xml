@@ -43,8 +43,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        tools:text="已结算"
-                        android:textColor="@color/colorPrimary" />
+                        android:textColor="@color/colorPrimary"
+                        tools:text="已结算" />
                 </RelativeLayout>
 
                 <TextView
@@ -53,8 +53,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_10"
                     android:autoLink="phone"
-                    tools:text="手机号码：185454578954"
-                    android:textColor="@color/text_dark_color" />
+                    android:textColor="@color/text_dark_color"
+                    tools:text="手机号码：185454578954" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -73,8 +73,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        tools:text="2018-1-21"
-                        android:textColor="@color/text_dark_color" />
+                        android:textColor="@color/text_dark_color"
+                        tools:text="2018-1-21" />
                 </RelativeLayout>
 
                 <View
@@ -117,8 +117,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        tools:text="25"
-                        android:textColor="@color/text_deep_dark_color" />
+                        android:textColor="@color/text_deep_dark_color"
+                        tools:text="25" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -161,15 +161,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        tools:text="王大宝"
-                        android:textColor="@color/text_deep_dark_color" />
+                        android:textColor="@color/text_deep_dark_color"
+                        tools:text="王大宝" />
 
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp">
+                    android:layout_marginTop="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -183,16 +183,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        tools:text="16546313201321"
-                        android:textColor="@color/text_deep_dark_color" />
-
-
+                        android:textColor="@color/text_deep_dark_color"
+                        tools:text="16546313201321" />
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp">
+                    android:layout_marginTop="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -206,29 +204,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        tools:text="2017-01-18"
-                        android:textColor="@color/text_deep_dark_color" />
+                        android:textColor="@color/text_deep_dark_color"
+                        tools:text="2017-01-18" />
                 </RelativeLayout>
-                <RelativeLayout
+
+                <LinearLayout
+                    android:id="@+id/mLlOrderDetailTimesContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp">
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="施工完成时间"
-                        android:textColor="@color/text_dark_color"
-                        android:textSize="@dimen/sp_14" />
-
-                    <TextView
-                        android:id="@+id/mTvOrderDetailForHavingWorkOrderCompleteTime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        tools:text="2017-01-18"
-                        android:textColor="@color/text_deep_dark_color" />
-                </RelativeLayout>
+                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -246,10 +232,10 @@
 
                 <com.android.ql.lf.carapp.ui.views.ImageContainerLinearLayout
                     android:id="@+id/mICllOrderDetailImageContainer"
-                    android:paddingTop="@dimen/dp_10"
-                    android:paddingBottom="@dimen/dp_10"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_10" />
 
                 <View
                     android:layout_width="match_parent"
@@ -261,11 +247,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginTop="@dimen/dp_10"
                     android:layout_marginBottom="10dp"
-                    tools:text="总价：￥14.5"
+                    android:layout_marginTop="@dimen/dp_10"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/sp_16" />
+                    android:textSize="@dimen/sp_16"
+                    tools:text="总价：￥14.5" />
             </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
