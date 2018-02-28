@@ -86,6 +86,15 @@ class ThirdLoginCompleteInfoFragment : BaseNetWorkingFragment() {
                         RequestParamsHelper.getQQloginParam(mEtCompleteName.getTextString(),
                                 (info as ThirdLoginManager.QQLoginInfoBean).openid,
                                 (info as ThirdLoginManager.QQLoginInfoBean).access_token))
+            }else if (info is ThirdLoginManager.WXUserInfo){
+                mPresent.getDataByPost(0x1,
+                        RequestParamsHelper.LOGIN_MODEL,
+                        RequestParamsHelper.ACT_WX_PERFECT,
+                        RequestParamsHelper.getWXCompleteDataParam(
+                                mEtCompleteName.getTextString(),
+                                (info as ThirdLoginManager.WXUserInfo).headimgurl,
+                                (info as ThirdLoginManager.WXUserInfo).openid,
+                                (info as ThirdLoginManager.WXUserInfo).nickname))
             }
         }
     }
@@ -111,7 +120,7 @@ class ThirdLoginCompleteInfoFragment : BaseNetWorkingFragment() {
                 if (check.code != SUCCESS_CODE) {
                     toast((check.obj as JSONObject).optString("msg"))
                 } else {
-                    userPresent.onLogin((check.obj as JSONObject).optJSONObject("result"))
+                    userPresent.onLogin((check.obj as JSONObject).optJSONObject("result"),(check.obj as JSONObject).optJSONObject("arr"))
                     finish()
                 }
             }

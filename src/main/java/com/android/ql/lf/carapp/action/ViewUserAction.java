@@ -1,9 +1,12 @@
 package com.android.ql.lf.carapp.action;
 
+import android.text.TextUtils;
+
 import com.android.ql.lf.carapp.application.CarApplication;
 import com.android.ql.lf.carapp.data.UserInfo;
 import com.android.ql.lf.carapp.utils.PreferenceUtils;
 import com.android.ql.lf.carapp.utils.RxBus;
+import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
@@ -17,7 +20,7 @@ import org.json.JSONObject;
 public class ViewUserAction implements IViewUserAction {
 
     @Override
-    public boolean onLogin(@NotNull JSONObject result) {
+    public boolean onLogin(@NotNull JSONObject result, JSONObject shopInfo) {
         try {
             UserInfo.getInstance().setMemberId(result.optString("member_id"));
             UserInfo.getInstance().setMemberName(result.optString("member_name"));
@@ -35,7 +38,13 @@ public class ViewUserAction implements IViewUserAction {
             UserInfo.getInstance().setMemberIdCard(result.optString("member_idcard"));
             UserInfo.getInstance().setMemberAuthentication(result.optString("member_authentication"));
             UserInfo.getInstance().setMemberQQOpenid(result.optString("member_qqopenid"));
+            UserInfo.getInstance().setMemberAlias(result.optString("member_alias"));
+            UserInfo.getInstance().setMemberIswxAuth(result.optString("member_iswxauth"));
             PreferenceUtils.setPrefString(CarApplication.application, UserInfo.USER_ID_FLAG, UserInfo.getInstance().getMemberId());
+            if (shopInfo != null && !TextUtils.isEmpty(shopInfo.toString()) && !"null".equals(shopInfo.toString())) {
+                UserInfo.ShopInfo shopInoBean = new Gson().fromJson(shopInfo.toString(), UserInfo.ShopInfo.class);
+                UserInfo.getInstance().setShopInfo(shopInoBean);
+            }
             return true;
         } catch (Exception e) {
             return false;

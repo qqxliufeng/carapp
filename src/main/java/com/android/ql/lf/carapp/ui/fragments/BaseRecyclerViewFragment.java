@@ -171,8 +171,13 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseNetWorkingFragment
         mSwipeRefreshLayout.setEnabled(enable);
     }
 
-    public void setLoadEnable(boolean enable) {
-        mBaseAdapter.setEnableLoadMore(enable);
+    public void setLoadEnable(final boolean enable) {
+        mRecyclerView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mBaseAdapter.setEnableLoadMore(enable);
+            }
+        }, 100);
     }
 
     @Override
@@ -242,7 +247,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseNetWorkingFragment
             BaseNetResult baseNetResult = checkResultCode(result);
             if (baseNetResult != null && Objects.equals(baseNetResult.code, SUCCESS_CODE)) {
                 processList(((JSONObject) baseNetResult.obj), clazz);
-            }else {
+            } else {
                 if (currentPage == 0) {
                     setEmptyView();
                 } else {

@@ -1,8 +1,15 @@
 package com.android.ql.lf.carapp.ui.fragments.order
 
+import android.app.Dialog
+import android.graphics.drawable.ColorDrawable
+import android.support.v4.content.ContextCompat
+import android.text.SpannableString
+import android.text.TextUtils
 import android.view.View
+import android.widget.TextView
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.EventIsMasterAndMoneyBean
+import com.android.ql.lf.carapp.data.NewOrderMessageBean
 import com.android.ql.lf.carapp.data.OrderBean
 import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.present.ServiceOrderPresent
@@ -41,10 +48,31 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
 
     private var currentOrderBean: OrderBean? = null
 
+    private var isShowing = true
+
     //接收是否谁为师傅和是否交纳保证金的事件
     private val masterAndMoneySubscription by lazy {
         RxBus.getDefault().toObservable(EventIsMasterAndMoneyBean::class.java).subscribe {
             showNotify()
+        }
+    }
+
+    //接收新订单的通知
+    private val newOrderMessageSubscription by lazy {
+        RxBus.getDefault().toObservable(NewOrderMessageBean::class.java).subscribe {
+            if (isShowing) {
+                if (!TextUtils.isEmpty(it.orderMessage)) {
+                    val dialog = Dialog(mContext)
+                    dialog.setCancelable(true)
+                    dialog.setCanceledOnTouchOutside(false)
+                    dialog.window.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(mContext, android.R.color.transparent)))
+                    val contentView = View.inflate(mContext, R.layout.dialog_order_notify_layout, null)
+                    val spannableString = SpannableString("5s")
+                    contentView.findViewById<TextView>(R.id.mTvOrderNotifyDialogTimeCount).text = spannableString
+                    dialog.setContentView(contentView)
+                    dialog.show()
+                }
+            }
         }
     }
 
@@ -67,7 +95,18 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
         registerLoginSuccessBus()
         masterAndMoneySubscription
         userLogoutSubscription
+        newOrderMessageSubscription
         showNotify()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        isShowing = true
+    }
+
+    override fun onPause() {
+        super.onPause()
+        isShowing = false
     }
 
     override fun onLoginSuccess(userInfo: UserInfo?) {
@@ -83,6 +122,13 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
 
     private fun showNotify() {
         if (UserInfo.getInstance().isLogin) {
+            //更新地址
+            if (UserInfo.getInstance().shopInfo != null) {
+                (parentFragment as MainOrderHouseFragment).updateAddress(UserInfo.getInstance().shopInfo.shop_address)
+            } else {
+                (parentFragment as MainOrderHouseFragment).updateAddress("暂无")
+            }
+
             if (UserInfo.getInstance().isMaster) {
                 mTvOrderQDNotify.visibility = View.GONE
                 mBaseAdapter.notifyDataSetChanged()
@@ -126,7 +172,11 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
     override fun onRefresh() {
         super.onRefresh()
         if (UserInfo.getInstance().isLogin) {
-            mPresent.getDataByPost(0x0, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_QORDER, RequestParamsHelper.getQorderParam(page = currentPage))
+            mPresent.getDataByPost(0x0, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_QORDER, RequestParamsHelper.getQorderParam(page = currentPage, location = if (UserInfo.getInstance().shopInfo != null) {
+                UserInfo.getInstance().shopInfo.shop_address
+            } else {
+                ""
+            }))
         } else {
             showNotify()
             onRequestFail(-1, IllegalStateException("状态异常"))
@@ -136,7 +186,11 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
 
     override fun onLoadMore() {
         super.onLoadMore()
-        mPresent.getDataByPost(0x0, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_QORDER, RequestParamsHelper.getQorderParam(page = currentPage))
+        mPresent.getDataByPost(0x0, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_QORDER, RequestParamsHelper.getQorderParam(page = currentPage, location = if (UserInfo.getInstance().shopInfo != null) {
+            UserInfo.getInstance().shopInfo.shop_address
+        } else {
+            ""
+        }))
     }
 
     override fun onRequestStart(requestID: Int) {
@@ -150,19 +204,15 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
         super.onRequestSuccess(requestID, result)
         if (requestID == 0x0) {
             processList(result as String, OrderBean::class.java)
+            val check = checkResultCode(result)
+            if (check != null && check.code == SUCCESS_CODE) {
+                (parentFragment as MainOrderHouseFragment).updateOrderNum((check.obj as JSONObject).optInt("arr1"))
+            }
             if (!mArrayList.isEmpty()) {
                 //校对时间
                 val currentTime = System.currentTimeMillis()
                 mArrayList.forEach {
                     it.endTime = currentTime + (it.qorder_remaining_time * 1000)
-                }
-            }
-            val check = checkResultCode(result)
-            if (check != null) {
-                val arrInfo = (check.obj as JSONObject).optJSONObject("arr")
-                if (arrInfo != null) {
-                    val address = arrInfo.optString("shop_address")
-                    (parentFragment as MainOrderHouseFragment).updateAddress(address)
                 }
             }
         } else if (requestID == 0x1) {
@@ -173,9 +223,10 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
             } else {
                 toast("该订单已被抢了~~")
             }
-            val position = mArrayList.indexOf(currentOrderBean)
-            mArrayList.remove(currentOrderBean)
-            mBaseAdapter.notifyItemRemoved(position)
+            onPostRefresh()
+//            val position = mArrayList.indexOf(currentOrderBean)
+//            mArrayList.remove(currentOrderBean)
+//            mBaseAdapter.notifyItemRemoved(position)
         }
     }
 
@@ -250,6 +301,7 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
     override fun onDestroyView() {
         unsubscribe(masterAndMoneySubscription)
         unsubscribe(userLogoutSubscription)
+        unsubscribe(newOrderMessageSubscription)
         super.onDestroyView()
     }
 

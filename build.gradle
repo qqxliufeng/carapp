@@ -19,6 +19,12 @@ android {
             abiFilters 'armeabi' , 'x86', 'armeabi-v7a', 'x86_64'//, 'arm64-v8a'
         }
 
+        manifestPlaceholders = [
+                JPUSH_PKGNAME : "com.android.ql.lf.carapp",
+                JPUSH_APPKEY : "e1f322032a2197b7f0fa843c", //JPush上注册的包名对应的appkey.
+                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+        ]
+
         multiDexEnabled true
 
     }
@@ -92,5 +98,8 @@ dependencies {
     implementation 'com.google.android:flexbox:0.3.1'
     implementation 'me.imid.swipebacklayout.lib:library:1.1.0'
     implementation 'com.github.iwgang:countdownview:2.1.6'
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
     implementation files('libs/open_sdk_r5990_lite.jar')
+    implementation 'cn.jiguang.sdk:jpush:3.1.1'  // 此处以JPush 3.1.1 版本为例。
+    implementation 'cn.jiguang.sdk:jcore:1.1.9'  // 此处以JCore 1.1.9 版本为例。
 }

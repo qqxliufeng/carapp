@@ -91,13 +91,8 @@ class OrderImageUpLoadFragment : BaseNetWorkingFragment() {
                     getFastProgressDialog("正在上传照片……")
                 }
 
-                override fun onActionEnd(paths: ArrayList<String>?) {
-                    val builder = ImageUploadHelper.createMultipartBody()
+                override fun onActionEnd(builder: MultipartBody.Builder) {
                     builder.addFormDataPart("oid", arguments.getString("oid"))
-                    paths!!.forEachIndexed { index, s ->
-                        val file = File(s)
-                        builder.addFormDataPart("$index", file.name, RequestBody.create(MultipartBody.FORM, file))
-                    }
                     mPresent.uploadFile(0x0, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_PLAY_PIC, builder.build().parts())
                 }
 

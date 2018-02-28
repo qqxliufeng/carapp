@@ -7,12 +7,10 @@ import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.present.ServiceOrderPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.adapter.OrderListForMineForHavingCalculateAdapter
-import com.android.ql.lf.carapp.ui.adapter.OrderListForMineForWaitingWorkAdapter
 import com.android.ql.lf.carapp.ui.fragments.AbstractLazyLoadFragment
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import kotlinx.android.synthetic.main.activity_fragment_container_layout.*
 import org.jetbrains.anko.bundleOf
 
 /**

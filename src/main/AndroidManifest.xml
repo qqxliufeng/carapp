@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.android.ql.lf.carapp">
 
 
@@ -19,7 +20,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="icon,label,theme">
         <activity android:name=".ui.activities.MainActivity" />
 
         <activity android:name=".ui.activities.SplashActivity">
@@ -69,11 +71,28 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.tencent.connect.common.AssistActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
+        <!--                                   微信登录                                    -->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.NoDisplay" />
+
+        <!--                                   极光推送自定义消息                                    -->
+        <receiver
+            android:name=".receiver.NewOrderMessageReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <!--Required 用户接收SDK消息的intent-->
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
+                <category android:name="com.android.ql.lf.carapp" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -7,6 +7,8 @@ import com.android.ql.lf.carapp.component.AppComponent;
 import com.android.ql.lf.carapp.component.AppModule;
 import com.android.ql.lf.carapp.component.DaggerAppComponent;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * Created by lf on 18.1.23.
  *

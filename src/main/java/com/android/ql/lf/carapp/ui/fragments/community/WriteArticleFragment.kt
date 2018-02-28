@@ -108,19 +108,13 @@ class WriteArticleFragment : BaseNetWorkingFragment() {
                                 getFastProgressDialog("正在发布……")
                             }
 
-                            override fun onActionEnd(paths: ArrayList<String>?) {
-                                val builder = ImageUploadHelper.createMultipartBody()
+                            override fun onActionEnd(builder: MultipartBody.Builder) {
                                 builder.addFormDataPart("title", mEtWriteArticleTitle.getTextString())
                                 builder.addFormDataPart("content", mEtWriteArticleContent.getTextString())
                                 builder.addFormDataPart("type", currentTag!!)
-                                paths!!.forEachIndexed { index, s ->
-                                    val file = File(s)
-                                    builder.addFormDataPart("$index", file.name, RequestBody.create(MultipartBody.FORM, file))
-                                }
                                 mPresent.uploadFile(0x2, RequestParamsHelper.QAA_MODEL,
                                         RequestParamsHelper.ACT_ADD_QUIZ, builder.build().parts())
                             }
-
                             override fun onActionFailed() {
                                 toast("发布失败……")
                             }

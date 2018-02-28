@@ -45,7 +45,9 @@ public class UserInfo {
     private String memberPic;
     private String memberMyInviteCode;
     private String memberRank;
-    private String memberOpenid;
+    private String memberOpenid; // 提现wxopenId
+    private String memberIswxAuth; //提现是否授权  1 已授权 0 未授权
+    private String memberWxOpenid; // 登录wxopenId
     private String memberAddress;
     private String memberInviteCode;
     private String memberIsEnsureMoney;
@@ -55,6 +57,9 @@ public class UserInfo {
     private String memberIdCard = null;
     private String memberAuthentication; // 0 师傅待审核 1 已是师傅 2 师傅审核失败 3 暂无师傅店铺信息
     private String memberQQOpenid;
+    private String memberAlias;
+    //    private String memberWxIs
+    private ShopInfo shopInfo;
 
 
     public String getMemberId() {
@@ -193,6 +198,38 @@ public class UserInfo {
         this.memberQQOpenid = memberQQOpenid;
     }
 
+    public String getMemberAlias() {
+        return memberAlias;
+    }
+
+    public void setMemberAlias(String memberAlias) {
+        this.memberAlias = memberAlias;
+    }
+
+    public String getMemberIswxAuth() {
+        return memberIswxAuth;
+    }
+
+    public void setMemberIswxAuth(String memberIswxAuth) {
+        this.memberIswxAuth = memberIswxAuth;
+    }
+
+    public String getMemberWxOpenid() {
+        return memberWxOpenid;
+    }
+
+    public void setMemberWxOpenid(String memberWxOpenid) {
+        this.memberWxOpenid = memberWxOpenid;
+    }
+
+    public ShopInfo getShopInfo() {
+        return shopInfo;
+    }
+
+    public void setShopInfo(ShopInfo shopInfo) {
+        this.shopInfo = shopInfo;
+    }
+
     public void loginOut() {
         memberId = null;
         instance = null;
@@ -215,5 +252,172 @@ public class UserInfo {
     public static String getUserIdFromCache(Context context) {
         return PreferenceUtils.getPrefString(context, USER_ID_FLAG, "");
     }
+
+    public static class ShopInfo {
+
+        private String shop_id;
+        private String shop_mpic;
+        private String shop_sypic;
+        private String shop_name;
+        private String shop_phone;
+        private String shop_address;
+        private String shop_num;
+        private String shop_content;
+        private String shop_type;
+        private String shop_token;
+        private String shop_time;
+        private String shop_uid;
+        private String shop_stoken;
+        private String shop_sn;
+        private String shop_coorp;
+        private String shop_ppa;
+        private String shop_start_time;
+        private String shop_end_time;
+
+        public String getShop_id() {
+            return shop_id;
+        }
+
+        public void setShop_id(String shop_id) {
+            this.shop_id = shop_id;
+        }
+
+        public String getShop_mpic() {
+            return shop_mpic;
+        }
+
+        public void setShop_mpic(String shop_mpic) {
+            this.shop_mpic = shop_mpic;
+        }
+
+        public String getShop_sypic() {
+            return shop_sypic;
+        }
+
+        public void setShop_sypic(String shop_sypic) {
+            this.shop_sypic = shop_sypic;
+        }
+
+        public String getShop_name() {
+            return shop_name;
+        }
+
+        public void setShop_name(String shop_name) {
+            this.shop_name = shop_name;
+        }
+
+        public String getShop_phone() {
+            return shop_phone;
+        }
+
+        public void setShop_phone(String shop_phone) {
+            this.shop_phone = shop_phone;
+        }
+
+        public String getShop_address() {
+            return shop_address;
+        }
+
+        public void setShop_address(String shop_address) {
+            this.shop_address = shop_address;
+        }
+
+        public String getShop_num() {
+            return shop_num;
+        }
+
+        public void setShop_num(String shop_num) {
+            this.shop_num = shop_num;
+        }
+
+        public String getShop_content() {
+            return shop_content;
+        }
+
+        public void setShop_content(String shop_content) {
+            this.shop_content = shop_content;
+        }
+
+        public String getShop_type() {
+            return shop_type;
+        }
+
+        public void setShop_type(String shop_type) {
+            this.shop_type = shop_type;
+        }
+
+        public String getShop_token() {
+            return shop_token;
+        }
+
+        public void setShop_token(String shop_token) {
+            this.shop_token = shop_token;
+        }
+
+        public String getShop_time() {
+            return shop_time;
+        }
+
+        public void setShop_time(String shop_time) {
+            this.shop_time = shop_time;
+        }
+
+        public String getShop_uid() {
+            return shop_uid;
+        }
+
+        public void setShop_uid(String shop_uid) {
+            this.shop_uid = shop_uid;
+        }
+
+        public String getShop_stoken() {
+            return shop_stoken;
+        }
+
+        public void setShop_stoken(String shop_stoken) {
+            this.shop_stoken = shop_stoken;
+        }
+
+        public String getShop_sn() {
+            return shop_sn;
+        }
+
+        public void setShop_sn(String shop_sn) {
+            this.shop_sn = shop_sn;
+        }
+
+        public String getShop_coorp() {
+            return shop_coorp;
+        }
+
+        public void setShop_coorp(String shop_coorp) {
+            this.shop_coorp = shop_coorp;
+        }
+
+        public String getShop_ppa() {
+            return shop_ppa;
+        }
+
+        public void setShop_ppa(String shop_ppa) {
+            this.shop_ppa = shop_ppa;
+        }
+
+        public String getShop_start_time() {
+            return shop_start_time;
+        }
+
+        public void setShop_start_time(String shop_start_time) {
+            this.shop_start_time = shop_start_time;
+        }
+
+        public String getShop_end_time() {
+            return shop_end_time;
+        }
+
+        public void setShop_end_time(String shop_end_time) {
+            this.shop_end_time = shop_end_time;
+        }
+    }
+
 
 }

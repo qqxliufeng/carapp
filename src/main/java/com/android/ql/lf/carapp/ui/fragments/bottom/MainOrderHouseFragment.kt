@@ -67,6 +67,10 @@ class MainOrderHouseFragment : BaseFragment() {
         }
     }
 
+    private val orderCountBadgeView by lazy {
+        QBadgeView(mContext)
+    }
+
     override fun getLayoutId() = R.layout.fragment_main_order_house_layout
 
     override fun initView(view: View?) {
@@ -74,11 +78,7 @@ class MainOrderHouseFragment : BaseFragment() {
         mAlOrderHouse.setPadding(0, statusHeight, 0, 0)
         mVpOrderHouse.adapter = OrderHouseViewPagerAdapter(childFragmentManager)
         mTlOrderHouse.setupWithViewPager(mVpOrderHouse)
-        mIvMainOrderHouseCount.setOnClickListener {
-            FragmentContainerActivity.startFragmentContainerActivity(mContext, "全部订单", OrderListForQDFragment::class.java)
-        }
-        val orderCountBadgeView = QBadgeView(mContext)
-        orderCountBadgeView.badgeNumber = 2
+        orderCountBadgeView.badgeNumber = 0
         val orderCountBadge = orderCountBadgeView.bindTarget(mIvMainOrderHouseCount)
         orderCountBadge.badgeBackgroundColor = Color.WHITE
         orderCountBadge.badgeTextColor = ContextCompat.getColor(mContext, R.color.main_color)
@@ -96,6 +96,10 @@ class MainOrderHouseFragment : BaseFragment() {
 
     fun updateAddress(address: String) {
         mTvMainOrderHouseAddress.text = address
+    }
+
+    fun updateOrderNum(count:Int){
+        orderCountBadgeView.badgeNumber = count
     }
 
     class OrderHouseViewPagerAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
@@ -36,7 +37,7 @@ public class ImageUploadHelper {
         this.onImageUploadListener = onImageUploadListener;
     }
 
-    public void upload(final ArrayList<ImageBean> list,final int maxSize) {
+    public void upload(final ArrayList<ImageBean> list, final int maxSize) {
         final File dir = new File(Constants.IMAGE_PATH);
         if (!dir.exists()) {
             dir.mkdirs();
@@ -69,7 +70,12 @@ public class ImageUploadHelper {
                             compressList.add(s);
                             if (compressList.size() == list.size()) {
                                 if (onImageUploadListener != null) {
-                                    onImageUploadListener.onActionEnd(compressList);
+                                    MultipartBody.Builder builder = ImageUploadHelper.createMultipartBody();
+                                    for (int i = 0; i < compressList.size(); i++) {
+                                        File file = new File(compressList.get(i));
+                                        builder.addFormDataPart(i + "", file.getName(), RequestBody.create(MultipartBody.FORM, file));
+                                    }
+                                    onImageUploadListener.onActionEnd(builder);
                                 }
                             }
                         } else {
@@ -85,7 +91,7 @@ public class ImageUploadHelper {
 
         public void onActionStart();
 
-        public void onActionEnd(ArrayList<String> paths);
+        public void onActionEnd(MultipartBody.Builder builder);
 
         public void onActionFailed();
     }

@@ -54,7 +54,7 @@ class MineCashFragment : BaseNetWorkingFragment() {
                 mPresent.getDataByPost(0x1,
                         RequestParamsHelper.MEMBER_MODEL,
                         RequestParamsHelper.ACT_MY_WITHDRAW_OPERATION,
-                        RequestParamsHelper.getMyWithdrawOperationParam(inputMoney,"$cashType"))
+                        RequestParamsHelper.getMyWithdrawOperationParam(inputMoney, "$cashType"))
             } catch (e: Exception) {
                 toast("请输入正确的提现金额！")
             }
@@ -68,9 +68,9 @@ class MineCashFragment : BaseNetWorkingFragment() {
 
     override fun onRequestStart(requestID: Int) {
         super.onRequestStart(requestID)
-        if (requestID == 0x0){
+        if (requestID == 0x0) {
             getFastProgressDialog("正在加载数据……")
-        }else if (requestID == 0x1){
+        } else if (requestID == 0x1) {
             getFastProgressDialog("正在提交……")
         }
     }
@@ -88,16 +88,21 @@ class MineCashFragment : BaseNetWorkingFragment() {
                 mEtMineCashMoney.isEnabled = mBtMineCashMoneySubmit.isEnabled
                 mTvMineCashAlreadyCashMoney.text = resultJson.optString("member_already_price")
             }
-        }else{
-
+        } else if (requestID == 0x1) {
+            val check = checkResultCode(result)
+            if (check != null && check.code == SUCCESS_CODE) {
+                toast("提现成功！")
+            } else {
+                toast((check.obj as JSONObject).optString("msg"))
+            }
         }
     }
 
     override fun onRequestFail(requestID: Int, e: Throwable) {
         super.onRequestFail(requestID, e)
-        if(requestID == 0x1){
+        if (requestID == 0x1) {
             toast("提现失败，请稍后重试……")
-        }else if (requestID == 0x0){
+        } else if (requestID == 0x0) {
             toast("获取信息失败，请稍后重试……")
         }
     }

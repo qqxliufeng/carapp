@@ -5,12 +5,18 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.view.View
+import cn.jpush.android.api.JPushInterface
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.present.UserPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.utils.*
+import com.google.gson.Gson
+import com.tencent.mm.opensdk.modelbase.BaseResp
+import com.tencent.mm.opensdk.modelmsg.SendAuth
+import com.tencent.mm.opensdk.openapi.IWXAPI
+import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.tencent.tauth.IUiListener
 import com.tencent.tauth.Tencent
 import com.tencent.tauth.UiError
@@ -35,12 +41,26 @@ class LoginFragment : BaseNetWorkingFragment(), IUiListener {
         UserPresent()
     }
 
-    private lateinit var qqLoginInfo:ThirdLoginManager.QQLoginInfoBean
+    private val wxLoginSubscription by lazy {
+        RxBus.getDefault().toObservable(BaseResp::class.java).subscribe {
+            if (it is SendAuth.Resp) {
+                val param = ApiParams()
+                param.addParam("code", it.code)
+                mPresent.getDataByGet(0x2, "t", "wxlogin", param)
+            }
+        }
+    }
+
+    private lateinit var qqLoginInfo: ThirdLoginManager.QQLoginInfoBean
+    private lateinit var wxLoginInfo: ThirdLoginManager.WXUserInfo
+
+    private lateinit var iwxApi: IWXAPI
 
     override fun getLayoutId() = R.layout.fragment_login_layout
 
     override fun initView(view: View?) {
         registerLoginSuccessBus()
+        wxLoginSubscription
         (mContext as FragmentContainerActivity).setToolBarBackgroundColor(Color.WHITE)
         (mContext as FragmentContainerActivity).setStatusBarLightColor(false)
         val toolbar = (mContext as FragmentContainerActivity).toolbar
@@ -68,6 +88,10 @@ class LoginFragment : BaseNetWorkingFragment(), IUiListener {
         }
         mIvQQLogin.setOnClickListener {
             ThirdLoginManager.qqLogin(Tencent.createInstance(Constants.TENCENT_ID, mContext.applicationContext), this@LoginFragment, this@LoginFragment)
+        }
+        mIvWXLogin.setOnClickListener {
+            iwxApi = WXAPIFactory.createWXAPI(mContext, Constants.WX_APP_ID, true)
+            ThirdLoginManager.wxLogin(iwxApi)
         }
         mEtLoginName.setText("15910101117")
         mEtLoginPassword.setText("123456")
@@ -104,26 +128,43 @@ class LoginFragment : BaseNetWorkingFragment(), IUiListener {
                 val jsonObject = checkResult.obj as JSONObject
                 if (SUCCESS_CODE == checkResult.code) {
                     toast("登录成功")
-                    userPresent.onLogin(jsonObject.optJSONObject("result"))
-                    finish()
+                    userPresent.onLogin(jsonObject.optJSONObject("result"), jsonObject.optJSONObject("arr"))
                 } else {
                     toast(jsonObject.optString("msg"))
                 }
             } else {
                 toast("登录失败，请稍后重试……")
             }
-        }else if (requestID == 0x1){
+        } else if (requestID == 0x1) { //qq 登录
             val check = checkResultCode(result)
-            if (check!=null){
-                when(check.code){
-                    SUCCESS_CODE ->{
-                        userPresent.onLogin((check.obj as JSONObject).optJSONObject("result"))
+            if (check != null) {
+                when (check.code) {
+                    SUCCESS_CODE -> {
+                        userPresent.onLogin((check.obj as JSONObject).optJSONObject("result"), (check.obj as JSONObject).optJSONObject("arr"))
                     }
-                    "202"->{
+                    "202" -> { //需要完善资料
                         FragmentContainerActivity.from(mContext)
                                 .setNeedNetWorking(true)
                                 .setTitle("完善资料")
                                 .setExtraBundle(bundleOf(Pair("info", qqLoginInfo)))
+                                .setClazz(ThirdLoginCompleteInfoFragment::class.java)
+                                .start()
+                    }
+                }
+            }
+        } else if (requestID == 0x2) { //  微信登录
+            val check = checkResultCode(result)
+            if (check != null) {
+                when (check.code) {
+                    SUCCESS_CODE -> {
+                        userPresent.onLogin((check.obj as JSONObject).optJSONObject("result"), (check.obj as JSONObject).optJSONObject("arr"))
+                    }
+                    "202" -> { // 授权成功 需要完善资料
+                        wxLoginInfo = Gson().fromJson((check.obj as JSONObject).optJSONObject("result").toString(), ThirdLoginManager.WXUserInfo::class.java)
+                        FragmentContainerActivity.from(mContext)
+                                .setNeedNetWorking(true)
+                                .setTitle("完善资料")
+                                .setExtraBundle(bundleOf(Pair("info", wxLoginInfo)))
                                 .setClazz(ThirdLoginCompleteInfoFragment::class.java)
                                 .start()
                     }
@@ -146,6 +187,9 @@ class LoginFragment : BaseNetWorkingFragment(), IUiListener {
 
     override fun onLoginSuccess(userInfo: UserInfo?) {
         super.onLoginSuccess(userInfo)
+        JPushInterface.setDebugMode(true)
+        JPushInterface.setAlias(mContext, 0, UserInfo.getInstance().memberAlias)
+        JPushInterface.init(mContext.applicationContext)
         finish()
     }
 
@@ -175,6 +219,11 @@ class LoginFragment : BaseNetWorkingFragment(), IUiListener {
 
     override fun onError(p0: UiError?) {
         toast("QQ登录失败")
+    }
+
+    override fun onDestroyView() {
+        unsubscribe(wxLoginSubscription)
+        super.onDestroyView()
     }
 
 }

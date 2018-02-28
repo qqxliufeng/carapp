@@ -8,7 +8,7 @@ import org.json.JSONObject
  */
 interface IViewUserAction {
 
-    fun onLogin(result: JSONObject): Boolean
+    fun onLogin(result: JSONObject, shopInfo: JSONObject): Boolean
 
     fun onLogout(): Boolean
 
@@ -18,8 +18,8 @@ interface IViewUserAction {
 
     fun onResetPassword(result: JSONObject)
 
-    fun modifyInfoForName(result: String):Boolean
+    fun modifyInfoForName(result: String): Boolean
 
-    fun modifyInfoForPic(result: String):Boolean
+    fun modifyInfoForPic(result: String): Boolean
 
 }

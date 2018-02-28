@@ -17,7 +17,7 @@
         android:orientation="vertical"
         android:padding="@dimen/dp_10">
 
-        <RelativeLayout
+        <!--<RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -91,8 +91,9 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="@dimen/dp_10"
-            android:background="#F1F2F2" />
+            android:background="#F1F2F2" />-->
 
+        <include layout="@layout/layout_order_common_item" />
 
         <Button
             android:layout_width="wrap_content"

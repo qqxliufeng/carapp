@@ -21,8 +21,8 @@ public class UserPresent {
         userAction = new ViewUserAction();
     }
 
-    public void onLogin(JSONObject result) {
-        if (userAction.onLogin(result)) {
+    public void onLogin(JSONObject memberInfo,JSONObject shopInfo) {
+        if (userAction.onLogin(memberInfo,shopInfo)) {
             sendLoginSuccessMessage();
         }
     }

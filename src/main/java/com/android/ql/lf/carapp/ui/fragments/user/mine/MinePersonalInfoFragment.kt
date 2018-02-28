@@ -129,7 +129,6 @@ class MinePersonalInfoFragment : BaseNetWorkingFragment() {
                         userPresent.modifyInfoForPic(picResult)
                     }
                 }
-
             } else {
                 toast((check.obj as JSONObject).optString("msg"))
             }
@@ -156,15 +155,10 @@ class MinePersonalInfoFragment : BaseNetWorkingFragment() {
                 }
 
                 override fun onActionStart() {
-                    progressDialog = ProgressDialog.show(mContext, null, "正在上传头像……")
+                    getFastProgressDialog("正在上传头像……")
                 }
 
-                override fun onActionEnd(paths: ArrayList<String>) {
-                    val builder = ImageUploadHelper.createMultipartBody()
-                    paths.forEachIndexed { index, s ->
-                        val file = File(s)
-                        builder.addFormDataPart("$index", file.name, RequestBody.create(MultipartBody.FORM, file))
-                    }
+                override fun onActionEnd(builder: MultipartBody.Builder) {
                     mPresent.uploadFile(0x1, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_EDIT_PERSONAL, builder.build().parts())
                 }
             }).upload(arrayListOf(ImageBean(null, uri.path)), 100)

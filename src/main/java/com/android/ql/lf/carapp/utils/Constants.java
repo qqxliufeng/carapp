@@ -23,6 +23,7 @@ public class Constants {
     public static final String FILE_PROVIDE_PATH = "com.android.ql.lf.carapp.fileProvider";
 
     public static final String TENCENT_ID = "1106743534";
+    public static final String WX_APP_ID = "wx0b6a3be07b8ed6a0";
 
     public static final String NO_FUNCTION_NOTIFY_MESSAGE = "此功能暂未开放！";
 

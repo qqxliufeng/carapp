@@ -40,8 +40,6 @@ class RequestParamsHelper {
         val ACT_CODE = "getcode"
         val ACT_LOGIN = "Login"
         val ACT_FORGETPW = "forgetpw"
-        val ACT_WX_PERFECT = "wx_perfect"
-
         fun getCodeParams(tel: String = ""): ApiParams {
             val params = getBaseParams()
             return params.addParam("tel", tel)
@@ -66,6 +64,11 @@ class RequestParamsHelper {
         }
 
 
+        val ACT_QQLOGIN = "qqlogin"
+        fun getQQloginParam(phone: String, openid: String, accessToken: String) =
+                getBaseParams().addParam("phone", phone).addParam("openid", openid).addParam("access_token", accessToken)
+
+        val ACT_WX_PERFECT = "wx_perfect"
         fun getWXCompleteDataParam(phone: String, headimgurl: String, openid: String, nickname: String): ApiParams {
             val params = getBaseParams()
             params.addParam("phone", phone)
@@ -74,11 +77,6 @@ class RequestParamsHelper {
             params.addParam("nickname", nickname)
             return params
         }
-
-        val ACT_QQLOGIN = "qqlogin"
-        fun getQQloginParam(phone: String, openid: String, accessToken: String) =
-                getBaseParams().addParam("phone", phone).addParam("openid", openid).addParam("access_token", accessToken)
-
         /**              login model  end           **/
 
 
@@ -133,7 +131,7 @@ class RequestParamsHelper {
         fun getMyWithdrawParam() = getWithIdParams()
 
         val ACT_MY_WITHDRAW_RECORD = "my_withdraw_record"
-        fun getMyWithdrawRecordParam() = getWithIdParams()
+        fun getMyWithdrawRecordParam(page: Int) = getWithPageParams(page)
 
         val ACT_MY_WITHDRAW_OPERATION = "my_withdraw_operation"
         fun getMyWithdrawOperationParam(price: String, type: String) = getWithIdParams().addParam("price", price).addParam("type", type)
@@ -141,6 +139,14 @@ class RequestParamsHelper {
         val ACT_BIND_ALIPAY = "bind_alipay"
         fun getBindAlipayParam(account: String, autonym: String) = getWithIdParams().addParam("account", account).addParam("autonym", autonym)
 
+        val ACT_BIND_WXPAY = "bind_wxpay"
+        fun getBindWxpayParam(idcard:String,autonym:String) = getWithIdParams().addParam("idcard",idcard).addParam("autonym",autonym)
+
+        val ACT_WX_AUTHORIZATION = "wx_authorization"
+        fun getWxAuthorizationParam(code:String) = getWithIdParams().addParam("code",code)
+
+        val ACT_M_P = "m_p"
+        fun getEnsureMoneyProductParam() = getWithIdParams()
 
         /**              member model  end           **/
 
@@ -242,6 +248,9 @@ class RequestParamsHelper {
 
         val ACT_QORDER_DEPOSIT = "qorder_deposit"
         fun getQorderDepositParam(oid: String) = getWithIdParams().addParam("oid", oid)
+
+        val ACT_MY_SALE_QORDER = "my_sale_qorder"
+        fun getMySaleQorderParam(page: Int) = getWithPageParams(page)
 
 
         /**              order model end        **/

@@ -161,14 +161,8 @@ class MineApplyMasterInfoSubmitFragment : BaseNetWorkingFragment() {
                 getFastProgressDialog(message)
             }
 
-            override fun onActionEnd(paths: java.util.ArrayList<String>?) {
-                val builder = ImageUploadHelper.createMultipartBody()
-                paths!!.forEachIndexed { index, s ->
-                    val file = File(s)
-                    builder.addFormDataPart("$index", file.name, RequestBody.create(MultipartBody.FORM, file))
-                }
-                mPresent.uploadFile(requestID, "t",
-                        "pictime", builder.build().parts())
+            override fun onActionEnd(builder: MultipartBody.Builder) {
+                mPresent.uploadFile(requestID, "t","pictime", builder.build().parts())
             }
 
             override fun onActionFailed() {
