@@ -1,12 +1,13 @@
 package com.android.ql.lf.carapp.ui.fragments.user.mine
 
+import android.support.design.widget.BottomSheetDialog
 import android.text.Html
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import com.android.ql.lf.carapp.R
-import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
+import com.android.ql.lf.carapp.ui.views.SelectPayTypeView
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -17,7 +18,9 @@ import org.json.JSONObject
  */
 class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment.EnsureMoneyProduct>() {
 
-    private lateinit var mTvProductIntruduce: TextView
+    private lateinit var mTvEnsureMoneyIntroduce: TextView
+
+    private var bottomPayDialog: BottomSheetDialog? = null
 
     override fun createAdapter(): BaseQuickAdapter<EnsureMoneyProduct, BaseViewHolder> =
             EnsureMoneyProductAdapter(R.layout.adapter_ensure_money_item_layout, mArrayList)
@@ -25,7 +28,7 @@ class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment
     override fun initView(view: View?) {
         super.initView(view)
         val footView = View.inflate(mContext, R.layout.fragment_mine_ensure_money_layout, null)
-        mTvProductIntruduce = footView.findViewById<TextView>(R.id.mTvEnsureMoneyIntrduce)
+        mTvEnsureMoneyIntroduce = footView.findViewById(R.id.mTvEnsureMoneyIntroduce)
         mBaseAdapter.addFooterView(footView)
 //        mLlMineEnsureMoneyContainer.minimumHeight = screenSize.height - statusBarHeight - actionBarHeight
 //        mBtMineEnsureMoneyBack.setOnClickListener {
@@ -54,7 +57,50 @@ class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment
         val check = checkResultCode(result)
         if (check != null && check.code == SUCCESS_CODE) {
             val arrJson = (check.obj as JSONObject).optJSONObject("arr")
-            mTvProductIntruduce.text = Html.fromHtml(arrJson.optString("ptgg_content"))
+            mTvEnsureMoneyIntroduce.text = Html.fromHtml(arrJson.optString("ptgg_content"))
+        }
+    }
+
+    override fun onMyItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
+        super.onMyItemChildClick(adapter, view, position)
+        val item = mArrayList[position]
+        if (view!!.id == R.id.mBtEnsureMoneyProductAction) {
+            when (item.m_p_type) {
+                "1" -> {
+                    if (item.member_ismaster_ensure_money == "0") {
+                        //缴纳师傅保证金
+                        if (bottomPayDialog == null) {
+                            bottomPayDialog = BottomSheetDialog(mContext)
+                            val contentView = SelectPayTypeView(mContext)
+                            contentView.setShowConfirmView(View.VISIBLE)
+                            contentView.setOnConfirmClickListener {
+                                bottomPayDialog!!.dismiss()
+                            }
+                            bottomPayDialog!!.setContentView(contentView)
+                        }
+                        bottomPayDialog!!.show()
+                    } else {
+                        //退师傅保证金
+                    }
+                }
+                "2" -> {
+                    if (item.member_ismerchant_ensure_money == "0") {
+                        //缴纳店铺保证金
+                        if (bottomPayDialog == null) {
+                            bottomPayDialog = BottomSheetDialog(mContext)
+                            val contentView = SelectPayTypeView(mContext)
+                            contentView.setShowConfirmView(View.VISIBLE)
+                            contentView.setOnConfirmClickListener {
+                                bottomPayDialog!!.dismiss()
+                            }
+                            bottomPayDialog!!.setContentView(contentView)
+                        }
+                        bottomPayDialog!!.show()
+                    } else {
+                        //退店铺保证金
+                    }
+                }
+            }
         }
     }
 
@@ -63,8 +109,22 @@ class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment
             helper!!.setText(R.id.mTvEnsureMoneyProductTitle, item!!.m_p_name)
             helper.setText(R.id.mTvEnsureMoneyProductCount, "￥${item.m_p_price}")
             val bt_action = helper.getView<Button>(R.id.mBtEnsureMoneyProductAction)
-            if (item.member_ismaster_ensure_money == "0"){
-
+            helper.addOnClickListener(R.id.mBtEnsureMoneyProductAction)
+            when (item.m_p_type) {
+                "1" -> {
+                    if (item.member_ismaster_ensure_money == "0") {
+                        bt_action.text = "去缴纳"
+                    } else {
+                        bt_action.text = "去退款"
+                    }
+                }
+                "2" -> {
+                    if (item.member_ismerchant_ensure_money == "0") {
+                        bt_action.text = "去缴纳"
+                    } else {
+                        bt_action.text = "去退款"
+                    }
+                }
             }
         }
     }
