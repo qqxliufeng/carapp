@@ -1,7 +1,6 @@
 package com.android.ql.lf.carapp.ui.fragments.bottom
 
 import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.app.AlertDialog
 import android.view.View
 import android.view.ViewGroup
 import com.android.ql.lf.carapp.R
@@ -9,6 +8,7 @@ import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.activities.MainActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
+import com.android.ql.lf.carapp.ui.fragments.message.MineMessageListFragment
 import com.android.ql.lf.carapp.ui.fragments.user.SettingFragment
 import com.android.ql.lf.carapp.ui.fragments.user.mine.*
 import com.android.ql.lf.carapp.utils.*
@@ -87,6 +87,10 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
         modifyInfoSubscription
 
         setUserInfo(UserInfo.getInstance())
+
+        mFlMainMineMessageNotifyContainer.setOnClickListener {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的消息", true, false, MineMessageListFragment::class.java)
+        }
 
         mLlMainMinePersonalInfoContainer.doClickWithUserStatusStart(MINE_PERSONAL_INFO_TOKEN) {
             FragmentContainerActivity.from(mContext).setClazz(MinePersonalInfoFragment::class.java).setTitle("个人中心").setNeedNetWorking(true).start()

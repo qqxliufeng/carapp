@@ -104,6 +104,7 @@
             android:textSize="@dimen/sp_14" />
 
         <TextView
+            android:id="@+id/mTvSettingAboutUs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_10"
@@ -119,6 +120,7 @@
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/mTvSettingHelp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
@@ -134,6 +136,7 @@
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/mTvSettingProtocol"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"

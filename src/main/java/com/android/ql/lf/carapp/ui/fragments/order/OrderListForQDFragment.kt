@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.media.Ringtone
 import android.media.RingtoneManager
+import android.os.CountDownTimer
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.support.v4.app.NotificationCompat
@@ -15,6 +16,7 @@ import android.support.v4.content.ContextCompat
 import android.text.SpannableString
 import android.text.TextUtils
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.EventIsMasterAndMoneyBean
@@ -93,9 +95,25 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
             newOrderNotifyDialog.setCanceledOnTouchOutside(false)
             newOrderNotifyDialog.window.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(mContext, android.R.color.transparent)))
             val contentView = View.inflate(mContext, R.layout.dialog_order_notify_layout, null)
-            val spannableString = SpannableString("5s")
-            contentView.findViewById<TextView>(R.id.mTvOrderNotifyDialogTimeCount).text = spannableString
+            contentView.findViewById<Button>(R.id.mBtNewOrderNotify).setOnClickListener {
+                newOrderNotifyDialog.dismiss()
+            }
+            val timeCount = contentView.findViewById<TextView>(R.id.mTvOrderNotifyDialogTimeCount)
+            timeCount.text = "5s"
             newOrderNotifyDialog.setContentView(contentView)
+            val countDownTime = object:CountDownTimer(1000 * 5,1000){
+                override fun onFinish() {
+                    newOrderNotifyDialog.dismiss()
+                }
+
+                override fun onTick(millisUntilFinished: Long) {
+                    timeCount.text = "${millisUntilFinished/1000}秒"
+                }
+            }
+            countDownTime.start()
+            newOrderNotifyDialog.setOnDismissListener {
+                countDownTime.cancel()
+            }
             newOrderNotifyDialog.show()
         }
     }

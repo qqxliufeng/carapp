@@ -175,6 +175,12 @@ class RequestParamsHelper {
         val ACT_PERSONAL = "personal"
         fun getPersonalParam(uid: String) = getBaseParams().addParam("uid", uid)
 
+        val ACT_ABOUT = "about"
+        fun getAboutUs() = getBaseParams()
+
+        val ACT_HELP = "help"
+        fun getHelp() = getBaseParams()
+
         /**              member model  end           **/
 
 

@@ -3,13 +3,18 @@ package com.android.ql.lf.carapp.ui.fragments.user
 import android.support.v7.app.AlertDialog
 import android.view.View
 import com.android.ql.lf.carapp.R
+import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.present.UserPresent
+import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
+import com.android.ql.lf.carapp.ui.fragments.DetailContentFragment
 import com.android.ql.lf.carapp.utils.CacheDataManager
 import com.android.ql.lf.carapp.utils.Constants
+import com.android.ql.lf.carapp.utils.RequestParamsHelper
+import com.android.ql.lf.carapp.utils.toast
 import com.tencent.bugly.beta.Beta
 import kotlinx.android.synthetic.main.fragment_setting_layout.*
-import org.jetbrains.anko.support.v4.toast
+import org.jetbrains.anko.bundleOf
 
 /**
  * Created by liufeng on 2018/2/3.
@@ -42,6 +47,7 @@ class SettingFragment : BaseNetWorkingFragment() {
             CacheDataManager.clearAllCache(mContext)
             mCacheSize.text = "暂无缓存"
         }
+        mBtLogout.isEnabled = UserInfo.getInstance().isLogin
         mBtLogout.setOnClickListener {
             val builder = AlertDialog.Builder(mContext)
             builder.setNegativeButton("否", null)
@@ -54,6 +60,39 @@ class SettingFragment : BaseNetWorkingFragment() {
         }
         mTvSettingAddressManager.setOnClickListener {
             toast(Constants.NO_FUNCTION_NOTIFY_MESSAGE)
+        }
+        mTvSettingAboutUs.setOnClickListener {
+            FragmentContainerActivity.from(mContext)
+                    .setClazz(DetailContentFragment::class.java)
+                    .setTitle(mTvSettingAboutUs.text.toString())
+                    .setExtraBundle(bundleOf(
+                            Pair(DetailContentFragment.MODEL_NAME_FLAG,RequestParamsHelper.MEMBER_MODEL),
+                            Pair(DetailContentFragment.ACT_NAME_FLAG,RequestParamsHelper.ACT_ABOUT),
+                            Pair(DetailContentFragment.PARAM_FLAG, RequestParamsHelper.getAboutUs())))
+                    .setNeedNetWorking(true)
+                    .start()
+        }
+        mTvSettingHelp.setOnClickListener {
+            FragmentContainerActivity.from(mContext)
+                    .setClazz(DetailContentFragment::class.java)
+                    .setTitle(mTvSettingHelp.text.toString())
+                    .setExtraBundle(bundleOf(
+                            Pair(DetailContentFragment.MODEL_NAME_FLAG,RequestParamsHelper.MEMBER_MODEL),
+                            Pair(DetailContentFragment.ACT_NAME_FLAG,RequestParamsHelper.ACT_HELP),
+                            Pair(DetailContentFragment.PARAM_FLAG, RequestParamsHelper.getHelp())))
+                    .setNeedNetWorking(true)
+                    .start()
+        }
+        mTvSettingProtocol.setOnClickListener {
+            FragmentContainerActivity.from(mContext)
+                    .setClazz(DetailContentFragment::class.java)
+                    .setTitle(mTvSettingHelp.text.toString())
+                    .setExtraBundle(bundleOf(
+                            Pair(DetailContentFragment.MODEL_NAME_FLAG,RequestParamsHelper.MEMBER_MODEL),
+                            Pair(DetailContentFragment.ACT_NAME_FLAG,RequestParamsHelper.ACT_PTGG),
+                            Pair(DetailContentFragment.PARAM_FLAG, mapOf(Pair("pid","13")))))
+                    .setNeedNetWorking(true)
+                    .start()
         }
     }
 }
