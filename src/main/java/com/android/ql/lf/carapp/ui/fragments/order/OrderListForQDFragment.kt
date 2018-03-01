@@ -1,7 +1,16 @@
 package com.android.ql.lf.carapp.ui.fragments.order
 
 import android.app.Dialog
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.ColorDrawable
+import android.media.Ringtone
+import android.media.RingtoneManager
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.support.v4.app.NotificationCompat
+import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.content.ContextCompat
 import android.text.SpannableString
 import android.text.TextUtils
@@ -14,6 +23,8 @@ import com.android.ql.lf.carapp.data.OrderBean
 import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.present.ServiceOrderPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
+import com.android.ql.lf.carapp.ui.activities.MainActivity
+import com.android.ql.lf.carapp.ui.activities.SplashActivity
 import com.android.ql.lf.carapp.ui.adapter.OrderListForQDAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
 import com.android.ql.lf.carapp.ui.fragments.bottom.MainOrderHouseFragment
@@ -50,6 +61,10 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
 
     private var isShowing = true
 
+    private val newOrderNotifyDialog by lazy {
+        Dialog(mContext)
+    }
+
     //接收是否谁为师傅和是否交纳保证金的事件
     private val masterAndMoneySubscription by lazy {
         RxBus.getDefault().toObservable(EventIsMasterAndMoneyBean::class.java).subscribe {
@@ -60,19 +75,28 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
     //接收新订单的通知
     private val newOrderMessageSubscription by lazy {
         RxBus.getDefault().toObservable(NewOrderMessageBean::class.java).subscribe {
-            if (isShowing) {
-                if (!TextUtils.isEmpty(it.orderMessage)) {
-                    val dialog = Dialog(mContext)
-                    dialog.setCancelable(true)
-                    dialog.setCanceledOnTouchOutside(false)
-                    dialog.window.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(mContext, android.R.color.transparent)))
-                    val contentView = View.inflate(mContext, R.layout.dialog_order_notify_layout, null)
-                    val spannableString = SpannableString("5s")
-                    contentView.findViewById<TextView>(R.id.mTvOrderNotifyDialogTimeCount).text = spannableString
-                    dialog.setContentView(contentView)
-                    dialog.show()
+            if (!TextUtils.isEmpty(it.orderMessage)){
+                if (isShowing) {
+                    sendNotifyOnlySound()
+                    showNewOrderDialog()
+                } else {
+                    showNewOrderDialog()
+                    sendNotify()
                 }
             }
+        }
+    }
+
+    private fun showNewOrderDialog() {
+        if (!newOrderNotifyDialog.isShowing) {
+            newOrderNotifyDialog.setCancelable(true)
+            newOrderNotifyDialog.setCanceledOnTouchOutside(false)
+            newOrderNotifyDialog.window.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(mContext, android.R.color.transparent)))
+            val contentView = View.inflate(mContext, R.layout.dialog_order_notify_layout, null)
+            val spannableString = SpannableString("5s")
+            contentView.findViewById<TextView>(R.id.mTvOrderNotifyDialogTimeCount).text = spannableString
+            newOrderNotifyDialog.setContentView(contentView)
+            newOrderNotifyDialog.show()
         }
     }
 
@@ -84,6 +108,30 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
             }
         }
     }
+
+    private fun sendNotify() {
+        val builder = NotificationCompat.Builder(mContext)
+        builder.setAutoCancel(true)
+        val forIntent = Intent(context, MainActivity::class.java)
+        val intentPend = PendingIntent.getActivity(context, 0, forIntent, PendingIntent.FLAG_CANCEL_CURRENT)
+        builder.setContentIntent(intentPend)
+        builder.setSmallIcon(R.mipmap.ic_launcher)
+        builder.setDefaults(NotificationCompat.DEFAULT_SOUND)
+        builder.setTicker("你好")
+        builder.setContentText("今天天气真好")
+        builder.setContentTitle("天气")
+        val manager = NotificationManagerCompat.from(mContext)
+        manager.notify(0, builder.build())
+    }
+
+    private fun sendNotifyOnlySound(){
+        val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) ?: return
+        val r = RingtoneManager.getRingtone(context, notification)
+        r.play()
+        val vibrator = mContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        vibrator.vibrate(1000)
+    }
+
 
     override fun getLayoutId() = R.layout.fragment_order_for_qd_layout
 
@@ -97,6 +145,7 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
         userLogoutSubscription
         newOrderMessageSubscription
         showNotify()
+//        sendNotify()
     }
 
     override fun onResume() {

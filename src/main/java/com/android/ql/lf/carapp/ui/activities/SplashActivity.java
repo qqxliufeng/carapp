@@ -7,8 +7,23 @@ import android.net.Uri;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.widget.Toast;
+
+import com.android.ql.lf.carapp.R;
+import com.android.ql.lf.carapp.application.CarApplication;
+import com.android.ql.lf.carapp.component.ApiServerModule;
+import com.android.ql.lf.carapp.component.DaggerApiServerComponent;
+import com.android.ql.lf.carapp.data.UserInfo;
+import com.android.ql.lf.carapp.present.GetDataFromNetPresent;
+import com.android.ql.lf.carapp.present.UserPresent;
+import com.android.ql.lf.carapp.utils.RequestParamsHelper;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -33,15 +48,28 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
 
     private static final String[] REQUEST_PERMISSIONS_DESCRIPTION = new String[]{"相机", "读取SD卡"};
 
+    @Inject
+    GetDataFromNetPresent mPresent;
+
+    private UserPresent userPresent = new UserPresent();
+
+
     @Override
     public int getLayoutId() {
-        return android.R.layout.simple_list_item_1;
+        return R.layout.activity_splash_layout;
     }
 
     @Override
     public void initView() {
+        DaggerApiServerComponent.builder().apiServerModule(new ApiServerModule()).appComponent(CarApplication.getInstance().getAppComponent()).build().inject(this);
+        mPresent.setNetDataPresenter(this);
         if (hasPermissions()) {
-            startMain();
+            findViewById(R.id.mIvSplash).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    isLogin();
+                }
+            }, 2500);
         } else {
             requestPermission();
         }
@@ -78,7 +106,7 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
         if (hasPermissions()) {
-            startMain();
+            isLogin();
         }
     }
 
@@ -113,15 +141,45 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
             if (hasPermissions()) {
-                startMain();
+                isLogin();
             } else {
                 requestPermission();
             }
         }
     }
 
+    @Override
+    public <T> void onRequestSuccess(int requestID, T result) {
+        super.onRequestSuccess(requestID, result);
+        try {
+            JSONObject json = new JSONObject(result.toString());
+            if ("200".equals(json.optString("code"))) {
+                userPresent.onLogin(json.optJSONObject("result"), json.optJSONObject("arr"));
+                startMain();
+            } else {
+                startMain();
+            }
+        } catch (JSONException e) {
+            startMain();
+        }
+    }
+
     private void startMain() {
         startActivity(new Intent(this, MainActivity.class));
         finish();
+    }
+
+    /**
+     * 所有有权限都已经请求到了，直接进入到主页面
+     */
+    private void isLogin() {
+        if (UserInfo.isCacheUserId(this)) {
+            mPresent.getDataByPost(0x0,
+                    RequestParamsHelper.Companion.getMEMBER_MODEL(),
+                    RequestParamsHelper.Companion.getACT_PERSONAL(),
+                    RequestParamsHelper.Companion.getPersonalParam(UserInfo.getUserIdFromCache(this)));
+        } else {
+            startMain();
+        }
     }
 }

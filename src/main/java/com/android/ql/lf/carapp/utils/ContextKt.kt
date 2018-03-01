@@ -1,6 +1,7 @@
 package com.android.ql.lf.carapp.utils
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -11,6 +12,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import com.android.ql.lf.carapp.R
+import org.jetbrains.anko.alert
 
 /**
  * Created by lf on 18.2.10.
@@ -43,3 +45,29 @@ fun Fragment.startPhone(phone: String) {
     builder.create().show()
 }
 
+fun Fragment.alert(title: String? = "title",
+                   message: String = "message",
+                   positiveButton: String = "是",
+                   negativeButton: String = "否",
+                   positiveAction: ((dialog: DialogInterface, which: Int) -> Unit)? = null,
+                   negativeAction: ((dialog: DialogInterface, which: Int) -> Unit)? = null) =
+        this.context.alert(title, message, positiveButton, negativeButton, positiveAction, negativeAction)
+
+fun Fragment.alert(message: String = "message",
+                   positiveButton: String = "是",
+                   negativeButton: String = "否", positiveAction: ((dialog: DialogInterface, which: Int) -> Unit)? = null) =
+        this.alert(null, message, positiveButton, negativeButton, positiveAction, null)
+
+fun Context.alert(title: String? = "title",
+                  message: String = "message",
+                  positiveButton: String = "是",
+                  negativeButton: String = "否",
+                  positiveAction: ((dialog: DialogInterface, which: Int) -> Unit)? = null,
+                  negativeAction: ((dialog: DialogInterface, which: Int) -> Unit)? = null) {
+    val builder = AlertDialog.Builder(this)
+    builder.setMessage(message)
+    builder.setTitle(title)
+    builder.setNegativeButton(negativeButton, negativeAction)
+    builder.setPositiveButton(positiveButton, positiveAction)
+    builder.create().show()
+}

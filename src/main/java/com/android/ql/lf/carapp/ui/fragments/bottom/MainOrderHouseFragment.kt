@@ -77,6 +77,7 @@ class MainOrderHouseFragment : BaseFragment() {
         val statusHeight = (mContext as MainActivity).statusHeight
         mAlOrderHouse.setPadding(0, statusHeight, 0, 0)
         mVpOrderHouse.adapter = OrderHouseViewPagerAdapter(childFragmentManager)
+        mVpOrderHouse.offscreenPageLimit = TITLES.size
         mTlOrderHouse.setupWithViewPager(mVpOrderHouse)
         orderCountBadgeView.badgeNumber = 0
         val orderCountBadge = orderCountBadgeView.bindTarget(mIvMainOrderHouseCount)
@@ -98,7 +99,7 @@ class MainOrderHouseFragment : BaseFragment() {
         mTvMainOrderHouseAddress.text = address
     }
 
-    fun updateOrderNum(count:Int){
+    fun updateOrderNum(count: Int) {
         orderCountBadgeView.badgeNumber = count
     }
 

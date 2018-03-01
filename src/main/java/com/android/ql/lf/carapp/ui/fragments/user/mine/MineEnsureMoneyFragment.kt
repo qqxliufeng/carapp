@@ -1,16 +1,29 @@
 package com.android.ql.lf.carapp.ui.fragments.user.mine
 
+import android.annotation.SuppressLint
+import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.support.design.widget.BottomSheetDialog
 import android.text.Html
+import android.text.TextUtils
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import com.android.ql.lf.carapp.R
+import com.android.ql.lf.carapp.data.PayResult
+import com.android.ql.lf.carapp.data.WXPayBean
+import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
+import com.android.ql.lf.carapp.ui.fragments.order.PayResultFragment
 import com.android.ql.lf.carapp.ui.views.SelectPayTypeView
+import com.android.ql.lf.carapp.utils.PayManager
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
+import com.android.ql.lf.carapp.utils.alert
+import com.android.ql.lf.carapp.utils.toast
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.google.gson.Gson
 import org.json.JSONObject
 
 /**
@@ -21,6 +34,33 @@ class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment
     private lateinit var mTvEnsureMoneyIntroduce: TextView
 
     private var bottomPayDialog: BottomSheetDialog? = null
+
+    private var payType: String = SelectPayTypeView.WX_PAY
+
+
+    private val handle = @SuppressLint("HandlerLeak")
+    object : Handler() {
+        override fun handleMessage(msg: Message?) {
+            super.handleMessage(msg)
+            when (msg!!.what) {
+                PayManager.SDK_PAY_FLAG -> {
+                    val payResult = PayResult(msg.obj as Map<String, String>)
+                    val resultInfo = payResult.result// 同步返回需要验证的信息
+                    val resultStatus = payResult.resultStatus
+                    val bundle = Bundle()
+                    if (TextUtils.equals(resultStatus, "9000")) {
+                        //支付成功
+                        bundle.putInt(PayResultFragment.PAY_CODE_FLAG, PayResultFragment.PAY_SUCCESS_CODE)
+                        onPostRefresh()
+                    } else {
+                        //支付失败
+                        bundle.putInt(PayResultFragment.PAY_CODE_FLAG, PayResultFragment.PAY_FAIL_CODE)
+                    }
+                    FragmentContainerActivity.startFragmentContainerActivity(mContext, "支付结果", true, false, bundle, PayResultFragment::class.java)
+                }
+            }
+        }
+    }
 
     override fun createAdapter(): BaseQuickAdapter<EnsureMoneyProduct, BaseViewHolder> =
             EnsureMoneyProductAdapter(R.layout.adapter_ensure_money_item_layout, mArrayList)
@@ -50,14 +90,52 @@ class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment
         mPresent.getDataByPost(0x0, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_M_P, RequestParamsHelper.getEnsureMoneyProductParam())
     }
 
+    override fun onRequestStart(requestID: Int) {
+        super.onRequestStart(requestID)
+        if (requestID == 0x1) {
+            getFastProgressDialog("正在支付……")
+        }
+        if (requestID == 0x2) {
+            getFastProgressDialog("正在申请……")
+        }
+    }
+
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
         super.onRequestSuccess(requestID, result)
-        processList(result as String, EnsureMoneyProduct::class.java)
-        setLoadEnable(false)
-        val check = checkResultCode(result)
-        if (check != null && check.code == SUCCESS_CODE) {
-            val arrJson = (check.obj as JSONObject).optJSONObject("arr")
-            mTvEnsureMoneyIntroduce.text = Html.fromHtml(arrJson.optString("ptgg_content"))
+        if (requestID == 0x0) {
+            processList(result as String, EnsureMoneyProduct::class.java)
+            setLoadEnable(false)
+            val check = checkResultCode(result)
+            if (check != null && check.code == SUCCESS_CODE) {
+                val arrJson = (check.obj as JSONObject).optJSONObject("arr")
+                mTvEnsureMoneyIntroduce.text = Html.fromHtml(arrJson.optString("ptgg_content"))
+            }
+        } else if (requestID == 0x1) {
+            val check = checkResultCode(result)
+            if (check != null) {
+                if (check.code == SUCCESS_CODE) {
+                    if (payType == SelectPayTypeView.WX_PAY) {
+                        val wxBean = Gson().fromJson((check.obj as JSONObject).optJSONObject("result").toString(), WXPayBean::class.java)
+                        PayManager.wxPay(mContext, wxBean)
+                    } else {
+                        PayManager.aliPay(mContext, handle, (check.obj as JSONObject).optString("result"))
+                    }
+                } else {
+                    toast((check.obj as JSONObject).optString("msg"))
+                }
+            }
+        } else if (requestID == 0x2) {
+            val check = checkResultCode(result)
+            if (check != null) {
+                toast((check.obj as JSONObject).optString("msg"))
+            }
+        }
+    }
+
+    override fun onRequestFail(requestID: Int, e: Throwable) {
+        super.onRequestFail(requestID, e)
+        if (requestID == 0x2) {
+            toast("申请退款失败，请稍后重试……")
         }
     }
 
@@ -68,39 +146,47 @@ class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment
             when (item.m_p_type) {
                 "1" -> {
                     if (item.member_ismaster_ensure_money == "0") {
-                        //缴纳师傅保证金
-                        if (bottomPayDialog == null) {
-                            bottomPayDialog = BottomSheetDialog(mContext)
-                            val contentView = SelectPayTypeView(mContext)
-                            contentView.setShowConfirmView(View.VISIBLE)
-                            contentView.setOnConfirmClickListener {
-                                bottomPayDialog!!.dismiss()
-                            }
-                            bottomPayDialog!!.setContentView(contentView)
-                        }
-                        bottomPayDialog!!.show()
+                        pay(item)
                     } else {
                         //退师傅保证金
+                        refund(item)
                     }
                 }
                 "2" -> {
                     if (item.member_ismerchant_ensure_money == "0") {
-                        //缴纳店铺保证金
-                        if (bottomPayDialog == null) {
-                            bottomPayDialog = BottomSheetDialog(mContext)
-                            val contentView = SelectPayTypeView(mContext)
-                            contentView.setShowConfirmView(View.VISIBLE)
-                            contentView.setOnConfirmClickListener {
-                                bottomPayDialog!!.dismiss()
-                            }
-                            bottomPayDialog!!.setContentView(contentView)
-                        }
-                        bottomPayDialog!!.show()
+                        pay(item)
                     } else {
                         //退店铺保证金
+                        refund(item)
                     }
                 }
             }
+        }
+    }
+
+    private fun pay(item: EnsureMoneyProduct) {
+        payType = SelectPayTypeView.WX_PAY
+        if (bottomPayDialog == null) {
+            bottomPayDialog = BottomSheetDialog(mContext)
+            val contentView = SelectPayTypeView(mContext)
+            contentView.setShowConfirmView(View.VISIBLE)
+            contentView.setOnConfirmClickListener {
+                bottomPayDialog!!.dismiss()
+                payType = contentView.payType
+                mPresent.getDataByPost(0x1, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_PAYMENT_DEPOSIT,
+                        RequestParamsHelper.getPaymentDepositParam(item.m_p_type!!, item.m_p_id!!, payType))
+            }
+            bottomPayDialog!!.setContentView(contentView)
+        }
+        bottomPayDialog!!.show()
+    }
+
+    private fun refund(item: EnsureMoneyProduct) {
+        alert("是否要退款？", "退款", "否") { _, _ ->
+            mPresent.getDataByPost(0x2,
+                    RequestParamsHelper.MEMBER_MODEL,
+                    RequestParamsHelper.ACT_REFUND_DEPOSIT,
+                    RequestParamsHelper.getRefundDepositParam(item.m_p_type!!))
         }
     }
 
@@ -114,15 +200,19 @@ class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment
                 "1" -> {
                     if (item.member_ismaster_ensure_money == "0") {
                         bt_action.text = "去缴纳"
+                        bt_action.setBackgroundResource(R.drawable.shape_bt_bg1)
                     } else {
                         bt_action.text = "去退款"
+                        bt_action.setBackgroundResource(R.drawable.shape_bt_bg5)
                     }
                 }
                 "2" -> {
                     if (item.member_ismerchant_ensure_money == "0") {
                         bt_action.text = "去缴纳"
+                        bt_action.setBackgroundResource(R.drawable.shape_bt_bg1)
                     } else {
                         bt_action.text = "去退款"
+                        bt_action.setBackgroundResource(R.drawable.shape_bt_bg5)
                     }
                 }
             }

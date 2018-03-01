@@ -86,6 +86,7 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
         //修改个人信息
         modifyInfoSubscription
 
+        setUserInfo(UserInfo.getInstance())
 
         mLlMainMinePersonalInfoContainer.doClickWithUserStatusStart(MINE_PERSONAL_INFO_TOKEN) {
             FragmentContainerActivity.from(mContext).setClazz(MinePersonalInfoFragment::class.java).setTitle("个人中心").setNeedNetWorking(true).start()
@@ -129,8 +130,13 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
 //        mTvMainMineStore.doClickWithUserStatusStart(MINE_STORE_INFO_TOKEN) {
 //            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的店铺", MineStoreInfoFragment::class.java)
 //        }
-        mTvMainMineQCode.doClickWithUserStatusStart(MINE_Q_CODE_TOKEN) {
-            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的邀请码", MineQCodeFragment::class.java)
+
+
+//        mTvMainMineQCode.doClickWithUserStatusStart(MINE_Q_CODE_TOKEN) {
+//            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的邀请码", MineQCodeFragment::class.java)
+//        }
+        mTvMainMineQCode.setOnClickListener {
+            toast(Constants.NO_FUNCTION_NOTIFY_MESSAGE)
         }
 
         mTvMainMineShopOrder.setOnClickListener {
@@ -178,51 +184,59 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
      * 登录成功
      */
     override fun onLoginSuccess(it: UserInfo?) {
-        GlideManager.loadFaceCircleImage(mContext, it!!.memberPic, mIvMainMineFace)
-        mTvMainMineEditNameNotify.visibility = View.VISIBLE
-        mTvMainMineName.text = it.memberName
-        mTvMainMinePhone.text = it.memberPhone.let {
-            it.substring(0, 3) + "****" + it.substring(7, it.length)
+        if (it != null) {
+            setUserInfo(it)
+            when (UserInfo.loginToken) {
+                MINE_PERSONAL_INFO_TOKEN -> {
+                    mLlMainMinePersonalInfoContainer.doClickWithUseStatusEnd()
+                }
+                MINE_STORE_COLLECTION_TOKEN -> {
+                    mLlMainMineStoreContainer.doClickWithUseStatusEnd()
+                }
+                MINE_GOODS_COLLECTION_TOKEN -> {
+                    mLlMainMineGoodsContainer.doClickWithUseStatusEnd()
+                }
+                MINE_GRADE_TOKEN -> {
+                    mTvMainMineGrade.doClickWithUseStatusEnd()
+                }
+                MINE_PERSONAL_EDIT_INFO_TOKEN -> {
+                    mTvMainServiceEdit.doClickWithUseStatusEnd()
+                }
+                MINE_STORE_INFO_TOKEN -> {
+                    mTvMainMineStore.doClickWithUseStatusEnd()
+                }
+                MINE_Q_CODE_TOKEN -> {
+                    mTvMainMineQCode.doClickWithUseStatusEnd()
+                }
+                MINE_MY_WALLET_TOKEN -> {
+                    mTvMainMineWallet.doClickWithUseStatusEnd()
+                }
+                MINE_FOOT_PRINT_TOKEN -> {
+                    mLlMainMineFootPrintContainer.doClickWithUseStatusEnd()
+                }
+                MINE_SETTING_TOKEN -> {
+                    mTvMainMineSetting.doClickWithUseStatusEnd()
+                }
+                MINE_MY_ARTICLE_TOKEN -> {
+                    mTvMainMineArticle.doClickWithUseStatusEnd()
+                }
+                MINE_APPLY_MASTER_TOKEN -> {
+                    mTvMainMineApplyMaster.doClickWithUseStatusEnd()
+                }
+                MINE_EVALUATE_TOKEN -> {
+                    mTvMainMineEvaluate.doClickWithUseStatusEnd()
+                }
+            }
         }
-        when (UserInfo.loginToken) {
-            MINE_PERSONAL_INFO_TOKEN -> {
-                mLlMainMinePersonalInfoContainer.doClickWithUseStatusEnd()
-            }
-            MINE_STORE_COLLECTION_TOKEN -> {
-                mLlMainMineStoreContainer.doClickWithUseStatusEnd()
-            }
-            MINE_GOODS_COLLECTION_TOKEN -> {
-                mLlMainMineGoodsContainer.doClickWithUseStatusEnd()
-            }
-            MINE_GRADE_TOKEN -> {
-                mTvMainMineGrade.doClickWithUseStatusEnd()
-            }
-            MINE_PERSONAL_EDIT_INFO_TOKEN -> {
-                mTvMainServiceEdit.doClickWithUseStatusEnd()
-            }
-            MINE_STORE_INFO_TOKEN -> {
-                mTvMainMineStore.doClickWithUseStatusEnd()
-            }
-            MINE_Q_CODE_TOKEN -> {
-                mTvMainMineQCode.doClickWithUseStatusEnd()
-            }
-            MINE_MY_WALLET_TOKEN -> {
-                mTvMainMineWallet.doClickWithUseStatusEnd()
-            }
-            MINE_FOOT_PRINT_TOKEN -> {
-                mLlMainMineFootPrintContainer.doClickWithUseStatusEnd()
-            }
-            MINE_SETTING_TOKEN -> {
-                mTvMainMineSetting.doClickWithUseStatusEnd()
-            }
-            MINE_MY_ARTICLE_TOKEN -> {
-                mTvMainMineArticle.doClickWithUseStatusEnd()
-            }
-            MINE_APPLY_MASTER_TOKEN -> {
-                mTvMainMineApplyMaster.doClickWithUseStatusEnd()
-            }
-            MINE_EVALUATE_TOKEN -> {
-                mTvMainMineEvaluate.doClickWithUseStatusEnd()
+    }
+
+    private fun setUserInfo(it: UserInfo) {
+        if (it.isLogin) {
+            GlideManager.loadFaceCircleImage(mContext, it!!.memberPic, mIvMainMineFace)
+            mTvMainMineEditNameNotify.visibility = View.VISIBLE
+            mTvMainMineName.text = it.memberName
+            mTvMainMinePhone.text = it.memberPhone.let {
+                it.substring(0, 3) + "****" + it.substring(7, it.length)
             }
         }
     }

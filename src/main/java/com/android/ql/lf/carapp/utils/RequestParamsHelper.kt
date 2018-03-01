@@ -140,13 +140,40 @@ class RequestParamsHelper {
         fun getBindAlipayParam(account: String, autonym: String) = getWithIdParams().addParam("account", account).addParam("autonym", autonym)
 
         val ACT_BIND_WXPAY = "bind_wxpay"
-        fun getBindWxpayParam(idcard:String,autonym:String) = getWithIdParams().addParam("idcard",idcard).addParam("autonym",autonym)
+        fun getBindWxpayParam(idcard: String, autonym: String) = getWithIdParams().addParam("idcard", idcard).addParam("autonym", autonym)
 
         val ACT_WX_AUTHORIZATION = "wx_authorization"
-        fun getWxAuthorizationParam(code:String) = getWithIdParams().addParam("code",code)
+        fun getWxAuthorizationParam(code: String) = getWithIdParams().addParam("code", code)
 
         val ACT_M_P = "m_p"
         fun getEnsureMoneyProductParam() = getWithIdParams()
+
+        val ACT_EDIT_PERSONAL_SERVICE = "edit_personal_service"
+        fun getEditePersonalServiceParam(sid: String, address: String, ppa: String, starttime: String, endtime: String, content: String): ApiParams {
+            val param = getWithIdParams()
+            param.addParam("sid", sid)
+            param.addParam("address", address)
+            param.addParam("ppa", ppa)
+            param.addParam("starttime", starttime)
+            param.addParam("endtime", endtime)
+            param.addParam("content", content)
+            return param
+        }
+
+        val ACT_PAYMENT_DEPOSIT = "payment_deposit"
+        fun getPaymentDepositParam(type: String, mid: String, paytype: String): ApiParams {
+            val param = getWithIdParams()
+            param.addParam("type", type)
+            param.addParam("mid", mid)
+            param.addParam("paytype", paytype)
+            return param
+        }
+
+        val ACT_REFUND_DEPOSIT = "refund_deposit"
+        fun getRefundDepositParam(type: String) = getWithIdParams().addParam("type", type)
+
+        val ACT_PERSONAL = "personal"
+        fun getPersonalParam(uid: String) = getBaseParams().addParam("uid", uid)
 
         /**              member model  end           **/
 

@@ -75,9 +75,13 @@ class OrderDetailForHavingWorkFragment : BaseNetWorkingFragment() {
                 }
                 if (orderBean != null && !orderBean!!.qorder_pic.isEmpty()) {
                     mICllOrderDetailImageContainer.visibility = View.VISIBLE
+                    mTvOrderDetailImageTitle.visibility = View.VISIBLE
+                    mViewOrderDetailImageLine.visibility = View.VISIBLE
                     mICllOrderDetailImageContainer.setImages(orderBean!!.qorder_pic)
                 } else {
+                    mTvOrderDetailImageTitle.visibility = View.GONE
                     mICllOrderDetailImageContainer.visibility = View.GONE
+                    mViewOrderDetailImageLine.visibility = View.GONE
                 }
             } else {
                 mTvOrderDetailLoadFail.visibility = View.VISIBLE

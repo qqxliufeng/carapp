@@ -2,6 +2,7 @@ package com.android.ql.lf.carapp.ui.fragments.order
 
 import android.view.View
 import com.android.ql.lf.carapp.R
+import com.android.ql.lf.carapp.data.EventOrderStatusBean
 import com.android.ql.lf.carapp.data.OrderBean
 import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.present.ServiceOrderPresent
@@ -9,6 +10,7 @@ import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.adapter.OrderListForMineForWaitingCalculateAdapter
 import com.android.ql.lf.carapp.ui.fragments.AbstractLazyLoadFragment
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
+import com.android.ql.lf.carapp.utils.RxBus
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import org.jetbrains.anko.bundleOf
@@ -25,11 +27,20 @@ class OrderListForMineForWaitingCalculateFragment : AbstractLazyLoadFragment<Ord
         }
     }
 
+    private val updateOrderStatusSubscription by lazy {
+        RxBus.getDefault().toObservable(EventOrderStatusBean::class.java).subscribe {
+            if (it.orderStatus == ServiceOrderPresent.OrderStatus.WAITING_CALCULATE.index.toInt()) {
+                loadData()
+            }
+        }
+    }
+
     override fun createAdapter(): BaseQuickAdapter<OrderBean, BaseViewHolder>
             = OrderListForMineForWaitingCalculateAdapter(R.layout.adapter_order_list_for_mine_for_waiting_calculate_item_layout, mArrayList)
 
     override fun initView(view: View?) {
         super.initView(view)
+        updateOrderStatusSubscription
         registerLoginSuccessBus()
     }
 
@@ -76,4 +87,10 @@ class OrderListForMineForWaitingCalculateFragment : AbstractLazyLoadFragment<Ord
                     .start()
         }
     }
+
+    override fun onDestroyView() {
+        unsubscribe(updateOrderStatusSubscription)
+        super.onDestroyView()
+    }
+
 }

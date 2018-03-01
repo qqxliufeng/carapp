@@ -1,6 +1,7 @@
 package com.android.ql.lf.carapp.component;
 
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity;
+import com.android.ql.lf.carapp.ui.activities.SplashActivity;
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment;
 
 import dagger.Component;
@@ -17,6 +18,7 @@ public interface ApiServerComponent {
     void inject(FragmentContainerActivity activity);
 
     void inject(BaseNetWorkingFragment baseNetWorkingFragment);
-//    void inject(SplashActivity splashActivity);
+
+    void inject(SplashActivity splashActivity);
 
 }

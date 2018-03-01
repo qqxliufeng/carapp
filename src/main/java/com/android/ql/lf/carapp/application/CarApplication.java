@@ -6,6 +6,8 @@ import android.support.multidex.MultiDexApplication;
 import com.android.ql.lf.carapp.component.AppComponent;
 import com.android.ql.lf.carapp.component.AppModule;
 import com.android.ql.lf.carapp.component.DaggerAppComponent;
+import com.android.ql.lf.carapp.utils.Constants;
+import com.tencent.bugly.Bugly;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -26,6 +28,7 @@ public class CarApplication extends MultiDexApplication {
         super.onCreate();
         application = this;
         appComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
+        Bugly.init(getApplicationContext(), Constants.BUGLY_APP_ID, false);
     }
 
 

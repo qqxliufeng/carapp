@@ -7,6 +7,7 @@ import com.android.ql.lf.carapp.present.UserPresent
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.utils.CacheDataManager
 import com.android.ql.lf.carapp.utils.Constants
+import com.tencent.bugly.beta.Beta
 import kotlinx.android.synthetic.main.fragment_setting_layout.*
 import org.jetbrains.anko.support.v4.toast
 
@@ -25,6 +26,16 @@ class SettingFragment : BaseNetWorkingFragment() {
         val packageInfo = mContext.packageManager.getPackageInfo(mContext.packageName, 0)
         val versionName = packageInfo.versionName
         mVersionName.text = "V$versionName"
+        val upgradeInfo = Beta.getUpgradeInfo()
+        if (upgradeInfo != null && packageInfo.versionCode < upgradeInfo.versionCode) {
+            mTvNewVersionNotify.visibility = View.VISIBLE
+            mVersionName.text = "V${upgradeInfo.versionName}"
+            mRlVersionUpContainer.setOnClickListener {
+                Beta.checkUpgrade(true, false)
+            }
+        } else {
+            mTvNewVersionNotify.visibility = View.GONE
+        }
         val cacheSize = CacheDataManager.getTotalCacheSize(mContext)
         mCacheSize.text = "$cacheSize"
         mCacheSizeContainer.setOnClickListener {

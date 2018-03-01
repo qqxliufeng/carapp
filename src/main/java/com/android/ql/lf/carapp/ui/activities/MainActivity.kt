@@ -1,8 +1,10 @@
 package com.android.ql.lf.carapp.ui.activities
 
+import android.content.Intent
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
+import android.util.Log
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.ui.fragments.bottom.MainCommunityFragment
@@ -10,7 +12,10 @@ import com.android.ql.lf.carapp.ui.fragments.bottom.MainMallFragment
 import com.android.ql.lf.carapp.ui.fragments.bottom.MainMineFragment
 import com.android.ql.lf.carapp.ui.fragments.bottom.MainOrderHouseFragment
 import com.android.ql.lf.carapp.utils.BottomNavigationViewHelper
+import com.android.ql.lf.carapp.utils.Constants
+import com.android.ql.lf.carapp.utils.PreferenceUtils
 import com.android.ql.lf.carapp.utils.toast
+import com.tencent.bugly.beta.Beta
 import kotlinx.android.synthetic.main.activity_main_layout.*
 
 /**
@@ -24,6 +29,7 @@ class MainActivity : BaseActivity() {
     override fun getLayoutId() = R.layout.activity_main_layout
 
     override fun initView() {
+        Beta.checkUpgrade(false,false)
         setSwipeBackEnable(false)
         BottomNavigationViewHelper.disableShiftMode(mMainNavigation)
         mMainNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
@@ -53,12 +59,18 @@ class MainActivity : BaseActivity() {
         false
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        mMainContent.currentItem = 0
+    }
+
     override fun onBackPressed() {
         if (System.currentTimeMillis() - exitTime > 2000) {
             toast("再按一次退出")
             exitTime = System.currentTimeMillis()
         } else {
             UserInfo.getInstance().loginOut()
+            PreferenceUtils.setPrefBoolean(this, Constants.APP_IS_ALIVE, false)
             finish()
         }
     }
