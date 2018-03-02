@@ -58,6 +58,7 @@
                         android:id="@+id/mViewMainMineMessageNotify"
                         android:layout_width="7dp"
                         android:layout_height="7dp"
+                        android:visibility="gone"
                         android:layout_gravity="right"
                         android:background="@drawable/shape_view_notify_bg_1" />
                 </FrameLayout>

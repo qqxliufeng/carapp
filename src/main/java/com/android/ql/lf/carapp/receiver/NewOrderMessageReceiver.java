@@ -45,9 +45,9 @@ public class NewOrderMessageReceiver extends BroadcastReceiver {
         builder.setSmallIcon(R.mipmap.ic_launcher);
         //设置通知铃声
         builder.setDefaults(NotificationCompat.DEFAULT_SOUND);
-        builder.setTicker("你好");
-        builder.setContentText("今天天气真好");
-        builder.setContentTitle("天气");
+        builder.setTicker("新消息");
+        builder.setContentText("您有新的订单，请注意查收！");
+        builder.setContentTitle("新消息提醒");
         PendingIntent intentPend = PendingIntent.getActivity(context, 0, forIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         builder.setContentIntent(intentPend);
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);

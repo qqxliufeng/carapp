@@ -66,6 +66,7 @@
                     android:layout_width="7dp"
                     android:layout_height="7dp"
                     android:layout_gravity="right"
+                    android:visibility="gone"
                     android:background="@drawable/shape_view_notify_bg_1" />
             </FrameLayout>
         </RelativeLayout>

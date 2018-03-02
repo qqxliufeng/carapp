@@ -4,6 +4,7 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.view.View
 import android.view.ViewGroup
 import com.android.ql.lf.carapp.R
+import com.android.ql.lf.carapp.data.UpdateNotifyBean
 import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.activities.MainActivity
@@ -67,6 +68,12 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
         }
     }
 
+    private val updateMessageNotifySubscription by lazy {
+        RxBus.getDefault().toObservable(UpdateNotifyBean::class.java).subscribe {
+            mViewMainMineMessageNotify.visibility = it.status
+        }
+    }
+
     override fun getLayoutId() = R.layout.fragment_main_mine_layout
 
     override fun initView(view: View?) {
@@ -85,6 +92,8 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
         userLogoutSubscription
         //修改个人信息
         modifyInfoSubscription
+        //接受修改消息提示事件
+        updateMessageNotifySubscription
 
         setUserInfo(UserInfo.getInstance())
 
@@ -261,6 +270,7 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
         unsubscribe(messageSubscription)
         unsubscribe(userLogoutSubscription)
         unsubscribe(modifyInfoSubscription)
+        unsubscribe(updateMessageNotifySubscription)
         super.onDestroyView()
     }
 }

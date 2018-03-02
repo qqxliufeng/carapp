@@ -1,6 +1,7 @@
 package com.android.ql.lf.carapp.ui.fragments.bottom
 
 import android.graphics.Color
+import android.opengl.Visibility
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
@@ -9,6 +10,7 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import com.android.ql.lf.carapp.R
+import com.android.ql.lf.carapp.data.UpdateNotifyBean
 import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.activities.MainActivity
@@ -18,6 +20,7 @@ import com.android.ql.lf.carapp.ui.fragments.order.OrderListForAfterSaleFragment
 import com.android.ql.lf.carapp.ui.fragments.order.OrderListForMineFragment
 import com.android.ql.lf.carapp.ui.fragments.order.OrderListForQDFragment
 import com.android.ql.lf.carapp.utils.RxBus
+import com.android.ql.lf.carapp.utils.doClickWithUserStatusStart
 import kotlinx.android.synthetic.main.fragment_main_order_house_layout.*
 import q.rorbin.badgeview.QBadgeView
 
@@ -30,6 +33,8 @@ class MainOrderHouseFragment : BaseFragment() {
     companion object {
 
         val FIRST_LEVEL_ALL_MESSAGE_HAVE_READ_FLAG = "first level all message have read flag"
+
+        val MY_MESSAGE_FLAG = "my_message_flag"
 
         fun newInstance(): MainOrderHouseFragment {
             return MainOrderHouseFragment()
@@ -55,6 +60,12 @@ class MainOrderHouseFragment : BaseFragment() {
                 UserInfo.getInstance().memberAddress
             } else {
                 "暂无"
+            }
+            if (it.isLogin) {
+                if (UserInfo.loginToken == MY_MESSAGE_FLAG) {
+                    updateNotifyRed(View.GONE)
+                    FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的消息", true, false, MineMessageListFragment::class.java)
+                }
             }
         }
     }
@@ -84,7 +95,8 @@ class MainOrderHouseFragment : BaseFragment() {
         orderCountBadge.badgeBackgroundColor = Color.WHITE
         orderCountBadge.badgeTextColor = ContextCompat.getColor(mContext, R.color.main_color)
         orderCountBadge.setBadgeTextSize(8.0f, true)
-        mFlMainMainOrderHouseNotifyContainer.setOnClickListener {
+        mFlMainMainOrderHouseNotifyContainer.doClickWithUserStatusStart(MY_MESSAGE_FLAG) {
+            updateNotifyRed(View.GONE)
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的消息", true, false, MineMessageListFragment::class.java)
         }
         mAlOrderHouse.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
@@ -101,6 +113,11 @@ class MainOrderHouseFragment : BaseFragment() {
 
     fun updateOrderNum(count: Int) {
         orderCountBadgeView.badgeNumber = count
+    }
+
+    fun updateNotifyRed(visibility: Int) {
+        mViewMainOrderHouseMessageNotify.visibility = visibility
+        RxBus.getDefault().post(UpdateNotifyBean(visibility))
     }
 
     class OrderHouseViewPagerAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {

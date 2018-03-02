@@ -6,7 +6,6 @@ wrjt.sdqlweb.com/interface.php/v1/login/getcode    请求方式：post  参数 :
 上传图片api:
 wrjt.sdqlweb.com/interface.php/v1/t/pictime        请求方式：post  参数 : pic 图片
 
-
 客服电话api:
 wrjt.sdqlweb.com/interface.php/v1/t/kf_tel        请求方式：post  参数 : 
 
@@ -21,9 +20,8 @@ wrjt.sdqlweb.com/interface.php/v1/t/app_update        请求方式：post  参�
 
 分享链接  http://wrjt.sdqlweb.com/index.php/home/index/share?gid=30   商品id
 
-
 规则api:
-wrjt.sdqlweb.com/interface.php/v1/member/ptgg                请求方式：post  参数 : pid  保证金缴纳介绍 1  用户注册服务协议 11 帖子发布规则 2  修理师傅简介 3 商家简介 12  用户协议 13
+wrjt.sdqlweb.com/interface.php/v1/member/ptgg         请求方式：post  参数 : pid  保证金缴纳介绍 1  用户注册服务协议 11 帖子发布规则 2  修理师傅简介 3 商家简介 12  用户协议 13
 
 
 ======== 登录 =======================================
@@ -49,8 +47,6 @@ wrjt.sdqlweb.com/interface.php/v1/login/forgetpw   请求方式：post  参数 :
 检测账号api:
 wrjt.sdqlweb.com/interface.php/v1/login/isregister 请求方式：post  参数 : tel       手机号
 
-
-
 ======== 会员中心 =====================================
 
 保证金交纳产品api:
@@ -69,7 +65,7 @@ wrjt.sdqlweb.com/interface.php/v1/member/my_withdraw         请求方式：post
 wrjt.sdqlweb.com/interface.php/v1/member/my_withdraw_operation 请求方式：post  参数 : uid,price,type, 用户ID,提现金额,提现类型 1 微信  2 支付宝
 
 我的提现 提现记录api:
-wrjt.sdqlweb.com/interface.php/v1/member/my_withdraw_record 请求方式：post  参数 : uid 用户ID
+wrjt.sdqlweb.com/interface.php/v1/member/my_withdraw_record 请求方式：post  参数 : page,pagesize,uid 第多少页,每页显示多少条,用户ID
 
 商家申请api:
 wrjt.sdqlweb.com/interface.php/v1/member/apply               请求方式：post  参数 : uid,type,name,mpic,sypic,phone,address,num,content 用户ID,申请类型 1 师傅  2  商家 ,店铺名,店铺图片,身份证营业执照,联系电话,店铺地址,师傅人数,店铺介绍
@@ -91,6 +87,12 @@ wrjt.sdqlweb.com/interface.php/v1/member/edit_personal_service  请求方式：p
 
 我的等级api:
 wrjt.sdqlweb.com/interface.php/v1/member/my_grades           请求方式：post  参数 : uid 用户ID
+
+我的消息api:
+wrjt.sdqlweb.com/interface.php/v1/member/my_msg              请求方式：post  参数 : uid 用户ID 0 系统消息  1 维修订单消息 2 商铺消息 3 购物消息 4 帖子消息
+
+我的消息详情api:
+wrjt.sdqlweb.com/interface.php/v1/member/my_msg_detail       请求方式：post  参数 : uid，token 用户ID,token 0 系统消息  1 维修订单消息 2 商铺消息 3 购物消息 4 帖子消息 
 
 我的钱包 历史收入api:
 wrjt.sdqlweb.com/interface.php/v1/member/integral            请求方式：post  参数 : page,pagesize,uid 第多少页,每页显示多少条,用户ID

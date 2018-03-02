@@ -45,6 +45,8 @@ class OrderDetailForWaitingWorkFragment : BaseNetWorkingFragment() {
         super.onRequestStart(requestID)
         if (requestID == 0x1) {
             getFastProgressDialog("正在提交……")
+        }else if (requestID == 0x0){
+            getFastProgressDialog("正在加载……")
         }
     }
 
@@ -67,7 +69,7 @@ class OrderDetailForWaitingWorkFragment : BaseNetWorkingFragment() {
                 setText(mTvOrderDetailForWaitingOrderName, orderBean?.qorder_name)
                 setText(mTvOrderDetailForWaitingOrderSN, orderBean?.qorder_sn)
                 setText(mTvOrderDetailForWaitingOrderTime, orderBean?.qorder_time)
-                setText(mTvOrderDetailForWaitingOrderAllCount, "总价：${orderBean?.qorder_price}")
+                setText(mTvOrderDetailForWaitingOrderAllCount, "总价：￥${orderBean?.qorder_price}")
                 mBtOrderDetailForWaitingWorkTakePhoto.setOnClickListener {
                     if (orderBean != null) {
                         FragmentContainerActivity

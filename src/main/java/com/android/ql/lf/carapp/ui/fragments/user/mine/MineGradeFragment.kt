@@ -1,6 +1,7 @@
 package com.android.ql.lf.carapp.ui.fragments.user.mine
 
 import android.os.Bundle
+import android.text.Html
 import android.view.View
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
@@ -48,7 +49,7 @@ class MineGradeFragment : BaseNetWorkingFragment() {
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
         super.onRequestSuccess(requestID, result)
         val check = checkResultCode(result)
-        if (check!=null && SUCCESS_CODE == check.code){
+        if (check != null && SUCCESS_CODE == check.code) {
             val json = check.obj as JSONObject
             val resultJson = json.optJSONObject("result")
             val rank = resultJson.optString("member_rank")
@@ -56,6 +57,7 @@ class MineGradeFragment : BaseNetWorkingFragment() {
             mTvMineGradeGrade.text = gradePair[rank]
             mTvMineGradeComment.text = resultJson.optString("member_grade")
             mTvMineGradeOrderNum.text = resultJson.optString("member_order_num")
+            mTvMineGradeGradeIntroduce.text = Html.fromHtml(json.optJSONObject("arr").optString("ptgg_content"))
         }
     }
 }

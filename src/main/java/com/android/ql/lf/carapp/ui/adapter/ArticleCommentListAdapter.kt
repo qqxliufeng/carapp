@@ -1,5 +1,6 @@
 package com.android.ql.lf.carapp.ui.adapter
 
+import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
 import com.android.ql.lf.carapp.R
@@ -15,8 +16,14 @@ import com.chad.library.adapter.base.BaseViewHolder
  */
 class ArticleCommentListAdapter(resId: Int, list: ArrayList<ArticleAnswerBean>) : BaseQuickAdapter<ArticleAnswerBean, BaseViewHolder>(resId, list) {
     override fun convert(helper: BaseViewHolder?, item: ArticleAnswerBean?) {
-        GlideManager.loadFaceCircleImage(mContext, item!!.member_pic, helper!!.getView(R.id.mIvAnswerInfoItemFace))
-        helper.setText(R.id.mTvAnswerInfoItemName, item.member_name)
+        if (!TextUtils.isEmpty(item!!.member_pic)) {
+            GlideManager.loadFaceCircleImage(mContext, item.member_pic, helper!!.getView(R.id.mIvAnswerInfoItemFace))
+        }
+        helper!!.setText(R.id.mTvAnswerInfoItemName, if (TextUtils.isEmpty(item.member_name)) {
+            "暂无"
+        } else {
+            item.member_name
+        })
         helper.setText(R.id.mTvAnswerInfoItemContent, item.answer_content)
         helper.setText(R.id.mTvAnswerInfoItemTime, item.answer_time)
         val mTvDelete = helper.getView<TextView>(R.id.mTvAnswerInfoItemDelete)

@@ -18,6 +18,7 @@ import com.android.ql.lf.carapp.present.GetDataFromNetPresent;
 import com.android.ql.lf.carapp.present.UserPresent;
 import com.android.ql.lf.carapp.utils.RequestParamsHelper;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,6 +26,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import cn.jpush.android.api.JPushInterface;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -155,6 +157,9 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
             JSONObject json = new JSONObject(result.toString());
             if ("200".equals(json.optString("code"))) {
                 userPresent.onLogin(json.optJSONObject("result"), json.optJSONObject("arr"));
+                JPushInterface.setDebugMode(true);
+                JPushInterface.setAlias(this, 0, UserInfo.getInstance().getMemberAlias());
+                JPushInterface.init(getApplicationContext());
                 startMain();
             } else {
                 startMain();
@@ -162,6 +167,12 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
         } catch (JSONException e) {
             startMain();
         }
+    }
+
+    @Override
+    public void onRequestFail(int requestID, @NotNull Throwable e) {
+        super.onRequestFail(requestID, e);
+        startMain();
     }
 
     private void startMain() {

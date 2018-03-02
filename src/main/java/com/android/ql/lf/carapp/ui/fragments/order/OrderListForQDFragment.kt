@@ -77,7 +77,7 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
     //接收新订单的通知
     private val newOrderMessageSubscription by lazy {
         RxBus.getDefault().toObservable(NewOrderMessageBean::class.java).subscribe {
-            if (!TextUtils.isEmpty(it.orderMessage)){
+            if (!TextUtils.isEmpty(it.orderMessage) && UserInfo.getInstance().isLogin) {
                 if (isShowing) {
                     sendNotifyOnlySound()
                     showNewOrderDialog()
@@ -101,17 +101,18 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
             val timeCount = contentView.findViewById<TextView>(R.id.mTvOrderNotifyDialogTimeCount)
             timeCount.text = "5s"
             newOrderNotifyDialog.setContentView(contentView)
-            val countDownTime = object:CountDownTimer(1000 * 5,1000){
+            val countDownTime = object : CountDownTimer(1000 * 5, 1000) {
                 override fun onFinish() {
                     newOrderNotifyDialog.dismiss()
                 }
 
                 override fun onTick(millisUntilFinished: Long) {
-                    timeCount.text = "${millisUntilFinished/1000}秒"
+                    timeCount.text = "${millisUntilFinished / 1000}秒"
                 }
             }
             countDownTime.start()
             newOrderNotifyDialog.setOnDismissListener {
+                onPostRefresh()// 刷新订单，接受新订单
                 countDownTime.cancel()
             }
             newOrderNotifyDialog.show()
@@ -135,21 +136,20 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
         builder.setContentIntent(intentPend)
         builder.setSmallIcon(R.mipmap.ic_launcher)
         builder.setDefaults(NotificationCompat.DEFAULT_SOUND)
-        builder.setTicker("你好")
-        builder.setContentText("今天天气真好")
-        builder.setContentTitle("天气")
+        builder.setTicker("新消息")
+        builder.setContentText("您有新的订单，请注意查收！")
+        builder.setContentTitle("新消息提醒")
         val manager = NotificationManagerCompat.from(mContext)
         manager.notify(0, builder.build())
     }
 
-    private fun sendNotifyOnlySound(){
+    private fun sendNotifyOnlySound() {
         val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) ?: return
         val r = RingtoneManager.getRingtone(context, notification)
         r.play()
         val vibrator = mContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         vibrator.vibrate(1000)
     }
-
 
     override fun getLayoutId() = R.layout.fragment_order_for_qd_layout
 
@@ -183,8 +183,7 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
 
     private fun onLogoutSuccess() {
         showNotify()
-        mArrayList.clear()
-        mBaseAdapter.notifyDataSetChanged()
+        super.onRefresh()
     }
 
     private fun showNotify() {
@@ -195,7 +194,6 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
             } else {
                 (parentFragment as MainOrderHouseFragment).updateAddress("暂无")
             }
-
             if (UserInfo.getInstance().isMaster) {
                 mTvOrderQDNotify.visibility = View.GONE
                 mBaseAdapter.notifyDataSetChanged()
@@ -205,15 +203,18 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
             when (UserInfo.getInstance().authenticationStatus) {
                 0 -> {
                     mTvOrderQDNotify.text = "当前帐号正在认证中……"
+                    mTvOrderQDNotify.isEnabled = false
                 }
                 2 -> {
                     mTvOrderQDNotify.text = "审核失败，请重新提交资料……"
+                    mTvOrderQDNotify.isEnabled = true
                     mTvOrderQDNotify.setOnClickListener {
                         FragmentContainerActivity.from(mContext).setTitle("申请成为师傅").setNeedNetWorking(true).setClazz(MineApplyMasterInfoSubmitFragment::class.java).start()
                     }
                 }
                 3 -> {
                     mTvOrderQDNotify.text = "当前帐号未认证，暂无法接单，请立即认证"
+                    mTvOrderQDNotify.isEnabled = true
                     mTvOrderQDNotify.setOnClickListener {
                         FragmentContainerActivity.from(mContext).setTitle("申请成为师傅").setNeedNetWorking(true).setClazz(MineApplyMasterInfoSubmitFragment::class.java).start()
                     }
@@ -221,6 +222,8 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
             }
             mBaseAdapter.notifyDataSetChanged()
         } else {
+            (parentFragment as MainOrderHouseFragment).updateAddress("暂无")
+            (parentFragment as MainOrderHouseFragment).updateOrderNum(0)
             mTvOrderQDNotify.visibility = View.VISIBLE
             mTvOrderQDNotify.text = "登录后显示订单"
             mTvOrderQDNotify.setOnClickListener {
@@ -274,6 +277,11 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
             val check = checkResultCode(result)
             if (check != null && check.code == SUCCESS_CODE) {
                 (parentFragment as MainOrderHouseFragment).updateOrderNum((check.obj as JSONObject).optInt("arr1"))
+                (parentFragment as MainOrderHouseFragment).updateNotifyRed(if (((check.obj as JSONObject).optString("arr2").toInt() > 0)) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                })
             }
             if (!mArrayList.isEmpty()) {
                 //校对时间

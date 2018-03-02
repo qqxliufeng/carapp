@@ -175,11 +175,11 @@ class RequestParamsHelper {
         val ACT_PERSONAL = "personal"
         fun getPersonalParam(uid: String) = getBaseParams().addParam("uid", uid)
 
-        val ACT_ABOUT = "about"
-        fun getAboutUs() = getBaseParams()
+        val ACT_MY_MSG = "my_msg"
+        fun getMyMsgParam() = getWithIdParams()
 
-        val ACT_HELP = "help"
-        fun getHelp() = getBaseParams()
+        val ACT_MY_MSG_DETAIL = "my_msg_detail"
+        fun getMyMsgDetailParam(status:String,page: Int) = getWithPageParams(page).addParam("status",status)
 
         /**              member model  end           **/
 
@@ -287,5 +287,11 @@ class RequestParamsHelper {
 
 
         /**              order model end        **/
+
+        /**              web url                **/
+        val ACT_ABOUT_URL = "${Constants.BASE_IP}view/about.html"
+        val ACT_HELP_URL = "${Constants.BASE_IP}view/help.html"
+        val ACT_PROTOCOL_URL = "${Constants.BASE_IP}view/t_rules.html?pid=13"
+
     }
 }

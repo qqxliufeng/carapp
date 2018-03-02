@@ -2,6 +2,7 @@ package com.android.ql.lf.carapp.ui.fragments.user
 
 import android.support.v7.app.AlertDialog
 import android.view.View
+import com.a.WebViewContentFragment
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.present.UserPresent
@@ -63,34 +64,25 @@ class SettingFragment : BaseNetWorkingFragment() {
         }
         mTvSettingAboutUs.setOnClickListener {
             FragmentContainerActivity.from(mContext)
-                    .setClazz(DetailContentFragment::class.java)
+                    .setClazz(WebViewContentFragment::class.java)
                     .setTitle(mTvSettingAboutUs.text.toString())
-                    .setExtraBundle(bundleOf(
-                            Pair(DetailContentFragment.MODEL_NAME_FLAG,RequestParamsHelper.MEMBER_MODEL),
-                            Pair(DetailContentFragment.ACT_NAME_FLAG,RequestParamsHelper.ACT_ABOUT),
-                            Pair(DetailContentFragment.PARAM_FLAG, RequestParamsHelper.getAboutUs())))
+                    .setExtraBundle(bundleOf(Pair(WebViewContentFragment.PATH_FLAG,RequestParamsHelper.ACT_ABOUT_URL)))
                     .setNeedNetWorking(true)
                     .start()
         }
         mTvSettingHelp.setOnClickListener {
             FragmentContainerActivity.from(mContext)
-                    .setClazz(DetailContentFragment::class.java)
+                    .setClazz(WebViewContentFragment::class.java)
                     .setTitle(mTvSettingHelp.text.toString())
-                    .setExtraBundle(bundleOf(
-                            Pair(DetailContentFragment.MODEL_NAME_FLAG,RequestParamsHelper.MEMBER_MODEL),
-                            Pair(DetailContentFragment.ACT_NAME_FLAG,RequestParamsHelper.ACT_HELP),
-                            Pair(DetailContentFragment.PARAM_FLAG, RequestParamsHelper.getHelp())))
+                    .setExtraBundle(bundleOf(Pair(WebViewContentFragment.PATH_FLAG,RequestParamsHelper.ACT_HELP_URL)))
                     .setNeedNetWorking(true)
                     .start()
         }
         mTvSettingProtocol.setOnClickListener {
             FragmentContainerActivity.from(mContext)
-                    .setClazz(DetailContentFragment::class.java)
-                    .setTitle(mTvSettingHelp.text.toString())
-                    .setExtraBundle(bundleOf(
-                            Pair(DetailContentFragment.MODEL_NAME_FLAG,RequestParamsHelper.MEMBER_MODEL),
-                            Pair(DetailContentFragment.ACT_NAME_FLAG,RequestParamsHelper.ACT_PTGG),
-                            Pair(DetailContentFragment.PARAM_FLAG, mapOf(Pair("pid","13")))))
+                    .setClazz(WebViewContentFragment::class.java)
+                    .setTitle(mTvSettingProtocol.text.toString())
+                    .setExtraBundle(bundleOf(Pair(WebViewContentFragment.PATH_FLAG,RequestParamsHelper.ACT_PROTOCOL_URL)))
                     .setNeedNetWorking(true)
                     .start()
         }

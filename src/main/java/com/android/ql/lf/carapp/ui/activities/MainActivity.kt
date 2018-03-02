@@ -29,12 +29,13 @@ class MainActivity : BaseActivity() {
     override fun getLayoutId() = R.layout.activity_main_layout
 
     override fun initView() {
-        Beta.checkUpgrade(false,false)
+        Beta.checkUpgrade(false, false)
         setSwipeBackEnable(false)
         BottomNavigationViewHelper.disableShiftMode(mMainNavigation)
         mMainNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         mMainContent.adapter = MainViewPagerAdapter(supportFragmentManager)
         mMainContent.offscreenPageLimit = 3
+        PreferenceUtils.setPrefBoolean(this, Constants.APP_IS_ALIVE, true)
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -61,7 +62,7 @@ class MainActivity : BaseActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        mMainContent.currentItem = 0
+        mMainNavigation.selectedItemId = R.id.navigation_home
     }
 
     override fun onBackPressed() {

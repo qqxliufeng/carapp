@@ -132,7 +132,6 @@
             android:background="#fff"
             android:lineSpacingExtra="5dp"
             android:padding="@dimen/dp_10"
-            android:text="等级介绍等级介绍等级介绍等级介绍等级介绍等级介绍等级介绍等级介绍等级介绍等级介绍等级介绍等级介绍等级介绍等级介绍等级介绍等级介绍等级介绍等级介绍"
             android:textColor="@color/text_dark_color"
             android:textSize="@dimen/sp_14" />
     </LinearLayout>

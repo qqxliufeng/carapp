@@ -41,6 +41,8 @@ class OrderDetailForHavingWorkFragment : BaseNetWorkingFragment() {
         super.onRequestStart(requestID)
         if (requestID == 0x1) {
             getFastProgressDialog("正在提交……")
+        }else if (requestID == 0x0){
+            getFastProgressDialog("正在加载……")
         }
     }
 

@@ -66,6 +66,9 @@ class ThirdLoginCompleteInfoFragment : BaseNetWorkingFragment() {
                     RequestParamsHelper.ACT_CODE,
                     RequestParamsHelper.getCodeParams(mEtCompleteName.text.toString()))
         }
+        mIvCompleteName.setOnClickListener {
+            mEtCompleteName.setText("")
+        }
         mBtCompleteLogin.setOnClickListener {
             if (mEtCompleteName.isEmpty()) {
                 mEtCompleteName.showSnackBar("手机号不能为空")
@@ -86,7 +89,7 @@ class ThirdLoginCompleteInfoFragment : BaseNetWorkingFragment() {
                         RequestParamsHelper.getQQloginParam(mEtCompleteName.getTextString(),
                                 (info as ThirdLoginManager.QQLoginInfoBean).openid,
                                 (info as ThirdLoginManager.QQLoginInfoBean).access_token))
-            }else if (info is ThirdLoginManager.WXUserInfo){
+            } else if (info is ThirdLoginManager.WXUserInfo) {
                 mPresent.getDataByPost(0x1,
                         RequestParamsHelper.LOGIN_MODEL,
                         RequestParamsHelper.ACT_WX_PERFECT,
@@ -120,7 +123,7 @@ class ThirdLoginCompleteInfoFragment : BaseNetWorkingFragment() {
                 if (check.code != SUCCESS_CODE) {
                     toast((check.obj as JSONObject).optString("msg"))
                 } else {
-                    userPresent.onLogin((check.obj as JSONObject).optJSONObject("result"),(check.obj as JSONObject).optJSONObject("arr"))
+                    userPresent.onLogin((check.obj as JSONObject).optJSONObject("result"), (check.obj as JSONObject).optJSONObject("arr"))
                     finish()
                 }
             }
