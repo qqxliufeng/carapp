@@ -91,11 +91,8 @@ wrjt.sdqlweb.com/interface.php/v1/member/my_grades           请求方式：post
 我的消息api:
 wrjt.sdqlweb.com/interface.php/v1/member/my_msg              请求方式：post  参数 : uid 用户ID 0 系统消息  1 维修订单消息 2 商铺消息 3 购物消息 4 帖子消息
 
-修改消息阅读状态api:
-wrjt.sdqlweb.com/interface.php/v1/member/edit_mymsg_status   请求方式：post  参数 : mid 消息ID
-
 我的消息详情api:
-wrjt.sdqlweb.com/interface.php/v1/member/my_msg_detail       请求方式：post  参数 : uid，status,page,pagesize 用户ID,status 0 系统消息  1 维修订单消息 2 商铺消息 3 购物消息 4 帖子消息 
+wrjt.sdqlweb.com/interface.php/v1/member/my_msg_detail       请求方式：post  参数 : uid，token 用户ID,token 0 系统消息  1 维修订单消息 2 商铺消息 3 购物消息 4 帖子消息 
 
 我的钱包 历史收入api:
 wrjt.sdqlweb.com/interface.php/v1/member/integral            请求方式：post  参数 : page,pagesize,uid 第多少页,每页显示多少条,用户ID
@@ -103,104 +100,7 @@ wrjt.sdqlweb.com/interface.php/v1/member/integral            请求方式：post
 我的钱包 绑定提现账户api:
 wrjt.sdqlweb.com/interface.php/v1/member/bind_account        请求方式：post  参数 : uid 用户ID
 
-我的钱包 绑定支付宝提
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-现账户api:
+我的钱包 绑定支付宝提现账户api:
 wrjt.sdqlweb.com/interface.php/v1/member/bind_alipay         请求方式：post  参数 : uid,account,autonym 用户ID,支付宝账号,用户真实姓名
 
 我的钱包 绑定微信提现账户api:

@@ -30,7 +30,7 @@ class OrderListForMineForWaitingCalculateFragment : AbstractLazyLoadFragment<Ord
     private val updateOrderStatusSubscription by lazy {
         RxBus.getDefault().toObservable(EventOrderStatusBean::class.java).subscribe {
             if (it.orderStatus == ServiceOrderPresent.OrderStatus.WAITING_CALCULATE.index.toInt()) {
-                loadData()
+                onPostRefresh()
             }
         }
     }

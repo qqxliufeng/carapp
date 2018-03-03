@@ -23,6 +23,7 @@ class OrderListForMineForWaitingWorkAdapter(layoutId: Int, list: ArrayList<Order
         helper.setText(R.id.mTvOrderListForItemName, item.qorder_name)
         helper.setText(R.id.mTvOrderListForItemProjectTime, item.qorder_time)
         helper.setText(R.id.mTvOrderListForItemStatus, ServiceOrderPresent.OrderStatus.getDescriptionByIndex(item.qorder_token))
+        helper.setText(R.id.mTvOrderListForItemProjectPrice, "￥${item.qorder_price}")
         helper.addOnClickListener(R.id.mBtOrderListForWaitingWorkCamera)
         helper.addOnClickListener(R.id.mBtOrderListForWaitingWorkComplete)
         helper.addOnClickListener(R.id.mTvOrderListForItemName)

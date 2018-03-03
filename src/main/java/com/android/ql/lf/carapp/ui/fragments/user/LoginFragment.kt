@@ -93,8 +93,6 @@ class LoginFragment : BaseNetWorkingFragment(), IUiListener {
             iwxApi = WXAPIFactory.createWXAPI(mContext, Constants.WX_APP_ID, true)
             ThirdLoginManager.wxLogin(iwxApi)
         }
-        mEtLoginName.setText("15910101117")
-        mEtLoginPassword.setText("123456")
         mBtLogin.setOnClickListener {
             if (mEtLoginName.isEmpty()) {
                 mEtLoginName.showSnackBar("手机号不能为空")

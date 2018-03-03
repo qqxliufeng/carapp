@@ -33,7 +33,7 @@ class OrderListForMineForHavingWorkFragment : AbstractLazyLoadFragment<OrderBean
     private val updateOrderStatusSubscription by lazy {
         RxBus.getDefault().toObservable(EventOrderStatusBean::class.java).subscribe {
             if (it.orderStatus == ServiceOrderPresent.OrderStatus.HAVING_WORK.index.toInt()) {
-                loadData()
+                onPostRefresh()
             }
         }
     }

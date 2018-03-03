@@ -19,8 +19,6 @@ class SystemMessageListFragment : BaseRecyclerViewFragment<SystemMessageListFrag
         val MESSAGE_TYPE_FLAG = "message_type_flag"
     }
 
-    private var currentItemIndex: Int = 0
-
     override fun createAdapter(): BaseQuickAdapter<SystemMessageItem, BaseViewHolder> =
             SystemMessageListAdapter(R.layout.adapter_system_message_list_item_layout, mArrayList)
 
@@ -38,20 +36,12 @@ class SystemMessageListFragment : BaseRecyclerViewFragment<SystemMessageListFrag
 
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
         super.onRequestSuccess(requestID, result)
-        if (requestID == 0x0) {
-            processList(result as String, SystemMessageItem::class.java)
-            if (!mArrayList.isEmpty()) {
-                mArrayList.forEach {
-                    it.isRead = it.message_status == "1"
-                }
-                mBaseAdapter.notifyDataSetChanged()
+        processList(result as String, SystemMessageItem::class.java)
+        if (!mArrayList.isEmpty()) {
+            mArrayList.forEach {
+                it.isRead = it.message_status != "0"
             }
-        } else if (requestID == 0x1) {
-            val check = checkResultCode(result)
-            if (check != null && check.code == SUCCESS_CODE) {
-                mArrayList[currentItemIndex].isRead = true
-                mBaseAdapter.notifyItemChanged(currentItemIndex)
-            }
+            mBaseAdapter.notifyDataSetChanged()
         }
     }
 
@@ -59,8 +49,13 @@ class SystemMessageListFragment : BaseRecyclerViewFragment<SystemMessageListFrag
     override fun onMyItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
         super.onMyItemClick(adapter, view, position)
         val item = mArrayList[position]
-        currentItemIndex = position
-        mPresent.getDataByPost(0x1, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_EDIT_MYMSG_STATUS, RequestParamsHelper.getEditMyMsgStatus(item.message_id!!))
+        if (!item.isRead) {
+            item.isRead = true
+            mBaseAdapter.notifyItemChanged(position)
+        }
+        if (mArrayList.none { !it.isRead }) {
+            RxBus.getDefault().post(MineMessageListFragment.SECOND_LEVEL_ALL_MESSAGE_HAVE_RED_FLAG)
+        }
     }
 
     class SystemMessageItem {

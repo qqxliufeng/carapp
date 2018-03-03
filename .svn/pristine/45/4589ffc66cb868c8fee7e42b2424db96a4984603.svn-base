@@ -1,7 +1,5 @@
 package com.android.ql.lf.carapp.ui.fragments.order
 
-import android.support.v4.content.ContextCompat
-import android.text.Html
 import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
@@ -66,7 +64,7 @@ class OrderDetailForWaitingWorkFragment : BaseNetWorkingFragment() {
                 setText(mTvOrderDetailForWaitingStatus, ServiceOrderPresent.OrderStatus.getDescriptionByIndex(orderBean?.qorder_token))
                 setText(mTvOrderDetailForWaitingPhone, "手机号码：${orderBean?.qorder_phone}")
                 setText(mTvOrderDetailForWaitingYTime, orderBean?.qorder_ytime)
-                mTvOrderDetailForWaitingContent.text = Html.fromHtml("<font color='${ContextCompat.getColor(mContext, R.color.colorPrimary)}'>备注：</font>${orderBean?.qorder_content}")
+                setText(mTvOrderDetailForWaitingContent, "备注：${orderBean?.qorder_content}")
                 setText(mTvOrderDetailForWaitingWorkPrice, "￥${orderBean?.qorder_price}")
                 setText(mTvOrderDetailForWaitingOrderName, orderBean?.qorder_name)
                 setText(mTvOrderDetailForWaitingOrderSN, orderBean?.qorder_sn)

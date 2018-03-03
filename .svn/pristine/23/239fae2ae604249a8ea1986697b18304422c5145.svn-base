@@ -179,10 +179,7 @@ class RequestParamsHelper {
         fun getMyMsgParam() = getWithIdParams()
 
         val ACT_MY_MSG_DETAIL = "my_msg_detail"
-        fun getMyMsgDetailParam(status: String, page: Int) = getWithPageParams(page).addParam("status", status)
-
-        val ACT_EDIT_MYMSG_STATUS = "edit_mymsg_status"
-        fun getEditMyMsgStatus(mid: String) = getWithIdParams().addParam("mid", mid)
+        fun getMyMsgDetailParam(status:String,page: Int) = getWithPageParams(page).addParam("status",status)
 
         /**              member model  end           **/
 
