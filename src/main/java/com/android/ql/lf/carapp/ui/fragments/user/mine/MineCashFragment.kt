@@ -1,6 +1,7 @@
 package com.android.ql.lf.carapp.ui.fragments.user.mine
 
-import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v4.widget.SwipeRefreshLayout
 import android.text.TextUtils
 import android.view.View
 import com.android.ql.lf.carapp.R
@@ -16,7 +17,7 @@ import org.json.JSONObject
  * Created by lf on 18.2.3.
  * @author lf on 18.2.3
  */
-class MineCashFragment : BaseNetWorkingFragment() {
+class MineCashFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private var allMoney = 0.0
     private var cashType = 0
@@ -24,6 +25,10 @@ class MineCashFragment : BaseNetWorkingFragment() {
     override fun getLayoutId() = R.layout.fragment_mine_cash_fragment
 
     override fun initView(view: View?) {
+        mSrlMineCashContainer.setColorSchemeColors(ContextCompat.getColor(mContext, android.R.color.holo_blue_dark),
+                ContextCompat.getColor(mContext, android.R.color.holo_green_dark),
+                ContextCompat.getColor(mContext, android.R.color.holo_orange_dark))
+        mSrlMineCashContainer.setOnRefreshListener(this)
         mLlMineCashListContainer.setOnClickListener {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "提现列表", MineCashListFragment::class.java)
         }
@@ -59,20 +64,28 @@ class MineCashFragment : BaseNetWorkingFragment() {
                 toast("请输入正确的提现金额！")
             }
         }
+        mSrlMineCashContainer.post({
+            mSrlMineCashContainer.isRefreshing = true
+            onRefresh()
+        })
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onRefresh() {
         mPresent.getDataByPost(0x0, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_MY_WITHDRAW, RequestParamsHelper.getMyWithdrawParam())
     }
 
     override fun onRequestStart(requestID: Int) {
         super.onRequestStart(requestID)
-        if (requestID == 0x0) {
-            getFastProgressDialog("正在加载数据……")
-        } else if (requestID == 0x1) {
+        if (requestID == 0x1) {
             getFastProgressDialog("正在提交……")
         }
+    }
+
+    override fun onRequestEnd(requestID: Int) {
+        super.onRequestEnd(requestID)
+        mSrlMineCashContainer.post({
+            mSrlMineCashContainer.isRefreshing = false
+        })
     }
 
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
@@ -84,6 +97,7 @@ class MineCashFragment : BaseNetWorkingFragment() {
                 val allMoney = resultJson.optString("member_withdrawal")
                 this.allMoney = allMoney.toDouble()
                 mTvMineCashAllMoney.text = allMoney
+                mEtMineCashMoney.setText("")
                 mBtMineCashMoneySubmit.isEnabled = !TextUtils.isEmpty(allMoney) && allMoney.toDouble() > 0.0
                 mEtMineCashMoney.isEnabled = mBtMineCashMoneySubmit.isEnabled
                 mTvMineCashAlreadyCashMoney.text = resultJson.optString("member_already_price")
@@ -92,6 +106,7 @@ class MineCashFragment : BaseNetWorkingFragment() {
             val check = checkResultCode(result)
             if (check != null && check.code == SUCCESS_CODE) {
                 toast("提现成功！")
+                mPresent.getDataByPost(0x0, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_MY_WITHDRAW, RequestParamsHelper.getMyWithdrawParam())
             } else {
                 toast((check.obj as JSONObject).optString("msg"))
             }

@@ -79,7 +79,7 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
         RxBus.getDefault().toObservable(NewOrderMessageBean::class.java).subscribe {
             if (!TextUtils.isEmpty(it.orderMessage) && UserInfo.getInstance().isLogin) {
                 if (isShowing) {
-                    sendNotifyOnlySound()
+//                    sendNotifyOnlySound()
                     showNewOrderDialog()
                 } else {
                     showNewOrderDialog()
@@ -129,18 +129,20 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
     }
 
     private fun sendNotify() {
-        val builder = NotificationCompat.Builder(mContext)
-        builder.setAutoCancel(true)
         val forIntent = Intent(context, MainActivity::class.java)
-        val intentPend = PendingIntent.getActivity(context, 0, forIntent, PendingIntent.FLAG_CANCEL_CURRENT)
-        builder.setContentIntent(intentPend)
-        builder.setSmallIcon(R.mipmap.ic_launcher)
-        builder.setDefaults(NotificationCompat.DEFAULT_SOUND)
-        builder.setTicker("新消息")
-        builder.setContentText("您有新的订单，请注意查收！")
-        builder.setContentTitle("新消息提醒")
-        val manager = NotificationManagerCompat.from(mContext)
-        manager.notify(0, builder.build())
+        startActivity(forIntent)
+//        val builder = NotificationCompat.Builder(mContext)
+//        builder.setAutoCancel(true)
+//        val forIntent = Intent(context, MainActivity::class.java)
+//        val intentPend = PendingIntent.getActivity(context, 0, forIntent, PendingIntent.FLAG_CANCEL_CURRENT)
+//        builder.setContentIntent(intentPend)
+//        builder.setSmallIcon(R.mipmap.ic_launcher)
+//        builder.setDefaults(NotificationCompat.DEFAULT_SOUND)
+//        builder.setTicker("新消息")
+//        builder.setContentText("您有新的订单，请注意查收！")
+//        builder.setContentTitle("新消息提醒")
+//        val manager = NotificationManagerCompat.from(mContext)
+//        manager.notify(0, builder.build())
     }
 
     private fun sendNotifyOnlySound() {

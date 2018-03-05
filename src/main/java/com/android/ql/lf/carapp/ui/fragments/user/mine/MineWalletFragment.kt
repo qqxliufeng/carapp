@@ -89,7 +89,7 @@ class MineWalletFragment : BaseRecyclerViewFragment<MineWalletFragment.HistoryWa
         override fun convert(helper: BaseViewHolder?, item: HistoryWalletBean?) {
             helper!!.setText(R.id.mTvWalletHistoryItemTitle, item!!.integral_title)
             helper.setText(R.id.mTvWalletHistoryItemTime, item.integral_time)
-            helper.setText(R.id.mTvWalletHistoryItemCount, item.integral_price)
+            helper.setText(R.id.mTvWalletHistoryItemCount, "￥${item.integral_price}")
         }
     }
 

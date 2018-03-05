@@ -61,13 +61,13 @@ class MinePersonalServiceEditFragment : BaseNetWorkingFragment() {
                     rv_content.layoutManager = LinearLayoutManager(mContext)
                     rv_content.adapter = object : BaseQuickAdapter<WorkRangeBean, BaseViewHolder>(android.R.layout.simple_list_item_1, workRangeList) {
                         override fun convert(helper: BaseViewHolder?, item: WorkRangeBean?) {
-                            helper!!.setText(android.R.id.text1, item!!.main_tag_title)
+                            helper!!.setText(android.R.id.text1, item!!.tag_title)
                         }
                     }
                     rv_content.addOnItemTouchListener(object : OnItemClickListener() {
                         override fun onSimpleItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
                             currentWorkRange = workRangeList[position]
-                            mTvServiceEditWorkRange.text = currentWorkRange!!.main_tag_title
+                            mTvServiceEditWorkRange.text = currentWorkRange!!.tag_title
                             bottomDialog!!.dismiss()
                         }
                     })
@@ -223,9 +223,9 @@ class MinePersonalServiceEditFragment : BaseNetWorkingFragment() {
     }
 
     class WorkRangeBean {
-        var main_tag_title: String? = null
-        var main_tag_id: String? = null
-        var main_tag_sort: String? = null
+        var tag_title: String? = null
+        var tag_id: String? = null
+        var tag_sort: String? = null
     }
 
 }

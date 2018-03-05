@@ -1,5 +1,6 @@
 package com.android.ql.lf.carapp.ui.fragments.user.mine
 
+import android.graphics.Color
 import android.widget.TextView
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
@@ -38,23 +39,29 @@ class MineCashListFragment : BaseRecyclerViewFragment<MineCashListFragment.CashL
             val tv_count = helper.getView<TextView>(R.id.mTvCashItemCount)
             val tv_result = helper.getView<TextView>(R.id.mTvCashItemResult)
             tv_time.text = item!!.withdraw_record_time
-            tv_count.text = item.withdraw_record_price
+            tv_count.text = "￥${item.withdraw_record_price}"
             tv_result.text = when (item.withdraw_record_status) {
                 "0" -> {
-                    "已完成"
-                }
-                else -> {
+                    tv_time.setTextColor(mContext.resources.getColor(R.color.text_deep_dark_color))
+                    tv_count.setTextColor(mContext.resources.getColor(R.color.text_deep_dark_color))
+                    tv_result.setTextColor(mContext.resources.getColor(R.color.colorPrimary))
                     "处理中"
                 }
-            }
-            if (item.withdraw_record_status != "0") {
-                tv_time.setTextColor(mContext.resources.getColor(R.color.text_deep_dark_color))
-                tv_count.setTextColor(mContext.resources.getColor(R.color.text_deep_dark_color))
-                tv_result.setTextColor(mContext.resources.getColor(R.color.colorPrimary))
-            } else {
-                tv_time.setTextColor(mContext.resources.getColor(R.color.text_dark_color))
-                tv_count.setTextColor(mContext.resources.getColor(R.color.text_dark_color))
-                tv_result.setTextColor(mContext.resources.getColor(R.color.text_dark_color))
+                "1" -> {
+                    tv_time.setTextColor(mContext.resources.getColor(R.color.text_dark_color))
+                    tv_count.setTextColor(mContext.resources.getColor(R.color.text_dark_color))
+                    tv_result.setTextColor(mContext.resources.getColor(R.color.text_dark_color))
+                    "已完成"
+                }
+                "2" -> {
+                    tv_time.setTextColor(mContext.resources.getColor(R.color.text_dark_color))
+                    tv_count.setTextColor(mContext.resources.getColor(R.color.text_dark_color))
+                    tv_result.setTextColor(Color.RED)
+                    "已驳回"
+                }
+                else->{
+                    "其它"
+                }
             }
         }
     }
