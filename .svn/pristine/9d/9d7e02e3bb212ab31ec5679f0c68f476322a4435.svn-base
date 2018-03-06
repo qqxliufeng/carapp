@@ -7,27 +7,13 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-
-   <!-- &lt;!&ndash;用于进行网络定位&ndash;&gt;
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    &lt;!&ndash;用于访问GPS定位&ndash;&gt;
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    &lt;!&ndash;用于获取运营商信息，用于支持提供运营商信息相关的接口&ndash;&gt;
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    &lt;!&ndash;用于访问wifi网络信息，wifi信息会用于进行网络定位&ndash;&gt;
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    &lt;!&ndash;用于获取wifi的获取权限，wifi信息会用来进行网络定位&ndash;&gt;
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-    &lt;!&ndash;用于申请调用A-GPS模块&ndash;&gt;
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
-    &lt;!&ndash;用于申请获取蓝牙信息进行室内定位&ndash;&gt;
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>-->
 
 
 
@@ -39,11 +25,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="icon,label,theme">
-
-        <!--<meta-data
-            android:name="com.amap.api.v2.apikey"
-            android:value="b776903c1dbf4a486c508d5ac4226c3a"/>-->
-
         <activity android:name=".ui.activities.MainActivity"
             android:launchMode="singleTask"/>
 

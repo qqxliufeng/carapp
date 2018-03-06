@@ -36,6 +36,13 @@ android {
             keyPassword 'jnqlcar'
             storeFile file('jnql_car.jks')
             storePassword 'jnqlcar'
+//            证书指纹:
+//            MD5:  4B:AC:BA:29:D6:DF:DA:9B:95:09:D3:E2:BC:20:F8:2A
+//            SHA1: F1:93:63:54:DC:AA:8C:60:B6:E7:6D:61:82:0D:78:DB:93:A4:64:00
+//            SHA256: 15:D0:1B:44:F6:AE:12:17:20:75:DC:68:5A:D5:B2:D8:88:2C:CE:59:0D:AB:9C:99:4D:CF:81:24:9F:30:F9:92
+//            签名算法名称: SHA256withRSA
+//            主体公共密钥算法: 2048 位 RSA 密钥
+//            版本: 3
         }
     }
 
@@ -105,4 +112,5 @@ dependencies {
     implementation 'cn.jiguang.sdk:jcore:1.1.9'
     // 此处以JCore 1.1.9 版本为例。
     implementation files('libs/alipaySdk-20170922.jar')
+    implementation  'com.amap.api:location:latest.integration'
 }
