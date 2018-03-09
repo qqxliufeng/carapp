@@ -1,5 +1,8 @@
 package com.android.ql.lf.carapp.ui.fragments.community
 
+import android.support.v4.content.ContextCompat
+import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.ArticleBean
@@ -53,6 +56,12 @@ class ArticleListFragment : BaseRecyclerViewFragment<ArticleBean>() {
     }
 
     override fun getEmptyMessage() = "暂无帖子"
+
+    override fun getItemDecoration(): RecyclerView.ItemDecoration {
+        val itemDecoration = super.getItemDecoration() as DividerItemDecoration
+        itemDecoration.setDrawable(ContextCompat.getDrawable(mContext, R.drawable.recycler_view_height_divider))
+        return itemDecoration
+    }
 
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
         super.onRequestSuccess(requestID, result)

@@ -106,7 +106,6 @@
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@android:style/Theme.NoDisplay" />
-        <activity android:name=".ui.activities.SelectAddressActivity" />
 
         <!--                                   极光推送自定义消息                                    -->
         <receiver

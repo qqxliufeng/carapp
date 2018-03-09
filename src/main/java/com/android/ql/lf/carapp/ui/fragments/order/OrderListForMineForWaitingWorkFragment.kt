@@ -75,7 +75,7 @@ class OrderListForMineForWaitingWorkFragment : AbstractLazyLoadFragment<OrderBea
 
     override fun onLoginSuccess(userInfo: UserInfo?) {
         super.onLoginSuccess(userInfo)
-        loadData()
+        onPostRefresh()
     }
 
     override fun onRequestStart(requestID: Int) {
@@ -136,10 +136,10 @@ class OrderListForMineForWaitingWorkFragment : AbstractLazyLoadFragment<OrderBea
                         .start()
             }
             R.id.mBtOrderListForWaitingWorkComplete -> {
-                mPresent.getDataByPost(0x1,
-                        RequestParamsHelper.ORDER_MODEL,
-                        RequestParamsHelper.ACT_EDIT_QORDER_STATUS,
-                        RequestParamsHelper.getEditQorderStatusParam(mArrayList[position].qorder_id, ServiceOrderPresent.OrderStatus.WAITING_CONFIRM.index))
+//                mPresent.getDataByPost(0x1,
+//                        RequestParamsHelper.ORDER_MODEL,
+//                        RequestParamsHelper.ACT_EDIT_QORDER_STATUS,
+//                        RequestParamsHelper.getEditQorderStatusParam(mArrayList[position].qorder_id, ServiceOrderPresent.OrderStatus.WAITING_CONFIRM.index))
             }
             R.id.mTvOrderListForItemName -> {
                 startPhone(mArrayList[position].qorder_phone)

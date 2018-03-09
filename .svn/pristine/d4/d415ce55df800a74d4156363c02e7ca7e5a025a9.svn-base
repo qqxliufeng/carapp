@@ -16,12 +16,10 @@ import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.activities.MainActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseFragment
 import com.android.ql.lf.carapp.ui.fragments.message.MineMessageListFragment
-import com.android.ql.lf.carapp.ui.fragments.order.OrderAllListQDFragment
 import com.android.ql.lf.carapp.ui.fragments.order.OrderListForAfterSaleFragment
 import com.android.ql.lf.carapp.ui.fragments.order.OrderListForMineFragment
 import com.android.ql.lf.carapp.ui.fragments.order.OrderListForQDFragment
 import com.android.ql.lf.carapp.utils.RxBus
-import com.android.ql.lf.carapp.utils.doClickWithUseStatusEnd
 import com.android.ql.lf.carapp.utils.doClickWithUserStatusStart
 import kotlinx.android.synthetic.main.fragment_main_order_house_layout.*
 import q.rorbin.badgeview.QBadgeView
@@ -35,7 +33,6 @@ class MainOrderHouseFragment : BaseFragment() {
     companion object {
 
         val FIRST_LEVEL_ALL_MESSAGE_HAVE_READ_FLAG = "first level all message have read flag"
-        val MY_ALL_ORDER_LIST_FLAG = "MY_ALL_ORDER_LIST_FLAG"
 
         val MY_MESSAGE_FLAG = "my_message_flag"
 
@@ -66,10 +63,8 @@ class MainOrderHouseFragment : BaseFragment() {
             }
             if (it.isLogin) {
                 if (UserInfo.loginToken == MY_MESSAGE_FLAG) {
-                    mFlMainMainOrderHouseNotifyContainer.doClickWithUseStatusEnd()
                     updateNotifyRed(View.GONE)
-                }else if (UserInfo.loginToken == MY_ALL_ORDER_LIST_FLAG){
-                    mIvMainOrderHouseCount.doClickWithUseStatusEnd()
+                    FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的消息", true, false, MineMessageListFragment::class.java)
                 }
             }
         }
@@ -104,8 +99,8 @@ class MainOrderHouseFragment : BaseFragment() {
             updateNotifyRed(View.GONE)
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的消息", true, false, MineMessageListFragment::class.java)
         }
-        mIvMainOrderHouseCount.doClickWithUserStatusStart(MY_ALL_ORDER_LIST_FLAG) {
-            FragmentContainerActivity.from(mContext).setNeedNetWorking(true).setClazz(OrderAllListQDFragment::class.java).setTitle("抢单列表").start()
+        mIvMainOrderHouseCount.setOnClickListener {
+            FragmentContainerActivity.from(mContext).setNeedNetWorking(true).setClazz(OrderListForQDFragment::class.java).setTitle("抢单列表").start()
         }
         mAlOrderHouse.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             mTlOrderHouseTitleContainer.alpha = 1 - Math.abs(verticalOffset).toFloat() / appBarLayout.totalScrollRange.toFloat()

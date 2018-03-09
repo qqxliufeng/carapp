@@ -114,7 +114,7 @@ class RequestParamsHelper {
         fun getPersonalServiceParam() = getWithIdParams()
 
         val ACT_APPLY = "apply"
-        fun getApplyParam(type: String, name: String, mpic: ArrayList<String>, sypic: ArrayList<String>, phone: String, address: String, num: String, content: String): ApiParams {
+        fun getApplyParam(type: String, name: String, mpic: ArrayList<String>, sypic: ArrayList<String>, phone: String, address: String, detailAddress:String,num: String, content: String): ApiParams {
             val param = getWithIdParams()
             param.addParam("type", type)
             param.addParam("name", name)
@@ -122,6 +122,7 @@ class RequestParamsHelper {
             param.addParam("sypic", sypic.toString().removePrefix("[").removeSuffix("]"))
             param.addParam("phone", phone)
             param.addParam("address", address)
+            param.addParam("detail_address", detailAddress)
             param.addParam("num", num)
             param.addParam("content", content)
             return param
@@ -149,10 +150,11 @@ class RequestParamsHelper {
         fun getEnsureMoneyProductParam() = getWithIdParams()
 
         val ACT_EDIT_PERSONAL_SERVICE = "edit_personal_service"
-        fun getEditePersonalServiceParam(sid: String, address: String, ppa: String, starttime: String, endtime: String, content: String): ApiParams {
+        fun getEditePersonalServiceParam(sid: String, address: String,detailAddress: String, ppa: String, starttime: String, endtime: String, content: String): ApiParams {
             val param = getWithIdParams()
             param.addParam("sid", sid)
             param.addParam("address", address)
+            param.addParam("detail_address", detailAddress)
             param.addParam("ppa", ppa)
             param.addParam("starttime", starttime)
             param.addParam("endtime", endtime)
@@ -277,7 +279,11 @@ class RequestParamsHelper {
         val ACT_PLAY_PIC = "play_pic"
 
         val ACT_EDIT_QORDER_STATUS = "edit_qorder_status"
-        fun getEditQorderStatusParam(oid: String, status: String) = getWithIdParams().addParam("oid", oid).addParam("status", status)
+        fun getEditQorderStatusParam(oid: String, status: String,code: String) =
+                getWithIdParams()
+                        .addParam("oid", oid)
+                        .addParam("status", status)
+                        .addParam("code",code)
 
         val ACT_QORDER_DETAIL = "qorder_detail"
         fun getOrderDetailParam(oid: String) = getWithIdParams().addParam("oid", oid)
@@ -295,6 +301,28 @@ class RequestParamsHelper {
         val ACT_ABOUT_URL = "${Constants.BASE_IP}view/about.html"
         val ACT_HELP_URL = "${Constants.BASE_IP}view/help.html"
         val ACT_PROTOCOL_URL = "${Constants.BASE_IP}view/t_rules.html?pid=13"
+
+
+
+        val ACT_PROVINCE = "province"
+        val ACT_CITY = "city"
+        val ACT_PROVINCE_CITY_AREA = "province_city_area"
+
+        fun getDefaultAddress() = getWithIdParams()
+
+        fun getProvinceParam() = getBaseParams()
+
+        fun getCityParam(pid: String): ApiParams {
+            val param = getBaseParams()
+            param.addParam("pid", pid)
+            return param
+        }
+
+        fun getProvinceCityAreaParam(cid: String): ApiParams {
+            val param = getBaseParams()
+            param.addParam("cid", cid)
+            return param
+        }
 
     }
 }

@@ -11,6 +11,7 @@ import com.android.ql.lf.carapp.data.EventIsMasterAndMoneyBean
 import com.android.ql.lf.carapp.data.ImageBean
 import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
+import com.android.ql.lf.carapp.ui.activities.SelectAddressActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.utils.*
 import com.bumptech.glide.Glide
@@ -66,14 +67,22 @@ class MineApplyMasterInfoSubmitFragment : BaseNetWorkingFragment() {
         arrayListOf<String>()
     }
 
+    private val  addressSubscription = RxBus.getDefault().toObservable(SelectAddressActivity.SelectAddressItemBean::class.java).subscribe {
+        selectAddress = it.name
+        mEtMasterInfoAddress.text = selectAddress!!
+    }
+
     private var currentImageFlag = 0
 
     private var statueCode = true
+
+    private var selectAddress:String? = null
 
     override fun getLayoutId() = R.layout.fragment_mine_apply_master_info_submit_layout
 
     override fun initView(view: View?) {
         (mContext as FragmentContainerActivity).setSwipeBackEnable(false)
+        addressSubscription
         val storeHeaderView = View.inflate(mContext, R.layout.layout_apply_master_add_image_layout, null)
         val idCardHeaderView = View.inflate(mContext, R.layout.layout_apply_master_add_image_layout, null)
         val licenceHeaderView = View.inflate(mContext, R.layout.layout_apply_master_add_image_layout, null)
@@ -114,6 +123,11 @@ class MineApplyMasterInfoSubmitFragment : BaseNetWorkingFragment() {
             openImageChoose(MimeType.ofImage(), 1 - licenceImageList.size)
         }
 
+        mEtMasterInfoAddress.setOnClickListener {
+            startActivity(Intent(mContext, SelectAddressActivity::class.java))
+            (mContext as FragmentContainerActivity).overridePendingTransition(R.anim.activity_open, 0)
+        }
+
         mBtMasterInfoSubmit.setOnClickListener {
             if (storeImagesList.size <= 0) {
                 toast("请上传至少一张门店照片")
@@ -139,8 +153,12 @@ class MineApplyMasterInfoSubmitFragment : BaseNetWorkingFragment() {
                 toast("请输入合法的手机号")
                 return@setOnClickListener
             }
-            if (mEtMasterInfoAddress.isEmpty()) {
-                toast("请输入店铺地址")
+            if (selectAddress == null) {
+                toast("请选择店铺地址")
+                return@setOnClickListener
+            }
+            if (mEtMinePersonalServiceDetailAddress.isEmpty()) {
+                toast("请输入详情的店铺地址")
                 return@setOnClickListener
             }
             if (!TextUtils.isDigitsOnly(mEtMasterInfoMasterNum.text.toString())) {
@@ -212,7 +230,8 @@ class MineApplyMasterInfoSubmitFragment : BaseNetWorkingFragment() {
                                         formStoreImagesList,
                                         formIdCardImagesList,
                                         mEtMasterInfoPhone.getTextString(),
-                                        mEtMasterInfoAddress.getTextString(),
+                                        selectAddress!!,
+                                        mEtMinePersonalServiceDetailAddress.getTextString(),
                                         mEtMasterInfoMasterNum.getTextString(),
                                         mEtMasterInfoStoreIntroduce.getTextString()))
                     }
@@ -275,5 +294,10 @@ class MineApplyMasterInfoSubmitFragment : BaseNetWorkingFragment() {
             val imageView = helper!!.getView<ImageView>(R.id.mIvApplyMasterImageInfoItem)
             Glide.with(mContext).load(item!!.uriPath).into(imageView)
         }
+    }
+
+    override fun onDestroyView() {
+        unsubscribe(addressSubscription)
+        super.onDestroyView()
     }
 }

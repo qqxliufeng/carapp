@@ -23,12 +23,13 @@ public class CarApplication extends MultiDexApplication {
 
     public static CarApplication application;
 
+
     @Override
     public void onCreate() {
         super.onCreate();
+        Bugly.init(this, Constants.BUGLY_APP_ID, false);
         application = this;
         appComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
-        Bugly.init(getApplicationContext(), Constants.BUGLY_APP_ID, false);
     }
 
 
@@ -39,7 +40,5 @@ public class CarApplication extends MultiDexApplication {
     public AppComponent getAppComponent() {
         return appComponent;
     }
-
-
 
 }

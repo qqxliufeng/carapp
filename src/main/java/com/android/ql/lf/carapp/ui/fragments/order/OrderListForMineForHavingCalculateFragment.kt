@@ -56,7 +56,7 @@ class OrderListForMineForHavingCalculateFragment : AbstractLazyLoadFragment<Orde
 
     override fun onLoginSuccess(userInfo: UserInfo?) {
         super.onLoginSuccess(userInfo)
-        loadData()
+        onPostRefresh()
     }
 
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {

@@ -11,6 +11,8 @@ import com.android.ql.lf.carapp.present.ServiceOrderPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
+import com.android.ql.lf.carapp.utils.getTextString
+import com.android.ql.lf.carapp.utils.isEmpty
 import com.android.ql.lf.carapp.utils.toast
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_order_detail_for_waiting_work_layout.*
@@ -61,7 +63,6 @@ class OrderDetailForWaitingWorkFragment : BaseNetWorkingFragment() {
                 mSvOrderDetailInfo.visibility = View.VISIBLE
                 val json = check.obj as JSONObject
                 orderBean = Gson().fromJson(json.optJSONObject("result").toString(), OrderBean::class.java)
-                setText(mTvOrderDetailForWaitingCode, orderBean?.qorder_code)
                 setText(mTvOrderDetailForWaitingName, orderBean?.qorder_name)
                 setText(mTvOrderDetailForWaitingStatus, ServiceOrderPresent.OrderStatus.getDescriptionByIndex(orderBean?.qorder_token))
                 setText(mTvOrderDetailForWaitingPhone, "手机号码：${orderBean?.qorder_phone}")
@@ -85,10 +86,14 @@ class OrderDetailForWaitingWorkFragment : BaseNetWorkingFragment() {
                 }
                 mBtOrderDetailForWaitingWorkSubmit.setOnClickListener {
                     if (orderBean != null) {
+                        if (mTvOrderDetailForWaitingCode.isEmpty()){
+                            toast("请输入验证码")
+                            return@setOnClickListener
+                        }
                         mPresent.getDataByPost(0x1,
                                 RequestParamsHelper.ORDER_MODEL,
                                 RequestParamsHelper.ACT_EDIT_QORDER_STATUS,
-                                RequestParamsHelper.getEditQorderStatusParam(orderBean!!.qorder_id, ServiceOrderPresent.OrderStatus.WAITING_CONFIRM.index))
+                                RequestParamsHelper.getEditQorderStatusParam(orderBean!!.qorder_id, ServiceOrderPresent.OrderStatus.WAITING_CONFIRM.index,mTvOrderDetailForWaitingCode.getTextString()))
                     }
                 }
             } else {
@@ -106,6 +111,7 @@ class OrderDetailForWaitingWorkFragment : BaseNetWorkingFragment() {
                         finish()
                     }
                     check.code == "400" -> toast((check.obj as JSONObject).optString("msg"))
+                    check.code == "403"-> toast((check.obj as JSONObject).optString("msg"))//验证码错误
                     else -> toast("确认失败，请稍后重试……")
                 }
             }

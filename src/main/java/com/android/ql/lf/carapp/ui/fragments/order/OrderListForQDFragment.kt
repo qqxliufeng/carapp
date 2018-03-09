@@ -279,6 +279,8 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
             val check = checkResultCode(result)
             if (check != null && check.code == SUCCESS_CODE) {
                 (parentFragment as MainOrderHouseFragment).updateOrderNum((check.obj as JSONObject).optInt("arr1"))
+            }
+            if (check != null) {
                 (parentFragment as MainOrderHouseFragment).updateNotifyRed(if (((check.obj as JSONObject).optString("arr2").toInt() > 0)) {
                     View.VISIBLE
                 } else {

@@ -1,6 +1,7 @@
 package com.android.ql.lf.carapp.ui.fragments.user.mine
 
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
 import android.support.v7.widget.LinearLayoutManager
@@ -9,10 +10,11 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.TimePicker
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.EventIsMasterAndMoneyBean
 import com.android.ql.lf.carapp.data.UserInfo
+import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
+import com.android.ql.lf.carapp.ui.activities.SelectAddressActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.utils.*
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -21,7 +23,6 @@ import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_mine_personal_service_layout.*
 import org.json.JSONObject
-import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -43,11 +44,19 @@ class MinePersonalServiceEditFragment : BaseNetWorkingFragment() {
 
     private var currentWorkRange: WorkRangeBean? = null
 
+    private var selectAddress:String? = null
+
+    private val  addressSubscription = RxBus.getDefault().toObservable(SelectAddressActivity.SelectAddressItemBean::class.java).subscribe {
+        selectAddress = it.name
+        mEtMinePersonalServiceAddress.text = selectAddress!!
+    }
+
     override fun getLayoutId() = R.layout.fragment_mine_personal_service_layout
 
     override fun initView(view: View?) {
+        addressSubscription
         mEtMinePersonalServicePhone.setText(UserInfo.getInstance().memberPhone)
-        mEtMinePersonalServiceAddress.setText(UserInfo.getInstance().memberAddress)
+        mEtMinePersonalServiceAddress.text = UserInfo.getInstance().memberAddress
         mRlServiceEditWorkRangeContainer.setOnClickListener {
             if (!workRangeList.isEmpty()) {
                 if (bottomDialog == null) {
@@ -129,8 +138,12 @@ class MinePersonalServiceEditFragment : BaseNetWorkingFragment() {
                 toast("请输入正确的手机号")
                 return@setOnClickListener
             }
-            if (mEtMinePersonalServiceAddress.isEmpty()) {
-                toast("请输入店铺地址")
+            if (selectAddress == null) {
+                toast("请选择店铺地址")
+                return@setOnClickListener
+            }
+            if (mEtMinePersonalServiceDetailAddress.isEmpty()) {
+                toast("请输入详情的店铺地址")
                 return@setOnClickListener
             }
             if (TextUtils.isEmpty(startTime)) {
@@ -153,8 +166,13 @@ class MinePersonalServiceEditFragment : BaseNetWorkingFragment() {
                 mPresent.getDataByPost(0x1,
                         RequestParamsHelper.MEMBER_MODEL,
                         RequestParamsHelper.ACT_EDIT_PERSONAL_SERVICE,
-                        RequestParamsHelper.getEditePersonalServiceParam(shopInfo!!.shop_id, mEtMinePersonalServiceAddress.getTextString(), "aa", startTime!!, endTime!!, mEtMinePersonalServiceContent.getTextString()))
+                        RequestParamsHelper.getEditePersonalServiceParam(shopInfo!!.shop_id,
+                                selectAddress!!,mEtMinePersonalServiceDetailAddress.getTextString(), "aa", startTime!!, endTime!!, mEtMinePersonalServiceContent.getTextString()))
             }
+        }
+        mEtMinePersonalServiceAddress.setOnClickListener {
+             startActivity(Intent(mContext, SelectAddressActivity::class.java))
+             (mContext as FragmentContainerActivity).overridePendingTransition(R.anim.activity_open, 0)
         }
         mPresent.getDataByPost(0x0, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_PERSONAL_SERVICE, RequestParamsHelper.getPersonalServiceParam())
     }
@@ -177,9 +195,11 @@ class MinePersonalServiceEditFragment : BaseNetWorkingFragment() {
                 shopInfo = Gson().fromJson(jsonObject.optJSONObject("result").toString(), UserInfo.ShopInfo::class.java)
                 setText(mEtMinePersonalServicePhone, shopInfo!!.shop_phone)
                 setText(mEtMinePersonalServiceAddress, shopInfo!!.shop_address)
+                selectAddress = shopInfo!!.shop_address
                 setText(mTvServiceEditWorkStartTime, shopInfo!!.shop_start_time)
                 setText(mTvServiceEditWorkEndTime, shopInfo!!.shop_end_time)
                 setText(mEtMinePersonalServiceContent, shopInfo!!.shop_content)
+                setText(mEtMinePersonalServiceDetailAddress,shopInfo!!.shop_d)
                 startTime = shopInfo!!.shop_start_time
                 endTime = shopInfo!!.shop_end_time
                 mBtMinePersonalServiceEditSubmit.isEnabled = true
@@ -193,7 +213,8 @@ class MinePersonalServiceEditFragment : BaseNetWorkingFragment() {
             if (check != null) {
                 if (check.code == SUCCESS_CODE) {
                     toast("修改成功！")
-                    UserInfo.getInstance().shopInfo.shop_address = mEtMinePersonalServiceAddress.getTextString()
+                    UserInfo.getInstance().shopInfo.shop_address = selectAddress+mEtMinePersonalServiceDetailAddress.getTextString()
+                    UserInfo.getInstance().shopInfo.shop_d = mEtMinePersonalServiceDetailAddress.getTextString()
                     UserInfo.getInstance().shopInfo.shop_content = mEtMinePersonalServiceContent.getTextString()
                     UserInfo.getInstance().shopInfo.shop_start_time = mTvServiceEditWorkStartTime.text.toString()
                     UserInfo.getInstance().shopInfo.shop_end_time = mTvServiceEditWorkEndTime.text.toString()
@@ -221,6 +242,12 @@ class MinePersonalServiceEditFragment : BaseNetWorkingFragment() {
             text
         }
     }
+
+    override fun onDestroyView() {
+        unsubscribe(addressSubscription)
+        super.onDestroyView()
+    }
+
 
     class WorkRangeBean {
         var tag_title: String? = null

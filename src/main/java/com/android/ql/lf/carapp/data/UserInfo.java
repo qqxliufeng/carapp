@@ -273,6 +273,7 @@ public class UserInfo {
         private String shop_ppa;
         private String shop_start_time;
         private String shop_end_time;
+        private String shop_d;
 
         public String getShop_id() {
             return shop_id;
@@ -416,6 +417,14 @@ public class UserInfo {
 
         public void setShop_end_time(String shop_end_time) {
             this.shop_end_time = shop_end_time;
+        }
+
+        public String getShop_d() {
+            return shop_d;
+        }
+
+        public void setShop_d(String shop_d) {
+            this.shop_d = shop_d;
         }
     }
 

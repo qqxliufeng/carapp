@@ -104,7 +104,7 @@ class OrderListForMineForHavingWorkFragment : AbstractLazyLoadFragment<OrderBean
 
     override fun onLoginSuccess(userInfo: UserInfo?) {
         super.onLoginSuccess(userInfo)
-        loadData()
+        onPostRefresh()
     }
 
     override fun onMyItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {

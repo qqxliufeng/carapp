@@ -36,11 +36,11 @@ class SettingFragment : BaseNetWorkingFragment() {
         if (upgradeInfo != null && packageInfo.versionCode < upgradeInfo.versionCode) {
             mTvNewVersionNotify.visibility = View.VISIBLE
             mVersionName.text = "V${upgradeInfo.versionName}"
-            mRlVersionUpContainer.setOnClickListener {
-                Beta.checkUpgrade(true, false)
-            }
         } else {
             mTvNewVersionNotify.visibility = View.GONE
+        }
+        mRlVersionUpContainer.setOnClickListener {
+            Beta.checkUpgrade(true, false)
         }
         val cacheSize = CacheDataManager.getTotalCacheSize(mContext)
         mCacheSize.text = "$cacheSize"
