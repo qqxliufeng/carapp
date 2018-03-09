@@ -46,6 +46,7 @@ class OrderListForMineForHavingWorkFragment : AbstractLazyLoadFragment<OrderBean
         super.initView(view)
         updateOrderStatusSubscription
         registerLoginSuccessBus()
+        registerLogoutSuccessBus()
     }
 
     override fun createAdapter(): BaseQuickAdapter<OrderBean, BaseViewHolder>
@@ -104,6 +105,10 @@ class OrderListForMineForHavingWorkFragment : AbstractLazyLoadFragment<OrderBean
 
     override fun onLoginSuccess(userInfo: UserInfo?) {
         super.onLoginSuccess(userInfo)
+        onPostRefresh()
+    }
+
+    override fun onLogoutSuccess(userInfo: String?) {
         onPostRefresh()
     }
 

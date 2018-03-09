@@ -43,6 +43,10 @@ class OrderAllListQDFragment :BaseRecyclerViewFragment<OrderBean>(){
 
     override fun getEmptyLayoutId() = R.layout.layout_order_list_empty
 
+    override fun getEmptyMessage(): String {
+        return "这里还没有订单呢！"
+    }
+
     override fun getLayoutId() = R.layout.fragment_order_for_qd_layout
 
     override fun initView(view: View?) {
@@ -90,7 +94,6 @@ class OrderAllListQDFragment :BaseRecyclerViewFragment<OrderBean>(){
         }
     }
 
-
     override fun onRefresh() {
         super.onRefresh()
         mPresent.getDataByPost(0x0, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_QORDER, RequestParamsHelper.getQorderParam(page = currentPage, location = if (UserInfo.getInstance().shopInfo != null) {
@@ -115,7 +118,6 @@ class OrderAllListQDFragment :BaseRecyclerViewFragment<OrderBean>(){
             getFastProgressDialog("正在抢单……")
         }
     }
-
 
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
         super.onRequestSuccess(requestID, result)
@@ -179,6 +181,5 @@ class OrderAllListQDFragment :BaseRecyclerViewFragment<OrderBean>(){
         unsubscribe(masterAndMoneySubscription)
         super.onDestroyView()
     }
-
 
 }

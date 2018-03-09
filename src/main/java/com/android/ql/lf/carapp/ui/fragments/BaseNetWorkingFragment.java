@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import javax.inject.Inject;
 
+import rx.Subscription;
 import rx.functions.Action1;
 
 /**
@@ -36,6 +37,8 @@ public abstract class BaseNetWorkingFragment extends BaseFragment implements INe
 
     public ProgressDialog progressDialog;
 
+    protected Subscription logoutSubscription;
+
 
     public void registerLoginSuccessBus() {
         subscription = RxBus.getDefault().toObservable(UserInfo.class).subscribe(new Action1<UserInfo>() {
@@ -46,8 +49,22 @@ public abstract class BaseNetWorkingFragment extends BaseFragment implements INe
         });
     }
 
+    public void registerLogoutSuccessBus(){
+        logoutSubscription = RxBus.getDefault().toObservable(String.class).subscribe(new Action1<String>() {
+            @Override
+            public void call(String logout) {
+                onLogoutSuccess(logout);
+            }
+        });
+    }
+
     public void onLoginSuccess(UserInfo userInfo) {
     }
+
+    public void onLogoutSuccess(String logout){
+
+    }
+
 
     @Override
     public void onAttach(Context context) {
@@ -109,6 +126,7 @@ public abstract class BaseNetWorkingFragment extends BaseFragment implements INe
 
     @Override
     public void onDestroyView() {
+        unsubscribe(logoutSubscription);
         super.onDestroyView();
         if (mPresent != null) {
             mPresent.unSubscription();

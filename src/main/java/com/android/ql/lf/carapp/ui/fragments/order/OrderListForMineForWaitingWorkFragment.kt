@@ -49,6 +49,7 @@ class OrderListForMineForWaitingWorkFragment : AbstractLazyLoadFragment<OrderBea
     override fun initView(view: View?) {
         super.initView(view)
         registerLoginSuccessBus()
+        registerLogoutSuccessBus()
         updateOrderStatusSubscription
     }
 
@@ -75,6 +76,10 @@ class OrderListForMineForWaitingWorkFragment : AbstractLazyLoadFragment<OrderBea
 
     override fun onLoginSuccess(userInfo: UserInfo?) {
         super.onLoginSuccess(userInfo)
+        onPostRefresh()
+    }
+
+    override fun onLogoutSuccess(userInfo: String?) {
         onPostRefresh()
     }
 

@@ -42,6 +42,7 @@ class OrderListForMineForWaitingCalculateFragment : AbstractLazyLoadFragment<Ord
         super.initView(view)
         updateOrderStatusSubscription
         registerLoginSuccessBus()
+        registerLogoutSuccessBus()
     }
 
     override fun getEmptyMessage() = if (!UserInfo.getInstance().isLogin) {
@@ -67,6 +68,10 @@ class OrderListForMineForWaitingCalculateFragment : AbstractLazyLoadFragment<Ord
 
     override fun onLoginSuccess(userInfo: UserInfo?) {
         super.onLoginSuccess(userInfo)
+        onPostRefresh()
+    }
+
+    override fun onLogoutSuccess(userInfo: String?) {
         onPostRefresh()
     }
 

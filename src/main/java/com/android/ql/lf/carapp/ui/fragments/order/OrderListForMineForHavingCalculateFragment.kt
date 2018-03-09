@@ -28,6 +28,7 @@ class OrderListForMineForHavingCalculateFragment : AbstractLazyLoadFragment<Orde
     override fun initView(view: View?) {
         super.initView(view)
         registerLoginSuccessBus()
+        registerLogoutSuccessBus()
     }
 
     override fun createAdapter(): BaseQuickAdapter<OrderBean, BaseViewHolder>
@@ -56,6 +57,10 @@ class OrderListForMineForHavingCalculateFragment : AbstractLazyLoadFragment<Orde
 
     override fun onLoginSuccess(userInfo: UserInfo?) {
         super.onLoginSuccess(userInfo)
+        onPostRefresh()
+    }
+
+    override fun onLogoutSuccess(userInfo: String?) {
         onPostRefresh()
     }
 
