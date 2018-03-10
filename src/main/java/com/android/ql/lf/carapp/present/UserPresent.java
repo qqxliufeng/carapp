@@ -27,6 +27,10 @@ public class UserPresent {
         }
     }
 
+    public void onLoginNoBus(JSONObject memberInfo,JSONObject shopInfo) {
+        userAction.onLogin(memberInfo,shopInfo);
+    }
+
     public void onLogout() {
         if (userAction.onLogout()) {
             sendLogoutSuccessMessage();

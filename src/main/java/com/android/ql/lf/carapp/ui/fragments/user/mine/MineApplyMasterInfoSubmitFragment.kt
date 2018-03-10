@@ -169,6 +169,10 @@ class MineApplyMasterInfoSubmitFragment : BaseNetWorkingFragment() {
                 toast("请输入店铺师傅数量")
                 return@setOnClickListener
             }
+            if (mEtMasterInfoMasterNum.text.toString().toInt()<=0){
+                toast("输入店铺师傅数量必须大于0")
+                return@setOnClickListener
+            }
             uploadImage(0x0, storeImagesList, "正在上传门店图片……")
         }
     }

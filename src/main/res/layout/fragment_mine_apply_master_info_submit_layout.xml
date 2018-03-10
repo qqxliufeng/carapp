@@ -132,17 +132,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="店铺名"
+                android:text="店铺名称"
                 android:textColor="@color/text_deep_dark_color"
                 android:textSize="@dimen/sp_14" />
 
             <EditText
                 android:id="@+id/mEtMasterInfoStoreName"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="50dp"
+                android:layout_marginLeft="80dp"
                 android:background="@null"
                 android:gravity="right"
                 android:hint="请输入店铺名"
@@ -173,11 +173,11 @@
 
             <EditText
                 android:id="@+id/mEtMasterInfoPhone"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="50dp"
+                android:layout_marginLeft="80dp"
                 android:background="@null"
                 android:gravity="right"
                 android:hint="请输入手机号"
@@ -200,7 +200,7 @@
             android:padding="10dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="店铺地址"
@@ -209,11 +209,11 @@
 
             <TextView
                 android:id="@+id/mEtMasterInfoAddress"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="50dp"
+                android:layout_marginLeft="80dp"
                 android:background="@null"
                 android:gravity="right"
                 android:text="请选择店铺地址"
@@ -244,7 +244,7 @@
 
             <EditText
                 android:id="@+id/mEtMinePersonalServiceDetailAddress"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
@@ -280,11 +280,11 @@
 
             <EditText
                 android:id="@+id/mEtMasterInfoMasterNum"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="50dp"
+                android:layout_marginLeft="80dp"
                 android:background="@null"
                 android:gravity="right"
                 android:hint="请输入您店铺师傅人数"

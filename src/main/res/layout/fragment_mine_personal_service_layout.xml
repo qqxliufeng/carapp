@@ -32,11 +32,12 @@
 
             <EditText
                 android:id="@+id/mEtMinePersonalServicePhone"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:background="@null"
+                android:layout_marginLeft="80dp"
                 android:hint="请输入联系电话"
                 android:inputType="phone"
                 android:maxLength="11"
@@ -68,7 +69,7 @@
 
             <TextView
                 android:id="@+id/mEtMinePersonalServiceAddress"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
@@ -103,7 +104,7 @@
 
             <EditText
                 android:id="@+id/mEtMinePersonalServiceDetailAddress"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
@@ -139,11 +140,13 @@
 
             <TextView
                 android:id="@+id/mTvServiceEditWorkRange"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:drawablePadding="@dimen/dp_10"
+                android:layout_marginLeft="80dp"
+                android:gravity="right"
                 android:drawableRight="@drawable/icon_inter1"
                 android:maxLength="11"
                 android:text="请选择主营各类"
@@ -269,6 +272,5 @@
                 android:enabled="false"
                 android:text="保存"/>
         </LinearLayout>
-
     </LinearLayout>
 </ScrollView>

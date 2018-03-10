@@ -97,17 +97,37 @@ class MineApplyMasterItemFragment : BaseNetWorkingFragment() {
 
     override fun initView(view: View?) {
         if (arguments.getInt("TYPE", 1) == 1) { // 师傅
-            if (UserInfo.getInstance().isCheckingMaster) {
-                mBtApplyMasterApply.text = "资料正在审核中……"
+            when (UserInfo.getInstance().authenticationStatus) {
+                0 -> {
+                    mBtApplyMasterApply.text = "资料正在审核中……"
+                    mBtApplyMasterApply.isEnabled = false
+                }
+                1 -> {
+                    mBtApplyMasterApply.text = "已经成为师傅"
+                    mBtApplyMasterApply.isEnabled = false
+                }
+                2 -> {
+                    mBtApplyMasterApply.text = "资料审核失败，请重新提交……"
+                    mBtApplyMasterApply.isEnabled = true
+                    FragmentContainerActivity.from(mContext).setTitle("申请成为师傅").setNeedNetWorking(true).setClazz(MineApplyMasterInfoSubmitFragment::class.java).start()
+                }
+                3 -> {
+                    mBtApplyMasterApply.text = "申请成为师傅"
+                    mBtApplyMasterApply.isEnabled = true
+                    FragmentContainerActivity.from(mContext).setTitle("申请成为师傅").setNeedNetWorking(true).setClazz(MineApplyMasterInfoSubmitFragment::class.java).start()
+                }
             }
-            if (UserInfo.getInstance().isMaster) {
-                mBtApplyMasterApply.text = "已经成为师傅"
-            }
-            mBtApplyMasterApply.isEnabled = !UserInfo.getInstance().isMaster && !UserInfo.getInstance().isCheckingMaster
-            mBtApplyMasterApply.setOnClickListener {
-                FragmentContainerActivity.from(mContext).setTitle("申请成为师傅").setNeedNetWorking(true).setClazz(MineApplyMasterInfoSubmitFragment::class.java).start()
-                finish()
-            }
+//            if (UserInfo.getInstance().isCheckingMaster) {
+//                mBtApplyMasterApply.text = "资料正在审核中……"
+//            }
+//            if (UserInfo.getInstance().isMaster) {
+//                mBtApplyMasterApply.text = "已经成为师傅"
+//            }
+//            mBtApplyMasterApply.isEnabled = !UserInfo.getInstance().isMaster && !UserInfo.getInstance().isCheckingMaster
+//            mBtApplyMasterApply.setOnClickListener {
+//                FragmentContainerActivity.from(mContext).setTitle("申请成为师傅").setNeedNetWorking(true).setClazz(MineApplyMasterInfoSubmitFragment::class.java).start()
+//                finish()
+//            }
             mPresent.getDataByPost(0x0, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_PTGG, RequestParamsHelper.getPtggParam("3"))
         } else { //商家
             mTvApplyMasterInfo.text = "此功能暂未开放"

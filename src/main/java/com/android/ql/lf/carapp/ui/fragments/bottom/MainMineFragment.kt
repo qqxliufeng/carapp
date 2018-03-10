@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.UpdateNotifyBean
 import com.android.ql.lf.carapp.data.UserInfo
+import com.android.ql.lf.carapp.present.UserPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.activities.MainActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
@@ -14,6 +15,7 @@ import com.android.ql.lf.carapp.ui.fragments.user.SettingFragment
 import com.android.ql.lf.carapp.ui.fragments.user.mine.*
 import com.android.ql.lf.carapp.utils.*
 import kotlinx.android.synthetic.main.fragment_main_mine_layout.*
+import org.json.JSONObject
 
 /**
  * Created by lf on 18.1.24.
@@ -62,6 +64,10 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
         RxBus.getDefault().toObservable(UpdateNotifyBean::class.java).subscribe {
             mViewMainMineMessageNotify.visibility = it.status
         }
+    }
+
+    private val userPresent by lazy {
+        UserPresent()
     }
 
     override fun getLayoutId() = R.layout.fragment_main_mine_layout
@@ -175,6 +181,27 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
     }
 
     override fun onRefresh() {
+        if (UserInfo.getInstance().isLogin) {
+            mPresent.getDataByPost(0x0,
+                    RequestParamsHelper.MEMBER_MODEL,
+                    RequestParamsHelper.ACT_PERSONAL,
+                    RequestParamsHelper.getPersonalParam(UserInfo.getInstance().memberId))
+        }else{
+            onRequestEnd(-1)
+        }
+    }
+
+    override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
+        super.onRequestSuccess(requestID, result)
+        val check = checkResultCode(result)
+        if (check!=null && check.code == SUCCESS_CODE){
+            val json = check.obj as JSONObject
+            userPresent.onLoginNoBus(json.optJSONObject("result"), json.optJSONObject("arr"))
+        }
+    }
+
+    override fun onRequestEnd(requestID: Int) {
+        super.onRequestEnd(requestID)
         if (mSrlMainMineContainer.isRefreshing) {
             mSrlMainMineContainer.post {
                 mSrlMainMineContainer.isRefreshing = false
