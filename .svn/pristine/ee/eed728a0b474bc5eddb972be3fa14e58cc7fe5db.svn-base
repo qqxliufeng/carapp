@@ -71,7 +71,6 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
     private val masterAndMoneySubscription by lazy {
         RxBus.getDefault().toObservable(EventIsMasterAndMoneyBean::class.java).subscribe {
             showNotify()
-            onPostRefresh()
         }
     }
 
@@ -129,7 +128,6 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
         }
     }
 
-    //在其它页面中 来了信息了 要跳到首页中
     private fun sendNotify() {
         val forIntent = Intent(context, MainActivity::class.java)
         startActivity(forIntent)
@@ -194,7 +192,7 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
         if (UserInfo.getInstance().isLogin) {
             //更新地址
             if (UserInfo.getInstance().shopInfo != null) {
-                (parentFragment as MainOrderHouseFragment).updateAddress(UserInfo.getInstance().shopInfo.shop_address+UserInfo.getInstance().shopInfo.shop_d)
+                (parentFragment as MainOrderHouseFragment).updateAddress(UserInfo.getInstance().shopInfo.shop_address)
             } else {
                 (parentFragment as MainOrderHouseFragment).updateAddress("暂无")
             }
@@ -279,8 +277,10 @@ class OrderListForQDFragment : BaseRecyclerViewFragment<OrderBean>() {
         if (requestID == 0x0) {
             processList(result as String, OrderBean::class.java)
             val check = checkResultCode(result)
-            if (check != null) {
+            if (check != null && check.code == SUCCESS_CODE) {
                 (parentFragment as MainOrderHouseFragment).updateOrderNum((check.obj as JSONObject).optInt("arr1"))
+            }
+            if (check != null) {
                 (parentFragment as MainOrderHouseFragment).updateNotifyRed(if (((check.obj as JSONObject).optString("arr2").toInt() > 0)) {
                     View.VISIBLE
                 } else {

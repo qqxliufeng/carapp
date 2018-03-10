@@ -41,16 +41,6 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
         }
     }
 
-    private val messageSubscription by lazy {
-        RxBus.getDefault().toObservable(String::class.java).subscribe {
-            if (MainOrderHouseFragment.FIRST_LEVEL_ALL_MESSAGE_HAVE_READ_FLAG == it) {
-                if (mViewMainMineMessageNotify.visibility == View.VISIBLE) {
-                    mViewMainMineMessageNotify.visibility = View.GONE
-                }
-            }
-        }
-    }
-
     private val userLogoutSubscription by lazy {
         RxBus.getDefault().toObservable(String::class.java).subscribe {
             if (it == UserInfo.LOGOUT_FLAG) {
@@ -86,8 +76,6 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
 
         //注册登录成功事件，刷新界面
         registerLoginSuccessBus()
-        //注册消息事件
-        messageSubscription
         //注册用户退出事件
         userLogoutSubscription
         //修改个人信息
@@ -98,6 +86,7 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
         setUserInfo(UserInfo.getInstance())
 
         mFlMainMineMessageNotifyContainer.setOnClickListener {
+            RxBus.getDefault().post(UpdateNotifyBean(View.GONE))
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的消息", true, false, MineMessageListFragment::class.java)
         }
 
@@ -267,7 +256,6 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
     }
 
     override fun onDestroyView() {
-        unsubscribe(messageSubscription)
         unsubscribe(userLogoutSubscription)
         unsubscribe(modifyInfoSubscription)
         unsubscribe(updateMessageNotifySubscription)

@@ -1,10 +1,12 @@
 package com.android.ql.lf.carapp.ui.fragments.user.mine
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.support.design.widget.BottomSheetDialog
+import android.support.v4.content.ContextCompat
 import android.text.Html
 import android.text.TextUtils
 import android.view.View
@@ -17,10 +19,7 @@ import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
 import com.android.ql.lf.carapp.ui.fragments.order.PayResultFragment
 import com.android.ql.lf.carapp.ui.views.SelectPayTypeView
-import com.android.ql.lf.carapp.utils.PayManager
-import com.android.ql.lf.carapp.utils.RequestParamsHelper
-import com.android.ql.lf.carapp.utils.alert
-import com.android.ql.lf.carapp.utils.toast
+import com.android.ql.lf.carapp.utils.*
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.gson.Gson
@@ -32,8 +31,6 @@ import org.json.JSONObject
 class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment.EnsureMoneyProduct>() {
 
     private lateinit var mTvEnsureMoneyIntroduce: TextView
-
-    private var bottomPayDialog: BottomSheetDialog? = null
 
     private var payType: String = SelectPayTypeView.WX_PAY
 
@@ -62,11 +59,20 @@ class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment
         }
     }
 
+    private val wxPaySuccessSubscription by lazy {
+        RxBus.getDefault().toObservable(WxPaySuccessBean::class.java).subscribe {
+            if (it.payResult){
+                onPostRefresh()
+            }
+        }
+    }
+
     override fun createAdapter(): BaseQuickAdapter<EnsureMoneyProduct, BaseViewHolder> =
             EnsureMoneyProductAdapter(R.layout.adapter_ensure_money_item_layout, mArrayList)
 
     override fun initView(view: View?) {
         super.initView(view)
+        wxPaySuccessSubscription
         val footView = View.inflate(mContext, R.layout.fragment_mine_ensure_money_layout, null)
         mTvEnsureMoneyIntroduce = footView.findViewById(R.id.mTvEnsureMoneyIntroduce)
         mBaseAdapter.addFooterView(footView)
@@ -166,19 +172,17 @@ class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment
 
     private fun pay(item: EnsureMoneyProduct) {
         payType = SelectPayTypeView.WX_PAY
-        if (bottomPayDialog == null) {
-            bottomPayDialog = BottomSheetDialog(mContext)
-            val contentView = SelectPayTypeView(mContext)
-            contentView.setShowConfirmView(View.VISIBLE)
-            contentView.setOnConfirmClickListener {
-                bottomPayDialog!!.dismiss()
-                payType = contentView.payType
-                mPresent.getDataByPost(0x1, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_PAYMENT_DEPOSIT,
-                        RequestParamsHelper.getPaymentDepositParam(item.m_p_type!!, item.m_p_id!!, payType))
-            }
-            bottomPayDialog!!.setContentView(contentView)
+        val bottomPayDialog = BottomSheetDialog(mContext)
+        val contentView = SelectPayTypeView(mContext)
+        contentView.setShowConfirmView(View.VISIBLE)
+        contentView.setOnConfirmClickListener {
+            bottomPayDialog.dismiss()
+            payType = contentView.payType
+            mPresent.getDataByPost(0x1, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_PAYMENT_DEPOSIT,
+                    RequestParamsHelper.getPaymentDepositParam(item.m_p_type!!, item.m_p_id!!, payType))
         }
-        bottomPayDialog!!.show()
+        bottomPayDialog.setContentView(contentView)
+        bottomPayDialog.show()
     }
 
     private fun refund(item: EnsureMoneyProduct) {
@@ -188,6 +192,11 @@ class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment
                     RequestParamsHelper.ACT_REFUND_DEPOSIT,
                     RequestParamsHelper.getRefundDepositParam(item.m_p_type!!))
         }
+    }
+
+    override fun onDestroyView() {
+        unsubscribe(wxPaySuccessSubscription)
+        super.onDestroyView()
     }
 
     class EnsureMoneyProductAdapter(layout: Int, list: ArrayList<EnsureMoneyProduct>) : BaseQuickAdapter<EnsureMoneyProduct, BaseViewHolder>(layout, list) {
@@ -200,18 +209,22 @@ class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment
                 "1" -> {
                     if (item.member_ismaster_ensure_money == "0") {
                         bt_action.text = "去缴纳"
+                        bt_action.setTextColor(Color.WHITE)
                         bt_action.setBackgroundResource(R.drawable.shape_bt_bg1)
                     } else {
                         bt_action.text = "去退款"
+                        bt_action.setTextColor(ContextCompat.getColor(mContext,R.color.text_dark_color))
                         bt_action.setBackgroundResource(R.drawable.shape_bt_bg5)
                     }
                 }
                 "2" -> {
                     if (item.member_ismerchant_ensure_money == "0") {
                         bt_action.text = "去缴纳"
+                        bt_action.setTextColor(Color.WHITE)
                         bt_action.setBackgroundResource(R.drawable.shape_bt_bg1)
                     } else {
                         bt_action.text = "去退款"
+                        bt_action.setTextColor(ContextCompat.getColor(mContext,R.color.text_dark_color))
                         bt_action.setBackgroundResource(R.drawable.shape_bt_bg5)
                     }
                 }
@@ -230,5 +243,8 @@ class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment
         var member_ismaster_ensure_money: String? = null
         var member_ismerchant_ensure_money: String? = null
     }
+
+    class WxPaySuccessBean(var payResult:Boolean)
+
 
 }

@@ -16,6 +16,8 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 
+import java.util.Objects;
+
 import javax.inject.Inject;
 
 import rx.Subscription;
@@ -49,11 +51,13 @@ public abstract class BaseNetWorkingFragment extends BaseFragment implements INe
         });
     }
 
-    public void registerLogoutSuccessBus(){
+    public void registerLogoutSuccessBus() {
         logoutSubscription = RxBus.getDefault().toObservable(String.class).subscribe(new Action1<String>() {
             @Override
             public void call(String logout) {
-                onLogoutSuccess(logout);
+                if (Objects.equals(logout, UserInfo.LOGOUT_FLAG)) {
+                    onLogoutSuccess(logout);
+                }
             }
         });
     }
@@ -61,7 +65,7 @@ public abstract class BaseNetWorkingFragment extends BaseFragment implements INe
     public void onLoginSuccess(UserInfo userInfo) {
     }
 
-    public void onLogoutSuccess(String logout){
+    public void onLogoutSuccess(String logout) {
 
     }
 

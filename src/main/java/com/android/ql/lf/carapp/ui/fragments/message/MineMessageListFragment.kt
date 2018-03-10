@@ -41,19 +41,6 @@ class MineMessageListFragment : BaseRecyclerViewFragment<MineMessageListFragment
 
     override fun initView(view: View?) {
         super.initView(view)
-//        subscription = RxBus.getDefault().toObservable(String::class.java).subscribe {
-//            if (SECOND_LEVEL_ALL_MESSAGE_HAVE_RED_FLAG == it) {
-//                if (currentMessageItem != null) {
-//                    if (!currentMessageItem!!.isRead) {
-//                        currentMessageItem!!.isRead = true
-//                        mBaseAdapter.notifyItemChanged(mArrayList.indexOf(currentMessageItem))
-//                    }
-//                }
-//                if (mArrayList.none { !it.isRead }) {
-//                    RxBus.getDefault().post(MainOrderHouseFragment.FIRST_LEVEL_ALL_MESSAGE_HAVE_READ_FLAG)
-//                }
-//            }
-//        }
         setRefreshEnable(false)
     }
 

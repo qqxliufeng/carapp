@@ -9,6 +9,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.ui.fragments.BaseFragment
+import com.android.ql.lf.carapp.ui.fragments.user.mine.MineEnsureMoneyFragment
+import com.android.ql.lf.carapp.utils.RxBus
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_pay_result_layout.*
 
@@ -44,6 +46,7 @@ class PayResultFragment : BaseFragment() {
                 PAY_SUCCESS_CODE -> {
                     mTvPayResultTitle.text = "支付成功"
                     mBtBack.text = "立即返回"
+                    RxBus.getDefault().post(MineEnsureMoneyFragment.WxPaySuccessBean(true))
                     mTvPayResultTitle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.img_icon_pitchon_pay_success, 0, 0, 0)
                     mBtBack.setOnClickListener {
                         finish()

@@ -106,22 +106,7 @@
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@android:style/Theme.NoDisplay" />
-
-
-
         <activity android:name=".ui.activities.SelectAddressActivity" />
-
-        <!--              微信                 -->
-        <activity
-            android:name=".wxapi.WXPayEntryActivity"
-            android:exported="true"
-            android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="wx0b6a3be07b8ed6a0" />
-            </intent-filter>
-        </activity>
 
         <!--                                   极光推送自定义消息                                    -->
         <receiver

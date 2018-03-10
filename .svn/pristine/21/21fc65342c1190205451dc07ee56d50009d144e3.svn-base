@@ -55,6 +55,8 @@ class MinePersonalServiceEditFragment : BaseNetWorkingFragment() {
 
     override fun initView(view: View?) {
         addressSubscription
+        mEtMinePersonalServicePhone.setText(UserInfo.getInstance().memberPhone)
+        mEtMinePersonalServiceAddress.text = UserInfo.getInstance().memberAddress
         mRlServiceEditWorkRangeContainer.setOnClickListener {
             if (!workRangeList.isEmpty()) {
                 if (bottomDialog == null) {
@@ -164,14 +166,8 @@ class MinePersonalServiceEditFragment : BaseNetWorkingFragment() {
                 mPresent.getDataByPost(0x1,
                         RequestParamsHelper.MEMBER_MODEL,
                         RequestParamsHelper.ACT_EDIT_PERSONAL_SERVICE,
-                        RequestParamsHelper.getEditePersonalServiceParam(
-                                shopInfo!!.shop_id,
-                                selectAddress!!,
-                                mEtMinePersonalServiceDetailAddress.getTextString(),
-                                currentWorkRange!!.tag_title!!,
-                                startTime!!,
-                                endTime!!,
-                                mEtMinePersonalServiceContent.getTextString()))
+                        RequestParamsHelper.getEditePersonalServiceParam(shopInfo!!.shop_id,
+                                selectAddress!!,mEtMinePersonalServiceDetailAddress.getTextString(), "aa", startTime!!, endTime!!, mEtMinePersonalServiceContent.getTextString()))
             }
         }
         mEtMinePersonalServiceAddress.setOnClickListener {
@@ -204,11 +200,6 @@ class MinePersonalServiceEditFragment : BaseNetWorkingFragment() {
                 setText(mTvServiceEditWorkEndTime, shopInfo!!.shop_end_time)
                 setText(mEtMinePersonalServiceContent, shopInfo!!.shop_content)
                 setText(mEtMinePersonalServiceDetailAddress,shopInfo!!.shop_d)
-                setText(mTvServiceEditWorkRange,shopInfo!!.shop_ppa)
-                if (!TextUtils.isEmpty(shopInfo!!.shop_ppa)){
-                    currentWorkRange = WorkRangeBean()
-                    currentWorkRange!!.tag_title = shopInfo!!.shop_ppa
-                }
                 startTime = shopInfo!!.shop_start_time
                 endTime = shopInfo!!.shop_end_time
                 mBtMinePersonalServiceEditSubmit.isEnabled = true

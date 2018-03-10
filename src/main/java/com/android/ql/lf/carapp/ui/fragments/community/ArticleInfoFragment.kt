@@ -49,9 +49,6 @@ class ArticleInfoFragment : BaseRecyclerViewFragment<ArticleAnswerBean>() {
         super.initView(view)
         arguments.classLoader = this.javaClass.classLoader
         articleBean = arguments.getParcelable(ARTICLE_BEAN_FLAG)
-        if (articleBean != null) {
-            setArticleInfo()
-        }
         mBaseAdapter.addHeaderView(topView)
         mBaseAdapter.setHeaderAndEmpty(true)
         mPraiseView.setOnClickListener {

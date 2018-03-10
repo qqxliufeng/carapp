@@ -1,9 +1,13 @@
 package com.android.ql.lf.carapp.ui.fragments.bottom
 
 import android.graphics.Color
+import android.opengl.Visibility
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.content.ContextCompat
+import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.UpdateNotifyBean
@@ -30,6 +34,7 @@ class MainOrderHouseFragment : BaseFragment() {
 
     companion object {
 
+        val FIRST_LEVEL_ALL_MESSAGE_HAVE_READ_FLAG = "first level all message have read flag"
         val MY_ALL_ORDER_LIST_FLAG = "MY_ALL_ORDER_LIST_FLAG"
 
         val MY_MESSAGE_FLAG = "my_message_flag"
@@ -42,8 +47,23 @@ class MainOrderHouseFragment : BaseFragment() {
 
     }
 
+    private val messageSubscription by lazy {
+        RxBus.getDefault().toObservable(String::class.java).subscribe {
+            if (FIRST_LEVEL_ALL_MESSAGE_HAVE_READ_FLAG == it) {
+                if (mViewMainOrderHouseMessageNotify.visibility == View.VISIBLE) {
+                    mViewMainOrderHouseMessageNotify.visibility = View.GONE
+                }
+            }
+        }
+    }
+
     private val loginSubscription by lazy {
         RxBus.getDefault().toObservable(UserInfo::class.java).subscribe {
+            mTvMainOrderHouseAddress.text = if (!TextUtils.isEmpty(UserInfo.getInstance().memberAddress)) {
+                UserInfo.getInstance().memberAddress
+            } else {
+                "暂无"
+            }
             if (it.isLogin) {
                 if (UserInfo.loginToken == MY_MESSAGE_FLAG) {
                     mFlMainMainOrderHouseNotifyContainer.doClickWithUseStatusEnd()
@@ -65,12 +85,6 @@ class MainOrderHouseFragment : BaseFragment() {
 
     private val orderCountBadgeView by lazy {
         QBadgeView(mContext)
-    }
-
-    private val updateMessageNotifySubscription by lazy {
-        RxBus.getDefault().toObservable(UpdateNotifyBean::class.java).subscribe {
-            mViewMainOrderHouseMessageNotify.visibility = it.status
-        }
     }
 
     override fun getLayoutId() = R.layout.fragment_main_order_house_layout
@@ -98,7 +112,7 @@ class MainOrderHouseFragment : BaseFragment() {
         }
         loginSubscription
         userLogoutSubscription
-        updateMessageNotifySubscription
+        messageSubscription
     }
 
     fun updateAddress(address: String) {
@@ -134,9 +148,9 @@ class MainOrderHouseFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
+        unsubscribe(messageSubscription)
         unsubscribe(loginSubscription)
         unsubscribe(userLogoutSubscription)
-        unsubscribe(updateMessageNotifySubscription)
         super.onDestroyView()
     }
 
