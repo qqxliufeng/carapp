@@ -95,15 +95,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="预约时间"
+                        android:layout_centerVertical="true"
                         android:textColor="@color/text_deep_dark_color"
                         android:textSize="@dimen/sp_16" />
 
                     <TextView
                         android:id="@+id/mTvOrderDetailForWaitingYTime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
                         android:layout_alignParentRight="true"
                         android:textColor="@color/text_dark_color"
+                        android:gravity="right|center"
+                        android:layout_marginLeft="80dp"
                         tools:text="2018-1-21" />
                 </RelativeLayout>
 
