@@ -1,6 +1,7 @@
 package com.android.ql.lf.carapp.ui.activities
 
 import android.content.Intent
+import android.net.Uri
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
@@ -11,10 +12,7 @@ import com.android.ql.lf.carapp.ui.fragments.bottom.MainCommunityFragment
 import com.android.ql.lf.carapp.ui.fragments.bottom.MainMallFragment
 import com.android.ql.lf.carapp.ui.fragments.bottom.MainMineFragment
 import com.android.ql.lf.carapp.ui.fragments.bottom.MainOrderHouseFragment
-import com.android.ql.lf.carapp.utils.BottomNavigationViewHelper
-import com.android.ql.lf.carapp.utils.Constants
-import com.android.ql.lf.carapp.utils.PreferenceUtils
-import com.android.ql.lf.carapp.utils.toast
+import com.android.ql.lf.carapp.utils.*
 import com.tencent.bugly.beta.Beta
 import kotlinx.android.synthetic.main.activity_main_layout.*
 
