@@ -1,9 +1,11 @@
 package com.android.ql.lf.carapp.ui.fragments.user.mine
 
 import android.app.TimePickerDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
@@ -21,7 +23,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.google.gson.Gson
+import com.tencent.mm.opensdk.utils.Log
 import kotlinx.android.synthetic.main.fragment_mine_personal_service_layout.*
+import org.jetbrains.anko.collections.forEachWithIndex
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -44,9 +48,9 @@ class MinePersonalServiceEditFragment : BaseNetWorkingFragment() {
 
     private var currentWorkRange: WorkRangeBean? = null
 
-    private var selectAddress:String? = null
+    private var selectAddress: String? = null
 
-    private val  addressSubscription = RxBus.getDefault().toObservable(SelectAddressActivity.SelectAddressItemBean::class.java).subscribe {
+    private val addressSubscription = RxBus.getDefault().toObservable(SelectAddressActivity.SelectAddressItemBean::class.java).subscribe {
         selectAddress = it.name
         mEtMinePersonalServiceAddress.text = selectAddress!!
     }
@@ -57,7 +61,36 @@ class MinePersonalServiceEditFragment : BaseNetWorkingFragment() {
         addressSubscription
         mRlServiceEditWorkRangeContainer.setOnClickListener {
             if (!workRangeList.isEmpty()) {
-                if (bottomDialog == null) {
+                val titleList = arrayListOf<String>()
+                val checkList = arrayListOf<Boolean>()
+                val titleArray = arrayOf<String>()
+                val selectList = arrayListOf<Int>()
+                workRangeList.forEach {
+                    titleList.add(it.product_tag_title!!)
+                    checkList.add(false)
+                }
+                val builder = AlertDialog.Builder(mContext)
+                builder.setMultiChoiceItems(titleList.toArray(titleArray), checkList.toBooleanArray()) { dialog, which, isChecked ->
+                    if (selectList.contains(which)) {
+                        selectList.remove(which)
+                    } else {
+                        selectList.add(which)
+                    }
+                }
+                builder.setNegativeButton("取消", null)
+                builder.setPositiveButton("确定") { _, _ ->
+                    if (!selectList.isEmpty()) {
+                        val sb = StringBuilder()
+                        selectList.forEach {
+                            val item = workRangeList[it]
+                            sb.append(item.product_tag_title).append(",")
+                        }
+                        mTvServiceEditWorkRange.text = sb.deleteCharAt(sb.length - 1).toString()
+                    }
+                }
+                builder.setTitle("选择服务类型")
+                builder.create().show()
+                /*if (bottomDialog == null) {
                     bottomDialog = BottomSheetDialog(mContext)
                     val contentView = View.inflate(mContext, R.layout.dialog_work_range_layout, null)
                     val rv_content = contentView.findViewById<RecyclerView>(R.id.mRvRefundContent)
@@ -84,7 +117,7 @@ class MinePersonalServiceEditFragment : BaseNetWorkingFragment() {
                     contentView.measure(0, 0)
                     behavior.peekHeight = contentView.measuredHeight
                 }
-                bottomDialog!!.show()
+                bottomDialog!!.show()*/
             }
         }
         mTvServiceEditWorkStartTime.setOnClickListener {
@@ -99,7 +132,7 @@ class MinePersonalServiceEditFragment : BaseNetWorkingFragment() {
                         startTime = "$hourOfDay:$minute"
                         mTvServiceEditWorkStartTime.text = startTime
                     }
-                }else{
+                } else {
                     startTime = "$hourOfDay:$minute"
                     mTvServiceEditWorkStartTime.text = startTime
                 }
@@ -119,7 +152,7 @@ class MinePersonalServiceEditFragment : BaseNetWorkingFragment() {
                         endTime = "$hourOfDay:$minute"
                         mTvServiceEditWorkEndTime.text = endTime
                     }
-                }else{
+                } else {
                     endTime = "$hourOfDay:$minute"
                     mTvServiceEditWorkEndTime.text = endTime
                 }
@@ -168,15 +201,15 @@ class MinePersonalServiceEditFragment : BaseNetWorkingFragment() {
                                 shopInfo!!.shop_id,
                                 selectAddress!!,
                                 mEtMinePersonalServiceDetailAddress.getTextString(),
-                                currentWorkRange!!.tag_title!!,
+                                mTvServiceEditWorkRange.text.toString(),
                                 startTime!!,
                                 endTime!!,
                                 mEtMinePersonalServiceContent.getTextString()))
             }
         }
         mEtMinePersonalServiceAddress.setOnClickListener {
-             startActivity(Intent(mContext, SelectAddressActivity::class.java))
-             (mContext as FragmentContainerActivity).overridePendingTransition(R.anim.activity_open, 0)
+            startActivity(Intent(mContext, SelectAddressActivity::class.java))
+            (mContext as FragmentContainerActivity).overridePendingTransition(R.anim.activity_open, 0)
         }
         mPresent.getDataByPost(0x0, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_PERSONAL_SERVICE, RequestParamsHelper.getPersonalServiceParam())
     }
@@ -203,11 +236,11 @@ class MinePersonalServiceEditFragment : BaseNetWorkingFragment() {
                 setText(mTvServiceEditWorkStartTime, shopInfo!!.shop_start_time)
                 setText(mTvServiceEditWorkEndTime, shopInfo!!.shop_end_time)
                 setText(mEtMinePersonalServiceContent, shopInfo!!.shop_content)
-                setText(mEtMinePersonalServiceDetailAddress,shopInfo!!.shop_d)
-                setText(mTvServiceEditWorkRange,shopInfo!!.shop_ppa)
-                if (!TextUtils.isEmpty(shopInfo!!.shop_ppa)){
+                setText(mEtMinePersonalServiceDetailAddress, shopInfo!!.shop_d)
+                setText(mTvServiceEditWorkRange, shopInfo!!.shop_ppa)
+                if (!TextUtils.isEmpty(shopInfo!!.shop_ppa)) {
                     currentWorkRange = WorkRangeBean()
-                    currentWorkRange!!.tag_title = shopInfo!!.shop_ppa
+                    currentWorkRange!!.product_tag_title = shopInfo!!.shop_ppa
                 }
                 startTime = shopInfo!!.shop_start_time
                 endTime = shopInfo!!.shop_end_time
@@ -222,7 +255,7 @@ class MinePersonalServiceEditFragment : BaseNetWorkingFragment() {
             if (check != null) {
                 if (check.code == SUCCESS_CODE) {
                     toast("修改成功！")
-                    UserInfo.getInstance().shopInfo.shop_address = selectAddress+mEtMinePersonalServiceDetailAddress.getTextString()
+                    UserInfo.getInstance().shopInfo.shop_address = selectAddress + mEtMinePersonalServiceDetailAddress.getTextString()
                     UserInfo.getInstance().shopInfo.shop_d = mEtMinePersonalServiceDetailAddress.getTextString()
                     UserInfo.getInstance().shopInfo.shop_content = mEtMinePersonalServiceContent.getTextString()
                     UserInfo.getInstance().shopInfo.shop_start_time = mTvServiceEditWorkStartTime.text.toString()
@@ -259,9 +292,9 @@ class MinePersonalServiceEditFragment : BaseNetWorkingFragment() {
 
 
     class WorkRangeBean {
-        var tag_title: String? = null
-        var tag_id: String? = null
-        var tag_sort: String? = null
+        var product_tag_title: String? = null
+        var product_tag_id: String? = null
+        var product_tag_sort: String? = null
     }
 
 }

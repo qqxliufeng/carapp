@@ -68,7 +68,7 @@ wrjt.sdqlweb.com/interface.php/v1/member/my_withdraw_operation 请求方式：po
 wrjt.sdqlweb.com/interface.php/v1/member/my_withdraw_record 请求方式：post  参数 : page,pagesize,uid 第多少页,每页显示多少条,用户ID
 
 商家申请api:
-wrjt.sdqlweb.com/interface.php/v1/member/apply               请求方式：post  参数 : uid,type,name,mpic,sypic,phone,address,num,content 用户ID,申请类型 1 师傅  2  商家 ,店铺名,店铺图片,身份证营业执照,联系电话,店铺地址,师傅人数,店铺介绍
+wrjt.sdqlweb.com/interface.php/v1/member/apply               请求方式：post  参数 : uid,type,name,mpic,sypic,phone,address,num,content，detail_address 用户ID,申请类型 1 师傅  2  商家 ,店铺名,店铺图片,身份证营业执照,联系电话,店铺地址,师傅人数,店铺介绍，服务店铺地址
 
 用户中心api:
 wrjt.sdqlweb.com/interface.php/v1/member/personal            请求方式：post  参数 : uid 用户ID
@@ -83,7 +83,7 @@ wrjt.sdqlweb.com/interface.php/v1/member/edit_pw             请求方式：post
 wrjt.sdqlweb.com/interface.php/v1/member/personal_service    请求方式：post  参数 : uid 用户ID
 
 修改个人服务中心api:
-wrjt.sdqlweb.com/interface.php/v1/member/edit_personal_service  请求方式：post  参数 : sid,address,ppa,starttime,endtime,content 店铺ID,服务地址,主营,营业开始时间,营业结束时间,服务简介
+wrjt.sdqlweb.com/interface.php/v1/member/edit_personal_service  请求方式：post  参数 : sid,address,ppa,starttime,endtime,content,detail_address 店铺ID,服务地址,主营,营业开始时间,营业结束时间,服务简介,服务详细地址
 
 我的等级api:
 wrjt.sdqlweb.com/interface.php/v1/member/my_grades           请求方式：post  参数 : uid 用户ID
@@ -103,104 +103,7 @@ wrjt.sdqlweb.com/interface.php/v1/member/integral            请求方式：post
 我的钱包 绑定提现账户api:
 wrjt.sdqlweb.com/interface.php/v1/member/bind_account        请求方式：post  参数 : uid 用户ID
 
-我的钱包 绑定支付宝提
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-现账户api:
+我的钱包 绑定支付宝提现账户api:
 wrjt.sdqlweb.com/interface.php/v1/member/bind_alipay         请求方式：post  参数 : uid,account,autonym 用户ID,支付宝账号,用户真实姓名
 
 我的钱包 绑定微信提现账户api:
@@ -224,7 +127,7 @@ wrjt.sdqlweb.com/interface.php/v1/order/my_roadwork_qorder    请求方式：pos
 wrjt.sdqlweb.com/interface.php/v1/order/my_qorder             请求方式：post  参数 : uid,status,page,pagesize 用户ID,订单状态 施工状态 0  待抢单 1 待施工  2 待确认  3  已施工 4 待结算 5  已结算  6  退款中 7 已退款  8 已过期 token  为空 是全部订单
 
 修改抢单状态api:
-wrjt.sdqlweb.com/interface.php/v1/order/edit_qorder_status    请求方式：post  参数 : oid,status 抢单ID,订单状态 施工状态 0  待抢单 1 待施工  2 待确认  3  已施工 4 待结算 5  已结算  6  退款中 7 已退款  8 已过期 token  为空 是全部订单
+wrjt.sdqlweb.com/interface.php/v1/order/edit_qorder_status    请求方式：post  参数 : oid,status,code,appointment_time,check_code 抢单ID,订单状态,校验码，预约时间，核销码 施工状态 0  待抢单 1 待施工  2 待确认  3  已施工 4 待结算 5  已结算  6  退款中 7 已退款  8 已过期 token  为空 是全部订单
 
 抢单拍照api:
 wrjt.sdqlweb.com/interface.php/v1/order/play_pic              请求方式：post  参数 : oid,pic 抢单ID,图片

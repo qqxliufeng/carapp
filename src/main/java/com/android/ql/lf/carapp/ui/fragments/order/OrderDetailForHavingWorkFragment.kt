@@ -60,7 +60,7 @@ class OrderDetailForHavingWorkFragment : BaseNetWorkingFragment() {
                 setText(mTvOrderDetailForHavingWorkName, orderBean?.qorder_name)
                 setText(mTvOrderDetailForHavingWorkStatus, ServiceOrderPresent.OrderStatus.getDescriptionByIndex(orderBean?.qorder_token))
                 setText(mTvOrderDetailForHavingWorkPhone, "手机号码：${orderBean?.qorder_phone}")
-                setText(mTvOrderDetailForHavingWorkYTime, orderBean?.qorder_ytime)
+                setText(mTvOrderDetailForHavingWorkYTime, orderBean?.qorder_appointment_time)
                 mTvOrderDetailForHavingWorkContent.text = Html.fromHtml("<font color='${ContextCompat.getColor(mContext, R.color.colorPrimary)}'>备注：</font>${orderBean?.qorder_content}")
                 setText(mTvOrderDetailForWaitingWorkPrice, "￥${orderBean?.qorder_price}")
                 setText(mTvOrderDetailForHavingWorkOrderName, orderBean?.qorder_name)

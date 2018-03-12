@@ -1,19 +1,17 @@
 package com.android.ql.lf.carapp.ui.fragments.user
 
+import android.net.Uri
 import android.support.v7.app.AlertDialog
+import android.text.TextUtils
 import android.view.View
 import com.a.WebViewContentFragment
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.UserInfo
+import com.android.ql.lf.carapp.data.VersionInfo
 import com.android.ql.lf.carapp.present.UserPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
-import com.android.ql.lf.carapp.ui.fragments.DetailContentFragment
-import com.android.ql.lf.carapp.utils.CacheDataManager
-import com.android.ql.lf.carapp.utils.Constants
-import com.android.ql.lf.carapp.utils.RequestParamsHelper
-import com.android.ql.lf.carapp.utils.toast
-import com.tencent.bugly.beta.Beta
+import com.android.ql.lf.carapp.utils.*
 import kotlinx.android.synthetic.main.fragment_setting_layout.*
 import org.jetbrains.anko.bundleOf
 
@@ -32,15 +30,16 @@ class SettingFragment : BaseNetWorkingFragment() {
         val packageInfo = mContext.packageManager.getPackageInfo(mContext.packageName, 0)
         val versionName = packageInfo.versionName
         mVersionName.text = "V$versionName"
-        val upgradeInfo = Beta.getUpgradeInfo()
-        if (upgradeInfo != null && packageInfo.versionCode < upgradeInfo.versionCode) {
+        if (packageInfo.versionCode < VersionInfo.getInstance().versionCode) {
             mTvNewVersionNotify.visibility = View.VISIBLE
-            mVersionName.text = "V${upgradeInfo.versionName}"
+            mVersionName.text = "V${VersionInfo.getInstance().versionCode}"
         } else {
             mTvNewVersionNotify.visibility = View.GONE
         }
         mRlVersionUpContainer.setOnClickListener {
-            Beta.checkUpgrade(true, false)
+            if (!TextUtils.isEmpty(VersionInfo.getInstance().downUrl)) {
+                VersionHelp.downNewVersion(mContext.applicationContext, Uri.parse(VersionInfo.getInstance().downUrl), "${System.currentTimeMillis()}")
+            }
         }
         val cacheSize = CacheDataManager.getTotalCacheSize(mContext)
         mCacheSize.text = "$cacheSize"
@@ -66,7 +65,7 @@ class SettingFragment : BaseNetWorkingFragment() {
             FragmentContainerActivity.from(mContext)
                     .setClazz(WebViewContentFragment::class.java)
                     .setTitle(mTvSettingAboutUs.text.toString())
-                    .setExtraBundle(bundleOf(Pair(WebViewContentFragment.PATH_FLAG,RequestParamsHelper.ACT_ABOUT_URL)))
+                    .setExtraBundle(bundleOf(Pair(WebViewContentFragment.PATH_FLAG, RequestParamsHelper.ACT_ABOUT_URL)))
                     .setNeedNetWorking(true)
                     .start()
         }
@@ -74,7 +73,7 @@ class SettingFragment : BaseNetWorkingFragment() {
             FragmentContainerActivity.from(mContext)
                     .setClazz(WebViewContentFragment::class.java)
                     .setTitle(mTvSettingHelp.text.toString())
-                    .setExtraBundle(bundleOf(Pair(WebViewContentFragment.PATH_FLAG,RequestParamsHelper.ACT_HELP_URL)))
+                    .setExtraBundle(bundleOf(Pair(WebViewContentFragment.PATH_FLAG, RequestParamsHelper.ACT_HELP_URL)))
                     .setNeedNetWorking(true)
                     .start()
         }
@@ -82,7 +81,7 @@ class SettingFragment : BaseNetWorkingFragment() {
             FragmentContainerActivity.from(mContext)
                     .setClazz(WebViewContentFragment::class.java)
                     .setTitle(mTvSettingProtocol.text.toString())
-                    .setExtraBundle(bundleOf(Pair(WebViewContentFragment.PATH_FLAG,RequestParamsHelper.ACT_PROTOCOL_URL)))
+                    .setExtraBundle(bundleOf(Pair(WebViewContentFragment.PATH_FLAG, RequestParamsHelper.ACT_PROTOCOL_URL)))
                     .setNeedNetWorking(true)
                     .start()
         }

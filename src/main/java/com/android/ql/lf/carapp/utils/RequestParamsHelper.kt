@@ -279,11 +279,13 @@ class RequestParamsHelper {
         val ACT_PLAY_PIC = "play_pic"
 
         val ACT_EDIT_QORDER_STATUS = "edit_qorder_status"
-        fun getEditQorderStatusParam(oid: String, status: String,code: String) =
+        fun getEditQorderStatusParam(oid: String, status: String,code: String,appointment_time:String,checkCode:String = "") =
                 getWithIdParams()
                         .addParam("oid", oid)
                         .addParam("status", status)
                         .addParam("code",code)
+                        .addParam("appointment_time",appointment_time)
+                        .addParam("check_code",checkCode)
 
         val ACT_QORDER_DETAIL = "qorder_detail"
         fun getOrderDetailParam(oid: String) = getWithIdParams().addParam("oid", oid)

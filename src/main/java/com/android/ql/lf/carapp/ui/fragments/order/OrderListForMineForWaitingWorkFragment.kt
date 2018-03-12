@@ -39,10 +39,6 @@ class OrderListForMineForWaitingWorkFragment : AbstractLazyLoadFragment<OrderBea
         }
     }
 
-    private val serviceOrderPresent by lazy {
-        ServiceOrderPresent()
-    }
-
     override fun createAdapter(): BaseQuickAdapter<OrderBean, BaseViewHolder>
             = OrderListForMineForWaitingWorkAdapter(R.layout.adapter_order_list_for_mine_for_waiting_work_item_layout, mArrayList)
 
@@ -94,19 +90,6 @@ class OrderListForMineForWaitingWorkFragment : AbstractLazyLoadFragment<OrderBea
         super.onRequestSuccess(requestID, result)
         if (requestID == 0x0) {
             processList(result as String, OrderBean::class.java)
-        } else if (requestID == 0x1) {
-            val check = checkResultCode(result)
-            if (check != null) {
-                when {
-                    check.code == SUCCESS_CODE -> {
-                        toast("确认完成")
-                        serviceOrderPresent.updateOrderStatus(ServiceOrderPresent.OrderStatus.HAVING_WORK.index.toInt())
-                        onPostRefresh()
-                    }
-                    check.code == "400" -> toast((check.obj as JSONObject).optString("msg"))
-                    else -> toast("确认失败，请稍后重试……")
-                }
-            }
         }
     }
 
@@ -139,12 +122,6 @@ class OrderListForMineForWaitingWorkFragment : AbstractLazyLoadFragment<OrderBea
                         .setClazz(OrderImageUpLoadFragment::class.java)
                         .setExtraBundle(bundleOf(Pair("oid", mArrayList[position].qorder_id)))
                         .start()
-            }
-            R.id.mBtOrderListForWaitingWorkComplete -> {
-//                mPresent.getDataByPost(0x1,
-//                        RequestParamsHelper.ORDER_MODEL,
-//                        RequestParamsHelper.ACT_EDIT_QORDER_STATUS,
-//                        RequestParamsHelper.getEditQorderStatusParam(mArrayList[position].qorder_id, ServiceOrderPresent.OrderStatus.WAITING_CONFIRM.index))
             }
             R.id.mTvOrderListForItemName -> {
                 startPhone(mArrayList[position].qorder_phone)

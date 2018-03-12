@@ -13,7 +13,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp_10"
             android:orientation="vertical">
 
@@ -36,15 +36,55 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:background="@drawable/shape_tv_bg1"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="14sp"
                     android:layout_marginLeft="60dp"
+                    android:background="@drawable/shape_tv_bg1"
+                    android:gravity="left"
+                    android:hint="请输入验证码"
                     android:minWidth="100dp"
-                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimary"
                     android:textColorHint="@android:color/darker_gray"
-                    android:gravity="center"
-                    android:hint="请输入验证码"/>
+                    android:inputType="number"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="#eee" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:padding="@dimen/dp_10">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="核销码"
+                    android:textColor="@color/text_deep_dark_color"
+                    android:textSize="@dimen/sp_16" />
+
+                <EditText
+                    android:id="@+id/mTvOrderDetailForWaitingHXCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="60dp"
+                    android:background="@drawable/shape_tv_bg1"
+                    android:gravity="left"
+                    android:hint="请输入核销码"
+                    android:minWidth="100dp"
+                    android:maxLength="12"
+                    android:inputType="number"
+                    android:textColor="@color/colorPrimary"
+                    android:textColorHint="@android:color/darker_gray"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
             </RelativeLayout>
 
             <LinearLayout
@@ -64,9 +104,9 @@
                         android:id="@+id/mTvOrderDetailForWaitingName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:text="王大宝"
                         android:textColor="@color/text_deep_dark_color"
-                        android:textSize="@dimen/sp_16" />
+                        android:textSize="@dimen/sp_16"
+                        tools:text="王大宝" />
 
                     <TextView
                         android:id="@+id/mTvOrderDetailForWaitingStatus"
@@ -82,8 +122,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_10"
-                    android:textColor="@color/text_dark_color"
                     android:autoLink="phone"
+                    android:textColor="@color/text_dark_color"
                     tools:text="手机号码：185454578954" />
 
                 <RelativeLayout
@@ -94,8 +134,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="预约时间"
                         android:layout_centerVertical="true"
+                        android:text="预约时间"
                         android:textColor="@color/text_deep_dark_color"
                         android:textSize="@dimen/sp_16" />
 
@@ -104,9 +144,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_alignParentRight="true"
-                        android:textColor="@color/text_dark_color"
-                        android:gravity="right|center"
                         android:layout_marginLeft="80dp"
+                        android:gravity="right|center"
+                        android:textColor="@color/text_dark_color"
                         tools:text="2018-1-21" />
                 </RelativeLayout>
 
@@ -158,8 +198,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="50dp"
                         android:layout_toLeftOf="@+id/mTvOrderDetailForWaitingWorkPrice"
-                        android:textColor="@color/text_deep_dark_color"
-                        android:text="X1" />
+                        android:text="X1"
+                        android:textColor="@color/text_deep_dark_color" />
 
                 </RelativeLayout>
 

@@ -1,11 +1,13 @@
 package com.android.ql.lf.carapp.ui.fragments.order
 
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.support.v4.content.ContextCompat
 import android.text.Html
 import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
+import android.widget.TimePicker
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.OrderBean
 import com.android.ql.lf.carapp.present.ServiceOrderPresent
@@ -37,6 +39,7 @@ class OrderDetailForWaitingWorkFragment : BaseNetWorkingFragment() {
     }
 
     private var orderBean: OrderBean? = null
+    private var bespokeTime: String? = null
 
     override fun getLayoutId() =
             R.layout.fragment_order_detail_for_waiting_work_layout
@@ -74,9 +77,15 @@ class OrderDetailForWaitingWorkFragment : BaseNetWorkingFragment() {
                     val calendar = Calendar.getInstance()
                     val datePicker = DatePickerDialog(mContext,
                             DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                                Log.e("TAG", "$year$month$dayOfMonth")
+                                val tempTime = "$year-${month + 1}-$dayOfMonth"
+                                val timePicker = TimePickerDialog(mContext, TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+                                    bespokeTime = "$tempTime $hourOfDay:$minute"
+                                    mTvOrderDetailForWaitingYTime.text = bespokeTime
+                                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true)
+                                timePicker.setTitle("请选择结束时间")
+                                timePicker.show()
                             },
-                            calendar.get(Calendar.YEAR), Calendar.MONTH, Calendar.DAY_OF_MONTH)
+                            calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
                     datePicker.setTitle("请选择时间")
                     datePicker.show()
                 }
@@ -103,10 +112,23 @@ class OrderDetailForWaitingWorkFragment : BaseNetWorkingFragment() {
                             toast("请输入验证码")
                             return@setOnClickListener
                         }
+                        if (bespokeTime == null) {
+                            toast("请选择预约时间")
+                            return@setOnClickListener
+                        }
                         mPresent.getDataByPost(0x1,
                                 RequestParamsHelper.ORDER_MODEL,
                                 RequestParamsHelper.ACT_EDIT_QORDER_STATUS,
-                                RequestParamsHelper.getEditQorderStatusParam(orderBean!!.qorder_id, ServiceOrderPresent.OrderStatus.WAITING_CONFIRM.index, mTvOrderDetailForWaitingCode.getTextString()))
+                                RequestParamsHelper.getEditQorderStatusParam(
+                                        orderBean!!.qorder_id,
+                                        ServiceOrderPresent.OrderStatus.WAITING_CONFIRM.index,
+                                        mTvOrderDetailForWaitingCode.getTextString(),
+                                        bespokeTime!!,
+                                        if (mTvOrderDetailForWaitingHXCode.isEmpty()) {
+                                            ""
+                                        } else {
+                                            mTvOrderDetailForWaitingHXCode.getTextString()
+                                        }))
                     }
                 }
             } else {

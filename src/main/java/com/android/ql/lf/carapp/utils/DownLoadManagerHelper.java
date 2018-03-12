@@ -29,7 +29,7 @@ public class DownLoadManagerHelper {
         request.setVisibleInDownloadsUi(true);  //设置显示下载界面
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
         Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).mkdir();
-        final String downPath = Environment.getExternalStorageDirectory().getAbsoluteFile()+File.separator+Environment.DIRECTORY_DOWNLOADS+File.separator+fileName+".apk";
+        final String downPath = Environment.getExternalStorageDirectory().getAbsolutePath()+File.separator+Environment.DIRECTORY_DOWNLOADS+File.separator+fileName+".apk";
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,fileName+".apk");
         final long myDownId = downloadManager.enqueue(request);
         IntentFilter intentFilter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);

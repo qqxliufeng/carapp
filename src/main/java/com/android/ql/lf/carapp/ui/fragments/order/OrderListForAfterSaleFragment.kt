@@ -2,12 +2,17 @@ package com.android.ql.lf.carapp.ui.fragments.order
 
 import android.view.View
 import com.android.ql.lf.carapp.R
+import com.android.ql.lf.carapp.data.EventOrderStatusBean
 import com.android.ql.lf.carapp.data.OrderBean
 import com.android.ql.lf.carapp.data.UserInfo
+import com.android.ql.lf.carapp.present.ServiceOrderPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.adapter.OrderListForAfterSaleAdapter
+import com.android.ql.lf.carapp.ui.adapter.OrderListForMineForWaitingWorkAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
+import com.android.ql.lf.carapp.utils.RxBus
+import com.android.ql.lf.carapp.utils.startPhone
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import org.jetbrains.anko.bundleOf
@@ -27,10 +32,20 @@ class OrderListForAfterSaleFragment : BaseRecyclerViewFragment<OrderBean>() {
     override fun initView(view: View?) {
         super.initView(view)
         registerLoginSuccessBus()
+        registerLogoutSuccessBus()
+        updateOrderStatusSubscription
+    }
+
+    private val updateOrderStatusSubscription by lazy {
+        RxBus.getDefault().toObservable(EventOrderStatusBean::class.java).subscribe {
+            if (it.orderStatus == ServiceOrderPresent.OrderStatus.WAITING_WORK.index.toInt()) {
+                onPostRefresh()
+            }
+        }
     }
 
     override fun createAdapter(): BaseQuickAdapter<OrderBean, BaseViewHolder>
-            = OrderListForAfterSaleAdapter(R.layout.adapter_order_list_for_after_sale_item_layout, mArrayList)
+            = OrderListForMineForWaitingWorkAdapter(R.layout.adapter_order_list_for_mine_for_waiting_work_item_layout, mArrayList)
 
     override fun getEmptyMessage() = if (!UserInfo.getInstance().isLogin) {
         resources.getString(R.string.login_notify_title)
@@ -44,13 +59,13 @@ class OrderListForAfterSaleFragment : BaseRecyclerViewFragment<OrderBean>() {
             setEmptyViewStatus()
         } else {
             setRefreshEnable(true)
-            mPresent.getDataByPost(0x0, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_MY_SALE_QORDER, RequestParamsHelper.getMySaleQorderParam(page = currentPage))
+            mPresent.getDataByPost(0x0, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_MY_QORDER, RequestParamsHelper.getMyQorderParam(ServiceOrderPresent.OrderStatus.BACK_MONEY.index, currentPage))
         }
     }
 
     override fun onLoadMore() {
         super.onLoadMore()
-        mPresent.getDataByPost(0x0, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_MY_SALE_QORDER, RequestParamsHelper.getMySaleQorderParam(page = currentPage))
+        mPresent.getDataByPost(0x0, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_MY_QORDER, RequestParamsHelper.getMyQorderParam(ServiceOrderPresent.OrderStatus.BACK_MONEY.index, currentPage))
     }
 
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
@@ -58,22 +73,48 @@ class OrderListForAfterSaleFragment : BaseRecyclerViewFragment<OrderBean>() {
         processList(result as String,OrderBean::class.java)
     }
 
+    override fun onMyItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
+        super.onMyItemClick(adapter, view, position)
+        FragmentContainerActivity
+                .from(mContext)
+                .setTitle("订单详情")
+                .setNeedNetWorking(true)
+                .setExtraBundle(bundleOf(Pair(OrderDetailForWaitingWorkFragment.ORDER_BEAN_FLAG, mArrayList[position].qorder_id)))
+                .setClazz(OrderDetailForWaitingWorkFragment::class.java)
+                .start()
+    }
+
     override fun onMyItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
         super.onMyItemChildClick(adapter, view, position)
-        if (view!!.id == R.id.mBtAfterSaleItem){
-            FragmentContainerActivity
-                    .from(mContext)
-                    .setTitle("订单详情")
-                    .setNeedNetWorking(true)
-                    .setExtraBundle(bundleOf(Pair(OrderDetailForHavingWorkFragment.ORDER_BEAN_FLAG, mArrayList[position].qorder_id)))
-                    .setClazz(OrderDetailForHavingWorkFragment::class.java)
-                    .start()
+        when (view!!.id) {
+            R.id.mBtOrderListForWaitingWorkCamera -> {
+                FragmentContainerActivity
+                        .from(mContext)
+                        .setTitle("拍照")
+                        .setNeedNetWorking(true)
+                        .setClazz(OrderImageUpLoadFragment::class.java)
+                        .setExtraBundle(bundleOf(Pair("oid", mArrayList[position].qorder_id)))
+                        .start()
+            }
+            R.id.mTvOrderListForItemName -> {
+                startPhone(mArrayList[position].qorder_phone)
+            }
         }
+    }
+
+    override fun onLogoutSuccess(logout: String?) {
+        super.onLogoutSuccess(logout)
+        onPostRefresh()
     }
 
     override fun onLoginSuccess(userInfo: UserInfo?) {
         super.onLoginSuccess(userInfo)
         onPostRefresh()
+    }
+
+    override fun onDestroyView() {
+        unsubscribe(updateOrderStatusSubscription)
+        super.onDestroyView()
     }
 
 }

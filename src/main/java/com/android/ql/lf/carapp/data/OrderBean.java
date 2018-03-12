@@ -34,6 +34,7 @@ public class OrderBean {
     private String qorder_mprice;
     private String qorder_code;
     private String qorder_d;
+    private String qorder_appointment_time;
     private long qorder_remaining_time;
     private long endTime;
 
@@ -235,6 +236,14 @@ public class OrderBean {
 
     public void setQorder_remaining_time(long qorder_remaining_time) {
         this.qorder_remaining_time = qorder_remaining_time;
+    }
+
+    public String getQorder_appointment_time() {
+        return qorder_appointment_time;
+    }
+
+    public void setQorder_appointment_time(String qorder_appointment_time) {
+        this.qorder_appointment_time = qorder_appointment_time;
     }
 
     public long getEndTime() {

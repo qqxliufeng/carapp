@@ -1,32 +1,39 @@
 package com.android.ql.lf.carapp.ui.fragments.bottom
 
+import android.app.Dialog
 import android.graphics.Color
+import android.net.Uri
+import android.os.Environment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.content.ContextCompat
+import android.support.v4.os.EnvironmentCompat
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.UpdateNotifyBean
 import com.android.ql.lf.carapp.data.UserInfo
+import com.android.ql.lf.carapp.data.VersionInfo
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.activities.MainActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseFragment
+import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.ui.fragments.message.MineMessageListFragment
 import com.android.ql.lf.carapp.ui.fragments.order.OrderAllListQDFragment
 import com.android.ql.lf.carapp.ui.fragments.order.OrderListForAfterSaleFragment
 import com.android.ql.lf.carapp.ui.fragments.order.OrderListForMineFragment
 import com.android.ql.lf.carapp.ui.fragments.order.OrderListForQDFragment
-import com.android.ql.lf.carapp.utils.RxBus
-import com.android.ql.lf.carapp.utils.doClickWithUseStatusEnd
-import com.android.ql.lf.carapp.utils.doClickWithUserStatusStart
+import com.android.ql.lf.carapp.utils.*
 import kotlinx.android.synthetic.main.fragment_main_order_house_layout.*
+import org.json.JSONObject
 import q.rorbin.badgeview.QBadgeView
 
 /**
  * Created by lf on 18.1.24.
  * @author lf on 18.1.24
  */
-class MainOrderHouseFragment : BaseFragment() {
+class MainOrderHouseFragment : BaseNetWorkingFragment() {
 
     companion object {
 
@@ -48,7 +55,7 @@ class MainOrderHouseFragment : BaseFragment() {
                 if (UserInfo.loginToken == MY_MESSAGE_FLAG) {
                     mFlMainMainOrderHouseNotifyContainer.doClickWithUseStatusEnd()
                     updateNotifyRed(View.GONE)
-                }else if (UserInfo.loginToken == MY_ALL_ORDER_LIST_FLAG){
+                } else if (UserInfo.loginToken == MY_ALL_ORDER_LIST_FLAG) {
                     mIvMainOrderHouseCount.doClickWithUseStatusEnd()
                 }
             }
@@ -99,7 +106,43 @@ class MainOrderHouseFragment : BaseFragment() {
         loginSubscription
         userLogoutSubscription
         updateMessageNotifySubscription
+        mPresent.getDataByPost(0x0, "t", "app_update")
     }
+
+    override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
+        super.onRequestSuccess(requestID, result)
+        val check = checkResultCode(result)
+        if (check != null) {
+            if (check.code == SUCCESS_CODE) {
+                val json = check.obj as JSONObject
+                val resultJson = json.optJSONObject("result")
+                if (resultJson.optString("version_code").toInt() > VersionHelp.currentVersionCode(mContext)) {
+                    VersionInfo.getInstance().versionCode = resultJson.optString("version_code").toInt()
+                    VersionInfo.getInstance().content = resultJson.optString("ssw")
+                    VersionInfo.getInstance().downUrl = resultJson.optString("apk")
+                    val updateDialog = Dialog(mContext)
+                    val contentView = View.inflate(mContext, R.layout.layout_update_layout, null)
+                    val tv_content = contentView.findViewById<TextView>(R.id.mTvUpdateVersionContent)
+                    contentView.findViewById<Button>(R.id.mBtUpdateVersionCancel).setOnClickListener {
+                        updateDialog.dismiss()
+                    }
+                    contentView.findViewById<Button>(R.id.mBtUpdateVersionUpdate).setOnClickListener {
+                        updateDialog.dismiss()
+                        toast("正在下载……")
+                        VersionHelp.downNewVersion(mContext, Uri.parse(resultJson.optString("apk")),"${System.currentTimeMillis()}")
+                    }
+                    updateDialog.setCanceledOnTouchOutside(false)
+                    tv_content.text = resultJson.optString("ssw")
+                    updateDialog.setContentView(contentView)
+                    updateDialog.show()
+                }
+            }
+        }
+    }
+
+    override fun onRequestFail(requestID: Int, e: Throwable) {
+    }
+
 
     fun updateAddress(address: String) {
         mTvMainOrderHouseAddress.text = address
