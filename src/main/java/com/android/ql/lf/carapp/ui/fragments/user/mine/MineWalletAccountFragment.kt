@@ -174,8 +174,12 @@ class MineWalletAccountFragment : BaseFragment() {
             super.onRequestSuccess(requestID, result)
             if (requestID == 0x0){
                 val check = checkResultCode(result)
-                if (check != null && check.code == SUCCESS_CODE) {
-                    toast("账号绑定成功")
+                if (check != null) {
+                    if (check.code == SUCCESS_CODE) {
+                        toast("账号绑定成功")
+                    }else{
+                        toast((check.obj as JSONObject).optString("msg"))
+                    }
                 } else {
                     toast("账号绑定失败，请稍后重试……")
                 }
