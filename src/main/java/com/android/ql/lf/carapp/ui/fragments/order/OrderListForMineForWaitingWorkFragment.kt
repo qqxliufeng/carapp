@@ -34,7 +34,7 @@ class OrderListForMineForWaitingWorkFragment : AbstractLazyLoadFragment<OrderBea
     private val updateOrderStatusSubscription by lazy {
         RxBus.getDefault().toObservable(EventOrderStatusBean::class.java).subscribe {
             if (it.orderStatus == ServiceOrderPresent.OrderStatus.WAITING_WORK.index.toInt()) {
-                onPostRefresh()
+                onLoginRefresh()
             }
         }
     }
@@ -72,11 +72,11 @@ class OrderListForMineForWaitingWorkFragment : AbstractLazyLoadFragment<OrderBea
 
     override fun onLoginSuccess(userInfo: UserInfo?) {
         super.onLoginSuccess(userInfo)
-        onPostRefresh()
+        onLoginRefresh()
     }
 
     override fun onLogoutSuccess(userInfo: String?) {
-        onPostRefresh()
+        onLogoutRefresh()
     }
 
     override fun onRequestStart(requestID: Int) {

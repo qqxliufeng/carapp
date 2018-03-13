@@ -117,6 +117,9 @@ wrjt.sdqlweb.com/interface.php/v1/member/wx_authorization    请求方式：post
 抢单api:
 wrjt.sdqlweb.com/interface.php/v1/order/qorder                请求方式：post  参数 : page,pagesize,uid,location 页数,每页最大数量，用户ID,店铺地址
 
+预约时间:
+wrjt.sdqlweb.com/interface.php/v1/order/edit_appointment_time 请求方式：post  参数 : qid,appointment_time 订单ID,预约时间
+
 抢单api:
 wrjt.sdqlweb.com/interface.php/v1/order/order_receiving       请求方式：post  参数 : uid,oid 用户ID,订单ID
 
@@ -124,10 +127,10 @@ wrjt.sdqlweb.com/interface.php/v1/order/order_receiving       请求方式：pos
 wrjt.sdqlweb.com/interface.php/v1/order/my_roadwork_qorder    请求方式：post  参数 : uid 用户ID
 
 我的抢单api:
-wrjt.sdqlweb.com/interface.php/v1/order/my_qorder             请求方式：post  参数 : uid,status,page,pagesize 用户ID,订单状态 施工状态 0  待抢单 1 待施工  2 待确认  3  已施工 4 待结算 5  已结算  6  退款中 7 已退款  8 已过期 token  为空 是全部订单
+wrjt.sdqlweb.com/interface.php/v1/order/my_qorder             请求方式：post  参数 : uid,status,page,pagesize 用户ID,订单状态 施工状态 0  待抢单 1 待施工  2 待确认  3  已施工 4 待结算 5  已结算  6  售后 7 已退款  8 已过期 token  为空 是全部订单
 
 修改抢单状态api:
-wrjt.sdqlweb.com/interface.php/v1/order/edit_qorder_status    请求方式：post  参数 : oid,status,code,appointment_time,check_code 抢单ID,订单状态,校验码，预约时间，核销码 施工状态 0  待抢单 1 待施工  2 待确认  3  已施工 4 待结算 5  已结算  6  退款中 7 已退款  8 已过期 token  为空 是全部订单
+wrjt.sdqlweb.com/interface.php/v1/order/edit_qorder_status    请求方式：post  参数 : oid,status,code,appointment_time,check_code 抢单ID,订单状态,校验码，预约时间，核销码 施工状态 0  待抢单 1 待施工  2 待确认  3  已施工 4 待结算 5  已结算  6  售后 7 已退款  8 已过期 token  为空 是全部订单
 
 抢单拍照api:
 wrjt.sdqlweb.com/interface.php/v1/order/play_pic              请求方式：post  参数 : oid,pic 抢单ID,图片

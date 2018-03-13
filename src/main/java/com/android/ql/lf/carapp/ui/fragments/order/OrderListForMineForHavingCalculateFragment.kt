@@ -9,6 +9,7 @@ import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.adapter.OrderListForMineForHavingCalculateAdapter
 import com.android.ql.lf.carapp.ui.fragments.AbstractLazyLoadFragment
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
+import com.android.ql.lf.carapp.utils.startPhone
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import org.jetbrains.anko.bundleOf
@@ -57,11 +58,11 @@ class OrderListForMineForHavingCalculateFragment : AbstractLazyLoadFragment<Orde
 
     override fun onLoginSuccess(userInfo: UserInfo?) {
         super.onLoginSuccess(userInfo)
-        onPostRefresh()
+        onLoginRefresh()
     }
 
     override fun onLogoutSuccess(userInfo: String?) {
-        onPostRefresh()
+        onLogoutRefresh()
     }
 
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
@@ -71,7 +72,7 @@ class OrderListForMineForHavingCalculateFragment : AbstractLazyLoadFragment<Orde
 
     override fun onMyItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
         super.onMyItemChildClick(adapter, view, position)
-        if (view!!.id == R.id.mBtOrderListForHavingCalculateSubmit){
+        if (view!!.id == R.id.mBtOrderListForHavingCalculateSubmit) {
             FragmentContainerActivity
                     .from(mContext)
                     .setTitle("订单详情")
@@ -79,7 +80,8 @@ class OrderListForMineForHavingCalculateFragment : AbstractLazyLoadFragment<Orde
                     .setExtraBundle(bundleOf(Pair(OrderDetailForHavingWorkFragment.ORDER_BEAN_FLAG, mArrayList[position].qorder_id)))
                     .setClazz(OrderDetailForHavingWorkFragment::class.java)
                     .start()
+        } else if (view.id == R.id.mTvOrderListForItemName) {
+            startPhone(mArrayList[position].qorder_phone)
         }
     }
-
 }

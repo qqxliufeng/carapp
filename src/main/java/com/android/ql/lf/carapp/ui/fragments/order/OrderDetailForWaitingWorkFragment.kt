@@ -7,7 +7,6 @@ import android.text.Html
 import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
-import android.widget.TimePicker
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.OrderBean
 import com.android.ql.lf.carapp.present.ServiceOrderPresent
@@ -18,7 +17,6 @@ import com.android.ql.lf.carapp.utils.getTextString
 import com.android.ql.lf.carapp.utils.isEmpty
 import com.android.ql.lf.carapp.utils.toast
 import com.google.gson.Gson
-import com.tencent.mm.opensdk.utils.Log
 import kotlinx.android.synthetic.main.fragment_order_detail_for_waiting_work_layout.*
 import org.jetbrains.anko.bundleOf
 import org.json.JSONObject
@@ -53,10 +51,10 @@ class OrderDetailForWaitingWorkFragment : BaseNetWorkingFragment() {
 
     override fun onRequestStart(requestID: Int) {
         super.onRequestStart(requestID)
-        if (requestID == 0x1) {
-            getFastProgressDialog("正在提交……")
-        } else if (requestID == 0x0) {
-            getFastProgressDialog("正在加载……")
+        when (requestID) {
+            0x1 -> getFastProgressDialog("正在提交……")
+            0x0 -> getFastProgressDialog("正在加载……")
+            0x2 -> getFastProgressDialog("正在提交时间……")
         }
     }
 
@@ -72,7 +70,7 @@ class OrderDetailForWaitingWorkFragment : BaseNetWorkingFragment() {
                 setText(mTvOrderDetailForWaitingName, orderBean?.qorder_name)
                 setText(mTvOrderDetailForWaitingStatus, ServiceOrderPresent.OrderStatus.getDescriptionByIndex(orderBean?.qorder_token))
                 setText(mTvOrderDetailForWaitingPhone, "手机号码：${orderBean?.qorder_phone}")
-                setText(mTvOrderDetailForWaitingYTime, orderBean?.qorder_ytime)
+                setText(mTvOrderDetailForWaitingYTime, orderBean?.qorder_appointment_time)
                 mTvOrderDetailForWaitingYTime.setOnClickListener {
                     val calendar = Calendar.getInstance()
                     val datePicker = DatePickerDialog(mContext,
@@ -80,7 +78,9 @@ class OrderDetailForWaitingWorkFragment : BaseNetWorkingFragment() {
                                 val tempTime = "$year-${month + 1}-$dayOfMonth"
                                 val timePicker = TimePickerDialog(mContext, TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
                                     bespokeTime = "$tempTime $hourOfDay:$minute"
-                                    mTvOrderDetailForWaitingYTime.text = bespokeTime
+                                    mPresent.getDataByPost(0x2, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_ORDER_TIME,
+                                            RequestParamsHelper.getOrderTimeParam(orderBean!!.qorder_id, bespokeTime!!))
+//                                    mTvOrderDetailForWaitingYTime.text = bespokeTime
                                 }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true)
                                 timePicker.setTitle("请选择结束时间")
                                 timePicker.show()
@@ -112,10 +112,6 @@ class OrderDetailForWaitingWorkFragment : BaseNetWorkingFragment() {
                             toast("请输入验证码")
                             return@setOnClickListener
                         }
-                        if (bespokeTime == null) {
-                            toast("请选择预约时间")
-                            return@setOnClickListener
-                        }
                         mPresent.getDataByPost(0x1,
                                 RequestParamsHelper.ORDER_MODEL,
                                 RequestParamsHelper.ACT_EDIT_QORDER_STATUS,
@@ -123,7 +119,6 @@ class OrderDetailForWaitingWorkFragment : BaseNetWorkingFragment() {
                                         orderBean!!.qorder_id,
                                         ServiceOrderPresent.OrderStatus.WAITING_CONFIRM.index,
                                         mTvOrderDetailForWaitingCode.getTextString(),
-                                        bespokeTime!!,
                                         if (mTvOrderDetailForWaitingHXCode.isEmpty()) {
                                             ""
                                         } else {
@@ -149,6 +144,13 @@ class OrderDetailForWaitingWorkFragment : BaseNetWorkingFragment() {
                     check.code == "403" -> toast((check.obj as JSONObject).optString("msg"))//验证码错误
                     else -> toast("确认失败，请稍后重试……")
                 }
+            }
+        } else if (requestID == 0x2) {
+            val check = checkResultCode(result)
+            if (check != null && check.code == SUCCESS_CODE) {
+                mTvOrderDetailForWaitingYTime.text = bespokeTime
+            } else {
+                mTvOrderDetailForWaitingYTime.text = "暂无"
             }
         }
     }

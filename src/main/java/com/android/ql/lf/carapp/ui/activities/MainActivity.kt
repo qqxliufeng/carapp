@@ -27,7 +27,7 @@ class MainActivity : BaseActivity() {
     override fun getLayoutId() = R.layout.activity_main_layout
 
     override fun initView() {
-        Beta.checkUpgrade(false, false)
+//        Beta.checkUpgrade(false, false)
         setSwipeBackEnable(false)
         BottomNavigationViewHelper.disableShiftMode(mMainNavigation)
         mMainNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)

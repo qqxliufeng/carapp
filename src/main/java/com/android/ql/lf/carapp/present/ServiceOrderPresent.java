@@ -42,7 +42,7 @@ public class ServiceOrderPresent {
         HAVING_WORK("3", "已施工"),
         WAITING_CALCULATE("4", "待结算"),
         HAVING_CALCULATE("5", "已结算"),
-        BACK_MONEY("6", "退款中"),
+        BACK_MONEY("6", "售后"),
         HAD_BACK_MONEY("7", "已退款"),
         HAD_EXPIRE("8", "已过期"),
         ALL("-1", "");

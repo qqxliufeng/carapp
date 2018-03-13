@@ -33,7 +33,7 @@ class OrderListForMineForHavingWorkFragment : AbstractLazyLoadFragment<OrderBean
     private val updateOrderStatusSubscription by lazy {
         RxBus.getDefault().toObservable(EventOrderStatusBean::class.java).subscribe {
             if (it.orderStatus == ServiceOrderPresent.OrderStatus.HAVING_WORK.index.toInt()) {
-                onPostRefresh()
+                onLoginRefresh()
             }
         }
     }
@@ -96,7 +96,7 @@ class OrderListForMineForHavingWorkFragment : AbstractLazyLoadFragment<OrderBean
             if (check != null && check.code == SUCCESS_CODE) {
                 toast("申请成功，正等待审核")
                 serviceOrderPresent.updateOrderStatus(ServiceOrderPresent.OrderStatus.WAITING_CALCULATE.index.toInt())
-                onPostRefresh()
+                onRefresh()
             } else {
                 toast((check.obj as JSONObject).optString("msg"))
             }
@@ -105,11 +105,11 @@ class OrderListForMineForHavingWorkFragment : AbstractLazyLoadFragment<OrderBean
 
     override fun onLoginSuccess(userInfo: UserInfo?) {
         super.onLoginSuccess(userInfo)
-        onPostRefresh()
+        onLoginRefresh()
     }
 
     override fun onLogoutSuccess(userInfo: String?) {
-        onPostRefresh()
+        onLogoutRefresh()
     }
 
     override fun onMyItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {

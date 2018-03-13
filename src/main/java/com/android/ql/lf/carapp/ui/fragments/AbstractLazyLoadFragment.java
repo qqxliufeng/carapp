@@ -64,6 +64,23 @@ public abstract class AbstractLazyLoadFragment<T> extends BaseRecyclerViewFragme
         loadData();
     }
 
+
+    public void onLoginRefresh(){
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+
+            }
+        });
+        super.onRefresh();
+        loadData();
+    }
+
+    public void onLogoutRefresh(){
+        onLoginRefresh();
+    }
+
     /**
      * 加载数据
      */
