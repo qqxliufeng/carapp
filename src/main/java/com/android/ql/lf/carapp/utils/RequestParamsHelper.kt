@@ -186,6 +186,61 @@ class RequestParamsHelper {
         val ACT_EDIT_MYMSG_STATUS = "edit_mymsg_status"
         fun getEditMyMsgStatus(mid: String) = getWithIdParams().addParam("mid", mid)
 
+        val ACT_ADD_ADDRESS = "add_address"
+        fun getAddAddressListParams(aid: String? = "", name: String = "", phone: String = "", addressInfo: String = "", code: String = "", detail: String = ""): ApiParams {
+            val params = getWithIdParams()
+            params.addParam("aid", aid)
+            params.addParam("name", name)
+            params.addParam("phone", phone)
+            params.addParam("address", addressInfo)
+            params.addParam("detail", detail)
+            params.addParam("postcode", code)
+            return params
+        }
+
+        val ACT_ADDRESS_LIST = "address"
+        fun getAddressListParams() = getWithIdParams()
+
+        val ACT_DEFAULT_ADDRESS = "default_address"
+        fun getDefaultAddressParams(topAid: String, setAid: String): ApiParams {
+            val params = getWithIdParams()
+            params.addParam("topaid", topAid)
+            params.addParam("aid", setAid)
+            return params
+        }
+
+        val ACT_DEL_ADDRESS = "del_address"
+        fun getDelAddressParams(aid: String): ApiParams {
+            val params = getWithIdParams()
+            params.addParam("aid", aid)
+            return params
+        }
+
+        //购物车
+        val ACT_SHOPCART = "shopcart"
+
+        fun getShopcartParam(page: Int, pageSize: Int = 10) = getWithPageParams(page, pageSize)
+
+        //删除购物车商品
+        val ACT_DEL_SHOPCART = "del_shopcart"
+
+        fun getDelShopcartParam(cid: String): ApiParams {
+            val param = getWithIdParams()
+            param.addParam("cid", cid)
+            return param
+        }
+
+        //修改商品数量
+        val ACT_UPDATE_SHOPCART = "update_shopcart"
+
+        fun getUpdateShopcart(cid: String, num: String): ApiParams {
+            val param = getWithIdParams()
+            param.addParam("cid", cid)
+            param.addParam("num", num)
+            return param
+        }
+
+
         /**              member model  end           **/
 
 
