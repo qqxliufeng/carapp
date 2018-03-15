@@ -86,6 +86,8 @@ class MinePersonalServiceEditFragment : BaseNetWorkingFragment() {
                             sb.append(item.product_tag_title).append(",")
                         }
                         mTvServiceEditWorkRange.text = sb.deleteCharAt(sb.length - 1).toString()
+                        currentWorkRange = WorkRangeBean()
+                        currentWorkRange!!.product_tag_title = mTvServiceEditWorkRange.text.toString()
                     }
                 }
                 builder.setTitle("选择服务类型")
