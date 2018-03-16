@@ -229,7 +229,7 @@ public class SelectAddressActivity extends BaseActivity implements TabLayout.OnT
                 tab.setText("请选择");
                 if (currentMode == AREA_MODE) {
                     mTabLayout.removeTabAt(1);
-                    mTabLayout.removeTabAt(2);
+                    mTabLayout.removeTabAt(1);
                 } else if (currentMode == CITY_MODE) {
                     mTabLayout.removeTabAt(1);
                 }

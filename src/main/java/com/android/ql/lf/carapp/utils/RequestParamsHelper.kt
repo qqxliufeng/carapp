@@ -216,6 +216,9 @@ class RequestParamsHelper {
             return params
         }
 
+        val ACT_BIND_ACCOUNT = "bind_account"
+        fun getBindAccountParam() = getWithIdParams()
+
         //购物车
         val ACT_SHOPCART = "shopcart"
 

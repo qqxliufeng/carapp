@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.content.ContextCompat
+import android.text.TextUtils
 import android.view.View
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.UserInfo
@@ -99,14 +100,20 @@ class MineWalletAccountFragment : BaseFragment() {
                         RequestParamsHelper.ACT_BIND_WXPAY,
                         RequestParamsHelper.getBindWxpayParam(mEtBindWxAccount.getTextString(), mEtBindWxAccountRealName.getTextString()))
             }
+            mPresent.getDataByPost(0x2,
+                    RequestParamsHelper.MEMBER_MODEL,
+                    RequestParamsHelper.ACT_BIND_ACCOUNT,
+                    RequestParamsHelper.getBindAccountParam())
         }
 
         override fun onRequestStart(requestID: Int) {
             super.onRequestStart(requestID)
-            if (requestID == 0x1) {
-                getFastProgressDialog("正在认证……")
-            } else {
-                getFastProgressDialog("正在提交信息……")
+            when (requestID) {
+                0x1 -> getFastProgressDialog("正在认证……")
+                0x0 -> getFastProgressDialog("正在提交信息……")
+                0x2 -> {
+                    getFastProgressDialog("正在获取信息……")
+                }
             }
         }
 
@@ -124,10 +131,30 @@ class MineWalletAccountFragment : BaseFragment() {
                 }
             } else if (requestID == 0x0) {
                 val check = checkResultCode(result)
-                if (check != null && check.code == SUCCESS_CODE) {
-                    toast("账号绑定成功")
+                if (check != null) {
+                    if (check.code == SUCCESS_CODE) {
+                        toast("账号绑定成功")
+                    }else{
+                        toast((check.obj as JSONObject).optString("msg"))
+                    }
                 } else {
-                    toast("账号绑定失败，请稍后重试……")
+                    toast("账号绑定失败")
+                }
+            } else if (requestID == 0x2) {
+                val check = checkResultCode(result)
+                if (check != null) {
+                    if (check.code == SUCCESS_CODE) {
+                        val json = check.obj as JSONObject
+                        val resultJson = json.optJSONObject("result")
+                        val realName = resultJson.optString("member_autonym")
+                        if (!TextUtils.isEmpty(realName)) {
+                            mEtBindWxAccountRealName.setText(realName)
+                        }
+                        val idCard = resultJson.optString("member_idcard")
+                        if (!TextUtils.isEmpty(idCard)){
+                            mEtBindWxAccount.setText(idCard)
+                        }
+                    }
                 }
             }
         }
@@ -161,18 +188,30 @@ class MineWalletAccountFragment : BaseFragment() {
                     toast(mEtBindAliAccount.hint.toString())
                     return@setOnClickListener
                 }
-                mPresent.getDataByPost(0x0, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_BIND_ALIPAY, RequestParamsHelper.getBindAlipayParam(mEtBindAliAccount.getTextString(), mEtBindAliAccountRealName.getTextString()))
+                mPresent.getDataByPost(0x0,
+                        RequestParamsHelper.MEMBER_MODEL,
+                        RequestParamsHelper.ACT_BIND_ALIPAY,
+                        RequestParamsHelper.getBindAlipayParam(mEtBindAliAccount.getTextString(),
+                                mEtBindAliAccountRealName.getTextString()))
             }
+            mPresent.getDataByPost(0x1,
+                    RequestParamsHelper.MEMBER_MODEL,
+                    RequestParamsHelper.ACT_BIND_ACCOUNT,
+                    RequestParamsHelper.getBindAccountParam())
         }
 
         override fun onRequestStart(requestID: Int) {
             super.onRequestStart(requestID)
-            getFastProgressDialog("正在提交信息……")
+            if (requestID == 0x0) {
+                getFastProgressDialog("正在提交信息……")
+            } else {
+                getFastProgressDialog("正在获取信息……")
+            }
         }
 
         override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
             super.onRequestSuccess(requestID, result)
-            if (requestID == 0x0){
+            if (requestID == 0x0) {
                 val check = checkResultCode(result)
                 if (check != null) {
                     if (check.code == SUCCESS_CODE) {
@@ -181,7 +220,21 @@ class MineWalletAccountFragment : BaseFragment() {
                         toast((check.obj as JSONObject).optString("msg"))
                     }
                 } else {
-                    toast("账号绑定失败，请稍后重试……")
+                    toast("账号绑定失败")
+                }
+            }else if (requestID == 0x1){
+                val check = checkResultCode(result)
+                if (check!=null && check.code == SUCCESS_CODE){
+                    val json = check.obj as JSONObject
+                    val resultJson = json.optJSONObject("result")
+                    val realName = resultJson.optString("member_autonym")
+                    if (!TextUtils.isEmpty(realName)) {
+                        mEtBindAliAccountRealName.setText(realName)
+                    }
+                    val aliPay = resultJson.optString("member_alipay")
+                    if (!TextUtils.isEmpty(aliPay)){
+                        mEtBindAliAccount.setText(aliPay)
+                    }
                 }
             }
         }
