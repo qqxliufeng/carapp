@@ -9,6 +9,7 @@ import android.view.View
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.RefreshData
 import com.android.ql.lf.carapp.data.ShoppingCarItemBean
+import com.android.ql.lf.carapp.present.ShoppingCarPresent
 import com.android.ql.lf.carapp.ui.adapter.ShoppingCarItemAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
@@ -26,7 +27,6 @@ import java.text.DecimalFormat
  */
 class ShoppingCarFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
 
-
     companion object {
         val REFRESH_SHOPPING_CAR_FLAG = "refresh shopping car"
     }
@@ -36,6 +36,10 @@ class ShoppingCarFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
     private var currentEditMode = 1// 1 减  0  加
 
     private val selectedList = ArrayList<ShoppingCarItemBean>()
+
+    private val shoppingCarPresent by lazy {
+        ShoppingCarPresent(mArrayList)
+    }
 
     override fun getLayoutId(): Int = R.layout.fragment_shopping_car_layout
 
@@ -55,11 +59,9 @@ class ShoppingCarFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
         setRefreshEnable(false)
         mLlShoppingCarAllSelectContainer.setOnClickListener {
             mCivShoppingCarAllSelect.isChecked = !mCivShoppingCarAllSelect.isChecked
-            var money = 0.00F
-            mArrayList.forEach { it.isSelector = mCivShoppingCarAllSelect.isChecked }
-            money = calculatePrice(money)
-            mTvShoppingCarAllSelectMoney.text = "￥${DecimalFormat("0.00").format(money)}"
-            mCalculate.isEnabled = money != 0.00f
+            val results = if (mCivShoppingCarAllSelect.isChecked) {shoppingCarPresent.allItemSelects() } else { shoppingCarPresent.cancelItemsSelects() }
+            mTvShoppingCarAllSelectMoney.text = shoppingCarPresent.formartPrice(results.second)
+            mCalculate.isEnabled = !shoppingCarPresent.isNoneSelected()
             mBaseAdapter.notifyDataSetChanged()
         }
         mCalculate.setOnClickListener {
@@ -69,16 +71,6 @@ class ShoppingCarFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
 //            bundle.putParcelableArrayList(SubmitNewOrderFragment.Companion.GOODS_ID_FLAG, selectedList)
 //            FragmentContainerActivity.startFragmentContainerActivity(mContext, "确认订单", true, false, bundle, SubmitNewOrderFragment::class.java)
         }
-    }
-
-    private fun calculatePrice(money: Float): Float {
-        var money1 = money
-        mArrayList.forEach {
-            if (it.isSelector) {
-                money1 += (it.shopcart_price.toFloat() * it.shopcart_num.toInt())
-            }
-        }
-        return money1
     }
 
     override fun getItemDecoration(): RecyclerView.ItemDecoration {
@@ -131,17 +123,17 @@ class ShoppingCarFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
                     mBaseAdapter.notifyDataSetChanged()
                 }
             } else if (requestID == 0x2) {
-                if (baseNetResult != null) {
-                    if (currentEditMode == 0) {
-                        currentItem.shopcart_num = (currentItem.shopcart_num.toInt() + 1).toString()
-                    } else {
-                        currentItem.shopcart_num = (currentItem.shopcart_num.toInt() - 1).toString()
-                    }
-                    var money = 0.00f
-                    money = calculatePrice(money)
-                    mTvShoppingCarAllSelectMoney.text = "￥${DecimalFormat("0.00").format(money)}"
-                    mBaseAdapter.notifyItemChanged(mArrayList.indexOf(currentItem))
-                }
+//                if (baseNetResult != null) {
+//                    if (currentEditMode == 0) {
+//                        currentItem.shopcart_num = (currentItem.shopcart_num.toInt() + 1).toString()
+//                    } else {
+//                        currentItem.shopcart_num = (currentItem.shopcart_num.toInt() - 1).toString()
+//                    }
+//                    var money = 0.00f
+//                    money = calculatePrice(money)
+//                    mTvShoppingCarAllSelectMoney.text = "￥${DecimalFormat("0.00").format(money)}"
+//                    mBaseAdapter.notifyItemChanged(mArrayList.indexOf(currentItem))
+//                }
             }
         }
     }

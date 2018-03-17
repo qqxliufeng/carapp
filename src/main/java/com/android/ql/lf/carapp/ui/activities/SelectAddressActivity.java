@@ -1,5 +1,6 @@
 package com.android.ql.lf.carapp.ui.activities;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -38,7 +39,7 @@ import butterknife.BindView;
  * @author lf on 2017/11/30 0030
  */
 
-public class SelectAddressActivity extends BaseActivity implements TabLayout.OnTabSelectedListener {
+public class SelectAddressActivity extends BaseActivity implements TabLayout.OnTabSelectedListener, SwipeRefreshLayout.OnRefreshListener {
 
     public static final int PROVINCE_MODE = 0x0;
     public static final int CITY_MODE = 0x1;
@@ -89,9 +90,12 @@ public class SelectAddressActivity extends BaseActivity implements TabLayout.OnT
                 finish();
             }
         });
+        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         mTabLayout.addTab(mTabLayout.newTab().setText("请选择"));
         mTabLayout.addOnTabSelectedListener(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mSwipeRefreshLayout.setColorSchemeColors(Color.RED, Color.BLACK, Color.YELLOW, Color.GREEN);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         adapter = new MySelectAddressAdapter(android.R.layout.simple_list_item_1, provinceList);
         adapter.setEnableLoadMore(false);
         mRecyclerView.setAdapter(adapter);
@@ -115,7 +119,7 @@ public class SelectAddressActivity extends BaseActivity implements TabLayout.OnT
                 } else if (currentMode == AREA_MODE) {
                     areaItemBean = areaList.get(position);
                     SelectAddressItemBean resultItemBean = new SelectAddressItemBean();
-                    resultItemBean.setName(provinceItemBean.getName() +  cityItemBean.getName() +  areaItemBean.getName());
+                    resultItemBean.setName(provinceItemBean.getName() + cityItemBean.getName() + areaItemBean.getName());
                     resultItemBean.setId(provinceItemBean.getId() + "," + cityItemBean.getId() + "," + areaItemBean.getId());
                     RxBus.getDefault().post(resultItemBean);
                     finish();
@@ -153,6 +157,11 @@ public class SelectAddressActivity extends BaseActivity implements TabLayout.OnT
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
+    }
+
+    @Override
+    public void onRefresh() {
+        onRequestEnd(-1);
     }
 
     @Override
@@ -266,6 +275,7 @@ public class SelectAddressActivity extends BaseActivity implements TabLayout.OnT
         super.finish();
         overridePendingTransition(R.anim.activity_close, R.anim.activity_close);
     }
+
 
     static class MySelectAddressAdapter extends BaseQuickAdapter<SelectAddressItemBean, BaseViewHolder> {
 
