@@ -46,12 +46,12 @@ class MainActivity : BaseActivity() {
                 mMainContent.currentItem = 1
                 return@OnNavigationItemSelectedListener true
             }
-//            R.id.navigation_notifications -> {
-//                mMainContent.currentItem = 2
-//                return@OnNavigationItemSelectedListener true
-//            }
-            R.id.navigation_message -> {
+            R.id.navigation_notifications -> {
                 mMainContent.currentItem = 2
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.navigation_message -> {
+                mMainContent.currentItem = 3
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -84,18 +84,17 @@ class MainActivity : BaseActivity() {
                 MainCommunityFragment.newInstance()
             }
             2 -> {
-//                MainMallFragment.newInstance()
+                MainMallFragment.newInstance()
+            }
+            3 -> {
                 MainMineFragment.newInstance()
             }
-        /*3 -> {
-            MainMineFragment.newInstance()
-        }*/
             else -> {
                 null
             }
         }
 
-        override fun getCount() = 3
+        override fun getCount() = 4
     }
 
 }

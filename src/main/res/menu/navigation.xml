@@ -11,10 +11,10 @@
         android:icon="@drawable/img_bottom_community_icon"
         android:title="社区论坛" />
 
-    <!--<item
+    <item
         android:id="@+id/navigation_notifications"
         android:icon="@drawable/img_bottom_mall_icon"
-        android:title="批发商城" />-->
+        android:title="批发商城" />
 
     <item
         android:id="@+id/navigation_message"
