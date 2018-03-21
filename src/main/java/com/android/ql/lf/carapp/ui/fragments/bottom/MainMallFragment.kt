@@ -9,10 +9,7 @@ import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.activities.MainActivity
 import com.android.ql.lf.carapp.ui.adapter.GoodsMallItemAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
-import com.android.ql.lf.carapp.ui.fragments.mall.normal.GoodsClassifyFragment
-import com.android.ql.lf.carapp.ui.fragments.mall.normal.SearchResultListFragment
-import com.android.ql.lf.carapp.ui.fragments.mall.normal.StoreClassifyFragment
-import com.android.ql.lf.carapp.ui.fragments.mall.normal.StoreInfoFragment
+import com.android.ql.lf.carapp.ui.fragments.mall.normal.*
 import com.android.ql.lf.carapp.ui.fragments.mall.shoppingcar.ShoppingCarFragment
 import com.android.ql.lf.carapp.ui.views.DividerGridItemDecoration
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -40,7 +37,7 @@ class MainMallFragment : BaseRecyclerViewFragment<String>() {
 
     override fun getLayoutId() = R.layout.fragment_main_mall_layout
 
-    override fun createAdapter(): BaseQuickAdapter<String, BaseViewHolder>  = GoodsMallItemAdapter(R.layout.adapter_main_mall_item_layout, mArrayList)
+    override fun createAdapter(): BaseQuickAdapter<String, BaseViewHolder> = GoodsMallItemAdapter(R.layout.adapter_main_mall_item_layout, mArrayList)
 
     override fun onRefresh() {
         super.onRefresh()
@@ -54,14 +51,14 @@ class MainMallFragment : BaseRecyclerViewFragment<String>() {
         param.topMargin = height
         mTvMainMallTitle.layoutParams = param
         mLlMainMallSearchContainer.setOnClickListener {
-//            FragmentContainerActivity
+            //            FragmentContainerActivity
 //                    .from(mContext)
 //                    .setTitle("列表页")
 //                    .setNeedNetWorking(true)
 //                    .setClazz(StoreClassifyFragment::class.java)
 //                    .start()
 //            FragmentContainerActivity.from(mContext).setNeedNetWorking(true).setHiddenToolBar(true).setClazz(SearchResultListFragment::class.java).start()
-            FragmentContainerActivity.from(mContext).setNeedNetWorking(true).setHiddenToolBar(true).setClazz(StoreInfoFragment::class.java).start()
+            FragmentContainerActivity.from(mContext).setNeedNetWorking(true).setTitle("商品详情").setClazz(GoodsInfoFragment::class.java).start()
         }
         mFabShoppingCar.setImageResource(R.drawable.img_icon_shoppingcart_white_full)
         mFabShoppingCar.setOnClickListener {

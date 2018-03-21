@@ -14,48 +14,131 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/mTlStoreInfoContainer"
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
+            android:layout_height="wrap_content"
             android:theme="@style/ThemeOverlay.AppCompat.Dark"
             app:layout_scrollFlags="scroll|enterAlways">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/mIvSearchGoodsBack"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:paddingBottom="@dimen/dp_10"
-                    android:paddingRight="@dimen/dp_10"
-                    android:paddingTop="@dimen/dp_10"
-                    android:src="@drawable/back" />
+                    android:orientation="vertical">
 
-                <com.android.ql.lf.carapp.ui.views.EditTextWithDel
-                    android:id="@+id/mEtSearchContent"
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:background="@drawable/shape_et_bg3"
-                    android:hint="请输入要搜索的内容"
-                    android:paddingLeft="@dimen/dp_10"
-                    android:paddingRight="@dimen/dp_10"
-                    android:textColor="@color/text_deep_dark_color"
-                    android:textColorHint="#747474"
-                    android:textSize="@dimen/sp_14" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/mTvSearchSubmit"
-                    android:layout_width="wrap_content"
+                        <ImageView
+                            android:id="@+id/mIvSearchGoodsBack"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:paddingBottom="@dimen/dp_10"
+                            android:paddingRight="@dimen/dp_10"
+                            android:paddingTop="@dimen/dp_10"
+                            android:src="@drawable/back" />
+
+                        <com.android.ql.lf.carapp.ui.views.EditTextWithDel
+                            android:id="@+id/mEtSearchContent"
+                            android:layout_width="0dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_et_bg3"
+                            android:hint="请输入要搜索的内容"
+                            android:paddingLeft="@dimen/dp_10"
+                            android:paddingRight="@dimen/dp_10"
+                            android:textColor="@color/text_deep_dark_color"
+                            android:textColorHint="#747474"
+                            android:textSize="@dimen/sp_14" />
+
+                        <TextView
+                            android:id="@+id/mTvSearchSubmit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:padding="@dimen/dp_10"
+                            android:text="分类"
+                            android:textColor="#fff"
+                            android:textSize="@dimen/sp_16" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="@dimen/dp_10"
-                    android:text="搜索"
-                    android:textColor="#fff"
-                    android:textSize="@dimen/sp_16" />
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@mipmap/ic_launcher"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="0.5"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:layout_marginLeft="5dp"
+                        android:layout_gravity="center"
+                        android:maxLines="1"
+                        android:text="王大宝汽车用品专卖店王大宝汽车用品"
+                        android:textColor="@color/text_deep_dark_color"
+                        android:textSize="@dimen/sp_14" />
+
+                    <View
+                        android:layout_width="1px"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:layout_marginRight="@dimen/dp_10"
+                        android:background="#fff" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="7898"
+                            android:textColor="@color/text_deep_dark_color"
+                            android:textSize="@dimen/sp_12" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="粉丝"
+                            android:textColor="@color/text_deep_dark_color"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:background="@drawable/shape_tv_bg8"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="15dp"
+                        android:layout_gravity="center_vertical"
+                        android:paddingRight="15dp"
+                        android:paddingTop="5dp"
+                        android:layout_marginRight="@dimen/dp_10"
+                        android:text="+ 关注"
+                        android:textColor="@color/colorPrimary" />
+
+                </LinearLayout>
             </LinearLayout>
         </android.support.v7.widget.Toolbar>
 
