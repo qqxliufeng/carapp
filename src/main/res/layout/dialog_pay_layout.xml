@@ -14,10 +14,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/img_vip_icon_wx"
+            android:layout_centerVertical="true"
+            android:drawableLeft="@drawable/img_pay_icon_wx"
             android:drawablePadding="@dimen/dp_10"
             android:gravity="center_vertical"
-            android:text="微信支付" />
+            android:text="微信" />
 
         <CheckBox
             android:id="@+id/mCbWX"
@@ -47,13 +48,47 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/img_vip_icon_alipay"
+            android:layout_centerVertical="true"
+            android:drawableLeft="@drawable/img_pay_icon_ali"
             android:drawablePadding="@dimen/dp_10"
             android:gravity="center_vertical"
-            android:text="支付宝支付" />
+            android:text="支付宝" />
 
         <CheckBox
             android:id="@+id/mCbALiPay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:padding="5dp"
+            android:theme="@style/style_cb_pay" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#E6E6E6" />
+
+    <RelativeLayout
+        android:id="@+id/mRlSubmitOrderAccountPayContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:padding="@dimen/dp_10">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:drawableLeft="@drawable/img_pay_icon_account"
+            android:drawablePadding="@dimen/dp_10"
+            android:gravity="center_vertical"
+            android:text="余额" />
+
+        <CheckBox
+            android:id="@+id/mCbAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

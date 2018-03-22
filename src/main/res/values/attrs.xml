@@ -23,4 +23,9 @@
         <attr name="easyCountMinute" format="integer" />
         <attr name="easyCountSecond" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="SelectPayTypeView">
+        <attr name="isShowAccount" format="boolean" />
+    </declare-styleable>
+
 </resources>

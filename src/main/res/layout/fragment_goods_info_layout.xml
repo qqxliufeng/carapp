@@ -152,8 +152,10 @@
                 android:background="#fff"
                 android:gravity="center"
                 android:paddingBottom="5dp"
+                android:drawableTop="@drawable/img_goods_info_phone_icon"
                 android:paddingTop="5dp"
                 android:text="在线咨询"
+                android:drawablePadding="3dp"
                 android:textSize="12sp" />
 
             <View
@@ -170,6 +172,8 @@
                 android:gravity="center"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
+                android:drawablePadding="3dp"
+                android:drawableTop="@drawable/img_goods_info_shopping_car_icon"
                 android:text="加入购物车"
                 android:textSize="@dimen/sp_12" />
 

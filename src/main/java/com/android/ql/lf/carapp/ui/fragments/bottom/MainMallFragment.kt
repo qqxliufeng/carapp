@@ -10,6 +10,7 @@ import com.android.ql.lf.carapp.ui.activities.MainActivity
 import com.android.ql.lf.carapp.ui.adapter.GoodsMallItemAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.normal.*
+import com.android.ql.lf.carapp.ui.fragments.mall.order.OrderSubmitFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.shoppingcar.ShoppingCarFragment
 import com.android.ql.lf.carapp.ui.views.DividerGridItemDecoration
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -58,7 +59,7 @@ class MainMallFragment : BaseRecyclerViewFragment<String>() {
 //                    .setClazz(StoreClassifyFragment::class.java)
 //                    .start()
 //            FragmentContainerActivity.from(mContext).setNeedNetWorking(true).setHiddenToolBar(true).setClazz(SearchResultListFragment::class.java).start()
-            FragmentContainerActivity.from(mContext).setNeedNetWorking(true).setTitle("商品详情").setClazz(GoodsInfoFragment::class.java).start()
+            FragmentContainerActivity.from(mContext).setNeedNetWorking(true).setTitle("确认订单").setClazz(OrderSubmitFragment::class.java).start()
         }
         mFabShoppingCar.setImageResource(R.drawable.img_icon_shoppingcart_white_full)
         mFabShoppingCar.setOnClickListener {

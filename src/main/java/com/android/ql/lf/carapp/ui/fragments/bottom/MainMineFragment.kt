@@ -95,22 +95,15 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
             RxBus.getDefault().post(UpdateNotifyBean(View.GONE))
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的消息", true, false, MineMessageListFragment::class.java)
         }
-
         mLlMainMinePersonalInfoContainer.doClickWithUserStatusStart(MINE_PERSONAL_INFO_TOKEN) {
             FragmentContainerActivity.from(mContext).setClazz(MinePersonalInfoFragment::class.java).setTitle("个人中心").setNeedNetWorking(true).start()
         }
-        mLlMainMineStoreContainer.setOnClickListener {
-            toast(Constants.NO_FUNCTION_NOTIFY_MESSAGE)
+        mLlMainMineStoreContainer.doClickWithUserStatusStart(MINE_STORE_COLLECTION_TOKEN) {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "店铺收藏", MineStoreCollectionFragment::class.java)
         }
-//        mLlMainMineStoreContainer.doClickWithUserStatusStart(MINE_STORE_COLLECTION_TOKEN) {
-//            FragmentContainerActivity.startFragmentContainerActivity(mContext, "店铺收藏", MineStoreCollectionFragment::class.java)
-//        }
-        mLlMainMineGoodsContainer.setOnClickListener {
-            toast(Constants.NO_FUNCTION_NOTIFY_MESSAGE)
+        mLlMainMineGoodsContainer.doClickWithUserStatusStart(MINE_GOODS_COLLECTION_TOKEN) {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "商品收藏", MineGoodsCollectionFragment::class.java)
         }
-//        mLlMainMineGoodsContainer.doClickWithUserStatusStart(MINE_GOODS_COLLECTION_TOKEN) {
-//            FragmentContainerActivity.startFragmentContainerActivity(mContext, "商品收藏", MineGoodsCollectionFragment::class.java)
-//        }
         mTvMainMineGrade.doClickWithUserStatusStart(MINE_GRADE_TOKEN) {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的等级", MineGradeFragment::class.java)
         }
@@ -132,35 +125,21 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
                 }
             }
         }
-        mTvMainMineStore.setOnClickListener {
-            toast(Constants.NO_FUNCTION_NOTIFY_MESSAGE)
+        mTvMainMineStore.doClickWithUserStatusStart(MINE_STORE_INFO_TOKEN) {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的店铺", MineStoreInfoFragment::class.java)
         }
-//        mTvMainMineStore.doClickWithUserStatusStart(MINE_STORE_INFO_TOKEN) {
-//            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的店铺", MineStoreInfoFragment::class.java)
-//        }
-
-
-//        mTvMainMineQCode.doClickWithUserStatusStart(MINE_Q_CODE_TOKEN) {
-//            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的邀请码", MineQCodeFragment::class.java)
-//        }
-        mTvMainMineQCode.setOnClickListener {
-            toast(Constants.NO_FUNCTION_NOTIFY_MESSAGE)
+        mTvMainMineQCode.doClickWithUserStatusStart(MINE_Q_CODE_TOKEN) {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的邀请码", MineQCodeFragment::class.java)
         }
-
-        mTvMainMineShopOrder.setOnClickListener {
-            toast(Constants.NO_FUNCTION_NOTIFY_MESSAGE)
-        }
-
         mTvMainMineWallet.doClickWithUserStatusStart(MINE_MY_WALLET_TOKEN) {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的钱包", MineWalletFragment::class.java)
         }
-
         mLlMainMineFootPrintContainer.setOnClickListener {
             toast(Constants.NO_FUNCTION_NOTIFY_MESSAGE)
         }
-//        mLlMainMineFootPrintContainer.doClickWithUserStatusStart(MINE_FOOT_PRINT_TOKEN) {
-//            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的足迹", MineFootPrintFragment::class.java)
-//        }
+        mLlMainMineFootPrintContainer.doClickWithUserStatusStart(MINE_FOOT_PRINT_TOKEN) {
+            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的足迹", MineFootPrintFragment::class.java)
+        }
         mTvMainMineSetting.doClickWithUserStatusStart(MINE_SETTING_TOKEN) {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "设置", SettingFragment::class.java)
         }
@@ -170,14 +149,12 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
         mTvMainMineApplyMaster.doClickWithUserStatusStart(MINE_APPLY_MASTER_TOKEN) {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "申请成为商家", MineApplyMasterFragment::class.java)
         }
-
         mTvMainMineEvaluate.setOnClickListener {
             toast(Constants.NO_FUNCTION_NOTIFY_MESSAGE)
         }
-
-//        mTvMainMineEvaluate.doClickWithUserStatusStart(MINE_EVALUATE_TOKEN){
-//            FragmentContainerActivity.from(mContext).setClazz(MimeEvaluateFragment::class.java).setTitle("我的评价").start()
-//        }
+        mTvMainMineEvaluate.doClickWithUserStatusStart(MINE_EVALUATE_TOKEN){
+            FragmentContainerActivity.from(mContext).setClazz(MimeEvaluateFragment::class.java).setTitle("我的评价").start()
+        }
     }
 
     override fun onRefresh() {
