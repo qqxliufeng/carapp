@@ -15,6 +15,10 @@ import kotlinx.android.synthetic.main.fragment_goods_info_layout.*
  */
 class GoodsInfoFragment : BaseNetWorkingFragment() {
 
+    companion object {
+        val GOODS_ID_FLAG = "goods_id_flag"
+    }
+
     private val mArrayList: ArrayList<String> = arrayListOf()
 
     private var paramsDialog: BottomGoodsParamDialog? = null

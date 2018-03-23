@@ -254,6 +254,59 @@ class RequestParamsHelper {
         fun getProductParams(page: Int) = getWithPageParams(page)
 
 
+        val ACT_COLLECT_PRODUCT = "collect_product"
+        fun getCollectProductParam(pid:String) = getWithIdParams().addParam("pid",pid)
+
+        val ACT_PRODUCT_FADDISH = "product_faddish"
+        fun getProductFaddishParams(type:String,sort:String,page:Int) =
+                getWithPageParams(page)
+                        .addParam("type",type)
+                        .addParam("sort",sort)
+
+        val ACT_CONCERM_SHOP = "concerm_shop"
+        fun getConcermShopParams(sid:String) = getWithIdParams().addParam("sid",sid)
+
+        val ACT_PRODUCT_SHOP_TYPE_SEARCH = "product_shop_type_search"
+        fun getProductShopTypeSearchParams(type_id:String,stype_id:String,sid:String,sort:String,page: Int) =
+                getWithPageParams(page)
+                        .addParam("type_id",type_id)
+                        .addParam("stype_id",stype_id)
+                        .addParam("sid",sid)
+                        .addParam("sort",sort)
+
+        val ACT_PRODUCT_TYPE = "product_type"
+        fun getProductTypeParams(pid:String) = getBaseParams().addParam("pid",pid)
+
+        val ACT_PRODUCT_SEARCH = "product_search"
+        fun getProductSearchParams(keyword:String,sort:String,type:String,page: Int) =
+                getWithPageParams(page)
+                        .addParam("keyword",keyword)
+                        .addParam("sort",sort)
+                        .addParam("type",type)
+
+        val ACT_PRODUCT_TYPE_SEARCH = "product_type_search"
+        fun getProductTypeSearchParams(type_id:String,stype_id:String,sort:String,page:Int) =
+                getWithPageParams(page)
+                        .addParam("type_id",type_id)
+                        .addParam("stype_id",stype_id)
+                        .addParam("sort",sort)
+
+        val ACT_PRODUCT_DETAIL = "product_detail"
+        fun getpPoductDetailParams(gid:String) = getWithIdParams().addParam("gid",gid)
+
+        val ACT_PRODUCT_SHOP_SEARCH = "product_shop_search"
+        fun getProductShopSearchParams(keyword:String,sid:String,sort:String,type:String = "",page:Int) =
+                getWithPageParams(page)
+                        .addParam("keyword",keyword)
+                        .addParam("sid",sid)
+                        .addParam("sort",sort)
+                        .addParam("type",type)
+
+        val ACT_ALL_COMMENT = "all_comment"
+        fun getAllCommentParams(gid: String,page: Int) = getWithPageParams(page).addParam("gid",gid)
+
+
+
         /**              qaa model  start           **/
         val QAA_MODEL = "qaa"
         val ACT_QUIZ = "quiz"
@@ -392,6 +445,5 @@ class RequestParamsHelper {
             param.addParam("cid", cid)
             return param
         }
-
     }
 }
