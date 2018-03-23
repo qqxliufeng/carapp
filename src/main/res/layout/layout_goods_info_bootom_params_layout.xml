@@ -51,7 +51,8 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_marginRight="20dp"
-                            android:src="@drawable/img_icon_close" />
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:src="@drawable/img_icon_close_black" />
                     </RelativeLayout>
 
                     <TextView
@@ -85,7 +86,7 @@
                         android:id="@+id/mLlBottomParamRuleContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"/>
+                        android:orientation="vertical" />
 
                     <!--<TextView
                         android:layout_width="match_parent"
@@ -205,16 +206,14 @@
 
                         <TextView
                             android:id="@+id/mTvBottomParamDelete"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:layout_centerVertical="true"
                             android:layout_toLeftOf="@+id/mTvBottomParamCount"
-                            android:background="@drawable/shape_tv_bg9"
-                            android:paddingBottom="5dp"
-                            android:paddingLeft="@dimen/dp_10"
-                            android:paddingRight="@dimen/dp_10"
-                            android:paddingTop="5dp"
-                            android:text="—" />
+                            android:background="@drawable/shape_tv_bg12"
+                            android:gravity="center"
+                            android:text="—"
+                            android:textColor="@color/text_deep_dark_color" />
 
                         <TextView
                             android:id="@+id/mTvBottomParamCount"
@@ -227,15 +226,13 @@
 
                         <TextView
                             android:id="@+id/mTvBottomParamAdd"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:layout_alignParentRight="true"
-                            android:background="@drawable/shape_tv_bg8"
-                            android:paddingBottom="5dp"
-                            android:paddingLeft="@dimen/dp_10"
-                            android:paddingRight="@dimen/dp_10"
-                            android:paddingTop="5dp"
-                            android:text="＋" />
+                            android:background="@drawable/shape_tv_bg12"
+                            android:gravity="center"
+                            android:text="＋"
+                            android:textColor="@color/text_deep_dark_color" />
                     </RelativeLayout>
 
                     <View
@@ -256,10 +253,11 @@
             android:id="@+id/mIvGoodsPic"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginLeft="10dp"
-            android:scaleType="centerCrop"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/shape_iv_bg"
             android:padding="1dp"
-            android:background="@drawable/shape_iv_bg" />
+            android:scaleType="centerCrop" />
     </FrameLayout>
 
     <TextView

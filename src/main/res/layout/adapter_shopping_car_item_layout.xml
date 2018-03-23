@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#fff"
     android:orientation="vertical">
-
 
     <TextView
         android:id="@+id/mTvShoppingCarItemKType"
@@ -13,7 +13,6 @@
         android:drawablePadding="@dimen/dp_10"
         android:padding="@dimen/dp_10"
         android:textColor="@color/text_deep_dark_color" />
-
 
     <View
         android:layout_width="match_parent"
@@ -38,58 +37,80 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginLeft="20dp"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher" />
 
-        <FrameLayout
+        <LinearLayout
+            android:id="@+id/mLlShoppingCarItemInfoContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/dp_10">
 
-            <LinearLayout
-                android:id="@+id/mLlShoppingCarItemInfoContainer"
+            <TextView
+                android:id="@+id/mTvShoppingCarItemName"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingLeft="@dimen/dp_10">
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/text_deep_dark_color"
+                tools:text="asdfasdfasdf" />
+
+            <TextView
+                android:id="@+id/mTvShoppingCarItemSpe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="#9C9C9C"
+                tools:text="asdfasdfasdf" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/mTvShoppingCarItemName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="2"
-                    android:textColor="@color/text_deep_dark_color" />
-
-                <TextView
-                    android:id="@+id/mTvShoppingCarItemSpe"
+                    android:id="@+id/mTvShoppingCarItemPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:ellipsize="end"
-                    android:maxLines="2"
-                    android:textColor="#9C9C9C" />
+                    android:layout_alignParentBottom="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/sp_14"
+                    tools:text="￥18888.00" />
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/mTvShoppingCarItemPrice"
+                    <ImageView
+                        android:id="@+id/mIvShoppingCarDeleteNum"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:textColor="@color/red_tv_color"
-                        android:textSize="@dimen/sp_16" />
+                        android:layout_toLeftOf="@+id/mTvShoppingCarNum"
+                        android:src="@drawable/img_shopping_car_delete_icon" />
 
                     <TextView
-                        android:id="@+id/mTvShoppingCarItemNum"
+                        android:id="@+id/mTvShoppingCarNum"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentRight="true"
-                        android:textColor="#9c9c9c" />
-                </RelativeLayout>
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@+id/mIvShoppingCarAddNum"
+                        android:textColor="@color/text_deep_dark_color"
+                        android:textSize="@dimen/sp_14"
+                        tools:text="11" />
 
-            </LinearLayout>
-        </FrameLayout>
+                    <ImageView
+                        android:id="@+id/mIvShoppingCarAddNum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/img_shopping_car_add_icon" />
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

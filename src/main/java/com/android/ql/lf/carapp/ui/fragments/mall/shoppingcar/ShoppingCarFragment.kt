@@ -94,15 +94,6 @@ class ShoppingCarFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
         super.onRequestStart(requestID)
         if (requestID == 0x1) {
             getFastProgressDialog("正在删除……")
-        } else if (requestID == 0x2) {
-            mPbShoppingCarItem.visibility = View.VISIBLE
-        }
-    }
-
-    override fun onRequestEnd(requestID: Int) {
-        super.onRequestEnd(requestID)
-        if (requestID == 0x2) {
-            mPbShoppingCarItem.visibility = View.GONE
         }
     }
 

@@ -6,6 +6,7 @@ import android.view.View
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.ui.adapter.GoodsCommentAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
+import com.android.ql.lf.carapp.ui.views.BottomGoodsParamDialog
 import kotlinx.android.synthetic.main.fragment_goods_info_layout.*
 
 /**
@@ -15,6 +16,8 @@ import kotlinx.android.synthetic.main.fragment_goods_info_layout.*
 class GoodsInfoFragment : BaseNetWorkingFragment() {
 
     private val mArrayList: ArrayList<String> = arrayListOf()
+
+    private var paramsDialog: BottomGoodsParamDialog? = null
 
     override fun getLayoutId() = R.layout.fragment_goods_info_layout
 
@@ -34,5 +37,13 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
         mRvGoodsInfo.layoutManager = LinearLayoutManager(mContext)
         mRvGoodsInfo.adapter = commentAdapter
         commentAdapter.addFooterView(footView)
+        mTvGoodsInfoBuy.setOnClickListener {
+            if (paramsDialog == null) {
+                paramsDialog = BottomGoodsParamDialog(mContext)
+                paramsDialog!!.show()
+            } else {
+                paramsDialog!!.show()
+            }
+        }
     }
 }

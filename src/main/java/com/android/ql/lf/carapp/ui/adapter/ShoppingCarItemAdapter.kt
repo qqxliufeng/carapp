@@ -1,9 +1,7 @@
 package com.android.ql.lf.carapp.ui.adapter
 
-import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.TextView
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.ShoppingCarItemBean
@@ -31,7 +29,6 @@ class ShoppingCarItemAdapter(layoutId: Int, list: ArrayList<ShoppingCarItemBean>
         val tv_k_type = helper.getView<TextView>(R.id.mTvShoppingCarItemKType)
         helper.setText(R.id.mTvShoppingCarItemPrice, "￥ ${item.shopcart_price}")
         helper.setText(R.id.mTvShoppingCarItemSpe, item.shopcart_specification)
-        helper.setText(R.id.mTvShoppingCarItemNum, "X ${item.shopcart_num}")
         val goods_pic = helper.getView<ImageView>(R.id.mTvShoppingCarItemPic)
         if (!item.shopcart_pic.isEmpty()) {
             GlideManager.loadImage(goods_pic.context, item.shopcart_pic[0], goods_pic)
