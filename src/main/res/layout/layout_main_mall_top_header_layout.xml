@@ -12,7 +12,14 @@
         app:indicator_drawable_selected="@drawable/shape_banner_selected_bg"
         app:indicator_drawable_unselected="@drawable/shape_banner_unselected_bg" />
 
-    <LinearLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/mRvMainMallClassify"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_10"
+        android:background="#fff" />
+
+    <!--<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#fff"
@@ -71,7 +78,7 @@
                 android:text="更多" />
         </LinearLayout>
 
-    </LinearLayout>
+    </LinearLayout>-->
 
     <ImageView
         android:layout_width="wrap_content"
@@ -93,8 +100,8 @@
             <com.android.ql.lf.carapp.ui.views.HotView
                 android:id="@+id/mHvMainMall1"
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="100dp"/>
+                android:layout_height="100dp"
+                android:layout_weight="1" />
 
             <View
                 android:layout_width="1px"
@@ -104,8 +111,8 @@
             <com.android.ql.lf.carapp.ui.views.HotView
                 android:id="@+id/mHvMainMall2"
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="100dp"/>
+                android:layout_height="100dp"
+                android:layout_weight="1" />
 
         </LinearLayout>
 
@@ -122,8 +129,8 @@
             <com.android.ql.lf.carapp.ui.views.HotView
                 android:id="@+id/mHvMainMall3"
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="100dp"/>
+                android:layout_height="100dp"
+                android:layout_weight="1" />
 
             <View
                 android:layout_width="1px"
@@ -133,8 +140,8 @@
             <com.android.ql.lf.carapp.ui.views.HotView
                 android:id="@+id/mHvMainMall4"
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="100dp"/>
+                android:layout_height="100dp"
+                android:layout_weight="1" />
         </LinearLayout>
 
     </LinearLayout>

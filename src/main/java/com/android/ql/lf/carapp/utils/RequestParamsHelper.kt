@@ -23,7 +23,7 @@ class RequestParamsHelper {
             return params
         }
 
-        private fun getWithPageParams(page: Int, pageSize: Int = 10): ApiParams {
+        fun getWithPageParams(page: Int, pageSize: Int = 10): ApiParams {
             val param = if (UserInfo.getInstance().isLogin) {
                 getWithIdParams()
             } else {
@@ -292,7 +292,7 @@ class RequestParamsHelper {
                         .addParam("sort",sort)
 
         val ACT_PRODUCT_DETAIL = "product_detail"
-        fun getpPoductDetailParams(gid:String) = getWithIdParams().addParam("gid",gid)
+        fun getPoductDetailParams(gid:String) = getWithIdParams().addParam("gid",gid)
 
         val ACT_PRODUCT_SHOP_SEARCH = "product_shop_search"
         fun getProductShopSearchParams(keyword:String,sid:String,sort:String,type:String = "",page:Int) =

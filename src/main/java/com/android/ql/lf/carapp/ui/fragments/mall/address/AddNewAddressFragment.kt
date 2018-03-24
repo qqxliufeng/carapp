@@ -15,7 +15,6 @@ import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.utils.*
 import kotlinx.android.synthetic.main.fragment_add_new_address_layout.*
 import org.jetbrains.anko.support.v4.toast
-import org.json.JSONObject
 
 /**
  * Created by lf on 2017/11/9 0009.
@@ -35,7 +34,6 @@ class AddNewAddressFragment : BaseNetWorkingFragment() {
         super.onAttach(context)
         setHasOptionsMenu(true)
     }
-
 
     override fun getLayoutId(): Int = R.layout.fragment_add_new_address_layout
 

@@ -13,11 +13,13 @@
         android:padding="@dimen/dp_10">
 
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@mipmap/ic_launcher" />
+            android:id="@+id/mIvGoodsInfoStorePic"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="centerCrop" />
 
         <TextView
+            android:id="@+id/mTvGoodsInfoStoreName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -43,6 +45,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/mTvGoodsInfoStoreAllGoodsNum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_deep_dark_color"
@@ -71,6 +74,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/mTvGoodsInfoStoreInfoFocusNum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_deep_dark_color"
@@ -99,6 +103,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/mTvGoodsInfoStoreInfoCommentNum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"

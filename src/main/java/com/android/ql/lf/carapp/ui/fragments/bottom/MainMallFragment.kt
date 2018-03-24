@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.android.ql.lf.carapp.R
-import com.android.ql.lf.carapp.data.BannerImageBean
-import com.android.ql.lf.carapp.data.GoodsBean
-import com.android.ql.lf.carapp.data.UserInfo
+import com.android.ql.lf.carapp.data.*
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.activities.MainActivity
 import com.android.ql.lf.carapp.ui.adapter.GoodsMallItemAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
+import com.android.ql.lf.carapp.ui.fragments.DetailContentFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.normal.*
 import com.android.ql.lf.carapp.ui.fragments.mall.shoppingcar.ShoppingCarFragment
 import com.android.ql.lf.carapp.ui.fragments.user.LoginFragment
@@ -22,6 +21,7 @@ import com.android.ql.lf.carapp.ui.views.HotView
 import com.android.ql.lf.carapp.utils.*
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.google.gson.Gson
 import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
@@ -67,8 +67,25 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
         topView.findViewById<Banner>(R.id.mBannerMainMall)
     }
 
-    private var tempGoodsBean:GoodsBean? = null
+    private val classifyView by lazy {
+        topView.findViewById<RecyclerView>(R.id.mRvMainMallClassify)
+    }
 
+    private val mClassifyList by lazy {
+        arrayListOf<ClassifyBean>()
+    }
+
+    private val classifyAdapter by lazy {
+        object : BaseQuickAdapter<ClassifyBean, BaseViewHolder>(R.layout.adapter_main_mall_classify_item_layout, mClassifyList) {
+            override fun convert(helper: BaseViewHolder?, item: ClassifyBean?) {
+                val icon = helper!!.getView<ImageView>(R.id.mIvMainMallClassifyItemIcon)
+                GlideManager.loadCircleImage(mContext, item!!.classify_pic, icon)
+                helper.setText(R.id.mTvMainMallClassifyItemName, item.classify_title)
+            }
+        }
+    }
+
+    private var tempGoodsBean: GoodsBean? = null
 
     override fun getLayoutId() = R.layout.fragment_main_mall_layout
 
@@ -91,15 +108,27 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
         val param = mTvMainMallTitle.layoutParams as ViewGroup.MarginLayoutParams
         param.topMargin = height
         mTvMainMallTitle.layoutParams = param
+        classifyView.layoutManager = GridLayoutManager(mContext, 4)
+        classifyView.adapter = classifyAdapter
+        classifyView.addOnItemTouchListener(object : OnItemClickListener() {
+            override fun onSimpleItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
+                val searchParam = SearchParamBean()
+                searchParam.model = RequestParamsHelper.PRODUCT_MODEL
+                searchParam.act = RequestParamsHelper.ACT_PRODUCT_TYPE_SEARCH
+                val params = HashMap<String, String>()
+                params.put("type_id", mClassifyList[position].classify_id)
+                params.put("stype_id", "")
+                searchParam.params = params
+                FragmentContainerActivity
+                        .from(mContext)
+                        .setNeedNetWorking(true)
+                        .setClazz(SearchResultListFragment::class.java)
+                        .setHiddenToolBar(true)
+                        .setExtraBundle(bundleOf(Pair(SearchResultListFragment.SEARCH_PARAM_FLAG, searchParam)))
+                        .start()
+            }
+        })
         mLlMainMallSearchContainer.setOnClickListener {
-            //            FragmentContainerActivity
-//                    .from(mContext)
-//                    .setTitle("列表页")
-//                    .setNeedNetWorking(true)
-//                    .setClazz(StoreClassifyFragment::class.java)
-//                    .start()
-//            FragmentContainerActivity.from(mContext).setNeedNetWorking(true).setHiddenToolBar(true).setClazz(SearchResultListFragment::class.java).start()
-            FragmentContainerActivity.from(mContext).setNeedNetWorking(true).setTitle("确认订单").setClazz(GoodsInfoFragment::class.java).start()
         }
         mFabShoppingCar.setImageResource(R.drawable.img_icon_shoppingcart_white_full)
         mFabShoppingCar.doClickWithUserStatusStart(MAIN_MALL_MY_SHOPPING_CAR_FLAG) {
@@ -126,7 +155,7 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
 
     override fun onRequestStart(requestID: Int) {
         super.onRequestStart(requestID)
-        if (requestID == 0x1){
+        if (requestID == 0x1) {
             getFastProgressDialog("正在收藏……")
         }
     }
@@ -141,19 +170,44 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
                         processList(check.obj as JSONObject, GoodsBean::class.java)
                         if (currentPage == 0) {
                             productContainer = Gson().fromJson(check.obj.toString(), ProductContainerBean::class.java)
-                            bannerView!!.setImages(productContainer!!.arr2).setDelayTime(3000).setBannerStyle(BannerConfig.CIRCLE_INDICATOR).start()
+                            mClassifyList.addAll(productContainer!!.arr)
+                            classifyAdapter.notifyDataSetChanged()
+                            bannerView!!.setImages(productContainer!!.arr2).setDelayTime(3000).setBannerStyle(BannerConfig.CIRCLE_INDICATOR).setOnBannerListener {
+                                FragmentContainerActivity.from(mContext)
+                                        .setTitle("详情")
+                                        .setNeedNetWorking(true)
+                                        .setClazz(DetailContentFragment::class.java)
+                                        .setExtraBundle(bundleOf(
+                                                Pair(DetailContentFragment.MODEL_NAME_FLAG, RequestParamsHelper.QAA_MODEL),
+                                                Pair(DetailContentFragment.ACT_NAME_FLAG, RequestParamsHelper.ACT_COMMUNITY_LUNBO_DETAIL),
+                                                Pair(DetailContentFragment.PARAM_FLAG, mapOf(Pair("lid", productContainer!!.arr2[it].lunbo_id)))
+                                        ))
+                                        .start()
+                            }.start()
                             productContainer!!.arr1.forEachWithIndex { index, item ->
                                 hotViewContainer[index].bindData(item.faddish_title, item.faddish_description, item.faddish_pic) {
-                                    toast("${item.faddish_id}")
+                                    val searchParam = SearchParamBean()
+                                    searchParam.model = RequestParamsHelper.PRODUCT_MODEL
+                                    searchParam.act = RequestParamsHelper.ACT_PRODUCT_FADDISH
+                                    val params = HashMap<String, String>()
+                                    params.put("type", item.faddish_id!!)
+                                    searchParam.params = params
+                                    FragmentContainerActivity
+                                            .from(mContext)
+                                            .setClazz(SearchResultListFragment::class.java)
+                                            .setHiddenToolBar(true)
+                                            .setNeedNetWorking(true)
+                                            .setExtraBundle(bundleOf(Pair(SearchResultListFragment.SEARCH_PARAM_FLAG, searchParam)))
+                                            .start()
                                 }
                             }
                         }
                     }
                 }
             }
-            0x1->{
+            0x1 -> {
                 val check = checkResultCode(result)
-                if (check!=null && check.code == SUCCESS_CODE){
+                if (check != null && check.code == SUCCESS_CODE) {
                     toast((check.obj as JSONObject).optString(MSG_FLAG))
                 }
             }
@@ -173,9 +227,9 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
     override fun onMyItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
         super.onMyItemClick(adapter, view, position)
         tempGoodsBean = mArrayList[position]
-        if (UserInfo.getInstance().isLogin){
+        if (UserInfo.getInstance().isLogin) {
             enterGoodsInfo(tempGoodsBean!!)
-        }else{
+        } else {
             UserInfo.loginToken = MAIN_MALL_ENTER_GOODS_INFO_FLAG
             LoginFragment.startLogin(mContext)
         }
@@ -208,7 +262,7 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
     /**
      * 添加 收藏
      */
-    private fun collectionGoods(goodsBean: GoodsBean){
+    private fun collectionGoods(goodsBean: GoodsBean) {
         mPresent.getDataByPost(0x1,
                 RequestParamsHelper.PRODUCT_MODEL,
                 RequestParamsHelper.ACT_COLLECT_PRODUCT,
@@ -218,7 +272,7 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
     /**
      * 加入到购物车
      */
-    private fun addShoppingCar(){
+    private fun addShoppingCar() {
         mPresent.getDataByPost(0x2,
                 RequestParamsHelper.PRODUCT_MODEL,
                 RequestParamsHelper.ACT_ADD_QUIZ)
@@ -227,15 +281,14 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
     /**
      * 进入商品详情
      */
-    private fun enterGoodsInfo(goodsBean: GoodsBean){
+    private fun enterGoodsInfo(goodsBean: GoodsBean) {
         FragmentContainerActivity.from(mContext)
                 .setNeedNetWorking(true)
                 .setTitle("商品详情")
-                .setExtraBundle(bundleOf(Pair(GoodsInfoFragment.GOODS_ID_FLAG,goodsBean.product_id)))
+                .setExtraBundle(bundleOf(Pair(GoodsInfoFragment.GOODS_ID_FLAG, goodsBean.product_id)))
                 .setClazz(GoodsInfoFragment::class.java)
                 .start()
     }
-
 
     override fun onLoginSuccess(userInfo: UserInfo?) {
         super.onLoginSuccess(userInfo)
@@ -248,11 +301,11 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
                 //加购物车
                 addShoppingCar()
             }
-            MAIN_MALL_ENTER_GOODS_INFO_FLAG->{
+            MAIN_MALL_ENTER_GOODS_INFO_FLAG -> {
                 //进入商品详情
                 enterGoodsInfo(tempGoodsBean!!)
             }
-            MAIN_MALL_MY_SHOPPING_CAR_FLAG->{
+            MAIN_MALL_MY_SHOPPING_CAR_FLAG -> {
                 mFabShoppingCar.doClickWithUseStatusEnd()
             }
         }
@@ -266,6 +319,7 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
 
     class ProductContainerBean {
         lateinit var result: ArrayList<GoodsBean>
+        lateinit var arr: ArrayList<ClassifyBean>
         lateinit var arr1: ArrayList<HotGoodsBean>
         lateinit var arr2: ArrayList<BannerImageBean>
     }

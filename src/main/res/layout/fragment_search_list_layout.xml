@@ -59,14 +59,17 @@
         android:orientation="horizontal">
 
         <RadioButton
+            android:id="@+id/mRbSearchListResultSort1"
             style="@style/style_rb"
             android:text="综合排序" />
 
         <RadioButton
+            android:id="@+id/mRbSearchListResultSort2"
             style="@style/style_rb"
             android:text="销量优先" />
 
         <RadioButton
+            android:id="@+id/mRbSearchListResultSort3"
             style="@style/style_rb"
             android:text="价从低到高" />
 
