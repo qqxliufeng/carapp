@@ -20,6 +20,7 @@ import com.android.ql.lf.carapp.ui.views.BottomGoodsParamDialog
 import com.android.ql.lf.carapp.ui.views.HtmlTextView
 import com.android.ql.lf.carapp.utils.GlideManager
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
+import com.android.ql.lf.carapp.utils.toast
 import com.google.gson.Gson
 import com.youth.banner.BannerConfig
 import com.youth.banner.loader.ImageLoader
@@ -59,33 +60,6 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
         View.inflate(mContext, R.layout.layout_goods_info_foot_view_layout, null)
     }
 
-    private val mTvGoodsContent by lazy {
-        footView.findViewById<HtmlTextView>(R.id.mHTvGoodsInfo)
-    }
-
-    /**                 店铺信息                          **/
-    private val mIvStorePic by lazy {
-        footView.findViewById<ImageView>(R.id.mIvGoodsInfoStorePic)
-    }
-
-    private val mTvStoreName by lazy {
-        footView.findViewById<TextView>(R.id.mTvGoodsInfoStoreName)
-    }
-
-    private val mTvStorAllGoodsNum by lazy {
-        footView.findViewById<TextView>(R.id.mTvGoodsInfoStoreAllGoodsNum)
-    }
-
-    private val mIvStoreFocuseNum by lazy {
-        footView.findViewById<TextView>(R.id.mTvGoodsInfoStoreInfoFocusNum)
-    }
-
-    private val mIvStoreCommentNum by lazy {
-        footView.findViewById<TextView>(R.id.mTvGoodsInfoStoreInfoCommentNum)
-    }
-
-    /**                 店铺信息                          **/
-
     private val mTvCommentCount by lazy {
         topView.findViewById<TextView>(R.id.mTvGoodsInfoTopViewCommentNum)
     }
@@ -96,7 +70,12 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
 
     override fun initView(view: View?) {
         mCibGoodsInfoCollection.setOnClickListener {
-            mCibGoodsInfoCollection.toggle()
+            if (goodsInfoBean!=null) {
+                mPresent.getDataByPost(0x1,
+                        RequestParamsHelper.PRODUCT_MODEL,
+                        RequestParamsHelper.ACT_COLLECT_PRODUCT,
+                        RequestParamsHelper.getCollectProductParam(goodsInfoBean!!.result!!.product_id))
+            }
         }
         mRvGoodsInfoComment.layoutManager = LinearLayoutManager(mContext)
         mRvGoodsInfoComment.adapter = commentAdapter
@@ -129,6 +108,8 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
         super.onRequestStart(requestID)
         if (requestID == 0x0) {
             getFastProgressDialog("正在加载详情……")
+        }else if (requestID == 0x1){
+            getFastProgressDialog("正在收藏……")
         }
     }
 
@@ -143,10 +124,21 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
         super.onRequestSuccess(requestID, result)
         val check = checkResultCode(result)
-        if (check != null && check.code == SUCCESS_CODE) {
-            goodsInfoBean = Gson().fromJson((check.obj as JSONObject).toString(), GoodsInfoBean::class.java)
-            bindData()
+        when(requestID){
+            0x0->{ // 加载列表
+                if (check != null && check.code == SUCCESS_CODE) {
+                    goodsInfoBean = Gson().fromJson((check.obj as JSONObject).toString(), GoodsInfoBean::class.java)
+                    bindData()
+                }
+            }
+            0x1->{ //收藏商品
+                if (check != null && check.code == SUCCESS_CODE){
+                    toast((check.obj as JSONObject).optString(MSG_FLAG))
+                    mCibGoodsInfoCollection.toggle()
+                }
+            }
         }
+
     }
 
     private fun bindData() {
@@ -158,9 +150,9 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
         mTvGoodsInfoInfoReleaseCount.text = goodsInfoBean!!.result!!.product_entrepot
         mTvGoodsInfoTitle.text = goodsInfoBean!!.result!!.product_name
         mTvGoodsInfoDescription.text = Html.fromHtml(goodsInfoBean!!.result!!.product_description)
-        mTvGoodsContent.setHtmlFromString(goodsInfoBean!!.result!!.product_content, false)
-        GlideManager.loadImage(mContext, goodsInfoBean!!.arr1!!.wholesale_shop_pic, mIvStorePic)
-        mTvStoreName.text = goodsInfoBean!!.arr1!!.wholesale_shop_name
+        mHTvGoodsInfo.setHtmlFromString(goodsInfoBean!!.result!!.product_content, false)
+        GlideManager.loadImage(mContext, goodsInfoBean!!.arr1!!.wholesale_shop_pic, mIvGoodsInfoStorePic)
+        mTvGoodsInfoStoreName.text = goodsInfoBean!!.arr1!!.wholesale_shop_name
         mTvGoodsInfoStoreAllGoodsNum.text = goodsInfoBean!!.arr1!!.wholesale_shop_num
         mTvGoodsInfoStoreInfoFocusNum.text = goodsInfoBean!!.arr1!!.wholesale_shop_attention
         mTvGoodsInfoStoreInfoCommentNum.text = goodsInfoBean!!.arr1!!.wholesale_shop_attention

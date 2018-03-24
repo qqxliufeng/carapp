@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.*
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
@@ -79,7 +80,11 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
         object : BaseQuickAdapter<ClassifyBean, BaseViewHolder>(R.layout.adapter_main_mall_classify_item_layout, mClassifyList) {
             override fun convert(helper: BaseViewHolder?, item: ClassifyBean?) {
                 val icon = helper!!.getView<ImageView>(R.id.mIvMainMallClassifyItemIcon)
-                GlideManager.loadCircleImage(mContext, item!!.classify_pic, icon)
+                if (item!!.imageRes == 0){
+                    GlideManager.loadCircleImage(mContext, item.classify_pic, icon)
+                }else{
+                    icon.setImageResource(item.imageRes)
+                }
                 helper.setText(R.id.mTvMainMallClassifyItemName, item.classify_title)
             }
         }
@@ -112,20 +117,26 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
         classifyView.adapter = classifyAdapter
         classifyView.addOnItemTouchListener(object : OnItemClickListener() {
             override fun onSimpleItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
-                val searchParam = SearchParamBean()
-                searchParam.model = RequestParamsHelper.PRODUCT_MODEL
-                searchParam.act = RequestParamsHelper.ACT_PRODUCT_TYPE_SEARCH
-                val params = HashMap<String, String>()
-                params.put("type_id", mClassifyList[position].classify_id)
-                params.put("stype_id", "")
-                searchParam.params = params
-                FragmentContainerActivity
-                        .from(mContext)
-                        .setNeedNetWorking(true)
-                        .setClazz(SearchResultListFragment::class.java)
-                        .setHiddenToolBar(true)
-                        .setExtraBundle(bundleOf(Pair(SearchResultListFragment.SEARCH_PARAM_FLAG, searchParam)))
-                        .start()
+                val classifyItem = mClassifyList[position]
+                if (classifyItem.imageRes == 0) {
+                    val searchParam = SearchParamBean()
+                    searchParam.model = RequestParamsHelper.PRODUCT_MODEL
+                    searchParam.act = RequestParamsHelper.ACT_PRODUCT_TYPE_SEARCH
+                    val params = HashMap<String, String>()
+                    params.put("type_id", classifyItem.classify_id)
+                    params.put("stype_id", "")
+                    searchParam.params = params
+                    FragmentContainerActivity
+                            .from(mContext)
+                            .setNeedNetWorking(true)
+                            .setClazz(SearchResultListFragment::class.java)
+                            .setHiddenToolBar(true)
+                            .setExtraBundle(bundleOf(Pair(SearchResultListFragment.SEARCH_PARAM_FLAG, searchParam)))
+                            .start()
+                }else{
+                    FragmentContainerActivity.from(mContext).setNeedNetWorking(true).setClazz(GoodsClassifyFragment::class.java)
+                            .start()
+                }
             }
         })
         mLlMainMallSearchContainer.setOnClickListener {
@@ -171,6 +182,11 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
                         if (currentPage == 0) {
                             productContainer = Gson().fromJson(check.obj.toString(), ProductContainerBean::class.java)
                             mClassifyList.addAll(productContainer!!.arr)
+                            val lastClassifyItem = ClassifyBean()
+                            lastClassifyItem.imageRes = R.drawable.img_icon_main_mall_icon8
+                            lastClassifyItem.classify_title = "更多"
+                            mClassifyList.add(lastClassifyItem)
+                            classifyView.isFocusableInTouchMode = false
                             classifyAdapter.notifyDataSetChanged()
                             bannerView!!.setImages(productContainer!!.arr2).setDelayTime(3000).setBannerStyle(BannerConfig.CIRCLE_INDICATOR).setOnBannerListener {
                                 FragmentContainerActivity.from(mContext)

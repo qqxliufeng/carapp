@@ -1,5 +1,6 @@
 package com.android.ql.lf.carapp.ui.fragments.mall.normal
 
+import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -9,13 +10,20 @@ import android.widget.ImageView
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.ClassifyBean
 import com.android.ql.lf.carapp.data.ClassifyItemEntity
+import com.android.ql.lf.carapp.data.SearchParamBean
+import com.android.ql.lf.carapp.data.lists.ListParseHelper
+import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.utils.GlideManager
+import com.android.ql.lf.carapp.utils.RequestParamsHelper
+import com.android.ql.lf.carapp.utils.toast
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseSectionQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.listener.OnItemClickListener
 import kotlinx.android.synthetic.main.fragment_mall_classify_layout.*
+import org.jetbrains.anko.bundleOf
+import org.json.JSONObject
 
 /**
  * Created by lf on 18.3.20.
@@ -35,23 +43,6 @@ class GoodsClassifyFragment : BaseNetWorkingFragment() {
     override fun getLayoutId() = R.layout.fragment_mall_classify_layout
 
     override fun initView(view: View?) {
-        (0..10).forEach {
-            val element = ClassifyBean()
-            element.classify_title = "$it"
-            element.isChecked = it == 0
-            mMenuArrayList.add(element)
-        }
-
-        mMenuArrayList.forEach {
-            val contentEntity = ClassifyItemEntity(true, it.classify_title)
-            mItemArrayList.add(contentEntity)
-            (0..10).forEach {
-                val classifySubItemBean = ClassifyBean.ClassifySubItemBean()
-                classifySubItemBean.classify_title = "goods"
-                mItemArrayList.add(ClassifyItemEntity(classifySubItemBean))
-            }
-        }
-
         val gridLayoutManager = GridLayoutManager(mContext, 3)
         mRcContent.layoutManager = gridLayoutManager
         contentAdapter = ContentAdapter(R.layout.adapter_search_and_classify_content_item_layout,
@@ -59,6 +50,23 @@ class GoodsClassifyFragment : BaseNetWorkingFragment() {
         mRcContent.adapter = contentAdapter
         mRcContent.addOnItemTouchListener(object : OnItemClickListener() {
             override fun onSimpleItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
+                contentItem = mItemArrayList[position]
+                if (!contentItem.isHeader){
+                    val searchParam = SearchParamBean()
+                    searchParam.model = RequestParamsHelper.PRODUCT_MODEL
+                    searchParam.act = RequestParamsHelper.ACT_PRODUCT_TYPE_SEARCH
+                    val params = HashMap<String, String>()
+                    params.put("type_id", contentItem.t.classify_pid)
+                    params.put("stype_id", contentItem.t.classify_id)
+                    searchParam.params = params
+                    FragmentContainerActivity
+                            .from(mContext)
+                            .setNeedNetWorking(true)
+                            .setClazz(SearchResultListFragment::class.java)
+                            .setHiddenToolBar(true)
+                            .setExtraBundle(bundleOf(Pair(SearchResultListFragment.SEARCH_PARAM_FLAG, searchParam)))
+                            .start()
+                }
             }
         })
         mRcMenu.layoutManager = LinearLayoutManager(mContext)
@@ -103,6 +111,47 @@ class GoodsClassifyFragment : BaseNetWorkingFragment() {
         })
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        mPresent.getDataByPost(
+                0x0,
+                RequestParamsHelper.PRODUCT_MODEL,
+                RequestParamsHelper.ACT_PRODUCT_TYPE,
+                RequestParamsHelper.getProductTypeParams(""))
+    }
+
+    override fun onRequestStart(requestID: Int) {
+        super.onRequestStart(requestID)
+        getFastProgressDialog("正在加载分类……")
+    }
+
+    override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
+        super.onRequestSuccess(requestID, result)
+        try {
+            val check = checkResultCode(result)
+            if (check!=null && check.code == SUCCESS_CODE){
+                mMenuArrayList.addAll(ListParseHelper<ClassifyBean>().fromJson((check.obj as JSONObject).toString(), ClassifyBean::class.java))
+                mMenuArrayList.forEach {
+                    val contentEntity = ClassifyItemEntity(true, it.classify_title)
+                    mItemArrayList.add(contentEntity)
+                    it.sub.forEach {
+                        val item = ClassifyItemEntity(it)
+                        mItemArrayList.add(item)
+                    }
+                }
+                if (!mMenuArrayList.isEmpty()) {
+                    menuItem = mMenuArrayList[0]
+                    mMenuArrayList[0].isChecked = true
+                }
+                menuAdapter.notifyDataSetChanged()
+                contentAdapter.notifyDataSetChanged()
+            }else{
+                toast("加载失败")
+            }
+        } catch (e: Exception) {
+            toast("加载失败")
+        }
+    }
 
     class MenuAdapter(layoutId: Int, list: ArrayList<ClassifyBean>) : BaseQuickAdapter<ClassifyBean, BaseViewHolder>(layoutId, list) {
 
@@ -121,8 +170,8 @@ class GoodsClassifyFragment : BaseNetWorkingFragment() {
 
         override fun convert(helper: BaseViewHolder?, item: ClassifyItemEntity?) {
             helper!!.setText(R.id.mSearchClassifyContentItemName, item!!.t.classify_title)
-//            val iv_icon = helper.getView<ImageView>(R.id.mSearchClassifyContentItemIcon)
-//            GlideManager.loadCircleImage(iv_icon.context, item.t.classify_pic, iv_icon)
+            val iv_icon = helper.getView<ImageView>(R.id.mSearchClassifyContentItemIcon)
+            GlideManager.loadImage(iv_icon.context, item.t.classify_pic, iv_icon)
         }
     }
 }

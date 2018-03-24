@@ -22,9 +22,18 @@ public class ClassifyBean {
     private String classify_url1;
     private String classify_time;
     private String classify_sign;
+    private int mImageRes = 0;
     private ArrayList<ClassifySubItemBean> sub;
 
     private boolean isChecked = false;
+
+    public void setImageRes(int mImageRes) {
+        this.mImageRes = mImageRes;
+    }
+
+    public int getImageRes() {
+        return mImageRes;
+    }
 
     public boolean isChecked() {
         return isChecked;
