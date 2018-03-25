@@ -51,8 +51,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:textColor="#949494"
-                android:textSize="14sp" />
+                android:textColor="@color/text_dark_color"
+                android:textSize="12sp" />
 
         </RelativeLayout>
 
@@ -69,14 +69,15 @@
                 android:layout_alignParentRight="true"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="#E10F0F"
-                android:textSize="16sp" />
+                android:textColor="@color/text_deep_dark_color"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/mIvSubmitOrderGoodsNum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:textSize="@dimen/sp_12"
                 android:layout_below="@+id/mIvSubmitOrderGoodsPrice"
                 android:layout_marginTop="5dp" />
         </RelativeLayout>

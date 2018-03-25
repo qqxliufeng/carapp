@@ -6,18 +6,20 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
 import android.text.TextPaint
+import android.text.TextUtils
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.AdsBean
 import com.android.ql.lf.carapp.data.GoodsBean
+import com.android.ql.lf.carapp.data.ShoppingCarItemBean
 import com.android.ql.lf.carapp.data.StoreInfoBean
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.adapter.GoodsCommentAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
+import com.android.ql.lf.carapp.ui.fragments.mall.order.OrderSubmitFragment
 import com.android.ql.lf.carapp.ui.views.BottomGoodsParamDialog
-import com.android.ql.lf.carapp.ui.views.HtmlTextView
 import com.android.ql.lf.carapp.utils.GlideManager
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
 import com.android.ql.lf.carapp.utils.toast
@@ -86,12 +88,33 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
                 if (paramsDialog == null) {
                     paramsDialog = BottomGoodsParamDialog(mContext)
                     paramsDialog!!.bindDataToView(
-                            "￥:${goodsInfoBean!!.result!!.product_price}",
+                            "￥${goodsInfoBean!!.result!!.product_price}",
                             "库存${goodsInfoBean!!.result!!.product_entrepot}件",
                             goodsInfoBean!!.result!!.product_name,
                             goodsInfoBean!!.result!!.product_pic[0],
                             goodsInfoBean!!.result!!.product_specification)
                     paramsDialog!!.setOnGoodsConfirmClickListener { specification, picPath, num ->
+                        val shoppingCarItem = ShoppingCarItemBean()
+                        shoppingCarItem.shopcart_mdprice = goodsInfoBean!!.result!!.product_mdprice
+                        shoppingCarItem.shopcart_num = num
+                        shoppingCarItem.shopcart_price = goodsInfoBean!!.result!!.product_price
+                        shoppingCarItem.shopcart_name = goodsInfoBean!!.result!!.product_name
+                        shoppingCarItem.shopcart_gid = goodsInfoBean!!.result!!.product_id
+                        shoppingCarItem.shopcart_id = ""
+                        if (TextUtils.isEmpty(picPath)) {
+                            shoppingCarItem.shopcart_pic = goodsInfoBean!!.result!!.product_pic as ArrayList<String>
+                        } else {
+                            shoppingCarItem.shopcart_pic = arrayListOf(picPath)
+                        }
+                        shoppingCarItem.shopcart_specification = specification
+                        val bundle = Bundle()
+                        bundle.putParcelableArrayList(OrderSubmitFragment.GOODS_ID_FLAG, arrayListOf(shoppingCarItem))
+                        FragmentContainerActivity
+                                .from(mContext).setTitle("确认订单")
+                                .setNeedNetWorking(true)
+                                .setClazz(OrderSubmitFragment::class.java)
+                                .setExtraBundle(bundle)
+                                .start()
                     }
                 }
                 paramsDialog!!.show()
