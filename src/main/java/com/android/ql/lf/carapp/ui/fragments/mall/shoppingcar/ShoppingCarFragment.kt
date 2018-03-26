@@ -59,7 +59,11 @@ class ShoppingCarFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
         setRefreshEnable(false)
         mLlShoppingCarAllSelectContainer.setOnClickListener {
             mCivShoppingCarAllSelect.isChecked = !mCivShoppingCarAllSelect.isChecked
-            val results = if (mCivShoppingCarAllSelect.isChecked) {shoppingCarPresent.allItemSelects() } else { shoppingCarPresent.cancelItemsSelects() }
+            val results = if (mCivShoppingCarAllSelect.isChecked) {
+                shoppingCarPresent.allItemSelects()
+            } else {
+                shoppingCarPresent.cancelItemsSelects()
+            }
             mTvShoppingCarAllSelectMoney.text = shoppingCarPresent.formartPrice(results.second)
             mCalculate.isEnabled = !shoppingCarPresent.isNoneSelected()
             mBaseAdapter.notifyDataSetChanged()
@@ -99,21 +103,36 @@ class ShoppingCarFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
 
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
         super.onRequestSuccess(requestID, result)
-        val baseNetResult = checkResultCode(result)
-        if (baseNetResult.code == SUCCESS_CODE) {
-            if (requestID == 0x0) {
-                if (baseNetResult != null && (baseNetResult.obj as JSONObject).optJSONArray("result").length() != 0) {
-                    processList(result as String, ShoppingCarItemBean::class.java)
-                } else {
-                    emptyShoppingCar()
+        if (requestID == 0x0) {
+            val check = checkResultCode(result)
+            if (check != null) {
+                if (check.code == SUCCESS_CODE) {
+                    if ((check.obj as JSONObject).optJSONArray("result").length() != 0) {
+                        processList(result as String, ShoppingCarItemBean::class.java)
+                    } else {
+                        emptyShoppingCar()
+                    }
                 }
-            } else if (requestID == 0x1) {
-                if (baseNetResult != null) {
-                    toast("删除成功")
-                    mArrayList.remove(currentItem)
-                    mBaseAdapter.notifyDataSetChanged()
-                }
-            } else if (requestID == 0x2) {
+            }
+        }else if(requestID == 0x1){
+            val check = checkResultCode(result)
+            if (check!=null && check.code == SUCCESS_CODE) {
+                toast("删除成功")
+                mArrayList.remove(currentItem)
+                mBaseAdapter.notifyDataSetChanged()
+            }
+        }
+//        if (check != null) {
+//            if (check.code == SUCCESS_CODE) {
+//                if (requestID == 0x0) {
+//                } else if (requestID == 0x1) {
+//                    if (check != null) {
+//
+//                    }
+//                } else if (requestID == 0x2) {
+
+
+
 //                if (baseNetResult != null) {
 //                    if (currentEditMode == 0) {
 //                        currentItem.shopcart_num = (currentItem.shopcart_num.toInt() + 1).toString()
@@ -125,8 +144,9 @@ class ShoppingCarFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
 //                    mTvShoppingCarAllSelectMoney.text = "￥${DecimalFormat("0.00").format(money)}"
 //                    mBaseAdapter.notifyItemChanged(mArrayList.indexOf(currentItem))
 //                }
-            }
-        }
+//                }
+//            }
+//        }
     }
 
     override fun onRequestFail(requestID: Int, e: Throwable) {

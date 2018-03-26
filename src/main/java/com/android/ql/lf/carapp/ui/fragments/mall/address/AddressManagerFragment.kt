@@ -16,9 +16,12 @@ import com.android.ql.lf.carapp.ui.adapter.AddressManagerListAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
 import com.android.ql.lf.carapp.utils.RxBus
+import com.android.ql.lf.carapp.utils.toast
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import kotlinx.android.synthetic.main.activity_fragment_container_layout.*
 import kotlinx.android.synthetic.main.fragment_address_manage_list_layout.*
+import org.json.JSONObject
 import java.util.*
 
 /**
@@ -30,6 +33,14 @@ class AddressManagerFragment : BaseRecyclerViewFragment<AddressBean>() {
 
     private var currentItem: AddressBean? = null
     private var topItem: AddressBean? = null
+
+    private val addressSubscription by lazy {
+        RxBus.getDefault().toObservable(RefreshData::class.java).subscribe {
+            if (it.isRefresh && it.any is String && "添加地址" == it.any) {
+                onPostRefresh()
+            }
+        }
+    }
 
     override fun getLayoutId() = R.layout.fragment_address_manage_list_layout
 
@@ -44,13 +55,14 @@ class AddressManagerFragment : BaseRecyclerViewFragment<AddressBean>() {
 
     override fun initView(view: View?) {
         super.initView(view)
-        subscription = RxBus.getDefault().toObservable(RefreshData::class.java).subscribe {
-            if (it.isRefresh && it.any is String && "添加地址" == it.any) {
-                onPostRefresh()
-            }
-        }
+        addressSubscription
         mTvAddNewAddress.setOnClickListener {
-            FragmentContainerActivity.startFragmentContainerActivity(mContext, "新增收货地址", true, false, AddNewAddressFragment::class.java)
+            FragmentContainerActivity
+                    .from(mContext)
+                    .setTitle("新增收货地址")
+                    .setNeedNetWorking(true)
+                    .setClazz(AddNewAddressFragment::class.java)
+                    .start()
         }
     }
 
@@ -63,6 +75,8 @@ class AddressManagerFragment : BaseRecyclerViewFragment<AddressBean>() {
                 RequestParamsHelper.ACT_ADDRESS_LIST,
                 RequestParamsHelper.getAddressListParams())
     }
+
+    override fun getEmptyMessage() = "暂没有收货地址~~"
 
     override fun onRequestStart(requestID: Int) {
         super.onRequestStart(requestID)
@@ -77,7 +91,7 @@ class AddressManagerFragment : BaseRecyclerViewFragment<AddressBean>() {
             try {
                 val json = checkResultCode(result.toString())
                 if (json != null) {
-                    mArrayList.addAll(ListParseHelper<AddressBean>().fromJson(json.toString(), AddressBean::class.java))
+                    mArrayList.addAll(ListParseHelper<AddressBean>().fromJson((json.obj as JSONObject).toString(), AddressBean::class.java))
                     if (mArrayList.size == 1) {
                         mArrayList[0].address_token = "1"
                     }
@@ -89,25 +103,23 @@ class AddressManagerFragment : BaseRecyclerViewFragment<AddressBean>() {
                     onRequestFail(requestID, Exception())
                 }
             } catch (e: Exception) {
-                Log.e("TAG", e.message)
+                setEmptyView()
             }
         } else if (requestID == 0x1) { //设置默认地址
             val json = checkResultCode(result.toString())
             if (json != null) {
-                mArrayList.remove(currentItem)
-                mArrayList.add(0, currentItem)
-                currentItem?.address_token = "1"
-                topItem?.address_token = "0"
-                mBaseAdapter.notifyDataSetChanged()
+                if (json.code == SUCCESS_CODE) {
+                    onPostRefresh()
+                }else{
+                    toast((json.obj as JSONObject).optString(MSG_FLAG))
+                }
             }
         } else if (requestID == 0x2) { //删除当前地址
             val json = checkResultCode(result.toString())
             if (json != null) {
-                mArrayList.remove(currentItem)
-                if (mArrayList.isEmpty()) {
-                    mBaseAdapter.setEmptyView(emptyLayoutId)
+                if (json.code == SUCCESS_CODE) {
+                    onPostRefresh()
                 }
-                mBaseAdapter.notifyDataSetChanged()
             }
         }
     }
@@ -159,6 +171,11 @@ class AddressManagerFragment : BaseRecyclerViewFragment<AddressBean>() {
                     RequestParamsHelper.ACT_DEL_ADDRESS, RequestParamsHelper.getDelAddressParams(currentItem!!.address_id))
         }.setNegativeButton("取消", null).create().show()
 
+    }
+
+    override fun onDestroyView() {
+        unsubscribe(addressSubscription)
+        super.onDestroyView()
     }
 
 }

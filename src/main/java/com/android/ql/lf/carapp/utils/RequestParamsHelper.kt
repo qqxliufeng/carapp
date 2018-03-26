@@ -224,6 +224,15 @@ class RequestParamsHelper {
 
         fun getShopcartParam(page: Int, pageSize: Int = 10) = getWithPageParams(page, pageSize)
 
+        val ACT_ADD_SHOPCART = "add_shopcart"
+        fun getAddShopcartParam(gid: String,shopid:String,num:String,specification:String) =
+                getWithIdParams()
+                        .addParam("gid",gid)
+                        .addParam("shopid",shopid)
+                        .addParam("num",num)
+                        .addParam("specification",specification)
+
+
         //删除购物车商品
         val ACT_DEL_SHOPCART = "del_shopcart"
 

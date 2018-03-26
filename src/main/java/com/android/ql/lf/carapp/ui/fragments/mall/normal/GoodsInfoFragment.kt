@@ -70,9 +70,15 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
         topView.findViewById<TextView>(R.id.mTvGoodsInfoTopViewCommentAll)
     }
 
+    enum class ACTION_MODE {
+        SHOPPING_CAR, BUY
+    }
+
+    private var actionMode: ACTION_MODE = ACTION_MODE.SHOPPING_CAR
+
     override fun initView(view: View?) {
         mCibGoodsInfoCollection.setOnClickListener {
-            if (goodsInfoBean!=null) {
+            if (goodsInfoBean != null) {
                 mPresent.getDataByPost(0x1,
                         RequestParamsHelper.PRODUCT_MODEL,
                         RequestParamsHelper.ACT_COLLECT_PRODUCT,
@@ -84,16 +90,42 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
         commentAdapter.addHeaderView(topView)
         commentAdapter.addFooterView(footView)
         mTvGoodsInfoBuy.setOnClickListener {
-            if (goodsInfoBean != null) {
-                if (paramsDialog == null) {
-                    paramsDialog = BottomGoodsParamDialog(mContext)
-                    paramsDialog!!.bindDataToView(
-                            "￥${goodsInfoBean!!.result!!.product_price}",
-                            "库存${goodsInfoBean!!.result!!.product_entrepot}件",
-                            goodsInfoBean!!.result!!.product_name,
-                            goodsInfoBean!!.result!!.product_pic[0],
-                            goodsInfoBean!!.result!!.product_specification)
-                    paramsDialog!!.setOnGoodsConfirmClickListener { specification, picPath, num ->
+            actionMode = ACTION_MODE.BUY
+            showGoodsSpe()
+        }
+        mTvGoodsInfoCollection.setOnClickListener {
+            actionMode = ACTION_MODE.SHOPPING_CAR
+            showGoodsSpe()
+        }
+        mCBPersonalGoodsInfo!!.setImageLoader(object : ImageLoader() {
+            override fun displayImage(context: Context?, path: Any?, imageView: ImageView?) {
+                GlideManager.loadImage(mContext, path as String, imageView)
+            }
+        })
+    }
+
+    private fun showGoodsSpe() {
+        if (goodsInfoBean != null) {
+            if (paramsDialog == null) {
+                paramsDialog = BottomGoodsParamDialog(mContext)
+                paramsDialog!!.bindDataToView(
+                        "￥${goodsInfoBean!!.result!!.product_price}",
+                        "库存${goodsInfoBean!!.result!!.product_entrepot}件",
+                        goodsInfoBean!!.result!!.product_name,
+                        goodsInfoBean!!.result!!.product_pic[0],
+                        goodsInfoBean!!.result!!.product_specification)
+                paramsDialog!!.setOnGoodsConfirmClickListener { specification, picPath, num ->
+                    if (actionMode == ACTION_MODE.SHOPPING_CAR) {
+                        mPresent.getDataByPost(0x2,
+                                RequestParamsHelper.MEMBER_MODEL,
+                                RequestParamsHelper.ACT_ADD_SHOPCART,
+                                RequestParamsHelper.getAddShopcartParam(
+                                        goodsInfoBean!!.result!!.product_id,
+                                        goodsInfoBean!!.arr1!!.wholesale_shop_id,
+                                        num,
+                                        picPath + "," + specification
+                                ))
+                    } else {
                         val shoppingCarItem = ShoppingCarItemBean()
                         shoppingCarItem.shopcart_mdprice = goodsInfoBean!!.result!!.product_mdprice
                         shoppingCarItem.shopcart_num = num
@@ -117,22 +149,17 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
                                 .start()
                     }
                 }
-                paramsDialog!!.show()
             }
+            paramsDialog!!.show()
         }
-        mCBPersonalGoodsInfo!!.setImageLoader(object : ImageLoader() {
-            override fun displayImage(context: Context?, path: Any?, imageView: ImageView?) {
-                GlideManager.loadImage(mContext, path as String, imageView)
-            }
-        })
     }
 
     override fun onRequestStart(requestID: Int) {
         super.onRequestStart(requestID)
-        if (requestID == 0x0) {
-            getFastProgressDialog("正在加载详情……")
-        }else if (requestID == 0x1){
-            getFastProgressDialog("正在收藏……")
+        when (requestID) {
+            0x0 -> getFastProgressDialog("正在加载详情……")
+            0x1 -> getFastProgressDialog("正在收藏……")
+            0x2 -> getFastProgressDialog("正在添加到购物车……")
         }
     }
 
@@ -147,17 +174,22 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
         super.onRequestSuccess(requestID, result)
         val check = checkResultCode(result)
-        when(requestID){
-            0x0->{ // 加载列表
+        when (requestID) {
+            0x0 -> { // 加载列表
                 if (check != null && check.code == SUCCESS_CODE) {
                     goodsInfoBean = Gson().fromJson((check.obj as JSONObject).toString(), GoodsInfoBean::class.java)
                     bindData()
                 }
             }
-            0x1->{ //收藏商品
-                if (check != null && check.code == SUCCESS_CODE){
+            0x1 -> { //收藏商品
+                if (check != null && check.code == SUCCESS_CODE) {
                     toast((check.obj as JSONObject).optString(MSG_FLAG))
                     mCibGoodsInfoCollection.toggle()
+                }
+            }
+            0x2->{// 加入到购物车
+                if (check != null && check.code == SUCCESS_CODE){
+                    toast((check.obj as JSONObject).optString(MSG_FLAG))
                 }
             }
         }

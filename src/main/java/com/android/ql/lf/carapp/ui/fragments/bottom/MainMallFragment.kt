@@ -152,7 +152,6 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
         })
         mBaseAdapter.addHeaderView(topView)
         mBaseAdapter.setHeaderAndEmpty(true)
-        mRecyclerView.requestFocus()
     }
 
     override fun onStart() {

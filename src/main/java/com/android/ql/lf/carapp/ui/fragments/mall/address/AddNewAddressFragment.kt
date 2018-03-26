@@ -9,12 +9,13 @@ import android.view.MenuItem
 import android.view.View
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.AddressBean
+import com.android.ql.lf.carapp.data.RefreshData
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.activities.SelectAddressActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.utils.*
 import kotlinx.android.synthetic.main.fragment_add_new_address_layout.*
-import org.jetbrains.anko.support.v4.toast
+import org.json.JSONObject
 
 /**
  * Created by lf on 2017/11/9 0009.
@@ -108,19 +109,17 @@ class AddNewAddressFragment : BaseNetWorkingFragment() {
         getFastProgressDialog("正在提交……")
     }
 
-//    override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
-//        super.onRequestSuccess(requestID, result)
-//        if (result != null) {
-//            val jsonObject = JSONObject(result.toString())
-//            if ("200" == jsonObject.optString("code")) {
-//                toast("${jsonObject.optString("msg")}")
-////                RefreshData.isRefresh = true
-////                RefreshData.any = "添加地址"
-////                RxBus.getDefault().post(RefreshData)
-//                finish()
-//            } else {
-//                toast("${jsonObject.optString("msg")}")
-//            }
-//        }
-//    }
+    override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
+        super.onRequestSuccess(requestID, result)
+        val check = checkResultCode(result)
+        if (check != null) {
+            toast((check.obj as JSONObject).optString("msg"))
+            if (check.code == SUCCESS_CODE) {
+                RefreshData.isRefresh = true
+                RefreshData.any = "添加地址"
+                RxBus.getDefault().post(RefreshData)
+                finish()
+            }
+        }
+    }
 }

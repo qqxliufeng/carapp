@@ -11,6 +11,7 @@ import com.android.ql.lf.carapp.data.VersionInfo
 import com.android.ql.lf.carapp.present.UserPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
+import com.android.ql.lf.carapp.ui.fragments.mall.address.AddressManagerFragment
 import com.android.ql.lf.carapp.utils.*
 import kotlinx.android.synthetic.main.fragment_setting_layout.*
 import org.jetbrains.anko.bundleOf
@@ -59,7 +60,12 @@ class SettingFragment : BaseNetWorkingFragment() {
             builder.create().show()
         }
         mTvSettingAddressManager.setOnClickListener {
-            toast(Constants.NO_FUNCTION_NOTIFY_MESSAGE)
+            FragmentContainerActivity
+                    .from(mContext)
+                    .setTitle("收货地址管理")
+                    .setClazz(AddressManagerFragment::class.java)
+                    .setNeedNetWorking(true)
+                    .start()
         }
         mTvSettingAboutUs.setOnClickListener {
             FragmentContainerActivity.from(mContext)
