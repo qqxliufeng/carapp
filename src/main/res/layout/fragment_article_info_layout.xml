@@ -68,7 +68,7 @@
                 android:textSize="@dimen/sp_12" />
 
             <com.android.ql.lf.carapp.ui.views.PraiseView
-                android:id="@+id/mPraiseView"
+                android:id="@+id/mBottomPraiseView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true">

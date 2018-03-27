@@ -51,8 +51,8 @@ class ArticleInfoFragment : BaseRecyclerViewFragment<ArticleAnswerBean>() {
         articleBean = arguments.getParcelable(ARTICLE_BEAN_FLAG)
         mBaseAdapter.addHeaderView(topView)
         mBaseAdapter.setHeaderAndEmpty(true)
-        mPraiseView.setOnClickListener {
-            mPraiseView.toggle()
+        mBottomPraiseView.setOnClickListener {
+            mBottomPraiseView.toggle()
             mPresent.getDataByPost(0x4,
                     RequestParamsHelper.QAA_MODEL,
                     RequestParamsHelper.ACT_ARTICLE_PRAISE,
@@ -65,6 +65,7 @@ class ArticleInfoFragment : BaseRecyclerViewFragment<ArticleAnswerBean>() {
         if (articleBean!!.member_pic != null) {
             GlideManager.loadFaceCircleImage(mContext, articleBean!!.member_pic, topView.findViewById(R.id.mIvAnswerTopViewFace))
         }
+        mBottomPraiseView.setPraiseText(articleBean!!.quiz_click)
         topView.findViewById<TextView>(R.id.mTvAnswerTopViewTitle).text = articleBean!!.quiz_title
         topView.findViewById<TextView>(R.id.mTvAnswerTopViewTime).text = articleBean!!.quiz_time
         topView.findViewById<TextView>(R.id.mTvAnswerTopViewContent).text = articleBean!!.quiz_content
@@ -73,7 +74,7 @@ class ArticleInfoFragment : BaseRecyclerViewFragment<ArticleAnswerBean>() {
         topView.findViewById<TextView>(R.id.mTvPraiseText).text = articleBean!!.quiz_click
         topView.findViewById<ImageContainerLinearLayout>(R.id.mLlAnswerTopViewPics).setImages(articleBean!!.quiz_pic)
         val praiseView = topView.findViewById<PraiseView>(R.id.mAnswerTopViewPraiseView)
-        praiseView.setOnClickListener{
+        praiseView.setOnClickListener {
             praiseView.toggle()
             mPresent.getDataByPost(0x4,
                     RequestParamsHelper.QAA_MODEL,
@@ -82,7 +83,6 @@ class ArticleInfoFragment : BaseRecyclerViewFragment<ArticleAnswerBean>() {
         }
         mTvAnswerInfoSeeCount.text = articleBean!!.quiz_look
         mTvAnswerInfoCommentCount.text = articleBean!!.quiz_replies
-        mTvPraiseText.text = articleBean!!.quiz_click
     }
 
     override fun getEmptyMessage() = "暂没有评价哦~~"

@@ -80,9 +80,9 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
         object : BaseQuickAdapter<ClassifyBean, BaseViewHolder>(R.layout.adapter_main_mall_classify_item_layout, mClassifyList) {
             override fun convert(helper: BaseViewHolder?, item: ClassifyBean?) {
                 val icon = helper!!.getView<ImageView>(R.id.mIvMainMallClassifyItemIcon)
-                if (item!!.imageRes == 0){
+                if (item!!.imageRes == 0) {
                     GlideManager.loadCircleImage(mContext, item.classify_pic, icon)
-                }else{
+                } else {
                     icon.setImageResource(item.imageRes)
                 }
                 helper.setText(R.id.mTvMainMallClassifyItemName, item.classify_title)
@@ -133,7 +133,7 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
                             .setHiddenToolBar(true)
                             .setExtraBundle(bundleOf(Pair(SearchResultListFragment.SEARCH_PARAM_FLAG, searchParam)))
                             .start()
-                }else{
+                } else {
                     FragmentContainerActivity.from(mContext).setNeedNetWorking(true).setClazz(GoodsClassifyFragment::class.java)
                             .start()
                 }
@@ -181,6 +181,7 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
                         processList(check.obj as JSONObject, GoodsBean::class.java)
                         if (currentPage == 0) {
                             productContainer = Gson().fromJson(check.obj.toString(), ProductContainerBean::class.java)
+                            mClassifyList.clear()
                             mClassifyList.addAll(productContainer!!.arr)
                             val lastClassifyItem = ClassifyBean()
                             lastClassifyItem.imageRes = R.drawable.img_icon_main_mall_icon8

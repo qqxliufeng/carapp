@@ -38,6 +38,7 @@ class ShoppingCarPresent(var shopItems: ArrayList<ShoppingCarItemBean>) {
      * 计算总价
      */
     fun calculateAllPrice(): Float {
+        allMoney = 0.00f
         shopItems.forEach {
             if (it.isSelector) {
                 allMoney += (it.shopcart_price.toFloat() * it.shopcart_num.toInt())
@@ -54,7 +55,7 @@ class ShoppingCarPresent(var shopItems: ArrayList<ShoppingCarItemBean>) {
     /**
      * 格式价格
      */
-    fun formartPrice(price: Float): String = "￥${DecimalFormat("0.00").format(price)}"
+    fun formatPrice(price: Float): String = "￥${DecimalFormat("0.00").format(price)}"
 
     /**
      * 判断是否没有一个条目选中

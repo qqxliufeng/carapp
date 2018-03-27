@@ -62,7 +62,7 @@
             android:name=".ui.activities.FragmentContainerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppFragmentContainerTheme"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
+            android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name="com.soundcloud.android.crop.CropImageActivity"

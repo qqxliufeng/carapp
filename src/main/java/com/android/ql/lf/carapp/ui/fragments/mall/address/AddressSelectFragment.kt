@@ -60,7 +60,7 @@ class AddressSelectFragment : BaseRecyclerViewFragment<AddressBean>() {
 
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
         super.onRequestSuccess(requestID, result)
-//        processList(checkResultCode(result), AddressBean::class.java)
+        processList(result as String, AddressBean::class.java)
     }
 
     override fun onMyItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {

@@ -148,20 +148,22 @@ class MinePersonalInfoFragment : BaseNetWorkingFragment() {
                 Crop.of(it, desUri).start(mContext, this@MinePersonalInfoFragment)
             }
         } else if (requestCode == Crop.REQUEST_CROP) {
-            val uri = Crop.getOutput(data)
-            ImageUploadHelper(object : ImageUploadHelper.OnImageUploadListener {
-                override fun onActionFailed() {
-                    toast("头像上传失败，请稍后重试！")
-                }
+            if (data != null) {
+                val uri = Crop.getOutput(data)
+                ImageUploadHelper(object : ImageUploadHelper.OnImageUploadListener {
+                    override fun onActionFailed() {
+                        toast("头像上传失败，请稍后重试！")
+                    }
 
-                override fun onActionStart() {
-                    getFastProgressDialog("正在上传头像……")
-                }
+                    override fun onActionStart() {
+                        getFastProgressDialog("正在上传头像……")
+                    }
 
-                override fun onActionEnd(builder: MultipartBody.Builder) {
-                    mPresent.uploadFile(0x1, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_EDIT_PERSONAL, builder.build().parts())
-                }
-            }).upload(arrayListOf(ImageBean(null, uri.path)), 100)
+                    override fun onActionEnd(builder: MultipartBody.Builder) {
+                        mPresent.uploadFile(0x1, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_EDIT_PERSONAL, builder.build().parts())
+                    }
+                }).upload(arrayListOf(ImageBean(null, uri.path)), 100)
+            }
         }
     }
 }

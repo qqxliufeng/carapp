@@ -225,12 +225,12 @@ class RequestParamsHelper {
         fun getShopcartParam(page: Int, pageSize: Int = 10) = getWithPageParams(page, pageSize)
 
         val ACT_ADD_SHOPCART = "add_shopcart"
-        fun getAddShopcartParam(gid: String,shopid:String,num:String,specification:String) =
+        fun getAddShopcartParam(gid: String, shopid: String, num: String, specification: String) =
                 getWithIdParams()
-                        .addParam("gid",gid)
-                        .addParam("shopid",shopid)
-                        .addParam("num",num)
-                        .addParam("specification",specification)
+                        .addParam("gid", gid)
+                        .addParam("shopid", shopid)
+                        .addParam("num", num)
+                        .addParam("specification", specification)
 
 
         //删除购物车商品
@@ -241,6 +241,7 @@ class RequestParamsHelper {
             param.addParam("cid", cid)
             return param
         }
+
 
         //修改商品数量
         val ACT_UPDATE_SHOPCART = "update_shopcart"
@@ -253,6 +254,12 @@ class RequestParamsHelper {
         }
 
 
+        val ACT_MYORDER_STATUS = "myorder_status"
+        fun getMyorderStatusParams(status: String, page: Int) = getWithPageParams(page).addParam("status", status)
+
+        val ACT_MYORDER = "myorder"
+        fun getMyorderParams(page: Int) = getWithPageParams(page)
+
         /**              member model  end           **/
 
         /**              product model start         **/
@@ -264,56 +271,55 @@ class RequestParamsHelper {
 
 
         val ACT_COLLECT_PRODUCT = "collect_product"
-        fun getCollectProductParam(pid:String) = getWithIdParams().addParam("pid",pid)
+        fun getCollectProductParam(pid: String) = getWithIdParams().addParam("pid", pid)
 
         val ACT_PRODUCT_FADDISH = "product_faddish"
-        fun getProductFaddishParams(type:String,sort:String,page:Int) =
+        fun getProductFaddishParams(type: String, sort: String, page: Int) =
                 getWithPageParams(page)
-                        .addParam("type",type)
-                        .addParam("sort",sort)
+                        .addParam("type", type)
+                        .addParam("sort", sort)
 
         val ACT_CONCERM_SHOP = "concerm_shop"
-        fun getConcermShopParams(sid:String) = getWithIdParams().addParam("sid",sid)
+        fun getConcermShopParams(sid: String) = getWithIdParams().addParam("sid", sid)
 
         val ACT_PRODUCT_SHOP_TYPE_SEARCH = "product_shop_type_search"
-        fun getProductShopTypeSearchParams(type_id:String,stype_id:String,sid:String,sort:String,page: Int) =
+        fun getProductShopTypeSearchParams(type_id: String, stype_id: String, sid: String, sort: String, page: Int) =
                 getWithPageParams(page)
-                        .addParam("type_id",type_id)
-                        .addParam("stype_id",stype_id)
-                        .addParam("sid",sid)
-                        .addParam("sort",sort)
+                        .addParam("type_id", type_id)
+                        .addParam("stype_id", stype_id)
+                        .addParam("sid", sid)
+                        .addParam("sort", sort)
 
         val ACT_PRODUCT_TYPE = "product_type"
-        fun getProductTypeParams(pid:String) = getBaseParams().addParam("pid",pid)
+        fun getProductTypeParams(pid: String) = getBaseParams().addParam("pid", pid)
 
         val ACT_PRODUCT_SEARCH = "product_search"
-        fun getProductSearchParams(keyword:String,sort:String,type:String,page: Int) =
+        fun getProductSearchParams(keyword: String, sort: String, type: String, page: Int) =
                 getWithPageParams(page)
-                        .addParam("keyword",keyword)
-                        .addParam("sort",sort)
-                        .addParam("type",type)
+                        .addParam("keyword", keyword)
+                        .addParam("sort", sort)
+                        .addParam("type", type)
 
         val ACT_PRODUCT_TYPE_SEARCH = "product_type_search"
-        fun getProductTypeSearchParams(type_id:String,stype_id:String,sort:String,page:Int) =
+        fun getProductTypeSearchParams(type_id: String, stype_id: String, sort: String, page: Int) =
                 getWithPageParams(page)
-                        .addParam("type_id",type_id)
-                        .addParam("stype_id",stype_id)
-                        .addParam("sort",sort)
+                        .addParam("type_id", type_id)
+                        .addParam("stype_id", stype_id)
+                        .addParam("sort", sort)
 
         val ACT_PRODUCT_DETAIL = "product_detail"
-        fun getPoductDetailParams(gid:String) = getWithIdParams().addParam("gid",gid)
+        fun getPoductDetailParams(gid: String) = getWithIdParams().addParam("gid", gid)
 
         val ACT_PRODUCT_SHOP_SEARCH = "product_shop_search"
-        fun getProductShopSearchParams(keyword:String,sid:String,sort:String,type:String = "",page:Int) =
+        fun getProductShopSearchParams(keyword: String, sid: String, sort: String, type: String = "", page: Int) =
                 getWithPageParams(page)
-                        .addParam("keyword",keyword)
-                        .addParam("sid",sid)
-                        .addParam("sort",sort)
-                        .addParam("type",type)
+                        .addParam("keyword", keyword)
+                        .addParam("sid", sid)
+                        .addParam("sort", sort)
+                        .addParam("type", type)
 
         val ACT_ALL_COMMENT = "all_comment"
-        fun getAllCommentParams(gid: String,page: Int) = getWithPageParams(page).addParam("gid",gid)
-
+        fun getAllCommentParams(gid: String, page: Int) = getWithPageParams(page).addParam("gid", gid)
 
 
         /**              qaa model  start           **/
@@ -424,6 +430,12 @@ class RequestParamsHelper {
 
         val ACT_MY_SALE_QORDER = "my_sale_qorder"
         fun getMySaleQorderParam(page: Int) = getWithPageParams(page)
+
+        val ACT_ADD_ORDER = "add_order"
+        fun getAddOrderParams(paytype: String, post_data: String) =
+                getWithIdParams()
+                        .addParam("paytype", paytype)
+                        .addParam("post_data", post_data)
 
 
         /**              order model end        **/

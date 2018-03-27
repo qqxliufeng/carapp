@@ -1,5 +1,9 @@
 package com.android.ql.lf.carapp.ui.fragments.mall.order
 
+import android.annotation.SuppressLint
+import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.RecyclerView
@@ -8,11 +12,12 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.*
 import com.android.ql.lf.carapp.R
-import com.android.ql.lf.carapp.data.AddressBean
-import com.android.ql.lf.carapp.data.ShoppingCarItemBean
+import com.android.ql.lf.carapp.data.*
+import com.android.ql.lf.carapp.present.MallOrderPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.address.AddressSelectFragment
+import com.android.ql.lf.carapp.ui.fragments.order.PayResultFragment
 import com.android.ql.lf.carapp.ui.views.PopupWindowDialog
 import com.android.ql.lf.carapp.ui.views.SelectPayTypeView
 import com.android.ql.lf.carapp.utils.*
@@ -33,7 +38,7 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
         val GOODS_ID_FLAG = "goods_id_flag"
     }
 
-    private var tempList:ArrayList<ShoppingCarItemBean>? = null
+    private var tempList: ArrayList<ShoppingCarItemBean>? = null
 
 
     /**
@@ -83,6 +88,10 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
      */
     private val footerView by lazy { View.inflate(mContext, R.layout.layout_submit_new_order_footer_layout, null) }
 
+    private val selectTypeView by lazy {
+        footerView.findViewById<SelectPayTypeView>(R.id.mStvPay)
+    }
+
     private val contentView: View by lazy {
         View.inflate(mContext, R.layout.dialog_bbs_layout, null)
     }
@@ -98,12 +107,51 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
 
     private var addressBean: AddressBean? = null
 
+    private val orderList = arrayListOf<MallOrderBean>()
+
+    private var payType: String = SelectPayTypeView.WX_PAY
+
+    private val handle by lazy {
+        @SuppressLint("HandlerLeak")
+        object : Handler() {
+            override fun handleMessage(msg: Message?) {
+                super.handleMessage(msg)
+                when (msg!!.what) {
+                    PayManager.SDK_PAY_FLAG -> {
+                        val payResult = PayResult(msg.obj as Map<String, String>)
+                        val resultInfo = payResult.result// 同步返回需要验证的信息
+                        val resultStatus = payResult.resultStatus
+                        val bundle = Bundle()
+                        if (TextUtils.equals(resultStatus, "9000")) {
+                            //支付成功
+                            bundle.putInt(OrderPayResultFragment.PAY_CODE_FLAG, OrderPayResultFragment.PAY_SUCCESS_CODE)
+                        } else {
+                            //支付失败
+                            bundle.putInt(OrderPayResultFragment.PAY_CODE_FLAG, OrderPayResultFragment.PAY_FAIL_CODE)
+                        }
+//                    OrderPresent.notifyRefreshOrderNum()
+                        FragmentContainerActivity
+                                .from(mContext)
+                                .setTitle("支付结果")
+                                .setNeedNetWorking(true)
+                                .setExtraBundle(bundle)
+                                .setClazz(OrderPayResultFragment::class.java)
+                                .start()
+                        finish()
+                    }
+                }
+            }
+        }
+    }
+
     override fun createAdapter(): BaseQuickAdapter<ShoppingCarItemBean, BaseViewHolder> {
         return object : BaseQuickAdapter<ShoppingCarItemBean, BaseViewHolder>(R.layout.adapter_submit_order_info_item_layout, mArrayList) {
             override fun convert(helper: BaseViewHolder?, item: ShoppingCarItemBean?) {
                 val iv_pic = helper!!.getView<ImageView>(R.id.mIvSubmitOrderGoodsPic)
                 GlideManager.loadImage(iv_pic.context, if (item!!.shopcart_pic.isEmpty()) "" else item.shopcart_pic[0], iv_pic)
                 helper.setText(R.id.mIvSubmitOrderGoodsName, item.shopcart_name)
+                helper.setText(R.id.mTvSubmitOrderItemStoreName, item.shop_shopname)
+                GlideManager.loadImage(mContext, item.shop_shoppic, helper.getView(R.id.mIvSubmitOrderItemStorePic))
                 helper.setText(R.id.mIvSubmitOrderGoodsSpe, item.shopcart_specification)
                 helper.setText(R.id.mIvSubmitOrderGoodsPrice, "￥${item.shopcart_price}")
                 helper.setText(R.id.mIvSubmitOrderGoodsNum, "X${item.shopcart_num}")
@@ -123,10 +171,6 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
         mSwipeRefreshLayout.isEnabled = false
         mBaseAdapter.addHeaderView(headerView)
         mBaseAdapter.addFooterView(footerView)
-        val selectTypeView = footerView.findViewById<SelectPayTypeView>(R.id.mStvPay)
-        mTvSubmitOrder.setOnClickListener {
-            toast(selectTypeView.payType)
-        }
         emptyAddressButton.setOnClickListener {
             FragmentContainerActivity.from(mContext).setTitle("选择地址").setNeedNetWorking(true).setClazz(AddressSelectFragment::class.java).start()
         }
@@ -138,6 +182,23 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
                 toast("请选择收货地址")
                 return@setOnClickListener
             }
+            mArrayList.forEach {
+                val orderBean = MallOrderBean()
+                orderBean.address = addressBean!!.address_id
+                orderBean.gid = it.shopcart_gid
+                orderBean.cid = it.shopcart_id
+                orderBean.mliuyan = it.bbs
+                orderBean.num = it.shopcart_num
+                orderBean.specification = it.shopcart_specification
+                orderBean.price = it.shopcart_price
+                orderBean.mdprice = it.shopcart_mdprice
+                orderBean.bbs = it.bbs
+                orderList.add(orderBean)
+            }
+            val json = Gson().toJson(orderList)
+            payType = selectTypeView.payType
+            mPresent.getDataByPost(0x1, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_ADD_ORDER,
+                    RequestParamsHelper.getAddOrderParams(payType, json))
         }
     }
 
@@ -177,8 +238,9 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
 
     override fun onRequestStart(requestID: Int) {
         super.onRequestStart(requestID)
-        if (requestID == 0x0) {
-            getFastProgressDialog("正在加载地址……")
+        when (requestID) {
+            0x0 -> getFastProgressDialog("正在加载地址……")
+            0x1 -> getFastProgressDialog("正在提交订单……")
         }
     }
 
@@ -201,6 +263,17 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
             }
         } else {
             //提交订单
+            val check = checkResultCode(result)
+            if (check!=null && check.code == SUCCESS_CODE){
+                MallOrderPresent.notifyRefreshShoppingCarList()
+                if (payType == SelectPayTypeView.WX_PAY) {
+                    PreferenceUtils.setPrefBoolean(mContext,"is_mall_order",true)
+                    val wxBean = Gson().fromJson((check.obj as JSONObject).optJSONObject("result").toString(), WXPayBean::class.java)
+                    PayManager.wxPay(mContext, wxBean)
+                } else {
+                    PayManager.aliPay(mContext, handle, (check.obj as JSONObject).optString("result"))
+                }
+            }
         }
     }
 
@@ -225,7 +298,7 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
                         toast("请输入留言内容")
                         return@setOnClickListener
                     }
-                    mContext.hiddenKeyBoard(et_content.windowToken)
+                    et_content.clearFocus()
                     currentItem.bbs = et_content.getTextString()
                     mBaseAdapter.notifyItemChanged(position + 1)
                     popupDialog.dismiss()

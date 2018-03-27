@@ -4,14 +4,28 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/mIvSubmitOrderGoodsKType"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#fff"
-        android:drawablePadding="@dimen/dp_10"
-        android:padding="@dimen/dp_10"
-        android:textColor="@color/text_deep_dark_color" />
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_10">
+
+        <ImageView
+            android:id="@+id/mIvSubmitOrderItemStorePic"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/mTvSubmitOrderItemStoreName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:textColor="@color/text_deep_dark_color" />
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

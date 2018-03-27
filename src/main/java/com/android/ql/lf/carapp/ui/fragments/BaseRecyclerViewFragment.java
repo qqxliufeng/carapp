@@ -138,6 +138,13 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseNetWorkingFragment
                     onMyItemChildClick(adapter, view, position);
                 }
             }
+
+            @Override
+            public void onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                if (!mSwipeRefreshLayout.isRefreshing()) {
+                    onMyItemLongClick(adapter, view, position);
+                }
+            }
         });
     }
 
@@ -163,6 +170,9 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseNetWorkingFragment
     }
 
     public void onMyItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+    }
+
+    public void onMyItemLongClick(BaseQuickAdapter adapter, View view, int position) {
     }
 
     protected abstract BaseQuickAdapter<T, BaseViewHolder> createAdapter();

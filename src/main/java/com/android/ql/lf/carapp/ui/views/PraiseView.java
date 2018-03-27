@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CheckableImageButton;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
@@ -65,7 +66,9 @@ public class PraiseView extends FrameLayout implements Checkable {
             if (PRAISE_TEXT.equals(tvPraiseCount.getText())) {
                 tvPraiseCount.setText(ONLY_ONE_TEXT);
             } else {
-                tvPraiseCount.setText(String.valueOf(Integer.parseInt(tvPraiseCount.getText().toString()) + 1));
+                if (!TextUtils.isEmpty(tvPraiseCount.getText().toString())) {
+                    tvPraiseCount.setText(String.valueOf(Integer.parseInt(tvPraiseCount.getText().toString()) + 1));
+                }
             }
             startAnimator();
         } else {
@@ -119,4 +122,9 @@ public class PraiseView extends FrameLayout implements Checkable {
     public void toggle() {
         setChecked(!isChecked);
     }
+
+    public void setPraiseText(String count) {
+        tvPraiseCount.setText(count);
+    }
+
 }

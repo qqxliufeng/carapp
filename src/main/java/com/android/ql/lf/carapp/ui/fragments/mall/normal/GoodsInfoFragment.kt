@@ -132,6 +132,8 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
                         shoppingCarItem.shopcart_price = goodsInfoBean!!.result!!.product_price
                         shoppingCarItem.shopcart_name = goodsInfoBean!!.result!!.product_name
                         shoppingCarItem.shopcart_gid = goodsInfoBean!!.result!!.product_id
+                        shoppingCarItem.shop_shoppic = goodsInfoBean!!.arr1!!.wholesale_shop_pic
+                        shoppingCarItem.shop_shopname = goodsInfoBean!!.arr1!!.wholesale_shop_name
                         shoppingCarItem.shopcart_id = ""
                         if (TextUtils.isEmpty(picPath)) {
                             shoppingCarItem.shopcart_pic = goodsInfoBean!!.result!!.product_pic as ArrayList<String>
@@ -187,8 +189,8 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
                     mCibGoodsInfoCollection.toggle()
                 }
             }
-            0x2->{// 加入到购物车
-                if (check != null && check.code == SUCCESS_CODE){
+            0x2 -> {// 加入到购物车
+                if (check != null && check.code == SUCCESS_CODE) {
                     toast((check.obj as JSONObject).optString(MSG_FLAG))
                 }
             }

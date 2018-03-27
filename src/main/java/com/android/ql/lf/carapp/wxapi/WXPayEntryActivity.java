@@ -7,8 +7,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.android.ql.lf.carapp.R;
+import com.android.ql.lf.carapp.ui.fragments.mall.order.OrderPayResultFragment;
 import com.android.ql.lf.carapp.ui.fragments.order.PayResultFragment;
 import com.android.ql.lf.carapp.utils.Constants;
+import com.android.ql.lf.carapp.utils.PreferenceUtils;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -49,10 +51,19 @@ public class WXPayEntryActivity extends AppCompatActivity implements IWXAPIEvent
     @Override
     public void onResp(BaseResp baseResp) {
         if (baseResp != null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.mFlWxPayResultContainer, PayResultFragment.Companion.newInstance(baseResp.errCode))
-                    .commit();
+            boolean isMallOrder = PreferenceUtils.getPrefBoolean(this, "is_mall_order", false);
+            if (isMallOrder) {
+                PreferenceUtils.setPrefBoolean(this, "is_mall_order", false);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.mFlWxPayResultContainer, OrderPayResultFragment.Companion.newInstance(baseResp.errCode))
+                        .commit();
+            } else {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.mFlWxPayResultContainer, PayResultFragment.Companion.newInstance(baseResp.errCode))
+                        .commit();
+            }
         }
     }
 }
