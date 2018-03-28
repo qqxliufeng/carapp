@@ -11,14 +11,13 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.android.ql.lf.carapp.R
-import com.android.ql.lf.carapp.data.AdsBean
-import com.android.ql.lf.carapp.data.GoodsBean
-import com.android.ql.lf.carapp.data.ShoppingCarItemBean
-import com.android.ql.lf.carapp.data.StoreInfoBean
+import com.android.ql.lf.carapp.data.*
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.adapter.GoodsCommentAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
+import com.android.ql.lf.carapp.ui.fragments.mall.order.OrderCommentListFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.order.OrderSubmitFragment
+import com.android.ql.lf.carapp.ui.fragments.user.mine.MimeEvaluateFragment
 import com.android.ql.lf.carapp.ui.views.BottomGoodsParamDialog
 import com.android.ql.lf.carapp.utils.GlideManager
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
@@ -42,7 +41,7 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
         val GOODS_ID_FLAG = "goods_id_flag"
     }
 
-    private val mArrayList: ArrayList<String> = arrayListOf()
+    private val mArrayList: ArrayList<CommentForGoodsBean> = arrayListOf()
 
     private var goodsInfoBean: GoodsInfoBean? = null
 
@@ -179,7 +178,25 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
         when (requestID) {
             0x0 -> { // 加载列表
                 if (check != null && check.code == SUCCESS_CODE) {
-                    goodsInfoBean = Gson().fromJson((check.obj as JSONObject).toString(), GoodsInfoBean::class.java)
+                    val jsonObject = check.obj as JSONObject
+                    goodsInfoBean = Gson().fromJson((jsonObject).toString(), GoodsInfoBean::class.java)
+                    val commentJsonArray = jsonObject.optJSONObject("arr").optJSONArray("list")
+                    if (commentJsonArray != null && commentJsonArray.length() > 0) {
+                        mTvCommentCount.text = "订单评价(${commentJsonArray.length()})"
+                        mTvCommentAll.setOnClickListener {
+                            FragmentContainerActivity
+                                    .from(mContext)
+                                    .setTitle("订单评价")
+                                    .setClazz(OrderCommentListFragment::class.java)
+                                    .setNeedNetWorking(true)
+                                    .setExtraBundle(bundleOf(Pair(OrderCommentListFragment.GID_FLAG, goodsInfoBean!!.result!!.product_id)))
+                                    .start()
+                        }
+                        (0 until commentJsonArray.length()).forEach {
+                            mArrayList.add(Gson().fromJson(commentJsonArray.optJSONObject(it).toString(), CommentForGoodsBean::class.java))
+                        }
+                        commentAdapter.notifyDataSetChanged()
+                    }
                     bindData()
                 }
             }

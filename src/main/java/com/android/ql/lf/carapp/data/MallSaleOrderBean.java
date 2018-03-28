@@ -15,6 +15,8 @@ public class MallSaleOrderBean {
     private String product_md;
     private String product_mdprice;
     private String product_price;
+    private String product_shopname;
+    private String product_shoppic;
     private String order_num;
     private String order_sn;
     private String order_oprice;
@@ -162,5 +164,21 @@ public class MallSaleOrderBean {
 
     public void setProduct_pic(List<String> product_pic) {
         this.product_pic = product_pic;
+    }
+
+    public String getProduct_shopname() {
+        return product_shopname;
+    }
+
+    public void setProduct_shopname(String product_shopname) {
+        this.product_shopname = product_shopname;
+    }
+
+    public String getProduct_shoppic() {
+        return product_shoppic;
+    }
+
+    public void setProduct_shoppic(String product_shoppic) {
+        this.product_shoppic = product_shoppic;
     }
 }

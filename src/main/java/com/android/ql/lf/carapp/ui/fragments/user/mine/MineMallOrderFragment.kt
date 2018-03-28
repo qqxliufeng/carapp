@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.SearchParamBean
+import com.android.ql.lf.carapp.present.MallOrderPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseFragment
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
@@ -33,8 +34,10 @@ class MineMallOrderFragment : BaseFragment() {
     override fun getLayoutId() = R.layout.fragment_main_mall_order_layout
 
     override fun initView(view: View?) {
-//        mVpMainMallOrder.adapter = MainMallOrderViewPagerAdapter(childFragmentManager)
-//        mTlMainMallOrder.setupWithViewPager(mVpMainMallOrder)
+        (mContext as FragmentContainerActivity).setSwipeBackEnable(false)
+        mVpMainMallOrder.adapter = MainMallOrderViewPagerAdapter(childFragmentManager)
+        mVpMainMallOrder.offscreenPageLimit = TITLES.size
+        mTlMainMallOrder.setupWithViewPager(mVpMainMallOrder)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -55,12 +58,39 @@ class MineMallOrderFragment : BaseFragment() {
 
     class MainMallOrderViewPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
 
-        override fun getItem(position: Int) = MainMallOrderItemFragment()
+        override fun getItem(position: Int): MainMallOrderItemFragment {
+            val searchParam = SearchParamBean()
+            searchParam.model = RequestParamsHelper.MEMBER_MODEL
+            searchParam.act = RequestParamsHelper.ACT_MYORDER_STATUS
+            val map = HashMap<String, String>()
+            when (position) {
+                0 -> {
+                    map.put("status", MallOrderPresent.MallOrderStatus.WAITING_FOR_MONEY.index)
+                    searchParam.params = map
+                }
+                1 -> {
+                    map.put("status", MallOrderPresent.MallOrderStatus.WAITING_FOR_SEND.index)
+                    searchParam.params = map
+                }
+                2 -> {
+                    map.put("status", MallOrderPresent.MallOrderStatus.WAITING_FOR_RECEIVER.index)
+                    searchParam.params = map
+                }
+                3 -> {
+                    map.put("status", MallOrderPresent.MallOrderStatus.WAITING_FOR_EVALUATE.index)
+                    searchParam.params = map
+                }
+                4 -> {
+                    map.put("status", MallOrderPresent.MallOrderStatus.MALL_ORDER_COMPLEMENT.index)
+                    searchParam.params = map
+                }
+            }
+            return MainMallOrderItemFragment.newInstance(bundleOf(Pair(MainMallOrderItemFragment.SEARCH_PARAM_FLAG, searchParam)))
+        }
 
         override fun getCount() = TITLES.size
 
         override fun getPageTitle(position: Int) = TITLES[position]
 
     }
-
 }

@@ -16,6 +16,7 @@ import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.order.OrderSubmitFragment
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
 import com.android.ql.lf.carapp.utils.RxBus
+import com.android.ql.lf.carapp.utils.alert
 import com.android.ql.lf.carapp.utils.toast
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -192,16 +193,12 @@ class ShoppingCarFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
 
     override fun onMyItemLongClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
         currentItem = mArrayList[position]
-        val builder = AlertDialog.Builder(mContext)
-        builder.setMessage("是否要删除当前商品？")
-        builder.setPositiveButton("删除") { _, _ ->
+        alert("是否要删除当前商品？","删除","取消") { dialog, which ->
             mPresent.getDataByPost(0x1,
                     RequestParamsHelper.Companion.MEMBER_MODEL,
                     RequestParamsHelper.Companion.ACT_DEL_SHOPCART,
                     RequestParamsHelper.Companion.getDelShopcartParam(currentItem.shopcart_id))
         }
-        builder.setNegativeButton("取消", null)
-        builder.create().show()
     }
 
     override fun onDestroyView() {

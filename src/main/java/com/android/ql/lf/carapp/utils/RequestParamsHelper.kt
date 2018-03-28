@@ -260,6 +260,21 @@ class RequestParamsHelper {
         val ACT_MYORDER = "myorder"
         fun getMyorderParams(page: Int) = getWithPageParams(page)
 
+        val ACT_EDIT_ORDER_STATUS = "edit_order_status"
+        fun getEditOrderStatusParam(oid: String, status: String) = getWithIdParams()
+                .addParam("status", status)
+                .addParam("oid", oid)
+
+        val ACT_EVALUATE = "evaluate"
+        fun getEvaluateParam(oid: String, gid: String, content: String, f: String): ApiParams {
+            val param = getWithIdParams()
+            param.addParam("oid", oid)
+            param.addParam("gid", gid)
+            param.addParam("content", content)
+            param.addParam("f", f)
+            return param
+        }
+
         /**              member model  end           **/
 
         /**              product model start         **/
@@ -436,6 +451,21 @@ class RequestParamsHelper {
                 getWithIdParams()
                         .addParam("paytype", paytype)
                         .addParam("post_data", post_data)
+
+        val ACT_PAY = "pay"
+        fun getPayParam(oid: String, gid: String, paytype: String) =
+                getWithIdParams()
+                        .addParam("oid", oid)
+                        .addParam("gid", gid)
+                        .addParam("paytype", paytype)
+
+        val ACT_REFUND = "refund"
+        fun getRefundParam(name: String,phone: String,oid: String,content:String) =
+                getWithIdParams()
+                        .addParam("oid", oid)
+                        .addParam("name",name)
+                        .addParam("phone",phone)
+                        .addParam("content",content)
 
 
         /**              order model end        **/

@@ -68,4 +68,10 @@
         <item name="android:layout_gravity">center</item>
     </style>
 
+    <style name="myRatingBar" parent="@android:style/Widget.Holo.RatingBar">
+        <item name="android:progressDrawable">@drawable/my_ratingbar_drawable</item>
+        <item name="android:minHeight">30px</item>
+    </style>
+
+
 </resources>

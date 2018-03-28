@@ -23,7 +23,7 @@ public class SelectPayTypeView extends LinearLayout {
 
     public static final String WX_PAY = "wxpay";
     public static final String ALI_PAY = "alipay";
-    public static final String ACCOUNT_PAY = "account";
+    public static final String ACCOUNT_PAY = "balance";
 
     private CheckBox cb_ali;
     private CheckBox cb_wx;
@@ -51,7 +51,7 @@ public class SelectPayTypeView extends LinearLayout {
         init();
     }
 
-    private void init() {
+    public void init() {
         View contentView = View.inflate(getContext(), R.layout.dialog_pay_layout, null);
         cb_ali = contentView.findViewById(R.id.mCbALiPay);
         cb_wx = contentView.findViewById(R.id.mCbWX);
@@ -87,6 +87,10 @@ public class SelectPayTypeView extends LinearLayout {
             });
         }
         addView(contentView);
+    }
+
+    public void setShowAccount(boolean showAccount) {
+        isShowAccount = showAccount;
     }
 
     public String getPayType() {
