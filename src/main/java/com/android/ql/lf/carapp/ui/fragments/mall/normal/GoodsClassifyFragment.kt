@@ -109,6 +109,20 @@ class GoodsClassifyFragment : BaseNetWorkingFragment() {
                 }
             }
         })
+        mLlSearchAndClassifySearch.setOnClickListener {
+            val searchParam = SearchParamBean()
+            searchParam.model = RequestParamsHelper.PRODUCT_MODEL
+            searchParam.act = RequestParamsHelper.ACT_PRODUCT_SEARCH
+            val params = HashMap<String, String>()
+            searchParam.params = params
+            FragmentContainerActivity
+                    .from(mContext)
+                    .setNeedNetWorking(true)
+                    .setClazz(SearchResultListFragment::class.java)
+                    .setHiddenToolBar(true)
+                    .setExtraBundle(bundleOf(Pair(SearchResultListFragment.SEARCH_PARAM_FLAG, searchParam)))
+                    .start()
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

@@ -333,8 +333,18 @@ class RequestParamsHelper {
                         .addParam("sort", sort)
                         .addParam("type", type)
 
+        val ACT_PRODUCT_SHOP = "product_shop"
+        fun getProductShopParams(sid: String, sort: String, page: Int) =
+                getWithPageParams(page)
+                        .addParam("sid", sid)
+                        .addParam("sort", sort)
+
+
         val ACT_ALL_COMMENT = "all_comment"
         fun getAllCommentParams(gid: String, page: Int) = getWithPageParams(page).addParam("gid", gid)
+
+        val ACT_ORDER_DETAIL = "order_detail"
+        fun getMallOrderDetailParam(oid: String) = getWithIdParams().addParam("oid", oid)
 
 
         /**              qaa model  start           **/
@@ -460,12 +470,12 @@ class RequestParamsHelper {
                         .addParam("paytype", paytype)
 
         val ACT_REFUND = "refund"
-        fun getRefundParam(name: String,phone: String,oid: String,content:String) =
+        fun getRefundParam(name: String, phone: String, oid: String, content: String) =
                 getWithIdParams()
                         .addParam("oid", oid)
-                        .addParam("name",name)
-                        .addParam("phone",phone)
-                        .addParam("content",content)
+                        .addParam("name", name)
+                        .addParam("phone", phone)
+                        .addParam("content", content)
 
 
         /**              order model end        **/

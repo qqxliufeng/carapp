@@ -3,21 +3,24 @@ package com.android.ql.lf.carapp.ui.fragments.mall.normal
 import android.graphics.Color
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.View
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.GoodsBean
+import com.android.ql.lf.carapp.data.RefreshData
 import com.android.ql.lf.carapp.data.SearchParamBean
+import com.android.ql.lf.carapp.data.UserInfo
+import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.adapter.GoodsMallItemAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
+import com.android.ql.lf.carapp.ui.fragments.bottom.MainMallFragment
+import com.android.ql.lf.carapp.ui.fragments.mall.shoppingcar.ShoppingCarFragment
+import com.android.ql.lf.carapp.ui.fragments.user.LoginFragment
 import com.android.ql.lf.carapp.ui.views.DividerGridItemDecoration
-import com.android.ql.lf.carapp.utils.ApiParams
-import com.android.ql.lf.carapp.utils.RequestParamsHelper
-import com.android.ql.lf.carapp.utils.getTextString
-import com.android.ql.lf.carapp.utils.isEmpty
+import com.android.ql.lf.carapp.utils.*
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.fragment_search_list_layout.*
+import org.jetbrains.anko.bundleOf
 
 /**
  * Created by lf on 18.3.20.
@@ -27,6 +30,10 @@ class SearchResultListFragment : BaseRecyclerViewFragment<GoodsBean>() {
 
     companion object {
         val SEARCH_PARAM_FLAG = "search_param_flag"
+
+        val RESULT_MALL_MY_SHOPPING_CAR_FLAG = "result_mall_my_shopping_car_flag"
+
+
     }
 
     private val searchParamBean by lazy {
@@ -48,17 +55,37 @@ class SearchResultListFragment : BaseRecyclerViewFragment<GoodsBean>() {
 
     private var keyword = ""
 
+    private var tempGoodsBean: GoodsBean? = null
+
+    private val collectionSubscription by lazy {
+        RxBus.getDefault().toObservable(RefreshData::class.java).subscribe {
+            if (it.isRefresh && it.any == MainMallFragment.REFRESH_COLLECTION_STATUS_FLAG) {
+                refreshCollectionStatus()
+            }
+        }
+    }
+
     override fun createAdapter(): BaseQuickAdapter<GoodsBean, BaseViewHolder> = GoodsMallItemAdapter(R.layout.adapter_main_mall_item_layout, mArrayList)
 
     override fun getLayoutId() = R.layout.fragment_search_list_layout
 
     override fun initView(view: View?) {
         super.initView(view)
+        val statusHeight = (mContext as FragmentContainerActivity).statusHeight
+        mAlGoodsSearchContainer.setPadding(0, statusHeight, 0, 0)
+        mAlGoodsSearchContainer.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+            mTlGoodsSearchContainer.alpha = 1 - Math.abs(verticalOffset).toFloat() / appBarLayout.totalScrollRange.toFloat()
+        }
+        collectionSubscription
         mIvSearchGoodsBack.setColorFilter(Color.parseColor("#646464"))
         mIvSearchGoodsBack.setOnClickListener {
             finish()
         }
+        mRbSearchListResultSort1.isChecked = true
         mRbSearchListResultSort1.setOnClickListener {
+            if (sort == ""){
+                return@setOnClickListener
+            }
             sort = ""
             onPostRefresh()
         }
@@ -73,15 +100,25 @@ class SearchResultListFragment : BaseRecyclerViewFragment<GoodsBean>() {
         }
         mRbSearchListResultSort3.setOnClickListener {
             sort = if (sortFlag) {
+                mRbSearchListResultSort3.text = "价格从高到低"
                 "p1"
             } else {
+                mRbSearchListResultSort3.text = "价格从低到高"
                 "p2"
             }
             sortFlag = !sortFlag
             onPostRefresh()
         }
+        mFabGoodsSearch.setImageResource(R.drawable.img_icon_shoppingcart_white_full)
+        mFabGoodsSearch.doClickWithUserStatusStart(RESULT_MALL_MY_SHOPPING_CAR_FLAG) {
+            FragmentContainerActivity.from(mContext).setClazz(ShoppingCarFragment::class.java).setTitle("购物车").setNeedNetWorking(true).start()
+        }
         mTvSearchSubmit.setOnClickListener {
-            keyword = if (mEtSearchContent.isEmpty()){""}else{mEtSearchContent.getTextString()}
+            keyword = if (mEtSearchContent.isEmpty()) {
+                ""
+            } else {
+                mEtSearchContent.getTextString()
+            }
             onPostRefresh()
         }
     }
@@ -111,9 +148,47 @@ class SearchResultListFragment : BaseRecyclerViewFragment<GoodsBean>() {
 
     override fun getEmptyMessage() = "暂没有商品~~~"
 
+    private fun refreshCollectionStatus() {
+        if (tempGoodsBean != null) {
+            if (tempGoodsBean!!.product_collect == "0") {
+                tempGoodsBean!!.product_collect = "1"
+            } else {
+                tempGoodsBean!!.product_collect = "0"
+            }
+            mBaseAdapter.notifyItemChanged(mArrayList.indexOf(tempGoodsBean))
+        }
+    }
+
+    /**
+     * 进入商品详情
+     */
+    private fun enterGoodsInfo(goodsBean: GoodsBean) {
+        FragmentContainerActivity.from(mContext)
+                .setNeedNetWorking(true)
+                .setTitle("商品详情")
+                .setExtraBundle(bundleOf(Pair(GoodsInfoFragment.GOODS_ID_FLAG, goodsBean.product_id)))
+                .setClazz(GoodsInfoFragment::class.java)
+                .start()
+    }
+
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
         super.onRequestSuccess(requestID, result)
         processList(result as String, GoodsBean::class.java)
+    }
+
+    override fun onMyItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
+        tempGoodsBean = mArrayList[position]
+        if (UserInfo.getInstance().isLogin) {
+            enterGoodsInfo(tempGoodsBean!!)
+        } else {
+            UserInfo.loginToken = MainMallFragment.MAIN_MALL_ENTER_GOODS_INFO_FLAG
+            LoginFragment.startLogin(mContext)
+        }
+    }
+
+    override fun onDestroyView() {
+        unsubscribe(collectionSubscription)
+        super.onDestroyView()
     }
 
 }

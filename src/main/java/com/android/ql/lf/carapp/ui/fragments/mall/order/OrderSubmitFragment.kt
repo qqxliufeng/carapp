@@ -25,6 +25,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_order_submit_layout.*
+import org.jetbrains.anko.bundleOf
 import org.json.JSONObject
 import java.text.DecimalFormat
 
@@ -264,14 +265,31 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
         } else {
             //提交订单
             val check = checkResultCode(result)
-            if (check!=null && check.code == SUCCESS_CODE){
-                MallOrderPresent.notifyRefreshShoppingCarList()
-                if (payType == SelectPayTypeView.WX_PAY) {
-                    PreferenceUtils.setPrefBoolean(mContext,"is_mall_order",true)
-                    val wxBean = Gson().fromJson((check.obj as JSONObject).optJSONObject("result").toString(), WXPayBean::class.java)
-                    PayManager.wxPay(mContext, wxBean)
+            if (check != null) {
+                if (check.code == SUCCESS_CODE) {
+                    MallOrderPresent.notifyRefreshShoppingCarList()
+                    when (payType) {
+                        SelectPayTypeView.WX_PAY -> {
+                            PreferenceUtils.setPrefBoolean(mContext, "is_mall_order", true)
+                            val wxBean = Gson().fromJson((check.obj as JSONObject).optJSONObject("result").toString(), WXPayBean::class.java)
+                            PayManager.wxPay(mContext, wxBean)
+                        }
+                        SelectPayTypeView.ALI_PAY -> PayManager.aliPay(mContext, handle, (check.obj as JSONObject).optString("result"))
+                        SelectPayTypeView.ACCOUNT_PAY -> {
+                            FragmentContainerActivity
+                                    .from(mContext)
+                                    .setTitle("支付结果")
+                                    .setNeedNetWorking(true)
+                                    .setExtraBundle(bundleOf(Pair(OrderPayResultFragment.PAY_CODE_FLAG, OrderPayResultFragment.PAY_SUCCESS_CODE)))
+                                    .setClazz(OrderPayResultFragment::class.java)
+                                    .start()
+                            finish()
+                        }
+                    }
                 } else {
-                    PayManager.aliPay(mContext, handle, (check.obj as JSONObject).optString("result"))
+                    if (payType == SelectPayTypeView.ACCOUNT_PAY) {
+                        toast("余额支付失败")
+                    }
                 }
             }
         }

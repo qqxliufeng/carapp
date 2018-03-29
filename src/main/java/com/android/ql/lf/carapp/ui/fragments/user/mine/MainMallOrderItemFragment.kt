@@ -15,6 +15,7 @@ import com.android.ql.lf.carapp.ui.adapter.MainMallOrderItemAdapter
 import com.android.ql.lf.carapp.ui.fragments.AbstractLazyLoadFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.normal.RefundFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.order.OrderCommentSubmitFragment
+import com.android.ql.lf.carapp.ui.fragments.mall.order.OrderInfoFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.order.OrderPayResultFragment
 import com.android.ql.lf.carapp.ui.views.SelectPayTypeView
 import com.android.ql.lf.carapp.utils.*
@@ -103,7 +104,8 @@ class MainMallOrderItemFragment : AbstractLazyLoadFragment<MallSaleOrderBean>() 
                 when (orderType) {
                     MallOrderPresent.MallOrderStatus.WAITING_FOR_MONEY.index,
                     MallOrderPresent.MallOrderStatus.WAITING_FOR_SEND.index,
-                    MallOrderPresent.MallOrderStatus.WAITING_FOR_EVALUATE.index-> {
+                    MallOrderPresent.MallOrderStatus.WAITING_FOR_EVALUATE.index,
+                    MallOrderPresent.MallOrderStatus.MALL_ORDER_APPLY_BACK.index -> {
                         onPostRefresh()
                     }
                 }
@@ -169,14 +171,9 @@ class MainMallOrderItemFragment : AbstractLazyLoadFragment<MallSaleOrderBean>() 
             0x2 -> {
                 val check = checkResultCode(result)
                 if (check != null && check.code == SUCCESS_CODE) {
-                    MallOrderPresent.notifyRefreshShoppingCarList()
-                    if (payType == SelectPayTypeView.WX_PAY) {
-                        PreferenceUtils.setPrefBoolean(mContext, "is_mall_order", true)
-                        val wxBean = Gson().fromJson((check.obj as JSONObject).optJSONObject("result").toString(), WXPayBean::class.java)
-                        PayManager.wxPay(mContext, wxBean)
-                    } else {
-                        PayManager.aliPay(mContext, handle, (check.obj as JSONObject).optString("result"))
-                    }
+                    MallOrderPresent.onOrderPaySuccess(mContext, (check.obj as JSONObject), payType, currentOrder!!.order_id, handle)
+                } else {
+                    toast((check.obj as JSONObject).optString(MSG_FLAG))
                 }
             }
             0x4 -> {
@@ -184,6 +181,7 @@ class MainMallOrderItemFragment : AbstractLazyLoadFragment<MallSaleOrderBean>() 
                 if (check != null) {
                     if (check.code == SUCCESS_CODE) {
                         toast("收货成功")
+                        onPostRefresh()
                     }
                     toast((check.obj as JSONObject).optString(MSG_FLAG))
                 }
@@ -206,7 +204,10 @@ class MainMallOrderItemFragment : AbstractLazyLoadFragment<MallSaleOrderBean>() 
                         }
                     } else if (view.id == R.id.mBtOrderListItemAction2) {
                         //去支付
-                        pay()
+                        MallOrderPresent.showPayDialog(mContext) {
+                            mPresent.getDataByPost(0x2, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_PAY,
+                                    RequestParamsHelper.getPayParam(currentOrder!!.order_id, currentOrder!!.product_id, it))
+                        }
                     }
                 }
                 MallOrderPresent.MallOrderStatus.WAITING_FOR_SEND.index -> {
@@ -250,28 +251,29 @@ class MainMallOrderItemFragment : AbstractLazyLoadFragment<MallSaleOrderBean>() 
                 MallOrderPresent.MallOrderStatus.MALL_ORDER_COMPLEMENT.index -> {
                     if (view!!.id == R.id.mBtOrderListItemAction1) {
                         //查看订单
+                        FragmentContainerActivity
+                                .from(mContext)
+                                .setNeedNetWorking(true)
+                                .setClazz(OrderInfoFragment::class.java)
+                                .setExtraBundle(bundleOf(Pair(OrderInfoFragment.OID_FLAG, currentOrder!!.order_id)))
+                                .setTitle("订单详情")
+                                .start()
                     }
                 }
             }
         }
     }
 
-    private fun pay() {
-        payType = SelectPayTypeView.WX_PAY
-        val bottomPayDialog = BottomSheetDialog(mContext)
-        val contentView = SelectPayTypeView(mContext)
-        contentView.removeAllViews()
-        contentView.setShowAccount(true)
-        contentView.init()
-        contentView.setShowConfirmView(View.VISIBLE)
-        contentView.setOnConfirmClickListener {
-            bottomPayDialog.dismiss()
-            payType = contentView.payType
-            mPresent.getDataByPost(0x2, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_PAY,
-                    RequestParamsHelper.getPayParam(currentOrder!!.order_id, currentOrder!!.product_id, payType))
-        }
-        bottomPayDialog.setContentView(contentView)
-        bottomPayDialog.show()
+    override fun onMyItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
+        super.onMyItemClick(adapter, view, position)
+        currentOrder = mArrayList[position]
+        FragmentContainerActivity
+                .from(mContext)
+                .setNeedNetWorking(true)
+                .setClazz(OrderInfoFragment::class.java)
+                .setExtraBundle(bundleOf(Pair(OrderInfoFragment.OID_FLAG, currentOrder!!.order_id)))
+                .setTitle("订单详情")
+                .start()
     }
 
     override fun onDestroyView() {

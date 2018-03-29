@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.*
+import com.android.ql.lf.carapp.present.GoodsPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.adapter.GoodsCommentAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
@@ -203,6 +204,7 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
             0x1 -> { //收藏商品
                 if (check != null && check.code == SUCCESS_CODE) {
                     toast((check.obj as JSONObject).optString(MSG_FLAG))
+                    GoodsPresent.notifyRefreshGoodsStatus()
                     mCibGoodsInfoCollection.toggle()
                 }
             }
@@ -212,7 +214,6 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
                 }
             }
         }
-
     }
 
     private fun bindData() {

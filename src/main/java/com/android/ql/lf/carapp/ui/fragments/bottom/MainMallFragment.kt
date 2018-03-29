@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.*
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
@@ -44,6 +43,8 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
         val MAIN_MALL_SHOPPING_CAR_FLAG = "main_mall_shopping_car_flag"
         val MAIN_MALL_MY_SHOPPING_CAR_FLAG = "main_mall_my_shopping_car_flag"
         val MAIN_MALL_ENTER_GOODS_INFO_FLAG = "main_mall_enter_goods_info_flag"
+
+        val REFRESH_COLLECTION_STATUS_FLAG = "refresh_collection_status_flag"
 
 
         fun newInstance(): MainMallFragment {
@@ -92,6 +93,14 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
 
     private var tempGoodsBean: GoodsBean? = null
 
+    private val collectionSubscription by lazy {
+        RxBus.getDefault().toObservable(RefreshData::class.java).subscribe {
+            if (it.isRefresh && it.any == REFRESH_COLLECTION_STATUS_FLAG) {
+                refreshCollectionStatus()
+            }
+        }
+    }
+
     override fun getLayoutId() = R.layout.fragment_main_mall_layout
 
     override fun createAdapter(): BaseQuickAdapter<GoodsBean, BaseViewHolder> = GoodsMallItemAdapter(R.layout.adapter_main_mall_item_layout, mArrayList)
@@ -109,6 +118,7 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
     override fun initView(view: View?) {
         super.initView(view)
         registerLoginSuccessBus()
+        collectionSubscription
         val height = (mContext as MainActivity).statusHeight
         val param = mTvMainMallTitle.layoutParams as ViewGroup.MarginLayoutParams
         param.topMargin = height
@@ -134,12 +144,28 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
                             .setExtraBundle(bundleOf(Pair(SearchResultListFragment.SEARCH_PARAM_FLAG, searchParam)))
                             .start()
                 } else {
-                    FragmentContainerActivity.from(mContext).setNeedNetWorking(true).setClazz(GoodsClassifyFragment::class.java)
+                    FragmentContainerActivity
+                            .from(mContext)
+                            .setNeedNetWorking(true)
+                            .setClazz(GoodsClassifyFragment::class.java)
+                            .setTitle("商品分类")
                             .start()
                 }
             }
         })
         mLlMainMallSearchContainer.setOnClickListener {
+            val searchParam = SearchParamBean()
+            searchParam.model = RequestParamsHelper.PRODUCT_MODEL
+            searchParam.act = RequestParamsHelper.ACT_PRODUCT_SEARCH
+            val params = HashMap<String, String>()
+            searchParam.params = params
+            FragmentContainerActivity
+                    .from(mContext)
+                    .setNeedNetWorking(true)
+                    .setClazz(SearchResultListFragment::class.java)
+                    .setHiddenToolBar(true)
+                    .setExtraBundle(bundleOf(Pair(SearchResultListFragment.SEARCH_PARAM_FLAG, searchParam)))
+                    .start()
         }
         mFabShoppingCar.setImageResource(R.drawable.img_icon_shoppingcart_white_full)
         mFabShoppingCar.doClickWithUserStatusStart(MAIN_MALL_MY_SHOPPING_CAR_FLAG) {
@@ -226,8 +252,20 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
                 val check = checkResultCode(result)
                 if (check != null && check.code == SUCCESS_CODE) {
                     toast((check.obj as JSONObject).optString(MSG_FLAG))
+                    refreshCollectionStatus()
                 }
             }
+        }
+    }
+
+    private fun refreshCollectionStatus() {
+        if (tempGoodsBean != null) {
+            if (tempGoodsBean!!.product_collect == "0") {
+                tempGoodsBean!!.product_collect = "1"
+            } else {
+                tempGoodsBean!!.product_collect = "0"
+            }
+            mBaseAdapter.notifyItemChanged(mArrayList.indexOf(tempGoodsBean) + 1)
         }
     }
 
@@ -330,6 +368,7 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
 
     override fun onDestroyView() {
         bannerView.releaseBanner()
+        unsubscribe(collectionSubscription)
         super.onDestroyView()
     }
 
