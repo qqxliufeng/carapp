@@ -179,6 +179,7 @@ class OrderInfoFragment : BaseNetWorkingFragment() {
                 MallOrderPresent.MallOrderStatus.WAITING_FOR_MONEY.index -> {
                     mBtOrderInfoAction1.visibility = View.VISIBLE
                     mBtOrderInfoAction2.visibility = View.VISIBLE
+                    mTvOrderInfoTopStatePic.setImageResource(R.drawable.img_order_status_money)
                     mBtOrderInfoAction1.text = "取消订单"
                     mBtOrderInfoAction2.text = "去支付"
                     mBtOrderInfoAction1.setOnClickListener {
@@ -200,6 +201,7 @@ class OrderInfoFragment : BaseNetWorkingFragment() {
                 MallOrderPresent.MallOrderStatus.WAITING_FOR_SEND.index -> {
                     mBtOrderInfoAction1.visibility = View.VISIBLE
                     mBtOrderInfoAction2.visibility = View.GONE
+                    mTvOrderInfoTopStatePic.setImageResource(R.drawable.img_order_status_send)
                     mBtOrderInfoAction1.text = "申请退款"
                     mBtOrderInfoAction1.setOnClickListener {
                         //申请退款
@@ -215,6 +217,7 @@ class OrderInfoFragment : BaseNetWorkingFragment() {
                     }
                 }
                 MallOrderPresent.MallOrderStatus.WAITING_FOR_RECEIVER.index -> {
+                    mTvOrderInfoTopStatePic.setImageResource(R.drawable.img_order_status_reveicer)
                     mBtOrderInfoAction1.visibility = View.GONE
                     mBtOrderInfoAction2.visibility = View.VISIBLE
                     mBtOrderInfoAction2.text = "确认收货"
@@ -229,6 +232,7 @@ class OrderInfoFragment : BaseNetWorkingFragment() {
                     }
                 }
                 MallOrderPresent.MallOrderStatus.WAITING_FOR_EVALUATE.index -> {
+                    mTvOrderInfoTopStatePic.setImageResource(R.drawable.img_order_status_ele)
                     mBtOrderInfoAction1.visibility = View.GONE
                     mBtOrderInfoAction2.visibility = View.VISIBLE
                     mBtOrderInfoAction2.text = "去评价"
@@ -244,9 +248,23 @@ class OrderInfoFragment : BaseNetWorkingFragment() {
                                 .start()
                     }
                 }
-                MallOrderPresent.MallOrderStatus.MALL_ORDER_COMPLEMENT.index,
-                MallOrderPresent.MallOrderStatus.MALL_ORDER_CANCEL.index,
+                MallOrderPresent.MallOrderStatus.MALL_ORDER_COMPLEMENT.index -> {
+                    mTvOrderInfoTopStatePic.setImageResource(R.drawable.img_order_status_complement)
+                    mBtOrderInfoAction1.visibility = View.GONE
+                    mBtOrderInfoAction2.visibility = View.GONE
+                }
+                MallOrderPresent.MallOrderStatus.MALL_ORDER_CANCEL.index -> {
+                    mTvOrderInfoTopStatePic.setImageResource(R.drawable.img_order_status_cancel)
+                    mBtOrderInfoAction1.visibility = View.GONE
+                    mBtOrderInfoAction2.visibility = View.GONE
+                }
                 MallOrderPresent.MallOrderStatus.MALL_ORDER_HAS_BACK.index -> {
+                    mTvOrderInfoTopStatePic.setImageResource(R.drawable.img_order_status_complement)
+                    mBtOrderInfoAction1.visibility = View.GONE
+                    mBtOrderInfoAction2.visibility = View.GONE
+                }
+                MallOrderPresent.MallOrderStatus.MALL_ORDER_APPLY_BACK.index -> {
+                    mTvOrderInfoTopStatePic.setImageResource(R.drawable.img_order_status_apply_money)
                     mBtOrderInfoAction1.visibility = View.GONE
                     mBtOrderInfoAction2.visibility = View.GONE
                 }

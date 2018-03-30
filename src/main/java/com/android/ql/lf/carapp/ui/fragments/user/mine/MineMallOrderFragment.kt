@@ -81,7 +81,7 @@ class MineMallOrderFragment : BaseFragment() {
                     searchParam.params = map
                 }
                 4 -> {
-                    map.put("status", MallOrderPresent.MallOrderStatus.MALL_ORDER_COMPLEMENT.index)
+                    map.put("status", MallOrderPresent.MallOrderStatus.MALL_ORDER_APPLY_BACK.index)
                     searchParam.params = map
                 }
             }

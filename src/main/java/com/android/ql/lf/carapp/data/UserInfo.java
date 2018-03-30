@@ -61,6 +61,33 @@ public class UserInfo {
     //    private String memberWxIs
     private ShopInfo shopInfo;
 
+    private int goodsCollectionNum = 0;
+    private int storeCollectionNum = 0;
+    private int footsCollectionNum = 0;
+
+    public int getGoodsCollectionNum() {
+        return goodsCollectionNum;
+    }
+
+    public void setGoodsCollectionNum(int goodsCollectionNum) {
+        this.goodsCollectionNum = goodsCollectionNum;
+    }
+
+    public int getStoreCollectionNum() {
+        return storeCollectionNum;
+    }
+
+    public void setStoreCollectionNum(int storeCollectionNum) {
+        this.storeCollectionNum = storeCollectionNum;
+    }
+
+    public int getFootsCollectionNum() {
+        return footsCollectionNum;
+    }
+
+    public void setFootsCollectionNum(int footsCollectionNum) {
+        this.footsCollectionNum = footsCollectionNum;
+    }
 
     public String getMemberId() {
         return memberId;

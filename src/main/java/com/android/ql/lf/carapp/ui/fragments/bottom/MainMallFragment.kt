@@ -130,8 +130,6 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
                 val classifyItem = mClassifyList[position]
                 if (classifyItem.imageRes == 0) {
                     val searchParam = SearchParamBean()
-                    searchParam.model = RequestParamsHelper.PRODUCT_MODEL
-                    searchParam.act = RequestParamsHelper.ACT_PRODUCT_TYPE_SEARCH
                     val params = HashMap<String, String>()
                     params.put("type_id", classifyItem.classify_id)
                     params.put("stype_id", "")
@@ -155,8 +153,6 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
         })
         mLlMainMallSearchContainer.setOnClickListener {
             val searchParam = SearchParamBean()
-            searchParam.model = RequestParamsHelper.PRODUCT_MODEL
-            searchParam.act = RequestParamsHelper.ACT_PRODUCT_SEARCH
             val params = HashMap<String, String>()
             searchParam.params = params
             FragmentContainerActivity
@@ -230,8 +226,6 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
                             productContainer!!.arr1.forEachWithIndex { index, item ->
                                 hotViewContainer[index].bindData(item.faddish_title, item.faddish_description, item.faddish_pic) {
                                     val searchParam = SearchParamBean()
-                                    searchParam.model = RequestParamsHelper.PRODUCT_MODEL
-                                    searchParam.act = RequestParamsHelper.ACT_PRODUCT_FADDISH
                                     val params = HashMap<String, String>()
                                     params.put("type", item.faddish_id!!)
                                     searchParam.params = params

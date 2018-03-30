@@ -20,6 +20,7 @@ import com.android.ql.lf.carapp.ui.fragments.mall.order.OrderCommentListFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.order.OrderSubmitFragment
 import com.android.ql.lf.carapp.ui.fragments.user.mine.MimeEvaluateFragment
 import com.android.ql.lf.carapp.ui.views.BottomGoodsParamDialog
+import com.android.ql.lf.carapp.utils.Constants
 import com.android.ql.lf.carapp.utils.GlideManager
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
 import com.android.ql.lf.carapp.utils.toast
@@ -132,7 +133,11 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
                         shoppingCarItem.shopcart_price = goodsInfoBean!!.result!!.product_price
                         shoppingCarItem.shopcart_name = goodsInfoBean!!.result!!.product_name
                         shoppingCarItem.shopcart_gid = goodsInfoBean!!.result!!.product_id
-                        shoppingCarItem.shop_shoppic = goodsInfoBean!!.arr1!!.wholesale_shop_pic
+                        if (goodsInfoBean!!.arr1!!.wholesale_shop_pic != null && !goodsInfoBean!!.arr1!!.wholesale_shop_pic.isEmpty()) {
+                            shoppingCarItem.shop_shoppic = goodsInfoBean!!.arr1!!.wholesale_shop_pic[0]
+                        } else {
+                            shoppingCarItem.shop_shoppic = ""
+                        }
                         shoppingCarItem.shop_shopname = goodsInfoBean!!.arr1!!.wholesale_shop_name
                         shoppingCarItem.shopcart_id = ""
                         if (TextUtils.isEmpty(picPath)) {
@@ -226,7 +231,9 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
         mTvGoodsInfoTitle.text = goodsInfoBean!!.result!!.product_name
         mTvGoodsInfoDescription.text = Html.fromHtml(goodsInfoBean!!.result!!.product_description)
         mHTvGoodsInfo.setHtmlFromString(goodsInfoBean!!.result!!.product_content, false)
-        GlideManager.loadImage(mContext, goodsInfoBean!!.arr1!!.wholesale_shop_pic, mIvGoodsInfoStorePic)
+        if (goodsInfoBean!!.arr1!!.wholesale_shop_pic != null && !goodsInfoBean!!.arr1!!.wholesale_shop_pic.isEmpty()) {
+            GlideManager.loadImage(mContext, goodsInfoBean!!.arr1!!.wholesale_shop_pic[0], mIvGoodsInfoStorePic)
+        }
         mTvGoodsInfoStoreName.text = goodsInfoBean!!.arr1!!.wholesale_shop_name
         mTvGoodsInfoStoreAllGoodsNum.text = goodsInfoBean!!.arr1!!.wholesale_shop_num
         mTvGoodsInfoStoreInfoFocusNum.text = goodsInfoBean!!.arr1!!.wholesale_shop_attention

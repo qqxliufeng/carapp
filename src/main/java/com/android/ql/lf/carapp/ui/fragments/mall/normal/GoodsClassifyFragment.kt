@@ -53,8 +53,6 @@ class GoodsClassifyFragment : BaseNetWorkingFragment() {
                 contentItem = mItemArrayList[position]
                 if (!contentItem.isHeader){
                     val searchParam = SearchParamBean()
-                    searchParam.model = RequestParamsHelper.PRODUCT_MODEL
-                    searchParam.act = RequestParamsHelper.ACT_PRODUCT_TYPE_SEARCH
                     val params = HashMap<String, String>()
                     params.put("type_id", contentItem.t.classify_pid)
                     params.put("stype_id", contentItem.t.classify_id)
@@ -111,8 +109,6 @@ class GoodsClassifyFragment : BaseNetWorkingFragment() {
         })
         mLlSearchAndClassifySearch.setOnClickListener {
             val searchParam = SearchParamBean()
-            searchParam.model = RequestParamsHelper.PRODUCT_MODEL
-            searchParam.act = RequestParamsHelper.ACT_PRODUCT_SEARCH
             val params = HashMap<String, String>()
             searchParam.params = params
             FragmentContainerActivity

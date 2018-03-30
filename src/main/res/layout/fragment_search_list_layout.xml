@@ -44,6 +44,9 @@
                     android:paddingRight="@dimen/dp_10"
                     android:textColor="@color/text_deep_dark_color"
                     android:textColorHint="#747474"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:singleLine="true"
                     android:textSize="@dimen/sp_14" />
 
                 <TextView

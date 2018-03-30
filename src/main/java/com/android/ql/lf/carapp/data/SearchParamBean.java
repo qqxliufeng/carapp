@@ -16,10 +16,19 @@ public class SearchParamBean implements Parcelable {
 
     private String model;
     private String act;
+    private String searchAct;
     private Map<String,String> params;
 
     public Map<String, String> getParams() {
         return params;
+    }
+
+    public String getSearchAct() {
+        return searchAct;
+    }
+
+    public void setSearchAct(String searchAct) {
+        this.searchAct = searchAct;
     }
 
     public void setParams(Map<String, String> params) {
@@ -54,6 +63,7 @@ public class SearchParamBean implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.model);
         dest.writeString(this.act);
+        dest.writeString(this.searchAct);
         dest.writeInt(this.params.size());
         for (Map.Entry<String, String> entry : this.params.entrySet()) {
             dest.writeString(entry.getKey());
@@ -64,6 +74,7 @@ public class SearchParamBean implements Parcelable {
     protected SearchParamBean(Parcel in) {
         this.model = in.readString();
         this.act = in.readString();
+        this.searchAct = in.readString();
         int paramsSize = in.readInt();
         this.params = new HashMap<String, String>(paramsSize);
         for (int i = 0; i < paramsSize; i++) {

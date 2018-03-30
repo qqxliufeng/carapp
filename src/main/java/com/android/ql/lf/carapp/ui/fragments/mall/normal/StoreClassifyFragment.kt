@@ -101,8 +101,6 @@ class StoreClassifyFragment : BaseRecyclerViewFragment<ClassifyItemEntity>() {
         val contentItem = mArrayList[position]
         if (!contentItem.isHeader) {
             val searchParam = SearchParamBean()
-            searchParam.model = RequestParamsHelper.PRODUCT_MODEL
-            searchParam.act = RequestParamsHelper.ACT_PRODUCT_SHOP_TYPE_SEARCH
             val params = HashMap<String, String>()
             params.put("type_id", contentItem.t.classify_pid)
             params.put("stype_id", contentItem.t.classify_id)

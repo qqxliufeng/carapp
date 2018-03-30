@@ -3,6 +3,8 @@ package com.android.ql.lf.carapp.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 /**
  * Created by lf on 18.3.24.
  *
@@ -13,7 +15,7 @@ public class StoreInfoBean implements Parcelable {
 
     private String wholesale_shop_id;
     private String wholesale_shop_name;
-    private String wholesale_shop_pic;
+    private ArrayList<String> wholesale_shop_pic;
     private String wholesale_shop_attention;
     private String wholesale_shop_uid;
     private String wholesale_shop_num;
@@ -34,11 +36,11 @@ public class StoreInfoBean implements Parcelable {
         this.wholesale_shop_name = wholesale_shop_name;
     }
 
-    public String getWholesale_shop_pic() {
+    public ArrayList<String> getWholesale_shop_pic() {
         return wholesale_shop_pic;
     }
 
-    public void setWholesale_shop_pic(String wholesale_shop_pic) {
+    public void setWholesale_shop_pic(ArrayList<String> wholesale_shop_pic) {
         this.wholesale_shop_pic = wholesale_shop_pic;
     }
 
@@ -66,6 +68,9 @@ public class StoreInfoBean implements Parcelable {
         this.wholesale_shop_num = wholesale_shop_num;
     }
 
+    public StoreInfoBean() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -75,25 +80,22 @@ public class StoreInfoBean implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.wholesale_shop_id);
         dest.writeString(this.wholesale_shop_name);
-        dest.writeString(this.wholesale_shop_pic);
+        dest.writeStringList(this.wholesale_shop_pic);
         dest.writeString(this.wholesale_shop_attention);
         dest.writeString(this.wholesale_shop_uid);
         dest.writeString(this.wholesale_shop_num);
     }
 
-    public StoreInfoBean() {
-    }
-
     protected StoreInfoBean(Parcel in) {
         this.wholesale_shop_id = in.readString();
         this.wholesale_shop_name = in.readString();
-        this.wholesale_shop_pic = in.readString();
+        this.wholesale_shop_pic = in.createStringArrayList();
         this.wholesale_shop_attention = in.readString();
         this.wholesale_shop_uid = in.readString();
         this.wholesale_shop_num = in.readString();
     }
 
-    public static final Parcelable.Creator<StoreInfoBean> CREATOR = new Parcelable.Creator<StoreInfoBean>() {
+    public static final Creator<StoreInfoBean> CREATOR = new Creator<StoreInfoBean>() {
         @Override
         public StoreInfoBean createFromParcel(Parcel source) {
             return new StoreInfoBean(source);

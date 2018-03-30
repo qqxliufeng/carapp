@@ -55,6 +55,9 @@
                             android:paddingLeft="@dimen/dp_10"
                             android:paddingRight="@dimen/dp_10"
                             android:textColor="@color/text_deep_dark_color"
+                            android:imeOptions="actionSearch"
+                            android:inputType="text"
+                            android:singleLine="true"
                             android:textColorHint="#747474"
                             android:textSize="@dimen/sp_14" />
 
@@ -181,9 +184,16 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
+  <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="#eee"
+      android:layout_marginBottom="45dp"
+      android:layout_gravity="bottom"/>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
+        android:layout_height="45dp"
         android:layout_gravity="bottom"
         android:background="#fff"
         android:orientation="horizontal">
@@ -201,9 +211,9 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:background="#f5f5f5" />
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:background="#E8E8E8" />
 
         <TextView
             android:id="@+id/mTvStoreInfoCollection"
@@ -218,7 +228,7 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="#f5f5f5" />
+            android:background="#E8E8E8" />
 
         <TextView
             android:id="@+id/mTvStoreInfoKeFu"

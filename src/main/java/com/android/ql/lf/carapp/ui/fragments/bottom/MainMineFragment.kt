@@ -1,9 +1,11 @@
 package com.android.ql.lf.carapp.ui.fragments.bottom
 
 import android.support.v4.widget.SwipeRefreshLayout
+import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import com.android.ql.lf.carapp.R
+import com.android.ql.lf.carapp.data.RefreshData
 import com.android.ql.lf.carapp.data.UpdateNotifyBean
 import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.present.UserPresent
@@ -39,6 +41,10 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
         val MINE_EVALUATE_TOKEN = "mine_evaluate_token"
         val MINE_MALL_ORDER_FLAG_TOKEN = "mine_mall_order_flag_token"
 
+        val MINE_GOODS_COLLECTION_NUM_TOKEN = "mine_goods_collection_num_token"
+        val MINE_STORE_COLLECTION_NUM_TOKEN = "mine_store_collection_num_token"
+        val MINE_FOOTS_COLLECTION_NUM_TOKEN = "mine_foots_collection_num_token"
+
         fun newInstance(): MainMineFragment {
             return MainMineFragment()
         }
@@ -67,6 +73,25 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
         }
     }
 
+    private val updateCollectionNumSubscription by lazy {
+        RxBus.getDefault().toObservable(RefreshData::class.java).subscribe {
+            if (it.isRefresh) {
+                if (it.any == MINE_GOODS_COLLECTION_NUM_TOKEN) {
+                    UserInfo.getInstance().goodsCollectionNum++
+                    mTvMainMineCollectionGoodsCount.text = "${UserInfo.getInstance().goodsCollectionNum}"
+                }
+                if (it.any == MINE_STORE_COLLECTION_NUM_TOKEN) {
+                    UserInfo.getInstance().storeCollectionNum++
+                    mTvMainMineCollectionStoreCount.text = "${UserInfo.getInstance().storeCollectionNum}"
+                }
+                if (it.any == MINE_FOOTS_COLLECTION_NUM_TOKEN) {
+                    UserInfo.getInstance().footsCollectionNum++
+                    mTvMainMineCollectionFootPrintCount.text = "${UserInfo.getInstance().footsCollectionNum}"
+                }
+            }
+        }
+    }
+
     private val userPresent by lazy {
         UserPresent()
     }
@@ -89,6 +114,9 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
         modifyInfoSubscription
         //接受修改消息提示事件
         updateMessageNotifySubscription
+
+        //接受收藏数量
+        updateCollectionNumSubscription
         setUserInfo(UserInfo.getInstance())
         mFlMainMineMessageNotifyContainer.setOnClickListener {
             RxBus.getDefault().post(UpdateNotifyBean(View.GONE))
@@ -145,12 +173,13 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
         mTvMainMineApplyMaster.doClickWithUserStatusStart(MINE_APPLY_MASTER_TOKEN) {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "申请成为商家", MineApplyMasterFragment::class.java)
         }
-        mTvMainMineEvaluate.doClickWithUserStatusStart(MINE_EVALUATE_TOKEN){
+        mTvMainMineEvaluate.doClickWithUserStatusStart(MINE_EVALUATE_TOKEN) {
             FragmentContainerActivity.from(mContext).setClazz(MimeEvaluateFragment::class.java).setTitle("我的评价").start()
         }
-        mTvMainMineShopOrder.doClickWithUserStatusStart(MINE_MALL_ORDER_FLAG_TOKEN){
+        mTvMainMineShopOrder.doClickWithUserStatusStart(MINE_MALL_ORDER_FLAG_TOKEN) {
             FragmentContainerActivity.from(mContext).setTitle("购物订单").setClazz(MineMallOrderFragment::class.java).start()
         }
+        onRefresh()
     }
 
     override fun onRefresh() {
@@ -159,7 +188,7 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
                     RequestParamsHelper.MEMBER_MODEL,
                     RequestParamsHelper.ACT_PERSONAL,
                     RequestParamsHelper.getPersonalParam(UserInfo.getInstance().memberId))
-        }else{
+        } else {
             onRequestEnd(-1)
         }
     }
@@ -167,9 +196,25 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
         super.onRequestSuccess(requestID, result)
         val check = checkResultCode(result)
-        if (check!=null && check.code == SUCCESS_CODE){
+        if (check != null && check.code == SUCCESS_CODE) {
             val json = check.obj as JSONObject
             userPresent.onLoginNoBus(json.optJSONObject("result"), json.optJSONObject("arr"))
+            val arr1 = json.optJSONObject("arr1")
+            val s1 = arr1.optString("s1")
+            if (!TextUtils.isEmpty(s1)) {
+                UserInfo.getInstance().goodsCollectionNum = s1.toInt()
+            }
+            val s2 = arr1.optString("s2")
+            if (!TextUtils.isEmpty(s2)) {
+                UserInfo.getInstance().storeCollectionNum = s2.toInt()
+            }
+            val s3 = arr1.optString("s3")
+            if (!TextUtils.isEmpty(s3)) {
+                UserInfo.getInstance().footsCollectionNum = s3.toInt()
+            }
+            mTvMainMineCollectionGoodsCount.text = "${UserInfo.getInstance().goodsCollectionNum}"
+            mTvMainMineCollectionStoreCount.text = "${UserInfo.getInstance().storeCollectionNum}"
+            mTvMainMineCollectionFootPrintCount.text = "${UserInfo.getInstance().footsCollectionNum}"
         }
     }
 

@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.GoodsBean
 import com.android.ql.lf.carapp.data.RefreshData
@@ -21,6 +22,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.fragment_search_list_layout.*
 import org.jetbrains.anko.bundleOf
+
 
 /**
  * Created by lf on 18.3.20.
@@ -83,7 +85,7 @@ class SearchResultListFragment : BaseRecyclerViewFragment<GoodsBean>() {
         }
         mRbSearchListResultSort1.isChecked = true
         mRbSearchListResultSort1.setOnClickListener {
-            if (sort == ""){
+            if (sort == "") {
                 return@setOnClickListener
             }
             sort = ""
@@ -113,7 +115,16 @@ class SearchResultListFragment : BaseRecyclerViewFragment<GoodsBean>() {
         mFabGoodsSearch.doClickWithUserStatusStart(RESULT_MALL_MY_SHOPPING_CAR_FLAG) {
             FragmentContainerActivity.from(mContext).setClazz(ShoppingCarFragment::class.java).setTitle("购物车").setNeedNetWorking(true).start()
         }
+
+        mEtSearchContent.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                mTvSearchSubmit.performClick()
+            }
+            false
+        }
+
         mTvSearchSubmit.setOnClickListener {
+            mContext.hiddenKeyBoard(mEtSearchContent.windowToken)
             keyword = if (mEtSearchContent.isEmpty()) {
                 ""
             } else {
@@ -135,7 +146,7 @@ class SearchResultListFragment : BaseRecyclerViewFragment<GoodsBean>() {
 
     override fun onRefresh() {
         super.onRefresh()
-        mPresent.getDataByPost(0x0, searchParamBean.model, searchParamBean.act, postParam
+        mPresent.getDataByPost(0x0, RequestParamsHelper.PRODUCT_MODEL,RequestParamsHelper.ACT_PRODUCT_SEARCH, postParam
                 .addParam("page", currentPage)
                 .addParam("sort", sort)
                 .addParam("keyword", keyword))

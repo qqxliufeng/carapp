@@ -77,6 +77,11 @@ class MainMallOrderItemAdapter(layoutId: Int, list: ArrayList<MallSaleOrderBean>
                     bt_action1.visibility = View.GONE
                     bt_action2.visibility = View.GONE
                 }
+                MallOrderPresent.MallOrderStatus.MALL_ORDER_APPLY_BACK.index->{
+                    helper.setText(R.id.mTvShoppingCarItemEditMode,MallOrderPresent.MallOrderStatus.MALL_ORDER_APPLY_BACK.description)
+                    bt_action1.visibility = View.GONE
+                    bt_action2.visibility = View.GONE
+                }
             }
         }
     }

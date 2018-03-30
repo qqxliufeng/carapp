@@ -275,6 +275,15 @@ class RequestParamsHelper {
             return param
         }
 
+        val ACT_MY_SHOP_COLLECT = "my_shop_collect"
+        fun getMyShopCollectParams(page: Int) = getWithPageParams(page)
+
+        val ACT_MY_CONCERM_SHOP = "my_concerm_shop"
+        fun getMyConcermShopParams(page: Int) = getWithPageParams(page)
+
+        val ACT_MY_SPOOR = "my_spoor"
+        fun getMySpoorParmas(page: Int) = getWithPageParams(page)
+
         /**              member model  end           **/
 
         /**              product model start         **/

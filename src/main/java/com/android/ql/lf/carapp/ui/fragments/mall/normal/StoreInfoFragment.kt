@@ -3,6 +3,7 @@ package com.android.ql.lf.carapp.ui.fragments.mall.normal
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.GoodsBean
 import com.android.ql.lf.carapp.data.StoreInfoBean
@@ -66,7 +67,9 @@ class StoreInfoFragment : BaseRecyclerViewFragment<GoodsBean>() {
         mIvSearchGoodsBack.setOnClickListener {
             finish()
         }
-        GlideManager.loadImage(mContext, storeInfoBean.wholesale_shop_pic, mIvStoreInfoPic)
+        if (storeInfoBean.wholesale_shop_pic != null && !storeInfoBean.wholesale_shop_pic.isEmpty()) {
+            GlideManager.loadImage(mContext, storeInfoBean.wholesale_shop_pic[0], mIvStoreInfoPic)
+        }
         mTvStoreInfoName.text = storeInfoBean.wholesale_shop_name
         mTvStoreInfoFansCount.text = storeInfoBean.wholesale_shop_attention
         mTvStoreInfoFocus.setOnClickListener {
@@ -85,7 +88,12 @@ class StoreInfoFragment : BaseRecyclerViewFragment<GoodsBean>() {
             mTvStoreInfoTopProductClassify.performClick()
         }
         mTvStoreInfoCollection.setOnClickListener {
-            //            mPresent.getDataByPost(0x2,RequestParamsHelper.PRODUCT_MODEL,RequestParamsHelper.)
+        }
+        mEtSearchContent.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+
+            }
+            false
         }
     }
 
@@ -121,7 +129,11 @@ class StoreInfoFragment : BaseRecyclerViewFragment<GoodsBean>() {
                 val check = checkResultCode(result)
                 if (check != null) {
                     if (check.code == SUCCESS_CODE) {
-                        collectStatus = if (collectStatus == 0){ 1 }else{ 0 }
+                        collectStatus = if (collectStatus == 0) {
+                            1
+                        } else {
+                            0
+                        }
                         setFocusText()
                     }
                     toast((check.obj as JSONObject).optString(MSG_FLAG))
