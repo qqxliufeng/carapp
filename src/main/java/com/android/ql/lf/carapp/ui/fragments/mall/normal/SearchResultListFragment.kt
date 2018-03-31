@@ -3,6 +3,7 @@ package com.android.ql.lf.carapp.ui.fragments.mall.normal
 import android.graphics.Color
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import com.android.ql.lf.carapp.R
@@ -22,6 +23,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.fragment_search_list_layout.*
 import org.jetbrains.anko.bundleOf
+import org.json.JSONObject
 
 
 /**
@@ -111,11 +113,10 @@ class SearchResultListFragment : BaseRecyclerViewFragment<GoodsBean>() {
             sortFlag = !sortFlag
             onPostRefresh()
         }
-        mFabGoodsSearch.setImageResource(R.drawable.img_icon_shoppingcart_white_full)
+        mFabGoodsSearch.setImageResource(R.drawable.img_icon_shoppingcart_white_null)
         mFabGoodsSearch.doClickWithUserStatusStart(RESULT_MALL_MY_SHOPPING_CAR_FLAG) {
             FragmentContainerActivity.from(mContext).setClazz(ShoppingCarFragment::class.java).setTitle("购物车").setNeedNetWorking(true).start()
         }
-
         mEtSearchContent.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 mTvSearchSubmit.performClick()
@@ -146,7 +147,7 @@ class SearchResultListFragment : BaseRecyclerViewFragment<GoodsBean>() {
 
     override fun onRefresh() {
         super.onRefresh()
-        mPresent.getDataByPost(0x0, RequestParamsHelper.PRODUCT_MODEL,RequestParamsHelper.ACT_PRODUCT_SEARCH, postParam
+        mPresent.getDataByPost(0x0, RequestParamsHelper.PRODUCT_MODEL, RequestParamsHelper.ACT_PRODUCT_SEARCH, postParam
                 .addParam("page", currentPage)
                 .addParam("sort", sort)
                 .addParam("keyword", keyword))
@@ -182,9 +183,49 @@ class SearchResultListFragment : BaseRecyclerViewFragment<GoodsBean>() {
                 .start()
     }
 
+    /**
+     * 添加 收藏
+     */
+    private fun collectionGoods(goodsBean: GoodsBean) {
+        mPresent.getDataByPost(0x1,
+                RequestParamsHelper.PRODUCT_MODEL,
+                RequestParamsHelper.ACT_COLLECT_PRODUCT,
+                RequestParamsHelper.getCollectProductParam(goodsBean.product_id))
+    }
+
+    override fun onRequestStart(requestID: Int) {
+        super.onRequestStart(requestID)
+        if (requestID == 0x1) {
+            getFastProgressDialog("正在收藏……")
+        }
+    }
+
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
         super.onRequestSuccess(requestID, result)
-        processList(result as String, GoodsBean::class.java)
+        if (requestID == 0x0) {
+            processList(result as String, GoodsBean::class.java)
+            if (currentPage == 0) {
+                val check = checkResultCode(result)
+                if (check != null && check.code == SUCCESS_CODE) {
+                    val arr3 = (check.obj as JSONObject).optString("arr3")
+                    if (!TextUtils.isEmpty(arr3)) {
+                        if (arr3.toInt() > 0) {
+                            mFabGoodsSearch.setImageResource(R.drawable.img_icon_shoppingcart_white_full)
+                        } else {
+                            mFabGoodsSearch.setImageResource(R.drawable.img_icon_shoppingcart_white_null)
+                        }
+                    } else {
+                        mFabGoodsSearch.setImageResource(R.drawable.img_icon_shoppingcart_white_null)
+                    }
+                }
+            }
+        } else if (requestID == 0x1) {
+            val check = checkResultCode(result)
+            if (check != null && check.code == SUCCESS_CODE) {
+                toast((check.obj as JSONObject).optString(MSG_FLAG))
+                refreshCollectionStatus()
+            }
+        }
     }
 
     override fun onMyItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
@@ -194,6 +235,22 @@ class SearchResultListFragment : BaseRecyclerViewFragment<GoodsBean>() {
         } else {
             UserInfo.loginToken = MainMallFragment.MAIN_MALL_ENTER_GOODS_INFO_FLAG
             LoginFragment.startLogin(mContext)
+        }
+    }
+
+    override fun onMyItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
+        super.onMyItemChildClick(adapter, view, position)
+        tempGoodsBean = mArrayList[position]
+        when (view!!.id) {
+            R.id.mIvGoodsInfoItemCollection -> {
+                if (UserInfo.getInstance().isLogin) {
+                    //收藏
+                    collectionGoods(tempGoodsBean!!)
+                } else {
+                    UserInfo.loginToken = MainMallFragment.MAIN_MALL_COLLECTION_FLAG
+                    LoginFragment.startLogin(mContext)
+                }
+            }
         }
     }
 

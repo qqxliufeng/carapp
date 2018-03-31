@@ -288,7 +288,7 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
                     }
                 } else {
                     if (payType == SelectPayTypeView.ACCOUNT_PAY) {
-                        toast("余额支付失败")
+                        toast((check.obj as JSONObject).optString(MSG_FLAG))
                     }
                 }
             }

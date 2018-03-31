@@ -25,6 +25,5 @@ class GoodsMallItemAdapter(layoutId: Int, list: ArrayList<GoodsBean>) : BaseQuic
             imageCollect.setImageResource(R.drawable.img_icon_goods_select)
         }
         helper.addOnClickListener(R.id.mIvGoodsInfoItemCollection)
-        helper.addOnClickListener(R.id.mTvGoodsInfoItemShoppingCar)
     }
 }

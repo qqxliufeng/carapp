@@ -3,6 +3,7 @@ package com.android.ql.lf.carapp.ui.fragments.bottom
 import android.content.Context
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -163,7 +164,7 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
                     .setExtraBundle(bundleOf(Pair(SearchResultListFragment.SEARCH_PARAM_FLAG, searchParam)))
                     .start()
         }
-        mFabShoppingCar.setImageResource(R.drawable.img_icon_shoppingcart_white_full)
+        mFabShoppingCar.setImageResource(R.drawable.img_icon_shoppingcart_white_null)
         mFabShoppingCar.doClickWithUserStatusStart(MAIN_MALL_MY_SHOPPING_CAR_FLAG) {
             FragmentContainerActivity.from(mContext).setClazz(ShoppingCarFragment::class.java).setTitle("购物车").setNeedNetWorking(true).start()
         }
@@ -238,6 +239,15 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
                                             .start()
                                 }
                             }
+                            if (!TextUtils.isEmpty(productContainer!!.arr3)) {
+                                if (productContainer!!.arr3!!.toInt() > 0) {
+                                    mFabShoppingCar.setImageResource(R.drawable.img_icon_shoppingcart_white_full)
+                                } else {
+                                    mFabShoppingCar.setImageResource(R.drawable.img_icon_shoppingcart_white_null)
+                                }
+                            } else {
+                                mFabShoppingCar.setImageResource(R.drawable.img_icon_shoppingcart_white_null)
+                            }
                         }
                     }
                 }
@@ -293,14 +303,6 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
                     collectionGoods(tempGoodsBean!!)
                 } else {
                     UserInfo.loginToken = MAIN_MALL_COLLECTION_FLAG
-                    LoginFragment.startLogin(mContext)
-                }
-            }
-            R.id.mTvGoodsInfoItemShoppingCar -> {
-                if (UserInfo.getInstance().isLogin) {
-                    //加购物车
-                } else {
-                    UserInfo.loginToken = MAIN_MALL_SHOPPING_CAR_FLAG
                     LoginFragment.startLogin(mContext)
                 }
             }
@@ -371,6 +373,7 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
         lateinit var arr: ArrayList<ClassifyBean>
         lateinit var arr1: ArrayList<HotGoodsBean>
         lateinit var arr2: ArrayList<BannerImageBean>
+        var arr3: String? = null
     }
 
     class HotGoodsBean {

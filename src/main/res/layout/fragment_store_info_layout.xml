@@ -52,12 +52,12 @@
                             android:layout_weight="1"
                             android:background="@drawable/shape_et_bg3"
                             android:hint="请输入要搜索的内容"
-                            android:paddingLeft="@dimen/dp_10"
-                            android:paddingRight="@dimen/dp_10"
-                            android:textColor="@color/text_deep_dark_color"
                             android:imeOptions="actionSearch"
                             android:inputType="text"
+                            android:paddingLeft="@dimen/dp_10"
+                            android:paddingRight="@dimen/dp_10"
                             android:singleLine="true"
+                            android:textColor="@color/text_deep_dark_color"
                             android:textColorHint="#747474"
                             android:textSize="@dimen/sp_14" />
 
@@ -155,16 +155,19 @@
             android:orientation="horizontal">
 
             <RadioButton
+                android:id="@+id/mRbStoreInfoSort1"
                 style="@style/style_rb"
                 android:text="综合排序" />
 
             <RadioButton
+                android:id="@+id/mRbStoreInfoSort2"
                 style="@style/style_rb"
                 android:text="销量优先" />
 
             <RadioButton
+                android:id="@+id/mRbStoreInfoSort3"
                 style="@style/style_rb"
-                android:text="价从低到高" />
+                android:text="价格从低到高" />
 
         </RadioGroup>
 
@@ -184,12 +187,12 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-  <View
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:background="#eee"
-      android:layout_marginBottom="45dp"
-      android:layout_gravity="bottom"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="45dp"
+        android:background="#eee" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -208,22 +211,22 @@
             android:textColor="@color/text_dark_color"
             android:textSize="@dimen/sp_14" />
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp"
-            android:background="#E8E8E8" />
+        <!--  <View
+             android:layout_width="1dp"
+             android:layout_height="match_parent"
+             android:layout_marginBottom="15dp"
+             android:layout_marginTop="15dp"
+             android:background="#E8E8E8" />
 
         <TextView
-            android:id="@+id/mTvStoreInfoCollection"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:text="立即收藏"
-            android:textColor="@color/text_dark_color"
-            android:textSize="@dimen/sp_14" />
+             android:id="@+id/mTvStoreInfoCollection"
+             android:layout_width="0dp"
+             android:layout_height="match_parent"
+             android:layout_weight="2"
+             android:gravity="center"
+             android:text="立即收藏"
+             android:textColor="@color/text_dark_color"
+             android:textSize="@dimen/sp_14" />-->
 
         <View
             android:layout_width="1dp"

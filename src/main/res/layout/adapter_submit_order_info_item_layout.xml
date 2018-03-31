@@ -20,10 +20,10 @@
             android:id="@+id/mTvSubmitOrderItemStoreName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:ellipsize="end"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/dp_10"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textColor="@color/text_deep_dark_color" />
     </LinearLayout>
 
@@ -91,9 +91,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:textSize="@dimen/sp_12"
                 android:layout_below="@+id/mIvSubmitOrderGoodsPrice"
-                android:layout_marginTop="5dp" />
+                android:layout_marginTop="5dp"
+                android:textSize="@dimen/sp_12" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -115,6 +115,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:text="商家配送"
             android:textColor="@color/text_deep_dark_color"
             android:textSize="@dimen/sp_14" />
     </RelativeLayout>
@@ -145,9 +146,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="70dp"
+            android:drawablePadding="5dp"
             android:drawableRight="@drawable/icon_inter"
             android:gravity="center|left"
-            android:drawablePadding="5dp"
             android:text="选填"
             android:textColor="@color/text_deep_dark_color"
             android:textSize="@dimen/sp_14" />
@@ -157,28 +158,4 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#E6E6E6" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#fff"
-        android:padding="@dimen/dp_10">
-
-        <TextView
-            android:id="@+id/mIvSubmitOrderGoodsCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/dp_10"
-            android:layout_toLeftOf="@+id/mIvSubmitOrderGoodsAllPrice"
-            android:textColor="@color/text_deep_dark_color"
-            android:textSize="@dimen/sp_12" />
-
-        <TextView
-            android:id="@+id/mIvSubmitOrderGoodsAllPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:textColor="@color/text_deep_dark_color"
-            android:textSize="12sp" />
-    </RelativeLayout>
 </LinearLayout>

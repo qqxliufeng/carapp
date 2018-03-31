@@ -7,15 +7,18 @@ import android.view.inputmethod.EditorInfo
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.GoodsBean
 import com.android.ql.lf.carapp.data.StoreInfoBean
+import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.adapter.GoodsMallItemAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
+import com.android.ql.lf.carapp.ui.fragments.bottom.MainMallFragment
+import com.android.ql.lf.carapp.ui.fragments.user.LoginFragment
 import com.android.ql.lf.carapp.ui.views.DividerGridItemDecoration
-import com.android.ql.lf.carapp.utils.GlideManager
-import com.android.ql.lf.carapp.utils.RequestParamsHelper
-import com.android.ql.lf.carapp.utils.toast
+import com.android.ql.lf.carapp.utils.*
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import com.hyphenate.easeui.EaseConstant
+import com.hyphenate.easeui.ui.EaseChatFragment
 import kotlinx.android.synthetic.main.fragment_store_info_layout.*
 import org.jetbrains.anko.bundleOf
 import org.json.JSONObject
@@ -32,6 +35,14 @@ class StoreInfoFragment : BaseRecyclerViewFragment<GoodsBean>() {
 
     private var collectStatus = 0
 
+    private var sort = ""
+    private var sortFlag = true
+    private var saleFlag = true
+
+    private var keyword = ""
+
+    private var tempGoodsBean: GoodsBean? = null
+
     private val storeInfoBean by lazy {
         arguments.classLoader = this@StoreInfoFragment.javaClass.classLoader
         arguments.getParcelable<StoreInfoBean>(STORE_ID_FLAG)
@@ -40,22 +51,6 @@ class StoreInfoFragment : BaseRecyclerViewFragment<GoodsBean>() {
     override fun createAdapter(): BaseQuickAdapter<GoodsBean, BaseViewHolder> = GoodsMallItemAdapter(R.layout.adapter_main_mall_item_layout, mArrayList)
 
     override fun getLayoutId() = R.layout.fragment_store_info_layout
-
-    override fun onRefresh() {
-        super.onRefresh()
-        mPresent.getDataByPost(0x0,
-                RequestParamsHelper.PRODUCT_MODEL,
-                RequestParamsHelper.ACT_PRODUCT_SHOP,
-                RequestParamsHelper.getProductShopParams(storeInfoBean.wholesale_shop_id, "", currentPage))
-    }
-
-    override fun onLoadMore() {
-        super.onLoadMore()
-        mPresent.getDataByPost(0x0,
-                RequestParamsHelper.PRODUCT_MODEL,
-                RequestParamsHelper.ACT_PRODUCT_SHOP,
-                RequestParamsHelper.getProductShopParams(storeInfoBean.wholesale_shop_id, "", currentPage))
-    }
 
     override fun initView(view: View?) {
         super.initView(view)
@@ -73,6 +68,7 @@ class StoreInfoFragment : BaseRecyclerViewFragment<GoodsBean>() {
         mTvStoreInfoName.text = storeInfoBean.wholesale_shop_name
         mTvStoreInfoFansCount.text = storeInfoBean.wholesale_shop_attention
         mTvStoreInfoFocus.setOnClickListener {
+            mTvStoreInfoFocus.isEnabled = false
             mPresent.getDataByPost(0x1, RequestParamsHelper.PRODUCT_MODEL, RequestParamsHelper.ACT_CONCERM_SHOP, RequestParamsHelper.getConcermShopParams(storeInfoBean!!.wholesale_shop_id))
         }
         mTvStoreInfoTopProductClassify.setOnClickListener {
@@ -87,14 +83,71 @@ class StoreInfoFragment : BaseRecyclerViewFragment<GoodsBean>() {
         mTvStoreInfoProductClassify.setOnClickListener {
             mTvStoreInfoTopProductClassify.performClick()
         }
-        mTvStoreInfoCollection.setOnClickListener {
-        }
         mEtSearchContent.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-
+                mContext.hiddenKeyBoard(mEtSearchContent.windowToken)
+                keyword = if (mEtSearchContent.isEmpty()) {
+                    ""
+                } else {
+                    mEtSearchContent.getTextString()
+                }
+                onPostRefresh()
             }
             false
         }
+        mRbStoreInfoSort1.isChecked = true
+        mRbStoreInfoSort1.setOnClickListener {
+            if (sort == "") {
+                return@setOnClickListener
+            }
+            sort = ""
+            onPostRefresh()
+        }
+        mRbStoreInfoSort2.setOnClickListener {
+            sort = if (saleFlag) {
+                "sv1"
+            } else {
+                "sv2"
+            }
+            saleFlag = !saleFlag
+            onPostRefresh()
+        }
+        mRbStoreInfoSort3.setOnClickListener {
+            sort = if (sortFlag) {
+                mRbStoreInfoSort3.text = "价格从高到低"
+                "p1"
+            } else {
+                mRbStoreInfoSort3.text = "价格从低到高"
+                "p2"
+            }
+            sortFlag = !sortFlag
+            onPostRefresh()
+        }
+        mTvStoreInfoKeFu.setOnClickListener {
+            FragmentContainerActivity.from(mContext).setClazz(EaseChatFragment::class.java)
+                    .setTitle(storeInfoBean!!.wholesale_shop_name)
+                    .setExtraBundle(bundleOf(Pair(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_GROUP),
+                            Pair(EaseConstant.EXTRA_USER_ID, "zw123")))
+                    .start()
+        }
+    }
+
+    override fun onRefresh() {
+        super.onRefresh()
+        mPresent.getDataByPost(0x0, RequestParamsHelper.PRODUCT_MODEL, RequestParamsHelper.ACT_PRODUCT_SEARCH,
+                RequestParamsHelper.getWithPageParams(currentPage)
+                        .addParam("sid", storeInfoBean!!.wholesale_shop_id)
+                        .addParam("sort", sort)
+                        .addParam("keyword", keyword))
+    }
+
+    override fun onLoadMore() {
+        super.onLoadMore()
+        mPresent.getDataByPost(0x0, RequestParamsHelper.PRODUCT_MODEL, RequestParamsHelper.ACT_PRODUCT_SEARCH,
+                RequestParamsHelper.getWithPageParams(currentPage)
+                        .addParam("sid", storeInfoBean!!.wholesale_shop_id)
+                        .addParam("sort", sort)
+                        .addParam("keyword", keyword))
     }
 
     override fun getLayoutManager(): RecyclerView.LayoutManager {
@@ -111,6 +164,7 @@ class StoreInfoFragment : BaseRecyclerViewFragment<GoodsBean>() {
         super.onRequestStart(requestID)
         when (requestID) {
             0x1 -> getFastProgressDialog("正在关注……")
+            0x2 -> getFastProgressDialog("正在收藏……")
         }
     }
 
@@ -126,6 +180,7 @@ class StoreInfoFragment : BaseRecyclerViewFragment<GoodsBean>() {
                 }
             }
             0x1 -> {
+                mTvStoreInfoFocus.isEnabled = true
                 val check = checkResultCode(result)
                 if (check != null) {
                     if (check.code == SUCCESS_CODE) {
@@ -139,6 +194,24 @@ class StoreInfoFragment : BaseRecyclerViewFragment<GoodsBean>() {
                     toast((check.obj as JSONObject).optString(MSG_FLAG))
                 }
             }
+            0x2 -> {
+                val check = checkResultCode(result)
+                if (check != null && check.code == SUCCESS_CODE) {
+                    toast((check.obj as JSONObject).optString(MSG_FLAG))
+                    refreshCollectionStatus()
+                }
+            }
+        }
+    }
+
+    private fun refreshCollectionStatus() {
+        if (tempGoodsBean != null) {
+            if (tempGoodsBean!!.product_collect == "0") {
+                tempGoodsBean!!.product_collect = "1"
+            } else {
+                tempGoodsBean!!.product_collect = "0"
+            }
+            mBaseAdapter.notifyItemChanged(mArrayList.indexOf(tempGoodsBean))
         }
     }
 
@@ -149,4 +222,48 @@ class StoreInfoFragment : BaseRecyclerViewFragment<GoodsBean>() {
             "已关注"
         }
     }
+
+    override fun onMyItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
+        tempGoodsBean = mArrayList[position]
+        enterGoodsInfo(tempGoodsBean!!)
+    }
+
+    override fun onMyItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
+        super.onMyItemChildClick(adapter, view, position)
+        tempGoodsBean = mArrayList[position]
+        when (view!!.id) {
+            R.id.mIvGoodsInfoItemCollection -> {
+                if (UserInfo.getInstance().isLogin) {
+                    //收藏
+                    collectionGoods(tempGoodsBean!!)
+                } else {
+                    UserInfo.loginToken = MainMallFragment.MAIN_MALL_COLLECTION_FLAG
+                    LoginFragment.startLogin(mContext)
+                }
+            }
+        }
+    }
+
+    /**
+     * 添加 收藏
+     */
+    private fun collectionGoods(goodsBean: GoodsBean) {
+        mPresent.getDataByPost(0x2,
+                RequestParamsHelper.PRODUCT_MODEL,
+                RequestParamsHelper.ACT_COLLECT_PRODUCT,
+                RequestParamsHelper.getCollectProductParam(goodsBean.product_id))
+    }
+
+    /**
+     * 进入商品详情
+     */
+    private fun enterGoodsInfo(goodsBean: GoodsBean) {
+        FragmentContainerActivity.from(mContext)
+                .setNeedNetWorking(true)
+                .setTitle("商品详情")
+                .setExtraBundle(bundleOf(Pair(GoodsInfoFragment.GOODS_ID_FLAG, goodsBean.product_id)))
+                .setClazz(GoodsInfoFragment::class.java)
+                .start()
+    }
+
 }

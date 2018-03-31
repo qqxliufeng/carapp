@@ -89,7 +89,7 @@ dependencies {
     implementation rootProject.ext.dependencies["libButterKnife"]
     annotationProcessor rootProject.ext.dependencies["libButterButterKnifeCompiler"]
     //glide
-    implementation 'com.github.bumptech.glide:glide:3.7.0'
+//    implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation rootProject.ext.dependencies["libGlideTransformations"]
     implementation 'com.zhihu.android:matisse:0.5.0-beta3'
     //anko
@@ -118,7 +118,5 @@ dependencies {
     implementation 'cn.jiguang.sdk:jcore:1.1.9'
     // 此处以JCore 1.1.9 版本为例。
     implementation files('libs/alipaySdk-20170922.jar')
-    implementation 'com.amap.api:location:latest.integration'
-
-    implementation 'com.hyphenate:hyphenate-sdk-lite:3.3.0'
+    implementation project(':easeui')
 }
