@@ -1,5 +1,6 @@
 package com.android.ql.lf.carapp.ui.fragments.mall.normal
 
+import android.content.Intent
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -8,6 +9,7 @@ import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.GoodsBean
 import com.android.ql.lf.carapp.data.StoreInfoBean
 import com.android.ql.lf.carapp.data.UserInfo
+import com.android.ql.lf.carapp.ui.activities.ChatActivity
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.adapter.GoodsMallItemAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
@@ -18,7 +20,6 @@ import com.android.ql.lf.carapp.utils.*
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.hyphenate.easeui.EaseConstant
-import com.hyphenate.easeui.ui.EaseChatFragment
 import kotlinx.android.synthetic.main.fragment_store_info_layout.*
 import org.jetbrains.anko.bundleOf
 import org.json.JSONObject
@@ -124,11 +125,11 @@ class StoreInfoFragment : BaseRecyclerViewFragment<GoodsBean>() {
             onPostRefresh()
         }
         mTvStoreInfoKeFu.setOnClickListener {
-            FragmentContainerActivity.from(mContext).setClazz(EaseChatFragment::class.java)
-                    .setTitle(storeInfoBean!!.wholesale_shop_name)
-                    .setExtraBundle(bundleOf(Pair(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_GROUP),
-                            Pair(EaseConstant.EXTRA_USER_ID, "zw123")))
-                    .start()
+            val intent = Intent(mContext, ChatActivity::class.java)
+            intent.putExtra(ChatActivity.CHAT_TITLE_FLAG, storeInfoBean!!.wholesale_shop_name)
+            intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE)
+            intent.putExtra(EaseConstant.EXTRA_USER_ID, "zw123")
+            startActivity(intent)
         }
     }
 
