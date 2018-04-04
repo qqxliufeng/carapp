@@ -56,11 +56,11 @@ public class UrlImageGetter implements Html.ImageGetter {
                     .subscribe(new Action1<Bitmap>() {
                         @Override
                         public void call(Bitmap loadedImage) {
-                            if (loadedImage!=null) {
+                            if (loadedImage != null) {
                                 float scaleWidth = ((float) width) / loadedImage.getWidth();
                                 Matrix matrix = new Matrix();
                                 matrix.postScale(scaleWidth, scaleWidth);
-                                loadedImage = Bitmap.createBitmap(loadedImage, 0, 0, loadedImage.getWidth(), loadedImage.getHeight(), matrix,true);
+                                loadedImage = Bitmap.createBitmap(loadedImage, 0, 0, loadedImage.getWidth(), loadedImage.getHeight(), matrix, true);
                                 urlDrawable.bitmap = loadedImage;
                                 urlDrawable.setBounds(0, 0, loadedImage.getWidth(), loadedImage.getHeight());
                                 container.invalidate();

@@ -17,7 +17,6 @@ import com.android.ql.lf.carapp.present.MallOrderPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.address.AddressSelectFragment
-import com.android.ql.lf.carapp.ui.fragments.order.PayResultFragment
 import com.android.ql.lf.carapp.ui.views.PopupWindowDialog
 import com.android.ql.lf.carapp.ui.views.SelectPayTypeView
 import com.android.ql.lf.carapp.utils.*
@@ -37,10 +36,10 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
 
     companion object {
         val GOODS_ID_FLAG = "goods_id_flag"
+        val PAY_MALL_ORDER_FLAG = "pay_mall_order_flag"
     }
 
     private var tempList: ArrayList<ShoppingCarItemBean>? = null
-
 
     /**
      * 头部View
@@ -102,6 +101,14 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
             if (it != null) {
                 addressBean = it
                 setAddressInfo(addressBean!!)
+            }
+        }
+    }
+
+    private val paySubscription by lazy {
+        RxBus.getDefault().toObservable(RefreshData::class.java).subscribe {
+            if (it.isRefresh && it.any == PAY_MALL_ORDER_FLAG) {
+                finish()
             }
         }
     }
@@ -169,6 +176,7 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
         tempList = arguments.getParcelableArrayList(GOODS_ID_FLAG)
         super.initView(view)
         addressSubscription
+        paySubscription
         mSwipeRefreshLayout.isEnabled = false
         mBaseAdapter.addHeaderView(headerView)
         mBaseAdapter.addFooterView(footerView)
@@ -327,6 +335,7 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
 
     override fun onDestroyView() {
         unsubscribe(addressSubscription)
+        unsubscribe(paySubscription)
         super.onDestroyView()
     }
 

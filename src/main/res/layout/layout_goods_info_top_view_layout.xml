@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimary"
             android:textSize="14dp"
-            tools:text="订单评价(21)" />
+            android:text="订单评价(0)" />
 
         <TextView
             android:id="@+id/mTvGoodsInfoTopViewCommentAll"

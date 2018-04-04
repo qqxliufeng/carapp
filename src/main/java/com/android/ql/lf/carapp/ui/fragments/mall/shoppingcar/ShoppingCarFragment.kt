@@ -2,7 +2,6 @@ package com.android.ql.lf.carapp.ui.fragments.mall.shoppingcar
 
 import android.annotation.SuppressLint
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -49,9 +48,10 @@ class ShoppingCarFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
     private val shoppingCarSubscription by lazy {
         RxBus.getDefault().toObservable(RefreshData::class.java).subscribe {
             if (RefreshData.isRefresh && RefreshData.any == REFRESH_SHOPPING_CAR_FLAG) {
-                mCalculate.isEnabled = false
-                mCivShoppingCarAllSelect.isChecked = false
-                onPostRefresh()
+//                mCalculate.isEnabled = false
+//                mCivShoppingCarAllSelect.isChecked = false
+//                onPostRefresh()
+                finish()
             }
         }
     }
@@ -193,7 +193,7 @@ class ShoppingCarFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
 
     override fun onMyItemLongClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
         currentItem = mArrayList[position]
-        alert("是否要删除当前商品？","删除","取消") { dialog, which ->
+        alert("是否要删除当前商品？", "删除", "取消") { dialog, which ->
             mPresent.getDataByPost(0x1,
                     RequestParamsHelper.Companion.MEMBER_MODEL,
                     RequestParamsHelper.Companion.ACT_DEL_SHOPCART,

@@ -4,10 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.text.Html
 import android.text.TextPaint
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
+import android.webkit.WebSettings
+import android.webkit.WebView
 import android.widget.ImageView
 import android.widget.TextView
 import com.android.ql.lf.carapp.R
@@ -19,26 +23,28 @@ import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.ui.fragments.BrowserImageFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.order.OrderCommentListFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.order.OrderSubmitFragment
-import com.android.ql.lf.carapp.ui.fragments.user.mine.MimeEvaluateFragment
 import com.android.ql.lf.carapp.ui.views.BottomGoodsParamDialog
-import com.android.ql.lf.carapp.utils.Constants
 import com.android.ql.lf.carapp.utils.GlideManager
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
 import com.android.ql.lf.carapp.utils.toast
 import com.google.gson.Gson
 import com.youth.banner.BannerConfig
 import com.youth.banner.loader.ImageLoader
-import kotlinx.android.synthetic.main.fragment_goods_info_layout.*
+import kotlinx.android.synthetic.main.fragment_test_goods_info_layout.*
 import kotlinx.android.synthetic.main.layout_goods_info_foot_view_layout.*
 import org.jetbrains.anko.bundleOf
 import org.json.JSONObject
+import android.webkit.WebViewClient
+import com.android.ql.lf.carapp.ui.views.ScrollLinearLayoutManager
+import com.android.ql.lf.carapp.ui.views.SlideDetailsLayout
+
 
 /**
- * Created by lf on 18.3.21.
- * @author lf on 18.3.21
+ * Created by lf on 18.4.4.
+ * @author lf on 18.4.4
  */
 @SuppressLint("RestrictedApi")
-class GoodsInfoFragment : BaseNetWorkingFragment() {
+class TestGoodsInfoFragment : BaseNetWorkingFragment() {
 
     companion object {
         val GOODS_ID_FLAG = "goods_id_flag"
@@ -50,7 +56,6 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
 
     private var paramsDialog: BottomGoodsParamDialog? = null
 
-    override fun getLayoutId() = R.layout.fragment_goods_info_layout
 
     private val commentAdapter by lazy {
         GoodsCommentAdapter(R.layout.adapter_goods_comment_item_layout, mArrayList)
@@ -79,6 +84,15 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
     private var actionMode: ACTION_MODE = ACTION_MODE.SHOPPING_CAR
 
     override fun initView(view: View?) {
+        mWebGoodsInfo.settings.javaScriptEnabled = true
+        mWebGoodsInfo.settings.domStorageEnabled = true
+        mWebGoodsInfo.settings.layoutAlgorithm = WebSettings.LayoutAlgorithm.SINGLE_COLUMN
+        mWebGoodsInfo.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+                view.loadUrl(url)
+                return true
+            }
+        }
         mCibGoodsInfoCollection.setOnClickListener {
             if (goodsInfoBean != null) {
                 mPresent.getDataByPost(0x1,
@@ -87,7 +101,9 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
                         RequestParamsHelper.getCollectProductParam(goodsInfoBean!!.result!!.product_id))
             }
         }
-        mRvGoodsInfoComment.layoutManager = LinearLayoutManager(mContext)
+        val linearLayoutManager = ScrollLinearLayoutManager(mContext)
+        linearLayoutManager.setScrollEnable(false)
+        mRvGoodsInfoComment.layoutManager = linearLayoutManager
         mRvGoodsInfoComment.adapter = commentAdapter
         commentAdapter.addHeaderView(topView)
         commentAdapter.addFooterView(footView)
@@ -118,6 +134,24 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
                         .setNeedNetWorking(true)
                         .setExtraBundle(bundleOf(Pair(OrderCommentListFragment.GID_FLAG, goodsInfoBean!!.result!!.product_id)))
                         .start()
+            }
+        }
+        slideDetailsLayout.setOnSlideDetailsListener {
+            if (goodsInfoBean !== null) {
+                if (it == SlideDetailsLayout.Status.OPEN) {
+                    val linkCss = "<style type=\"text/css\"> " +
+                            "img {" +
+                            "width:100%;" +
+                            "height:auto;" +
+                            "}" +
+                            "body {" +
+                            "margin-right:10px;" +
+                            "margin-left:10px;" +
+                            "}" +
+                            "</style>"
+                    val htmlContent = "<html><header>" + linkCss + "</header>" + goodsInfoBean!!.result!!.product_content + "</body></html>"
+                    mWebGoodsInfo.loadData(htmlContent, "text/html", "UTF-8")
+                }
             }
         }
     }
@@ -229,6 +263,7 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
         }
     }
 
+
     private fun bindData() {
         mCBPersonalGoodsInfo.setImages(goodsInfoBean!!.result!!.product_pic).setDelayTime(3000).setBannerStyle(BannerConfig.CIRCLE_INDICATOR).start()
         mCibGoodsInfoCollection.isChecked = goodsInfoBean!!.result!!.product_collect != "0"
@@ -238,7 +273,6 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
         mTvGoodsInfoInfoReleaseCount.text = goodsInfoBean!!.result!!.product_entrepot
         mTvGoodsInfoTitle.text = goodsInfoBean!!.result!!.product_name
         mTvGoodsInfoDescription.text = Html.fromHtml(goodsInfoBean!!.result!!.product_description)
-//        mHTvGoodsInfo.setHtmlFromString(goodsInfoBean!!.result!!.product_content, false)
         if (goodsInfoBean!!.arr1!!.wholesale_shop_pic != null && !goodsInfoBean!!.arr1!!.wholesale_shop_pic.isEmpty()) {
             GlideManager.loadImage(mContext, goodsInfoBean!!.arr1!!.wholesale_shop_pic[0], mIvGoodsInfoStorePic)
         }
@@ -256,6 +290,7 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
                     .start()
         }
     }
+
 
     override fun onStart() {
         super.onStart()
@@ -280,4 +315,5 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
         var arr2: AdsBean? = null
     }
 
+    override fun getLayoutId() = R.layout.fragment_test_goods_info_layout
 }

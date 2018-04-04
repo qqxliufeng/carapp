@@ -8,6 +8,7 @@ import com.android.ql.lf.carapp.present.MallOrderPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseFragment
 import com.android.ql.lf.carapp.ui.fragments.user.mine.MainMallOrderItemFragment
+import com.android.ql.lf.carapp.ui.fragments.user.mine.MineMallOrderFragment
 import com.android.ql.lf.carapp.utils.PreferenceUtils
 import com.android.ql.lf.carapp.utils.RxBus
 import kotlinx.android.synthetic.main.fragment_pay_result_layout.*
@@ -48,9 +49,9 @@ class OrderPayResultFragment : BaseFragment() {
                         FragmentContainerActivity
                                 .from(mContext)
                                 .setNeedNetWorking(true)
-                                .setClazz(OrderInfoFragment::class.java)
-                                .setExtraBundle(bundleOf(Pair(OrderInfoFragment.OID_FLAG, PreferenceUtils.getPrefString(mContext, "order_id", ""))))
-                                .setTitle("订单详情")
+                                .setClazz(MineMallOrderFragment::class.java)
+                                .setExtraBundle(bundleOf(Pair(MineMallOrderFragment.CURRENT_ITEM_FLAG, 1)))
+                                .setTitle("购物订单")
                                 .start()
                         finish()
                     }

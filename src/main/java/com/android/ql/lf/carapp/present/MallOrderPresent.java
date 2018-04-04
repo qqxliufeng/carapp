@@ -8,12 +8,14 @@ import android.widget.Toast;
 
 import com.android.ql.lf.carapp.data.RefreshData;
 import com.android.ql.lf.carapp.data.WXPayBean;
+import com.android.ql.lf.carapp.ui.fragments.mall.order.OrderSubmitFragment;
 import com.android.ql.lf.carapp.ui.fragments.mall.shoppingcar.ShoppingCarFragment;
 import com.android.ql.lf.carapp.ui.fragments.user.mine.MainMallOrderItemFragment;
 import com.android.ql.lf.carapp.ui.views.SelectPayTypeView;
 import com.android.ql.lf.carapp.utils.PayManager;
 import com.android.ql.lf.carapp.utils.PreferenceUtils;
 import com.android.ql.lf.carapp.utils.RxBus;
+import com.android.ql.lf.carapp.wxapi.WXPayEntryActivity;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -87,6 +89,13 @@ public class MallOrderPresent {
         RxBus.getDefault().post(RefreshData.INSTANCE);
     }
 
+    public static void notifyOnPay() {
+        RefreshData refreshData = RefreshData.INSTANCE;
+        refreshData.setRefresh(true);
+        refreshData.setAny(OrderSubmitFragment.Companion.getPAY_MALL_ORDER_FLAG());
+        RxBus.getDefault().post(RefreshData.INSTANCE);
+    }
+
     /**
      * 订单取消
      */
@@ -102,7 +111,7 @@ public class MallOrderPresent {
      * @param payType    支付方式
      * @param handler    支付宝处理Handler
      */
-    public static void onOrderPaySuccess(Context context, JSONObject jsonObject, String payType, String oid,Handler handler) {
+    public static void onOrderPaySuccess(Context context, JSONObject jsonObject, String payType, String oid, Handler handler) {
         PreferenceUtils.setPrefString(context, "order_id", oid);
         switch (payType) {
             case SelectPayTypeView.WX_PAY:
@@ -132,7 +141,7 @@ public class MallOrderPresent {
             @Override
             public void onConfirmClick() {
                 bottomPayDialog.dismiss();
-                if (onConfirmClickListener!=null){
+                if (onConfirmClickListener != null) {
                     onConfirmClickListener.onConfirmClick(contentView.getPayType());
                 }
             }
@@ -149,7 +158,7 @@ public class MallOrderPresent {
         MallOrderPresent.notifyRefreshOrderList();
     }
 
-    public interface OnConfirmClickListener{
+    public interface OnConfirmClickListener {
         void onConfirmClick(String payType);
     }
 

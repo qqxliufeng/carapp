@@ -23,6 +23,7 @@ import org.jetbrains.anko.bundleOf
 class MineMallOrderFragment : BaseFragment() {
 
     companion object {
+        val CURRENT_ITEM_FLAG = "current_item_flag"
         val TITLES = arrayListOf("待付款", "待发货", "待收货", "待评价", "售后中")
     }
 
@@ -38,6 +39,9 @@ class MineMallOrderFragment : BaseFragment() {
         mVpMainMallOrder.adapter = MainMallOrderViewPagerAdapter(childFragmentManager)
         mVpMainMallOrder.offscreenPageLimit = TITLES.size
         mTlMainMallOrder.setupWithViewPager(mVpMainMallOrder)
+        if (arguments != null && arguments.getInt(CURRENT_ITEM_FLAG, 0) != -1) {
+            mVpMainMallOrder.currentItem = arguments.getInt(CURRENT_ITEM_FLAG)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

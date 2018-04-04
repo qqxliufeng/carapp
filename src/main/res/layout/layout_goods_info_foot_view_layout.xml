@@ -154,14 +154,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#fff"
+        android:gravity="center"
         android:padding="@dimen/dp_10"
-        android:text="图文详情"
+        android:text="上拉加载详情"
         android:textColor="@color/text_deep_dark_color"
         android:textSize="14dp" />
 
-    <com.android.ql.lf.carapp.ui.views.HtmlTextView
+    <!--<com.android.ql.lf.carapp.ui.views.HtmlTextView
         android:id="@+id/mHTvGoodsInfo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/dp_10" />
+        android:padding="@dimen/dp_10" />-->
 </LinearLayout>

@@ -28,6 +28,7 @@ import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
 import com.youth.banner.loader.ImageLoader
 import kotlinx.android.synthetic.main.fragment_main_mall_layout.*
+import kotlinx.android.synthetic.main.fragment_test_goods_info_layout.*
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.collections.forEachWithIndex
 import org.json.JSONObject
@@ -332,12 +333,13 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
      * 进入商品详情
      */
     private fun enterGoodsInfo(goodsBean: GoodsBean) {
-        FragmentContainerActivity.from(mContext)
-                .setNeedNetWorking(true)
-                .setTitle("商品详情")
-                .setExtraBundle(bundleOf(Pair(GoodsInfoFragment.GOODS_ID_FLAG, goodsBean.product_id)))
-                .setClazz(GoodsInfoFragment::class.java)
-                .start()
+//        FragmentContainerActivity.from(mContext)
+//                .setNeedNetWorking(true)
+//                .setTitle("商品详情")
+//                .setExtraBundle(bundleOf(Pair(GoodsInfoFragment.GOODS_ID_FLAG, goodsBean.product_id)))
+//                .setClazz(GoodsInfoFragment::class.java)
+//                .start()
+        FragmentContainerActivity.from(mContext).setTitle("详情").setExtraBundle(bundleOf(Pair(GoodsInfoFragment.GOODS_ID_FLAG, goodsBean.product_id))).setClazz(TestGoodsInfoFragment::class.java).setNeedNetWorking(true).start()
     }
 
     override fun onLoginSuccess(userInfo: UserInfo?) {
