@@ -72,22 +72,30 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
         contentView.findViewById(R.id.mTvBottomParamConfirm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (onGoodsConfirmClickListener != null) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    for (MyFlexboxLayout item : flexboxLayouts) {
-                        if (item != null) {
-                            String selectName = item.getSelectName();
-                            if (TextUtils.isEmpty(selectName)) {
-                                Toast.makeText(getContext(), "请先选择" + item.getTitle(), Toast.LENGTH_SHORT).show();
-                                return;
-                            } else {
-                                stringBuilder.append(selectName).append(",");
+                try {
+                    if (onGoodsConfirmClickListener != null) {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        for (MyFlexboxLayout item : flexboxLayouts) {
+                            if (item != null) {
+                                String selectName = item.getSelectName();
+                                if (TextUtils.isEmpty(selectName)) {
+                                    Toast.makeText(getContext(), "请先选择" + item.getTitle(), Toast.LENGTH_SHORT).show();
+                                    return;
+                                } else {
+                                    stringBuilder.append(selectName).append(",");
+                                }
                             }
                         }
+                        if (stringBuilder.length() > 0) {
+                            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+                            onGoodsConfirmClickListener.onGoodsConfirmClick(stringBuilder.toString(), selectPic, tv_goods_num.getText().toString());
+                            dismiss();
+                        } else {
+                            Toast.makeText(getContext(), "商品规格选择错误", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                    stringBuilder.deleteCharAt(stringBuilder.length() - 1);
-                    onGoodsConfirmClickListener.onGoodsConfirmClick(stringBuilder.toString(), selectPic, tv_goods_num.getText().toString());
-                    dismiss();
+                } catch (Exception e) {
+                    Toast.makeText(getContext(), "商品规格选择错误", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -133,7 +141,15 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
                     @Override
                     public void onItemClick(int index) {
                         ArrayList<String> pic = item.getPic();
-                        if (pic != null && !pic.isEmpty()) {
+                        ArrayList<String> price1 = item.getPrice();
+                        if (price1 != null && !price1.isEmpty() && price1.size() > index) {
+                            tv_price.setText(String.format("￥%s", price1.get(index)));
+                        }
+                        ArrayList<String> repertory = item.getRepertory();
+                        if (repertory != null && !repertory.isEmpty() && repertory.size() > index) {
+                            tv_release_count.setText(String.format("库存%s件", repertory.get(index)));
+                        }
+                        if (pic != null && !pic.isEmpty() && pic.size() > index) {
                             String path = pic.get(index);
                             if (!TextUtils.isEmpty(path)) {
                                 selectPic = path;
@@ -146,7 +162,6 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
             }
         }
     }
-
 
     public interface OnGoodsConfirmClickListener {
         public void onGoodsConfirmClick(String specification, String picPath, String num);

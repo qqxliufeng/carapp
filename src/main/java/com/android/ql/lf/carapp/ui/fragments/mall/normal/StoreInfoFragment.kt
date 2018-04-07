@@ -262,8 +262,8 @@ class StoreInfoFragment : BaseRecyclerViewFragment<GoodsBean>() {
         FragmentContainerActivity.from(mContext)
                 .setNeedNetWorking(true)
                 .setTitle("商品详情")
-                .setExtraBundle(bundleOf(Pair(GoodsInfoFragment.GOODS_ID_FLAG, goodsBean.product_id)))
-                .setClazz(GoodsInfoFragment::class.java)
+                .setExtraBundle(bundleOf(Pair(NewGoodsInfoFragment.GOODS_ID_FLAG, goodsBean.product_id)))
+                .setClazz(NewGoodsInfoFragment::class.java)
                 .start()
     }
 

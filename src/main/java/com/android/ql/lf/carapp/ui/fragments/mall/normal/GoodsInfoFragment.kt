@@ -38,6 +38,7 @@ import org.json.JSONObject
  * @author lf on 18.3.21
  */
 @SuppressLint("RestrictedApi")
+@Deprecated("此类过期，请用NewGoodsInfoFragment")
 class GoodsInfoFragment : BaseNetWorkingFragment() {
 
     companion object {

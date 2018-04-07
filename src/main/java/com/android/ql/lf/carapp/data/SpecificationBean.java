@@ -11,6 +11,9 @@ public class SpecificationBean {
     private String  name;
     private ArrayList<String> item;
     private ArrayList<String> pic;
+    private ArrayList<String> repertory;
+    private ArrayList<String> yprice;
+    private ArrayList<String> price;
 
     public String getName() {
         return name;
@@ -34,5 +37,29 @@ public class SpecificationBean {
 
     public void setPic(ArrayList<String> pic) {
         this.pic = pic;
+    }
+
+    public ArrayList<String> getRepertory() {
+        return repertory;
+    }
+
+    public void setRepertory(ArrayList<String> repertory) {
+        this.repertory = repertory;
+    }
+
+    public ArrayList<String> getYprice() {
+        return yprice;
+    }
+
+    public void setYprice(ArrayList<String> yprice) {
+        this.yprice = yprice;
+    }
+
+    public ArrayList<String> getPrice() {
+        return price;
+    }
+
+    public void setPrice(ArrayList<String> price) {
+        this.price = price;
     }
 }

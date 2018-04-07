@@ -5,7 +5,7 @@ import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.GoodsBean
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
-import com.android.ql.lf.carapp.ui.fragments.mall.normal.GoodsInfoFragment
+import com.android.ql.lf.carapp.ui.fragments.mall.normal.NewGoodsInfoFragment
 import com.android.ql.lf.carapp.utils.GlideManager
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -50,8 +50,8 @@ class MineFootPrintFragment : BaseRecyclerViewFragment<GoodsBean>() {
         FragmentContainerActivity.from(mContext)
                 .setNeedNetWorking(true)
                 .setTitle("商品详情")
-                .setExtraBundle(bundleOf(Pair(GoodsInfoFragment.GOODS_ID_FLAG, mArrayList[position].product_id)))
-                .setClazz(GoodsInfoFragment::class.java)
+                .setExtraBundle(bundleOf(Pair(NewGoodsInfoFragment.GOODS_ID_FLAG, mArrayList[position].product_id)))
+                .setClazz(NewGoodsInfoFragment::class.java)
                 .start()
     }
 

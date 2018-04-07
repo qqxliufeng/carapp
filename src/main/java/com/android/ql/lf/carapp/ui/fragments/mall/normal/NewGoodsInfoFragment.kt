@@ -3,12 +3,9 @@ package com.android.ql.lf.carapp.ui.fragments.mall.normal
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.text.Html
 import android.text.TextPaint
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -30,7 +27,7 @@ import com.android.ql.lf.carapp.utils.toast
 import com.google.gson.Gson
 import com.youth.banner.BannerConfig
 import com.youth.banner.loader.ImageLoader
-import kotlinx.android.synthetic.main.fragment_test_goods_info_layout.*
+import kotlinx.android.synthetic.main.fragment_new_goods_info_layout.*
 import kotlinx.android.synthetic.main.layout_goods_info_foot_view_layout.*
 import org.jetbrains.anko.bundleOf
 import org.json.JSONObject
@@ -44,7 +41,7 @@ import com.android.ql.lf.carapp.ui.views.SlideDetailsLayout
  * @author lf on 18.4.4
  */
 @SuppressLint("RestrictedApi")
-class TestGoodsInfoFragment : BaseNetWorkingFragment() {
+class NewGoodsInfoFragment : BaseNetWorkingFragment() {
 
     companion object {
         val GOODS_ID_FLAG = "goods_id_flag"
@@ -55,7 +52,6 @@ class TestGoodsInfoFragment : BaseNetWorkingFragment() {
     private var goodsInfoBean: GoodsInfoBean? = null
 
     private var paramsDialog: BottomGoodsParamDialog? = null
-
 
     private val commentAdapter by lazy {
         GoodsCommentAdapter(R.layout.adapter_goods_comment_item_layout, mArrayList)
@@ -263,7 +259,6 @@ class TestGoodsInfoFragment : BaseNetWorkingFragment() {
         }
     }
 
-
     private fun bindData() {
         mCBPersonalGoodsInfo.setImages(goodsInfoBean!!.result!!.product_pic).setDelayTime(3000).setBannerStyle(BannerConfig.CIRCLE_INDICATOR).start()
         mCibGoodsInfoCollection.isChecked = goodsInfoBean!!.result!!.product_collect != "0"
@@ -291,7 +286,6 @@ class TestGoodsInfoFragment : BaseNetWorkingFragment() {
         }
     }
 
-
     override fun onStart() {
         super.onStart()
         mCBPersonalGoodsInfo.startAutoPlay()
@@ -315,5 +309,5 @@ class TestGoodsInfoFragment : BaseNetWorkingFragment() {
         var arr2: AdsBean? = null
     }
 
-    override fun getLayoutId() = R.layout.fragment_test_goods_info_layout
+    override fun getLayoutId() = R.layout.fragment_new_goods_info_layout
 }
