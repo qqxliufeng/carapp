@@ -87,7 +87,7 @@ class MineWalletFragment : BaseRecyclerViewFragment<MineWalletFragment.HistoryWa
 
     class MineWalletListAdapter(resId: Int, list: ArrayList<HistoryWalletBean>) : BaseQuickAdapter<HistoryWalletBean, BaseViewHolder>(resId, list) {
         override fun convert(helper: BaseViewHolder?, item: HistoryWalletBean?) {
-            helper!!.setText(R.id.mTvWalletHistoryItemTitle, item!!.integral_title)
+            helper!!.setText(R.id.mTvWalletHistoryItemTitle, "${item!!.integral_title}: ${item.integral_sn}")
             helper.setText(R.id.mTvWalletHistoryItemTime, item.integral_time)
             helper.setText(R.id.mTvWalletHistoryItemCount, "￥${item.integral_price}")
         }
@@ -97,6 +97,7 @@ class MineWalletFragment : BaseRecyclerViewFragment<MineWalletFragment.HistoryWa
         var integral_id: String? = null
         var integral_title: String? = null
         var integral_price: String? = null
+        var integral_sn: String? = null
         var integral_sym: String? = null
         var integral_time: String? = null
         var integral_uid: String? = null

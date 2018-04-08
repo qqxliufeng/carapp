@@ -123,7 +123,7 @@ class OrderListForMineForWaitingWorkFragment : AbstractLazyLoadFragment<OrderBea
                         .setExtraBundle(bundleOf(Pair("oid", mArrayList[position].qorder_id)))
                         .start()
             }
-            R.id.mTvOrderListForItemName -> {
+            R.id.mTvOrderListForItemCustomPhone -> {
                 startPhone(mArrayList[position].qorder_phone)
             }
         }

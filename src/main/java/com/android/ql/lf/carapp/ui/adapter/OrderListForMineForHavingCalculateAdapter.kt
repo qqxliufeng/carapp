@@ -22,6 +22,10 @@ class OrderListForMineForHavingCalculateAdapter(layoutId: Int, list: ArrayList<O
         helper.setText(R.id.mTvOrderListForItemProjectPrice, "￥${item.qorder_price}")
         helper.setText(R.id.mTvOrderListForItemStatus, ServiceOrderPresent.OrderStatus.getDescriptionByIndex(item.qorder_token))
         helper.addOnClickListener(R.id.mBtOrderListForHavingCalculateSubmit)
-        helper.addOnClickListener(R.id.mTvOrderListForItemName)
+
+        helper.setText(R.id.mTvOrderListForItemProjectSn, Html.fromHtml("<font color='${ContextCompat.getColor(mContext, R.color.colorPrimary)}'>订单号：</font>${item.qorder_sn}"))
+        helper.addOnClickListener(R.id.mTvOrderListForItemCustomPhone)
+        helper.setText(R.id.mTvOrderListForItemCustomPhone, item.qorder_phone)
+
     }
 }

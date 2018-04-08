@@ -11,6 +11,7 @@ import com.android.ql.lf.carapp.ui.adapter.OrderListForMineForWaitingCalculateAd
 import com.android.ql.lf.carapp.ui.fragments.AbstractLazyLoadFragment
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
 import com.android.ql.lf.carapp.utils.RxBus
+import com.android.ql.lf.carapp.utils.startPhone
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import org.jetbrains.anko.bundleOf
@@ -90,6 +91,8 @@ class OrderListForMineForWaitingCalculateFragment : AbstractLazyLoadFragment<Ord
                     .setExtraBundle(bundleOf(Pair(OrderDetailForHavingWorkFragment.ORDER_BEAN_FLAG, mArrayList[position].qorder_id)))
                     .setClazz(OrderDetailForHavingWorkFragment::class.java)
                     .start()
+        }else if (view.id == R.id.mTvOrderListForItemCustomPhone){
+            startPhone(mArrayList[position].qorder_phone)
         }
     }
 

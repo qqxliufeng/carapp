@@ -126,7 +126,7 @@ class OrderListForMineForHavingWorkFragment : AbstractLazyLoadFragment<OrderBean
     override fun onMyItemChildClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
         super.onMyItemChildClick(adapter, view, position)
         when (view!!.id) {
-            R.id.mTvOrderListForItemName -> startPhone(mArrayList[position].qorder_phone)
+            R.id.mTvOrderListForItemCustomPhone -> startPhone(mArrayList[position].qorder_phone)
             R.id.mBtmOrderListForItemCash -> {
                 if (mArrayList[position].qorder_token == "2") {
                     toast("当前订单正在审核中……")

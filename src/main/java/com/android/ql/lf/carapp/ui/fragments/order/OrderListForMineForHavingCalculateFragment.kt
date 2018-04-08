@@ -80,7 +80,7 @@ class OrderListForMineForHavingCalculateFragment : AbstractLazyLoadFragment<Orde
                     .setExtraBundle(bundleOf(Pair(OrderDetailForHavingWorkFragment.ORDER_BEAN_FLAG, mArrayList[position].qorder_id)))
                     .setClazz(OrderDetailForHavingWorkFragment::class.java)
                     .start()
-        } else if (view.id == R.id.mTvOrderListForItemName) {
+        } else if (view.id == R.id.mTvOrderListForItemCustomPhone) {
             startPhone(mArrayList[position].qorder_phone)
         }
     }

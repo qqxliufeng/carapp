@@ -116,12 +116,19 @@ class ArticleInfoFragment : BaseRecyclerViewFragment<ArticleAnswerBean>() {
         super.onRequestSuccess(requestID, result)
         if (requestID == 0x0) {
             val check = checkResultCode(result)
-            if (SUCCESS_CODE == check.code) {
-                processList(result as String, ArticleAnswerBean::class.java)
-                val json = check.obj as JSONObject
-                articleBean = Gson().fromJson(json.optJSONObject("arr").toString(), ArticleBean::class.java)
-                setArticleInfo()
-                mPresent.getDataByPost(0x1, RequestParamsHelper.QAA_MODEL, RequestParamsHelper.ACT_QUIZ_LOOK, RequestParamsHelper.getQuizLookParams(articleBean!!.quiz_id))
+            if (check != null) {
+                if (SUCCESS_CODE == check.code) {
+                    processList(result as String, ArticleAnswerBean::class.java)
+                    val json = check.obj as JSONObject
+                    articleBean = Gson().fromJson(json.optJSONObject("arr").toString(), ArticleBean::class.java)
+                    setArticleInfo()
+                    mPresent.getDataByPost(0x1, RequestParamsHelper.QAA_MODEL, RequestParamsHelper.ACT_QUIZ_LOOK, RequestParamsHelper.getQuizLookParams(articleBean!!.quiz_id))
+                } else if (check.code == "400") {
+                    mTvArticleInfoDelete.visibility = View.VISIBLE
+                    id_srl_base_recycler_view.visibility = View.GONE
+                    mLlArticleInfoBottomContainer.visibility = View.GONE
+                    RxBus.getDefault().post(WriteArticleFragment.ARTICLE_SEND_SUCCESS_FLAG)
+                }
             }
         } else if (requestID == 0x2) {
             onPostRefresh()
