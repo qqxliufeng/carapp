@@ -12,10 +12,7 @@ import com.android.ql.lf.carapp.data.OrderBean
 import com.android.ql.lf.carapp.present.ServiceOrderPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
-import com.android.ql.lf.carapp.utils.RequestParamsHelper
-import com.android.ql.lf.carapp.utils.getTextString
-import com.android.ql.lf.carapp.utils.isEmpty
-import com.android.ql.lf.carapp.utils.toast
+import com.android.ql.lf.carapp.utils.*
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_order_detail_for_waiting_work_layout.*
 import org.jetbrains.anko.bundleOf
@@ -77,10 +74,11 @@ class OrderDetailForWaitingWorkFragment : BaseNetWorkingFragment() {
                             DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
                                 val tempTime = "$year-${month + 1}-$dayOfMonth"
                                 val timePicker = TimePickerDialog(mContext, TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-                                    bespokeTime = "$tempTime $hourOfDay:$minute"
-                                    mPresent.getDataByPost(0x2, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_ORDER_TIME,
-                                            RequestParamsHelper.getOrderTimeParam(orderBean!!.qorder_id, bespokeTime!!))
-//                                    mTvOrderDetailForWaitingYTime.text = bespokeTime
+                                    alert("是否要保存预约时间？", positiveAction = { _, _ ->
+                                        bespokeTime = "$tempTime $hourOfDay:$minute"
+                                        mPresent.getDataByPost(0x2, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_ORDER_TIME,
+                                                RequestParamsHelper.getOrderTimeParam(orderBean!!.qorder_id, bespokeTime!!))
+                                    })
                                 }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true)
                                 timePicker.setTitle("请选择结束时间")
                                 timePicker.show()
@@ -126,6 +124,16 @@ class OrderDetailForWaitingWorkFragment : BaseNetWorkingFragment() {
                                         }))
                     }
                 }
+                if (orderBean != null && !orderBean!!.qorder_pic.isEmpty()) {
+                    mICllOrderDetailImageContainer.visibility = View.VISIBLE
+                    mTvOrderDetailImageTitle.visibility = View.VISIBLE
+                    mViewOrderDetailImageLine.visibility = View.VISIBLE
+                    mICllOrderDetailImageContainer.setImages(orderBean!!.qorder_pic)
+                } else {
+                    mTvOrderDetailImageTitle.visibility = View.GONE
+                    mICllOrderDetailImageContainer.visibility = View.GONE
+                    mViewOrderDetailImageLine.visibility = View.GONE
+                }
             } else {
                 mTvOrderDetailLoadFail.visibility = View.VISIBLE
                 mSvOrderDetailInfo.visibility = View.GONE
@@ -149,6 +157,7 @@ class OrderDetailForWaitingWorkFragment : BaseNetWorkingFragment() {
             val check = checkResultCode(result)
             if (check != null && check.code == SUCCESS_CODE) {
                 mTvOrderDetailForWaitingYTime.text = bespokeTime
+                serviceOrderPresent.updateOrderStatus(ServiceOrderPresent.OrderStatus.WAITING_WORK.index.toInt())
             } else {
                 mTvOrderDetailForWaitingYTime.text = "暂无"
             }

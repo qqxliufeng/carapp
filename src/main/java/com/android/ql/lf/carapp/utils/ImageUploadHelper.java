@@ -1,6 +1,9 @@
 package com.android.ql.lf.carapp.utils;
 
 
+import android.text.TextUtils;
+import android.util.Log;
+
 import com.android.ql.lf.carapp.data.ImageBean;
 import com.android.ql.lf.carapp.data.UserInfo;
 
@@ -11,9 +14,9 @@ import java.util.ArrayList;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import rx.Observable;
+import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
-import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -46,13 +49,16 @@ public class ImageUploadHelper {
         Observable.from(list).map(new Func1<ImageBean, String>() {
             @Override
             public String call(ImageBean imageItem) {
-                String path = dir + File.separator + System.currentTimeMillis() + ".jpg";
                 try {
-                    ImageFactory.compressAndGenImage(imageItem.getUriPath(), path, maxSize, false);
+                    if (imageItem != null && !TextUtils.isEmpty(imageItem.getUriPath())) {
+                        String path = dir + File.separator + System.currentTimeMillis() + ".jpg";
+                        ImageFactory.compressAndGenImage(imageItem.getUriPath(), path, maxSize, false);
+                        return path;
+                    }
                 } catch (IOException e) {
                     return null;
                 }
-                return path;
+                return null;
             }
         }).subscribeOn(Schedulers.io())
                 .doOnSubscribe(new Action0() {
@@ -63,29 +69,68 @@ public class ImageUploadHelper {
                         }
                     }
                 }).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<String>() {
+                .subscribe(new Observer<String>() {
                     @Override
-                    public void call(String s) {
-                        if (s != null) {
-                            compressList.add(s);
-                            if (compressList.size() == list.size()) {
-                                if (onImageUploadListener != null) {
-                                    MultipartBody.Builder builder = ImageUploadHelper.createMultipartBody();
-                                    for (int i = 0; i < compressList.size(); i++) {
-                                        File file = new File(compressList.get(i));
-                                        builder.addFormDataPart(i + "", file.getName(), RequestBody.create(MultipartBody.FORM, file));
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("TAG", e.getMessage());
+                        if (onImageUploadListener != null) {
+                            onImageUploadListener.onActionFailed();
+                        }
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        try {
+                            if (s != null) {
+                                compressList.add(s);
+                                if (compressList.size() == list.size()) {
+                                    if (onImageUploadListener != null) {
+                                        MultipartBody.Builder builder = ImageUploadHelper.createMultipartBody();
+                                        for (int i = 0; i < compressList.size(); i++) {
+                                            File file = new File(compressList.get(i));
+                                            builder.addFormDataPart(i + "", file.getName(), RequestBody.create(MultipartBody.FORM, file));
+                                        }
+                                        onImageUploadListener.onActionEnd(builder);
                                     }
-                                    onImageUploadListener.onActionEnd(builder);
+                                }
+                            } else {
+                                if (onImageUploadListener != null) {
+                                    onImageUploadListener.onActionFailed();
                                 }
                             }
-                        } else {
-                            if (onImageUploadListener != null) {
-                                onImageUploadListener.onActionFailed();
-                            }
+                        } catch (Exception e) {
+                            Log.e("TAG", e.getMessage());
                         }
                     }
                 });
     }
+
+//    new Action1<String>() {
+//        @Override
+//        public void call(String s) {
+//            if (s != null) {
+//                compressList.add(s);
+//                if (compressList.size() == list.size()) {
+//                    if (onImageUploadListener != null) {
+//                        MultipartBody.Builder builder = ImageUploadHelper.createMultipartBody();
+//                        for (int i = 0; i < compressList.size(); i++) {
+//                            File file = new File(compressList.get(i));
+//                            builder.addFormDataPart(i + "", file.getName(), RequestBody.create(MultipartBody.FORM, file));
+//                        }
+//                        onImageUploadListener.onActionEnd(builder);
+//                    }
+//                }
+//            } else {
+//                if (onImageUploadListener != null) {
+//                    onImageUploadListener.onActionFailed();
+//                }
+//            }
+//        }
+//    }
 
     public interface OnImageUploadListener {
 

@@ -1,6 +1,7 @@
 package com.android.ql.lf.carapp.ui.fragments.user.mine
 
 import android.content.Context
+import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -35,6 +36,7 @@ class MineWalletFragment : BaseRecyclerViewFragment<MineWalletFragment.HistoryWa
         super.initView(view)
         val topView = View.inflate(mContext, R.layout.layout_top_mine_wallet_layout, null)
         mTvReleaseMoney = topView.findViewById(R.id.mTvTopMineWalletMoney)
+        mTvReleaseMoney!!.text = "0.0"
         topView.findViewById<TextView>(R.id.mTvMineWalletEnsureMoney).setOnClickListener {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "保证金交纳", MineEnsureMoneyFragment::class.java)
         }
@@ -56,7 +58,6 @@ class MineWalletFragment : BaseRecyclerViewFragment<MineWalletFragment.HistoryWa
         return super.onOptionsItemSelected(item)
     }
 
-
     override fun onRefresh() {
         super.onRefresh()
         mPresent.getDataByPost(0x0, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_INTEGRAL, RequestParamsHelper.getIntegralParam(currentPage))
@@ -72,8 +73,6 @@ class MineWalletFragment : BaseRecyclerViewFragment<MineWalletFragment.HistoryWa
         val check = checkResultCode(result)
         if (check != null && check.code == SUCCESS_CODE) {
             mTvReleaseMoney!!.text = (check.obj as JSONObject).optString("arr") ?: "0.0"
-        } else {
-            mTvReleaseMoney!!.text = "0.0"
         }
         processList(result as String, HistoryWalletBean::class.java)
     }
@@ -87,7 +86,11 @@ class MineWalletFragment : BaseRecyclerViewFragment<MineWalletFragment.HistoryWa
 
     class MineWalletListAdapter(resId: Int, list: ArrayList<HistoryWalletBean>) : BaseQuickAdapter<HistoryWalletBean, BaseViewHolder>(resId, list) {
         override fun convert(helper: BaseViewHolder?, item: HistoryWalletBean?) {
-            helper!!.setText(R.id.mTvWalletHistoryItemTitle, "${item!!.integral_title}: ${item.integral_sn}")
+            helper!!.setText(R.id.mTvWalletHistoryItemTitle, "${item!!.integral_title}: ${if (TextUtils.isEmpty(item.integral_sn)) {
+                "暂无订单号"
+            } else {
+                item.integral_sn
+            }}")
             helper.setText(R.id.mTvWalletHistoryItemTime, item.integral_time)
             helper.setText(R.id.mTvWalletHistoryItemCount, "￥${item.integral_price}")
         }

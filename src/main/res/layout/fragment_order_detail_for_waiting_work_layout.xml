@@ -291,9 +291,29 @@
                     android:layout_marginTop="20dp"
                     android:background="#eee" />
 
+                <TextView
+                    android:id="@+id/mTvOrderDetailImageTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="施工照片"
+                    android:textColor="@color/text_deep_dark_color"
+                    android:textSize="@dimen/sp_16" />
+
+                <com.android.ql.lf.carapp.ui.views.ImageContainerLinearLayout
+                    android:id="@+id/mICllOrderDetailImageContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_10" />
+                <View
+                    android:id="@+id/mViewOrderDetailImageLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#eee" />
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
                     android:layout_marginBottom="10dp">
 
                     <TextView

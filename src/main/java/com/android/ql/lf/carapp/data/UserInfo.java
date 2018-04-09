@@ -214,7 +214,14 @@ public class UserInfo {
     }
 
     public int getAuthenticationStatus() {
-        return Integer.parseInt(memberAuthentication);
+        try {
+            if (TextUtils.isEmpty(memberAuthentication) || TextUtils.equals("null", memberAuthentication)) {
+                return 3;
+            }
+            return Integer.parseInt(memberAuthentication);
+        } catch (NumberFormatException e) {
+            return 3;
+        }
     }
 
     public String getMemberQQOpenid() {

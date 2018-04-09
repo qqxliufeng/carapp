@@ -1,4 +1,4 @@
-package com.a
+package com.android.ql.lf.carapp.ui.fragments
 
 import android.text.TextUtils
 import android.view.View
@@ -6,7 +6,6 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.android.ql.lf.carapp.R
-import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import kotlinx.android.synthetic.main.fragment_web_view_content_layout.*
 
 /**

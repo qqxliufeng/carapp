@@ -4,11 +4,11 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.CountDownTimer
 import android.view.View
-import com.a.WebViewContentFragment
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.ProtocolBean
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
+import com.android.ql.lf.carapp.ui.fragments.WebViewContentFragment
 import com.android.ql.lf.carapp.utils.*
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_register_layout.*

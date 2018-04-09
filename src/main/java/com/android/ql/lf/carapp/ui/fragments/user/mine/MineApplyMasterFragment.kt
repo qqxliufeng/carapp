@@ -8,7 +8,6 @@ import android.text.Html
 import android.util.TypedValue
 import android.view.View
 import android.widget.LinearLayout
-import com.a.WebViewContentFragment
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.ProtocolBean
 import com.android.ql.lf.carapp.data.UserInfo
@@ -16,7 +15,6 @@ import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseFragment
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
-import com.android.ql.lf.carapp.utils.toast
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_mine_apply_master_item_layout.*
 import kotlinx.android.synthetic.main.fragment_mine_apply_master_layout.*

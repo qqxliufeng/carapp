@@ -148,7 +148,6 @@
                 android:layout_marginLeft="80dp"
                 android:gravity="right"
                 android:drawableRight="@drawable/icon_inter1"
-                android:maxLength="11"
                 android:text="请选择主营各类"
                 android:textColor="@color/text_dark_color"
                 android:textSize="@dimen/sp_14" />

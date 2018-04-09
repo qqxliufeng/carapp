@@ -52,12 +52,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
         android:textColor="@color/text_dark_color"
         android:textSize="@dimen/sp_14" />
 
     <TextView
         android:id="@+id/mTvOrderListForItemProjectContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/text_dark_color"
+        android:textSize="@dimen/sp_14" />
+
+    <TextView
+        android:id="@+id/mTvOrderListForItemProjectOrderTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"

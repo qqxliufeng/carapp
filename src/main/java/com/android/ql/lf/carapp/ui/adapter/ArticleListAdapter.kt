@@ -18,7 +18,7 @@ class ArticleListAdapter(resId: Int, list: ArrayList<ArticleBean>) : BaseQuickAd
         helper.setText(R.id.mCtvArticleItemSeeCount, item.quiz_look)
         helper.setText(R.id.mCtvArticleItemCommentCount, item.quiz_replies)
         helper.setText(R.id.mCtvArticleItemPraiseCount, item.quiz_click)
-        helper.setText(R.id.mTvArticleItemContent, item.quiz_content)
+        helper.setText(R.id.mTvArticleItemContent, item.quiz_title)
         if (item.member_pic != null) {
             GlideManager.loadFaceCircleImage(mContext, item.member_pic, helper.getView(R.id.mIvArticleItemUserFace))
         }

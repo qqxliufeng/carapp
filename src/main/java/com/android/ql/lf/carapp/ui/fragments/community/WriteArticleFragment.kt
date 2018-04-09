@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.TypedValue
 import android.view.View
 import android.widget.CheckedTextView
-import com.a.WebViewContentFragment
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.ImageBean
 import com.android.ql.lf.carapp.data.ProtocolBean
@@ -14,6 +13,7 @@ import com.android.ql.lf.carapp.present.CommunityPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.adapter.OrderImageUpLoadAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
+import com.android.ql.lf.carapp.ui.fragments.WebViewContentFragment
 import com.android.ql.lf.carapp.utils.*
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -24,10 +24,8 @@ import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import kotlinx.android.synthetic.main.fragment_write_article_layout.*
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import org.jetbrains.anko.bundleOf
 import org.json.JSONObject
-import java.io.File
 import java.util.*
 
 /**

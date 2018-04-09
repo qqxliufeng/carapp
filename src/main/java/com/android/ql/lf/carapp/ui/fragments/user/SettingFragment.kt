@@ -4,14 +4,13 @@ import android.net.Uri
 import android.support.v7.app.AlertDialog
 import android.text.TextUtils
 import android.view.View
-import com.a.WebViewContentFragment
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.data.VersionInfo
 import com.android.ql.lf.carapp.present.UserPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
-import com.android.ql.lf.carapp.ui.fragments.mall.address.AddressManagerFragment
+import com.android.ql.lf.carapp.ui.fragments.WebViewContentFragment
 import com.android.ql.lf.carapp.utils.*
 import kotlinx.android.synthetic.main.fragment_setting_layout.*
 import org.jetbrains.anko.bundleOf
@@ -60,12 +59,7 @@ class SettingFragment : BaseNetWorkingFragment() {
             builder.create().show()
         }
         mTvSettingAddressManager.setOnClickListener {
-            FragmentContainerActivity
-                    .from(mContext)
-                    .setTitle("收货地址管理")
-                    .setClazz(AddressManagerFragment::class.java)
-                    .setNeedNetWorking(true)
-                    .start()
+            toast(Constants.NO_FUNCTION_NOTIFY_MESSAGE)
         }
         mTvSettingAboutUs.setOnClickListener {
             FragmentContainerActivity.from(mContext)
