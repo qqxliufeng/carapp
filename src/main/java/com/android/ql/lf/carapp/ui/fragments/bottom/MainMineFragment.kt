@@ -1,9 +1,13 @@
 package com.android.ql.lf.carapp.ui.fragments.bottom
 
+import android.app.Dialog
 import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.app.AlertDialog
 import android.text.TextUtils
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.RefreshData
 import com.android.ql.lf.carapp.data.UpdateNotifyBean
@@ -159,7 +163,10 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的邀请码", MineQCodeFragment::class.java)
         }
         mTvMainMineWallet.doClickWithUserStatusStart(MINE_MY_WALLET_TOKEN) {
-            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的钱包", MineWalletFragment::class.java)
+            val dialog = AlertDialog.Builder(mContext)
+            dialog.setView(View.inflate(mContext, R.layout.dialog_wallet_password_layout, null))
+            dialog.show()
+//            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的钱包", MineWalletFragment::class.java)
         }
         mLlMainMineFootPrintContainer.doClickWithUserStatusStart(MINE_FOOT_PRINT_TOKEN) {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的足迹", MineFootPrintFragment::class.java)

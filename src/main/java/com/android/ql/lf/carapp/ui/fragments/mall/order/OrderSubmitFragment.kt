@@ -265,6 +265,9 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
                     if (addressBean != null) {
                         setAddressInfo(addressBean!!)
                     }
+                }else{
+                    emptyAddressButton.visibility = View.VISIBLE
+                    selectAddressContainerView.visibility = View.GONE
                 }
             } catch (e: Exception) {
                 emptyAddressButton.visibility = View.VISIBLE

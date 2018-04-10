@@ -88,11 +88,9 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
                         }
                         if (stringBuilder.length() > 0) {
                             stringBuilder.deleteCharAt(stringBuilder.length() - 1);
-                            onGoodsConfirmClickListener.onGoodsConfirmClick(stringBuilder.toString(), selectPic, tv_goods_num.getText().toString());
-                            dismiss();
-                        } else {
-                            Toast.makeText(getContext(), "商品规格选择错误", Toast.LENGTH_SHORT).show();
                         }
+                        onGoodsConfirmClickListener.onGoodsConfirmClick(stringBuilder.toString(), selectPic, tv_goods_num.getText().toString());
+                        dismiss();
                     }
                 } catch (Exception e) {
                     Toast.makeText(getContext(), "商品规格选择错误", Toast.LENGTH_SHORT).show();

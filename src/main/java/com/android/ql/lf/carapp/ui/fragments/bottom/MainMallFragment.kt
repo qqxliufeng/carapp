@@ -14,6 +14,7 @@ import com.android.ql.lf.carapp.ui.activities.MainActivity
 import com.android.ql.lf.carapp.ui.adapter.GoodsMallItemAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
 import com.android.ql.lf.carapp.ui.fragments.DetailContentFragment
+import com.android.ql.lf.carapp.ui.fragments.mall.normal.ExpressInfoFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.normal.GoodsClassifyFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.normal.NewGoodsInfoFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.normal.SearchResultListFragment
@@ -288,7 +289,8 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
     override fun onMyItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
         tempGoodsBean = mArrayList[position]
         if (UserInfo.getInstance().isLogin) {
-            enterGoodsInfo(tempGoodsBean!!)
+//            enterGoodsInfo(tempGoodsBean!!)
+            FragmentContainerActivity.from(mContext).setNeedNetWorking(true).setTitle("物流信息").setClazz(ExpressInfoFragment::class.java).start()
         } else {
             UserInfo.loginToken = MAIN_MALL_ENTER_GOODS_INFO_FLAG
             LoginFragment.startLogin(mContext)

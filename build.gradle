@@ -111,6 +111,7 @@ dependencies {
     implementation 'com.google.android:flexbox:0.3.1'
     implementation 'me.imid.swipebacklayout.lib:library:1.1.0'
     implementation 'com.github.iwgang:countdownview:2.1.6'
+    implementation 'com.github.baoyachi:StepView:1.9'
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
     implementation files('libs/open_sdk_r5990_lite.jar')
     implementation 'cn.jiguang.sdk:jpush:3.1.1'

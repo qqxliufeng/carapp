@@ -1,12 +1,15 @@
 package com.android.ql.lf.carapp.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by lf on 18.3.27.
  *
  * @author lf on 18.3.27
  */
 
-public class MallOrderBean {
+public class MallOrderBean implements Parcelable {
 
     private String gid;
     private String cid;
@@ -109,4 +112,52 @@ public class MallOrderBean {
         this.specification = specification;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.gid);
+        dest.writeString(this.cid);
+        dest.writeString(this.price);
+        dest.writeString(this.address);
+        dest.writeString(this.num);
+        dest.writeString(this.ktype);
+        dest.writeString(this.mdtype);
+        dest.writeString(this.mliuyan);
+        dest.writeString(this.specification);
+        dest.writeString(this.mdprice);
+        dest.writeString(this.bbs);
+    }
+
+    public MallOrderBean() {
+    }
+
+    protected MallOrderBean(Parcel in) {
+        this.gid = in.readString();
+        this.cid = in.readString();
+        this.price = in.readString();
+        this.address = in.readString();
+        this.num = in.readString();
+        this.ktype = in.readString();
+        this.mdtype = in.readString();
+        this.mliuyan = in.readString();
+        this.specification = in.readString();
+        this.mdprice = in.readString();
+        this.bbs = in.readString();
+    }
+
+    public static final Parcelable.Creator<MallOrderBean> CREATOR = new Parcelable.Creator<MallOrderBean>() {
+        @Override
+        public MallOrderBean createFromParcel(Parcel source) {
+            return new MallOrderBean(source);
+        }
+
+        @Override
+        public MallOrderBean[] newArray(int size) {
+            return new MallOrderBean[size];
+        }
+    };
 }
