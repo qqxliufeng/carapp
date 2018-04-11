@@ -115,6 +115,7 @@ class WriteArticleFragment : BaseNetWorkingFragment() {
                             }
                             override fun onActionFailed() {
                                 toast("发布失败……")
+                                onRequestEnd(-1)
                             }
                         })
             }

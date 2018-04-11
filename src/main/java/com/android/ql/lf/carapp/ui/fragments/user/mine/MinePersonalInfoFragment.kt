@@ -15,6 +15,7 @@ import com.android.ql.lf.carapp.present.UserPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.ui.fragments.user.ResetPasswordFragment
+import com.android.ql.lf.carapp.ui.fragments.user.ResetWalletPasswordFragment
 import com.android.ql.lf.carapp.utils.*
 import com.soundcloud.android.crop.Crop
 import com.zhihu.matisse.Matisse
@@ -22,6 +23,7 @@ import com.zhihu.matisse.MimeType
 import kotlinx.android.synthetic.main.fragment_mine_personal_info_layout.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.support.v4.toast
 import org.json.JSONObject
 import java.io.File
@@ -65,6 +67,22 @@ class MinePersonalInfoFragment : BaseNetWorkingFragment() {
         }
         mTvPersonalInfoResetPassword.setOnClickListener {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "修改密码", ResetPasswordFragment::class.java)
+        }
+        if (TextUtils.isEmpty(UserInfo.getInstance().memberSecondPw)) {
+            mTvPersonalInfoResetWalletPassword.text = "设置钱包密码"
+            mTvPersonalInfoResetWalletPassword.setOnClickListener {
+                FragmentContainerActivity.from(mContext).setTitle("设置钱包密码")
+                        .setExtraBundle(bundleOf(Pair(ResetWalletPasswordFragment.PASSWORD_TYPE_FLAG, ResetWalletPasswordFragment.SET_PASSWORD_FLAG)))
+                        .setNeedNetWorking(true)
+                        .setClazz(ResetWalletPasswordFragment::class.java).start()
+            }
+        } else {
+            mTvPersonalInfoResetWalletPassword.text = "修改钱包密码"
+            mTvPersonalInfoResetWalletPassword.setOnClickListener {
+                FragmentContainerActivity.from(mContext)
+                        .setExtraBundle(bundleOf(Pair(ResetWalletPasswordFragment.PASSWORD_TYPE_FLAG, ResetWalletPasswordFragment.RESET_PASSWORD_FLAG)))
+                        .setTitle("修改钱包密码").setNeedNetWorking(true).setClazz(ResetWalletPasswordFragment::class.java).start()
+            }
         }
     }
 

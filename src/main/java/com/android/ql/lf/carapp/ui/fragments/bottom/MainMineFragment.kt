@@ -1,13 +1,9 @@
 package com.android.ql.lf.carapp.ui.fragments.bottom
 
-import android.app.Dialog
 import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.app.AlertDialog
 import android.text.TextUtils
-import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.RefreshData
 import com.android.ql.lf.carapp.data.UpdateNotifyBean
@@ -17,10 +13,12 @@ import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.activities.MainActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.ui.fragments.message.MineMessageListFragment
+import com.android.ql.lf.carapp.ui.fragments.user.ResetWalletPasswordFragment
 import com.android.ql.lf.carapp.ui.fragments.user.SettingFragment
 import com.android.ql.lf.carapp.ui.fragments.user.mine.*
 import com.android.ql.lf.carapp.utils.*
 import kotlinx.android.synthetic.main.fragment_main_mine_layout.*
+import org.jetbrains.anko.bundleOf
 import org.json.JSONObject
 
 /**
@@ -163,10 +161,27 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的邀请码", MineQCodeFragment::class.java)
         }
         mTvMainMineWallet.doClickWithUserStatusStart(MINE_MY_WALLET_TOKEN) {
-            val dialog = AlertDialog.Builder(mContext)
-            dialog.setView(View.inflate(mContext, R.layout.dialog_wallet_password_layout, null))
-            dialog.show()
-//            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的钱包", MineWalletFragment::class.java)
+            if (TextUtils.isEmpty(UserInfo.getInstance().memberSecondPw)) {
+                FragmentContainerActivity.from(mContext).setTitle("设置钱包密码")
+                        .setExtraBundle(bundleOf(Pair(ResetWalletPasswordFragment.PASSWORD_TYPE_FLAG, ResetWalletPasswordFragment.SET_PASSWORD_FLAG)))
+                        .setNeedNetWorking(true)
+                        .setClazz(ResetWalletPasswordFragment::class.java).start()
+            } else {
+                mContext.showPayPasswordDialog(resetAction = {
+                    FragmentContainerActivity.from(mContext)
+                            .setExtraBundle(bundleOf(Pair(ResetWalletPasswordFragment.PASSWORD_TYPE_FLAG, ResetWalletPasswordFragment.RESET_PASSWORD_FLAG)))
+                            .setTitle("修改钱包密码").setNeedNetWorking(true).setClazz(ResetWalletPasswordFragment::class.java).start()
+                }, forgetAction = {
+                    FragmentContainerActivity.from(mContext)
+                            .setExtraBundle(bundleOf(Pair(ResetWalletPasswordFragment.PASSWORD_TYPE_FLAG, ResetWalletPasswordFragment.FORGET_PASSWORD_FLAG)))
+                            .setTitle("忘记钱包密码").setNeedNetWorking(true).setClazz(ResetWalletPasswordFragment::class.java).start()
+                }, action = {
+                    mPresent.getDataByPost(0x1,
+                            RequestParamsHelper.MEMBER_MODEL,
+                            RequestParamsHelper.ACT_VERIFY_SECOND_PW,
+                            RequestParamsHelper.getVerifySecondPw(UserInfo.getInstance().memberPhone, it))
+                })
+            }
         }
         mLlMainMineFootPrintContainer.doClickWithUserStatusStart(MINE_FOOT_PRINT_TOKEN) {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的足迹", MineFootPrintFragment::class.java)
@@ -200,36 +215,54 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
         }
     }
 
+    override fun onRequestStart(requestID: Int) {
+        super.onRequestStart(requestID)
+        if (requestID == 0x1) {
+            getFastProgressDialog("正在验证密码……")
+        }
+    }
+
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
         super.onRequestSuccess(requestID, result)
         val check = checkResultCode(result)
-        if (check != null && check.code == SUCCESS_CODE) {
-            val json = check.obj as JSONObject
-            userPresent.onLoginNoBus(json.optJSONObject("result"), json.optJSONObject("arr"))
-            val arr1 = json.optJSONObject("arr1")
-            val s1 = arr1.optString("s1")
-            if (!TextUtils.isEmpty(s1)) {
-                UserInfo.getInstance().goodsCollectionNum = s1.toInt()
+        if (requestID == 0x0) {
+            if (check != null && check.code == SUCCESS_CODE) {
+                val json = check.obj as JSONObject
+                userPresent.onLoginNoBus(json.optJSONObject("result"), json.optJSONObject("arr"))
+                val arr1 = json.optJSONObject("arr1")
+                val s1 = arr1.optString("s1")
+                if (!TextUtils.isEmpty(s1)) {
+                    UserInfo.getInstance().goodsCollectionNum = s1.toInt()
+                }
+                val s2 = arr1.optString("s2")
+                if (!TextUtils.isEmpty(s2)) {
+                    UserInfo.getInstance().storeCollectionNum = s2.toInt()
+                }
+                val s3 = arr1.optString("s3")
+                if (!TextUtils.isEmpty(s3)) {
+                    UserInfo.getInstance().footsCollectionNum = s3.toInt()
+                }
+                mTvMainMineCollectionGoodsCount.text = "${UserInfo.getInstance().goodsCollectionNum}"
+                mTvMainMineCollectionStoreCount.text = "${UserInfo.getInstance().storeCollectionNum}"
+                mTvMainMineCollectionFootPrintCount.text = "${UserInfo.getInstance().footsCollectionNum}"
             }
-            val s2 = arr1.optString("s2")
-            if (!TextUtils.isEmpty(s2)) {
-                UserInfo.getInstance().storeCollectionNum = s2.toInt()
+        } else if (requestID == 0x1) {
+            if (check != null && check.code == SUCCESS_CODE) {
+                toast("验证成功")
+                FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的钱包", MineWalletFragment::class.java)
+            } else {
+                toast("验证失败，请重试……")
             }
-            val s3 = arr1.optString("s3")
-            if (!TextUtils.isEmpty(s3)) {
-                UserInfo.getInstance().footsCollectionNum = s3.toInt()
-            }
-            mTvMainMineCollectionGoodsCount.text = "${UserInfo.getInstance().goodsCollectionNum}"
-            mTvMainMineCollectionStoreCount.text = "${UserInfo.getInstance().storeCollectionNum}"
-            mTvMainMineCollectionFootPrintCount.text = "${UserInfo.getInstance().footsCollectionNum}"
         }
     }
 
     override fun onRequestEnd(requestID: Int) {
         super.onRequestEnd(requestID)
-        if (mSrlMainMineContainer.isRefreshing) {
-            mSrlMainMineContainer.post {
-                mSrlMainMineContainer.isRefreshing = false
+        if (requestID == 0x0) {
+            if (mSrlMainMineContainer.isRefreshing) {
+                mSrlMainMineContainer.post {
+                    mSrlMainMineContainer.isRefreshing = false
+                }
             }
         }
     }

@@ -284,6 +284,19 @@ class RequestParamsHelper {
         val ACT_MY_SPOOR = "my_spoor"
         fun getMySpoorParmas(page: Int) = getWithPageParams(page)
 
+        val ACT_VERIFY_SECOND_PW = "verify_second_pw"
+        fun getVerifySecondPw(tel: String, second_pw: String) = getWithIdParams().addParam("tel", tel).addParam("second_pw", second_pw)
+
+        val ACT_SET_SECOND_PW = "set_second_pw"
+        fun getSetSecondPW(tel: String, second_pw: String) = getWithIdParams().addParam("tel", tel).addParam("second_pw", second_pw)
+
+        val ACT_EDIT_SECOND_PW = "edit_second_pw"
+        fun getEditSecondPW(tel: String, old_second_pw: String, new_second_pw: String) =
+                getWithIdParams().addParam("tel", tel).addParam("old_second_pw", old_second_pw).addParam("new_second_pw", new_second_pw)
+
+        val ACT_FORGET_SECOND_PW = "forget_second_pw"
+        fun getForgetSecondPW(tel: String, second_pw: String) = getWithIdParams().addParam("tel", tel).addParam("second_pw", second_pw)
+
         /**              member model  end           **/
 
         /**              product model start         **/

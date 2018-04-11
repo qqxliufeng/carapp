@@ -23,7 +23,7 @@ class OrderListForMineForWaitingWorkAdapter(layoutId: Int, list: ArrayList<Order
         helper.setText(R.id.mTvOrderListForItemProjectContent, Html.fromHtml("<font color='${ContextCompat.getColor(mContext, R.color.colorPrimary)}'>备注：</font>${item.qorder_content}"))
         helper.setText(R.id.mTvOrderListForItemProjectSn, Html.fromHtml("<font color='${ContextCompat.getColor(mContext, R.color.colorPrimary)}'>订单号：</font>${item.qorder_sn}"))
         helper.setText(R.id.mTvOrderListForItemProjectOrderTime, Html.fromHtml("<font color='${ContextCompat.getColor(mContext, R.color.colorPrimary)}'>预约时间：</font>${if (TextUtils.isEmpty(item.qorder_appointment_time)) {
-            "暂无预约时间"
+            "暂无"
         } else {
             item.qorder_appointment_time
         }}"))

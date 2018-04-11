@@ -52,7 +52,8 @@ public class ImageUploadHelper {
                 try {
                     if (imageItem != null && !TextUtils.isEmpty(imageItem.getUriPath())) {
                         String path = dir + File.separator + System.currentTimeMillis() + ".jpg";
-                        ImageFactory.compressAndGenImage(imageItem.getUriPath(), path, maxSize, false);
+//                        ImageFactory.compressAndGenImage(imageItem.getUriPath(), path, maxSize, false);
+                        ImageFactory.ratioAndGenThumb(imageItem.getUriPath(), path,650,650,false);
                         return path;
                     }
                 } catch (IOException e) {

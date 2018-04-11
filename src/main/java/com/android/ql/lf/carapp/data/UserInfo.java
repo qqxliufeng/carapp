@@ -60,6 +60,15 @@ public class UserInfo {
     private String memberAlias;
     //    private String memberWxIs
     private ShopInfo shopInfo;
+    private String memberSecondPw = null;
+
+    public String getMemberSecondPw() {
+        return memberSecondPw;
+    }
+
+    public void setMemberSecondPw(String memberSecondPw) {
+        this.memberSecondPw = memberSecondPw;
+    }
 
     private int goodsCollectionNum = 0;
     private int storeCollectionNum = 0;

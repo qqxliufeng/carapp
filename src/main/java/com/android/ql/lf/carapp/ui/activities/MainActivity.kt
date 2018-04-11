@@ -32,7 +32,7 @@ class MainActivity : BaseActivity() {
         BottomNavigationViewHelper.disableShiftMode(mMainNavigation)
         mMainNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         mMainContent.adapter = MainViewPagerAdapter(supportFragmentManager)
-        mMainContent.offscreenPageLimit = 3
+        mMainContent.offscreenPageLimit = 4
         PreferenceUtils.setPrefBoolean(this, Constants.APP_IS_ALIVE, true)
     }
 
