@@ -4,6 +4,7 @@ import android.view.View
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
+import com.android.ql.lf.carapp.utils.Constants
 import com.android.ql.lf.carapp.utils.QRCodeUtil
 import kotlinx.android.synthetic.main.fragment_mine_q_code_layout.*
 
@@ -17,6 +18,7 @@ class MineQCodeFragment : BaseNetWorkingFragment() {
 
     override fun initView(view: View?) {
         mTvMineInviteCode.text = UserInfo.getInstance().memberMyInviteCode
-        mIvMineQCode.setImageBitmap(QRCodeUtil.createQRCodeBitmap(UserInfo.getInstance().memberMyInviteCode ?: "", 500, 500))
+        val address = "${Constants.BASE_IP}id=${UserInfo.getInstance().memberId}&code=${UserInfo.getInstance().memberMyInviteCode}"
+        mIvMineQCode.setImageBitmap(QRCodeUtil.createQRCodeBitmap(address, 500, 500))
     }
 }

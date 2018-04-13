@@ -32,7 +32,12 @@ class MineArticleWriteItemFragment : BaseRecyclerViewFragment<ArticleBean>() {
 
     override fun onRefresh() {
         super.onRefresh()
-        mPresent.getDataByPost(0x0, RequestParamsHelper.QAA_MODEL, RequestParamsHelper.ACT_GET_MYQUIZ, RequestParamsHelper.getGetMyQuizParam())
+        mPresent.getDataByPost(0x0, RequestParamsHelper.QAA_MODEL, RequestParamsHelper.ACT_GET_MYQUIZ, RequestParamsHelper.getGetMyQuizParam(currentPage))
+    }
+
+    override fun onLoadMore() {
+        super.onLoadMore()
+        mPresent.getDataByPost(0x0, RequestParamsHelper.QAA_MODEL, RequestParamsHelper.ACT_GET_MYQUIZ, RequestParamsHelper.getGetMyQuizParam(currentPage))
     }
 
     override fun getItemDecoration(): RecyclerView.ItemDecoration {

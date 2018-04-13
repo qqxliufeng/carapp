@@ -58,7 +58,7 @@ public class ImageFactory {
         BitmapFactory.Options newOpts = new BitmapFactory.Options();
         newOpts.inJustDecodeBounds = true;
         newOpts.inPreferredConfig = Bitmap.Config.RGB_565;
-        // Get bitmap info, but notice that bitmap is null now    
+        // Get bitmap info, but notice that bitmap is null now
         Bitmap bitmap = BitmapFactory.decodeFile(imgPath, newOpts);
         newOpts.inJustDecodeBounds = false;
         int w = newOpts.outWidth;

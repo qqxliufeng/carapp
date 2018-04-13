@@ -120,7 +120,9 @@ class MineApplyMasterItemFragment : BaseNetWorkingFragment() {
         } else { //商家
             mTvApplyMasterInfo.text = "此功能暂未开放"
             mBtApplyMasterApply.text = "申请成为商家"
-            mBtApplyMasterApply.isEnabled = false
+            mBtApplyMasterApply.setOnClickListener {
+                FragmentContainerActivity.from(mContext).setTitle("申请成为商家").setNeedNetWorking(true).setClazz(MineApplySallerInfoSubmitFragment::class.java).start()
+            }
         }
     }
 

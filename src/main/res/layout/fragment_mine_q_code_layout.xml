@@ -61,13 +61,13 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="@dimen/dp_10"
                 android:layout_marginBottom="@dimen/dp_10"
-                android:text="1、2016年1月11日-2016年1月24日期间每位客户限抽1次。 \n2、为了让您随时随地掌握最新资讯，中国卡客车官方网站，即日起全新升级..."
+                android:text="1、2016年1月11日-2016年1月24日期间每位客户限抽1次。 \n2、为了让您随时随地掌握最新资讯，中国卡客车官方网站，即日起全新升级...
+1、2016年1月11日-2016年1月24日期间每位客户限抽1次。 \n2、为了让您随时随地掌握最新资讯，中国卡客车官方网站，即日起全新升级...
+1、2016年1月11日-2016年1月24日期间每位客户限抽1次。 \n2、为了让您随时随地掌握最新资讯，中国卡客车官方网站，即日起全新升级...
+1、2016年1月11日-2016年1月24日期间每位客户限抽1次。 \n2、为了让您随时随地掌握最新资讯，中国卡客车官方网站，即日起全新升级...
+1、2016年1月11日-2016年1月24日期间每位客户限抽1次。 \n2、为了让您随时随地掌握最新资讯，中国卡客车官方网站，即日起全新升级...
+1、2016年1月11日-2016年1月24日期间每位客户限抽1次。 \n2、为了让您随时随地掌握最新资讯，中国卡客车官方网站，即日起全新升级..."
                 android:textColor="@color/text_dark_color" />
-
-            <Button
-                style="@style/style_button1"
-                android:layout_marginTop="@dimen/dp_10"
-                android:text="立即邀请"/>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

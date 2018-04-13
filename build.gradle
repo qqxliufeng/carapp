@@ -11,8 +11,8 @@ android {
         applicationId "com.android.ql.lf.carapp"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 2
-        versionName "2.0.0-develop"
+        versionCode 3
+        versionName "1.0.2-develop"
 
         ndk {
             //设置支持的SO库架构
@@ -24,8 +24,6 @@ android {
                 JPUSH_APPKEY : "e1f322032a2197b7f0fa843c", //JPush上注册的包名对应的appkey.
                 JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
         ]
-
-        useLibrary 'org.apache.http.legacy'
 
         multiDexEnabled true
 

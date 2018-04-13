@@ -472,4 +472,14 @@ public class UserInfo {
     }
 
 
+    //二期新增字段
+    private String memberAuthenticationSeller;
+
+    public String getMemberAuthenticationSeller() {
+        return memberAuthenticationSeller;
+    }
+
+    public void setMemberAuthenticationSeller(String memberAuthenticationSeller) {
+        this.memberAuthenticationSeller = memberAuthenticationSeller;
+    }
 }
