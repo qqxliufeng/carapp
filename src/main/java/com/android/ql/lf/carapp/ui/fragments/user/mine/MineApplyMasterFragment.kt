@@ -115,14 +115,33 @@ class MineApplyMasterItemFragment : BaseNetWorkingFragment() {
             }
             mBtApplyMasterApply.setOnClickListener {
                 FragmentContainerActivity.from(mContext).setTitle("申请成为师傅").setNeedNetWorking(true).setClazz(MineApplyMasterInfoSubmitFragment::class.java).start()
+                finish()
             }
             mPresent.getDataByPost(0x0, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_PTGG, RequestParamsHelper.getPtggParam("3"))
         } else { //商家
-            mTvApplyMasterInfo.text = "此功能暂未开放"
-            mBtApplyMasterApply.text = "申请成为商家"
+            when (UserInfo.getInstance().authenticationSellerStatus) {
+                0 -> {
+                    mBtApplyMasterApply.text = "资料正在审核中……"
+                    mBtApplyMasterApply.isEnabled = false
+                }
+                1 -> {
+                    mBtApplyMasterApply.text = "已经成为商家"
+                    mBtApplyMasterApply.isEnabled = false
+                }
+                2 -> {
+                    mBtApplyMasterApply.text = "资料审核失败，请重新提交……"
+                    mBtApplyMasterApply.isEnabled = true
+                }
+                3 -> {
+                    mBtApplyMasterApply.text = "申请成为商家"
+                    mBtApplyMasterApply.isEnabled = true
+                }
+            }
             mBtApplyMasterApply.setOnClickListener {
                 FragmentContainerActivity.from(mContext).setTitle("申请成为商家").setNeedNetWorking(true).setClazz(MineApplySallerInfoSubmitFragment::class.java).start()
+                finish()
             }
+            mPresent.getDataByPost(0x0, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_PTGG, RequestParamsHelper.getPtggParam("12"))
         }
     }
 

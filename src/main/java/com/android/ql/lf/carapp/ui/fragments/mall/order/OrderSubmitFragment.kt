@@ -159,6 +159,7 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
                 GlideManager.loadImage(iv_pic.context, if (item!!.shopcart_pic.isEmpty()) "" else item.shopcart_pic[0], iv_pic)
                 helper.setText(R.id.mIvSubmitOrderGoodsName, item.shopcart_name)
                 helper.setText(R.id.mTvSubmitOrderItemStoreName, item.shop_shopname)
+                helper.setText(R.id.mTvSubmitOrderGoodsExpressPrice, "商家配送 ￥${item.shopcart_mdprice}")
                 GlideManager.loadImage(mContext, item.shop_shoppic, helper.getView(R.id.mIvSubmitOrderItemStorePic))
                 helper.setText(R.id.mIvSubmitOrderGoodsSpe, item.shopcart_specification)
                 helper.setText(R.id.mIvSubmitOrderGoodsPrice, "￥${item.shopcart_price}")
@@ -265,7 +266,7 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
                     if (addressBean != null) {
                         setAddressInfo(addressBean!!)
                     }
-                }else{
+                } else {
                     emptyAddressButton.visibility = View.VISIBLE
                     selectAddressContainerView.visibility = View.GONE
                 }

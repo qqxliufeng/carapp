@@ -35,7 +35,7 @@ class PayResultFragment : BaseFragment() {
         }
     }
 
-    override fun getLayoutId() = R.layout.fragment_pay_result_layout
+    override fun getLayoutId() = R.layout.fragment_pay_result_no_order_layout
 
     override fun initView(view: View?) {
         mBtBack.setOnClickListener {

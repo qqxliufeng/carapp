@@ -48,7 +48,6 @@ class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment
                     if (TextUtils.equals(resultStatus, "9000")) {
                         //支付成功
                         bundle.putInt(PayResultFragment.PAY_CODE_FLAG, PayResultFragment.PAY_SUCCESS_CODE)
-                        onPostRefresh()
                     } else {
                         //支付失败
                         bundle.putInt(PayResultFragment.PAY_CODE_FLAG, PayResultFragment.PAY_FAIL_CODE)
@@ -121,6 +120,7 @@ class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment
             if (check != null) {
                 if (check.code == SUCCESS_CODE) {
                     if (payType == SelectPayTypeView.WX_PAY) {
+                        PreferenceUtils.setPrefBoolean(mContext, "is_mall_order", false)
                         val wxBean = Gson().fromJson((check.obj as JSONObject).optJSONObject("result").toString(), WXPayBean::class.java)
                         PayManager.wxPay(mContext, wxBean)
                     } else {

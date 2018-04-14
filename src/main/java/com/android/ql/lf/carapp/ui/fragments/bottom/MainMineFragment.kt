@@ -155,7 +155,20 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
             }
         }
         mTvMainMineStore.doClickWithUserStatusStart(MINE_STORE_INFO_TOKEN) {
-            FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的店铺", MineStoreInfoFragment::class.java)
+            when (UserInfo.getInstance().authenticationSellerStatus) {
+                0 -> {
+                    toast("认证资料正在审核中……")
+                }
+                1 -> {
+                    FragmentContainerActivity.from(mContext).setTitle("我的店铺").setClazz(MineStoreInfoFragment::class.java).setNeedNetWorking(true).start()
+                }
+                2 -> {
+                    toast("资料审核失败，请重新提交……")
+                }
+                3 -> {
+                    FragmentContainerActivity.from(mContext).setTitle("申请成为商家").setNeedNetWorking(true).setClazz(MineApplySallerInfoSubmitFragment::class.java).start()
+                }
+            }
         }
         mTvMainMineQCode.doClickWithUserStatusStart(MINE_Q_CODE_TOKEN) {
             FragmentContainerActivity.startFragmentContainerActivity(mContext, "我的邀请码", MineQCodeFragment::class.java)

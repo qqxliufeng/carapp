@@ -41,6 +41,9 @@ public class ViewUserAction implements IViewUserAction {
             UserInfo.getInstance().setMemberAlias(result.optString("member_alias"));
             UserInfo.getInstance().setMemberIswxAuth(result.optString("member_iswxauth"));
             UserInfo.getInstance().setMemberSecondPw(result.optString("member_second_pw"));
+
+            UserInfo.getInstance().setMemberAuthenticationSeller(result.optString("member_shop_authentication"));
+
             PreferenceUtils.setPrefString(CarApplication.application, UserInfo.USER_ID_FLAG, UserInfo.getInstance().getMemberId());
             if (shopInfo != null && !TextUtils.isEmpty(shopInfo.toString()) && !"null".equals(shopInfo.toString())) {
                 UserInfo.ShopInfo shopInoBean = new Gson().fromJson(shopInfo.toString(), UserInfo.ShopInfo.class);

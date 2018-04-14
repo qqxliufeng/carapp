@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.view.View
 import com.android.ql.lf.carapp.R
+import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseFragment
 import com.android.ql.lf.carapp.ui.views.SliderLayout
 import kotlinx.android.synthetic.main.fragment_mine_evaluate_layout.*
@@ -21,6 +22,7 @@ class MimeEvaluateFragment : BaseFragment() {
     override fun getLayoutId() = R.layout.fragment_mine_evaluate_layout
 
     override fun initView(view: View?) {
+        (mContext as FragmentContainerActivity).setSwipeBackEnable(false)
         mVpMineEvaluateContainer.adapter = MineEvaluateViewPagerAdapter(childFragmentManager)
         mTlMineEvaluate.setupWithViewPager(mVpMineEvaluateContainer)
         mVpMineEvaluateContainer.addOnPageChangeListener(SliderLayout.SliderOnPageChangeListener(mTlMineEvaluate,mSlMineEvaluate))

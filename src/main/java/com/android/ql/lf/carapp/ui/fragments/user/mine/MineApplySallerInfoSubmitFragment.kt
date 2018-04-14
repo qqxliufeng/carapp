@@ -243,7 +243,7 @@ class MineApplySallerInfoSubmitFragment : BaseNetWorkingFragment() {
                 val check = checkResultCode(result)
                 if (check != null && check.code == SUCCESS_CODE) {
                     toast("上传成功，等待后台审核")
-                    UserInfo.getInstance().setMemberAuthentication("0")
+                    UserInfo.getInstance().setMemberAuthenticationSeller("0")
                     RxBus.getDefault().post(EventIsMasterAndMoneyBean.getInstance())
                     finish()
                 } else {

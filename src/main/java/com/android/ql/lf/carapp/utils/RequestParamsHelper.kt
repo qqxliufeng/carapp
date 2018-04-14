@@ -297,6 +297,22 @@ class RequestParamsHelper {
         val ACT_FORGET_SECOND_PW = "forget_second_pw"
         fun getForgetSecondPW(tel: String, second_pw: String) = getWithIdParams().addParam("tel", tel).addParam("second_pw", second_pw)
 
+        val ACT_MY_QRCODE = "my_qrcode"
+        fun getMyQrcodeParam() = getWithIdParams()
+
+        val ACT_MY_SHOP_HEADER = "my_shop_header"
+        fun getMyShopHeaderParam() = getWithIdParams()
+
+        val ACT_EDIT_MY_SHOP_HEADER = "edit_my_shop_header"
+        fun getEditMyShopHeaderParam(sid: String, name: String, phone: String,address: String, d: String, content: String) =
+                getWithIdParams()
+                        .addParam("sid", sid)
+                        .addParam("name", name)
+                        .addParam("phone", phone)
+                        .addParam("address", address)
+                        .addParam("d", d)
+                        .addParam("content", content)
+
         /**              member model  end           **/
 
         /**              product model start         **/

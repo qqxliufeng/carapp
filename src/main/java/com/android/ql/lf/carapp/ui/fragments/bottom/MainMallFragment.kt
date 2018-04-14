@@ -289,8 +289,7 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
     override fun onMyItemClick(adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int) {
         tempGoodsBean = mArrayList[position]
         if (UserInfo.getInstance().isLogin) {
-//            enterGoodsInfo(tempGoodsBean!!)
-            FragmentContainerActivity.from(mContext).setNeedNetWorking(true).setTitle("物流信息").setClazz(ExpressInfoFragment::class.java).start()
+            enterGoodsInfo(tempGoodsBean!!)
         } else {
             UserInfo.loginToken = MAIN_MALL_ENTER_GOODS_INFO_FLAG
             LoginFragment.startLogin(mContext)

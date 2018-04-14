@@ -233,6 +233,7 @@ public class UserInfo {
         }
     }
 
+
     public String getMemberQQOpenid() {
         return memberQQOpenid;
     }
@@ -475,11 +476,18 @@ public class UserInfo {
     //二期新增字段
     private String memberAuthenticationSeller;
 
-    public String getMemberAuthenticationSeller() {
-        return memberAuthenticationSeller;
-    }
-
     public void setMemberAuthenticationSeller(String memberAuthenticationSeller) {
         this.memberAuthenticationSeller = memberAuthenticationSeller;
+    }
+
+    public int getAuthenticationSellerStatus() {
+        try {
+            if (TextUtils.isEmpty(memberAuthenticationSeller) || TextUtils.equals("null", memberAuthenticationSeller)) {
+                return 3;
+            }
+            return Integer.parseInt(memberAuthenticationSeller);
+        } catch (NumberFormatException e) {
+            return 3;
+        }
     }
 }
