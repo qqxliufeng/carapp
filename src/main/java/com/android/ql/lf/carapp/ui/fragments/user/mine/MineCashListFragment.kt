@@ -39,6 +39,12 @@ class MineCashListFragment : BaseRecyclerViewFragment<MineCashListFragment.CashL
             val tv_count = helper.getView<TextView>(R.id.mTvCashItemCount)
             val tv_result = helper.getView<TextView>(R.id.mTvCashItemResult)
             tv_time.text = item!!.withdraw_record_time
+            helper.setText(R.id.mTvCashItemSN, "订单号:${item.withdraw_record_sn}")
+            helper.setText(R.id.mTvCashItemPayType, when {
+                "1" == item.withdraw_record_paytype -> "微信"
+                "2" == item.withdraw_record_paytype -> "支付宝"
+                else -> "暂无"
+            })
             tv_count.text = "￥${item.withdraw_record_price}"
             tv_result.text = when (item.withdraw_record_status) {
                 "0" -> {
@@ -59,7 +65,7 @@ class MineCashListFragment : BaseRecyclerViewFragment<MineCashListFragment.CashL
                     tv_result.setTextColor(Color.RED)
                     "已驳回"
                 }
-                else->{
+                else -> {
                     "其它"
                 }
             }
@@ -72,5 +78,7 @@ class MineCashListFragment : BaseRecyclerViewFragment<MineCashListFragment.CashL
         var withdraw_record_price: String? = null
         var withdraw_record_status: String? = null
         var withdraw_record_time: String? = null
+        var withdraw_record_sn: String? = null
+        var withdraw_record_paytype: String? = null
     }
 }

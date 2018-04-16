@@ -169,7 +169,7 @@ wrjt.sdqlweb.com/interface.php/v1/qaa/quiz_type_search   请求方式：post  �
 wrjt.sdqlweb.com/interface.php/v1/qaa/quiz_detail        请求方式：post  参数 : qid,uid  帖子ID,用户ID   返回字段 quiz_concerm
 
 帖子浏览api:
-wrjt.sdqlweb.com/interface.php/v1/qaa/quiz_look          请求方式：post  参数 : qid  帖子ID
+wrjt.sdqlweb.com/interface.php/v1/qaa/merchant_quiz_look          请求方式：post  参数 : qid  帖子ID
 
 我的发帖api:
 wrjt.sdqlweb.com/interface.php/v1/qaa/get_myquiz         请求方式：post  参数 :  uid，page，pagesize 用户ID，页数，每页最大显示数量  返回 quiz_replies字段 回复数量
