@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import com.android.ql.lf.carapp.R
@@ -214,7 +215,7 @@ class MineApplyMasterInfoSubmitFragment : BaseNetWorkingFragment() {
                         formIdCardImagesList.add(imageJsonArray[it] as String)
                     }
                     mBtMasterInfoSubmit.post {
-                        uploadImage(0x2, idCardImageList, "正在上传营业执照图片……")
+                        uploadImage(0x2, licenceImageList, "正在上传营业执照图片……")
                     }
                 }
             }

@@ -221,7 +221,7 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
     private fun setAddressInfo(addressBean: AddressBean) {
         addressName.text = addressBean.address_name
         addressPhone.text = addressBean.address_phone
-        addressDetail.text = addressBean.address_detail
+        addressDetail.text = "${addressBean.address_addres} ${addressBean.address_detail}"
         emptyAddressButton.visibility = View.GONE
         selectAddressContainerView.visibility = View.VISIBLE
     }
