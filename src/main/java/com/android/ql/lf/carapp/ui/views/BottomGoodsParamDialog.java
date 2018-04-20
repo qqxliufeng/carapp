@@ -36,6 +36,9 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
     private ImageView iv_goods_pic;
 
     private String selectPic;
+    private String key = "";
+    private String mPrice = "";
+
 
     private OnGoodsConfirmClickListener onGoodsConfirmClickListener;
 
@@ -89,7 +92,7 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
                         if (stringBuilder.length() > 0) {
                             stringBuilder.deleteCharAt(stringBuilder.length() - 1);
                         }
-                        onGoodsConfirmClickListener.onGoodsConfirmClick(stringBuilder.toString(), selectPic, tv_goods_num.getText().toString());
+                        onGoodsConfirmClickListener.onGoodsConfirmClick(stringBuilder.toString(), selectPic, tv_goods_num.getText().toString(), key,mPrice);
                         dismiss();
                     }
                 } catch (Exception e) {
@@ -120,6 +123,7 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
 
     public void bindDataToView(String price, String releaseCount, String goodsName, String defaultPicPath, ArrayList<SpecificationBean> items) {
         tv_price.setText(price);
+        this.mPrice = price;
         tv_release_count.setText(releaseCount);
         tv_goods_name.setText(goodsName);
         selectPic = defaultPicPath;
@@ -130,11 +134,18 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
             flexboxLayouts.clear();
             for (final SpecificationBean item : mSpecificationList) {
                 MyFlexboxLayout myFlexboxLayout = new MyFlexboxLayout(getContext());
-
                 flexboxLayouts.add(myFlexboxLayout);
-
                 myFlexboxLayout.setTitle(item.getName());
-                myFlexboxLayout.addItems(item.getItem());
+                //设置默认key
+                if (item.getKey() != null && item.getStatus() != null) {
+                    for (int i = 0; i < item.getStatus().size(); i++) {
+                        if ("1".equals(item.getStatus().get(i))) {
+                            key = item.getKey().get(i);
+                            break;
+                        }
+                    }
+                }
+                myFlexboxLayout.addItems(item.getItem(), item.getStatus());
                 myFlexboxLayout.setOnItemClickListener(new MyFlexboxLayout.OnItemClickListener() {
                     @Override
                     public void onItemClick(int index) {
@@ -142,6 +153,7 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
                         ArrayList<String> price1 = item.getPrice();
                         if (price1 != null && !price1.isEmpty() && price1.size() > index) {
                             tv_price.setText(String.format("￥%s", price1.get(index)));
+                            mPrice = price1.get(index);
                         }
                         ArrayList<String> repertory = item.getRepertory();
                         if (repertory != null && !repertory.isEmpty() && repertory.size() > index) {
@@ -154,6 +166,9 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
                                 GlideManager.loadRoundImage(getContext(), path, iv_goods_pic, 15);
                             }
                         }
+                        if (item.getKey() != null) {
+                            key = item.getKey().get(index);
+                        }
                     }
                 });
                 llContainer.addView(myFlexboxLayout);
@@ -162,7 +177,7 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
     }
 
     public interface OnGoodsConfirmClickListener {
-        public void onGoodsConfirmClick(String specification, String picPath, String num);
+        public void onGoodsConfirmClick(String specification, String picPath, String num, String key,String mPrice);
     }
 
 }

@@ -14,6 +14,24 @@ public class SpecificationBean {
     private ArrayList<String> repertory;
     private ArrayList<String> yprice;
     private ArrayList<String> price;
+    private ArrayList<String> status;
+    private ArrayList<String> key;
+
+    public ArrayList<String> getStatus() {
+        return status;
+    }
+
+    public void setStatus(ArrayList<String> status) {
+        this.status = status;
+    }
+
+    public ArrayList<String> getKey() {
+        return key;
+    }
+
+    public void setKey(ArrayList<String> key) {
+        this.key = key;
+    }
 
     public String getName() {
         return name;

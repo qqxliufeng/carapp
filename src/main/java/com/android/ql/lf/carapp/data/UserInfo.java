@@ -62,6 +62,25 @@ public class UserInfo {
     private ShopInfo shopInfo;
     private String memberSecondPw = null;
 
+    private String memberHxname;
+    private String memberHxpw;
+
+    public String getMemberHxname() {
+        return memberHxname;
+    }
+
+    public void setMemberHxname(String memberHxname) {
+        this.memberHxname = memberHxname;
+    }
+
+    public String getMemberHxpw() {
+        return memberHxpw;
+    }
+
+    public void setMemberHxpw(String memberHxpw) {
+        this.memberHxpw = memberHxpw;
+    }
+
     public String getMemberSecondPw() {
         return memberSecondPw;
     }

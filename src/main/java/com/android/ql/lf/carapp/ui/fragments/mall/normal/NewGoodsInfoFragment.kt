@@ -32,8 +32,10 @@ import kotlinx.android.synthetic.main.layout_goods_info_foot_view_layout.*
 import org.jetbrains.anko.bundleOf
 import org.json.JSONObject
 import android.webkit.WebViewClient
+import com.android.ql.lf.carapp.ui.activities.ChatActivity
 import com.android.ql.lf.carapp.ui.views.ScrollLinearLayoutManager
 import com.android.ql.lf.carapp.ui.views.SlideDetailsLayout
+import com.hyphenate.easeui.EaseUI
 
 
 /**
@@ -111,6 +113,11 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment() {
             actionMode = ACTION_MODE.SHOPPING_CAR
             showGoodsSpe()
         }
+        mTvGoodsInfoAskOnline.setOnClickListener {
+            if (goodsInfoBean != null) {
+                ChatActivity.startChat(mContext, goodsInfoBean!!.arr1!!.wholesale_shop_name, "13121394518")
+            }
+        }
         mCBPersonalGoodsInfo!!.setImageLoader(object : ImageLoader() {
             override fun displayImage(context: Context?, path: Any?, imageView: ImageView?) {
                 GlideManager.loadImage(mContext, path as String, imageView)
@@ -162,7 +169,7 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment() {
                         goodsInfoBean!!.result!!.product_name,
                         goodsInfoBean!!.result!!.product_pic[0],
                         goodsInfoBean!!.result!!.product_specification)
-                paramsDialog!!.setOnGoodsConfirmClickListener { specification, picPath, num ->
+                paramsDialog!!.setOnGoodsConfirmClickListener { specification, picPath, num, key, price ->
                     if (actionMode == ACTION_MODE.SHOPPING_CAR) {
                         mPresent.getDataByPost(0x2,
                                 RequestParamsHelper.MEMBER_MODEL,
@@ -171,15 +178,17 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment() {
                                         goodsInfoBean!!.result!!.product_id,
                                         goodsInfoBean!!.arr1!!.wholesale_shop_id,
                                         num,
-                                        picPath + "," + specification
+                                        picPath + "," + specification,
+                                        price
                                 ))
                     } else {
                         val shoppingCarItem = ShoppingCarItemBean()
                         shoppingCarItem.shopcart_mdprice = goodsInfoBean!!.result!!.product_mdprice
                         shoppingCarItem.shopcart_num = num
-                        shoppingCarItem.shopcart_price = goodsInfoBean!!.result!!.product_price
+                        shoppingCarItem.shopcart_price = price
                         shoppingCarItem.shopcart_name = goodsInfoBean!!.result!!.product_name
                         shoppingCarItem.shopcart_gid = goodsInfoBean!!.result!!.product_id
+                        shoppingCarItem.key = key
                         if (goodsInfoBean!!.arr1!!.wholesale_shop_pic != null && !goodsInfoBean!!.arr1!!.wholesale_shop_pic.isEmpty()) {
                             shoppingCarItem.shop_shoppic = goodsInfoBean!!.arr1!!.wholesale_shop_pic[0]
                         } else {

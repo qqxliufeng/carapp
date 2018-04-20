@@ -1,6 +1,5 @@
 package com.android.ql.lf.carapp.ui.fragments.mall.normal
 
-import android.content.Intent
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -19,7 +18,6 @@ import com.android.ql.lf.carapp.ui.views.DividerGridItemDecoration
 import com.android.ql.lf.carapp.utils.*
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import com.hyphenate.easeui.EaseConstant
 import kotlinx.android.synthetic.main.fragment_store_info_layout.*
 import org.jetbrains.anko.bundleOf
 import org.json.JSONObject
@@ -125,11 +123,7 @@ class StoreInfoFragment : BaseRecyclerViewFragment<GoodsBean>() {
             onPostRefresh()
         }
         mTvStoreInfoKeFu.setOnClickListener {
-            val intent = Intent(mContext, ChatActivity::class.java)
-            intent.putExtra(ChatActivity.CHAT_TITLE_FLAG, storeInfoBean!!.wholesale_shop_name)
-            intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE)
-            intent.putExtra(EaseConstant.EXTRA_USER_ID, "zw123")
-            startActivity(intent)
+            ChatActivity.startChat(mContext, storeInfoBean!!.wholesale_shop_name, "13121394518")
         }
     }
 

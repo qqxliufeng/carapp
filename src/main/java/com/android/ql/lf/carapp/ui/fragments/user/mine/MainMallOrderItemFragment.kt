@@ -17,6 +17,7 @@ import com.android.ql.lf.carapp.ui.fragments.mall.normal.RefundFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.order.OrderCommentSubmitFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.order.OrderInfoFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.order.OrderPayResultFragment
+import com.android.ql.lf.carapp.ui.fragments.mall.order.OrderSubmitFragment
 import com.android.ql.lf.carapp.ui.views.SelectPayTypeView
 import com.android.ql.lf.carapp.utils.*
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -45,6 +46,8 @@ class MainMallOrderItemFragment : AbstractLazyLoadFragment<MallSaleOrderBean>() 
 
     private var currentOrder: MallSaleOrderBean? = null
 
+    private var payFlag = false
+
     private var payType: String = SelectPayTypeView.WX_PAY
 
     private var orderType: String = MallOrderPresent.MallOrderStatus.WAITING_FOR_MONEY.index
@@ -60,13 +63,14 @@ class MainMallOrderItemFragment : AbstractLazyLoadFragment<MallSaleOrderBean>() 
                         val resultInfo = payResult.result// 同步返回需要验证的信息
                         val resultStatus = payResult.resultStatus
                         val bundle = Bundle()
-                        if (TextUtils.equals(resultStatus, "9000")) {
+                        payFlag = if (TextUtils.equals(resultStatus, "9000")) {
                             //支付成功
                             bundle.putInt(OrderPayResultFragment.PAY_CODE_FLAG, OrderPayResultFragment.PAY_SUCCESS_CODE)
-                            onPostRefresh()
+                            true
                         } else {
                             //支付失败
                             bundle.putInt(OrderPayResultFragment.PAY_CODE_FLAG, OrderPayResultFragment.PAY_FAIL_CODE)
+                            false
                         }
 //                    OrderPresent.notifyRefreshOrderNum()
                         FragmentContainerActivity
@@ -76,6 +80,9 @@ class MainMallOrderItemFragment : AbstractLazyLoadFragment<MallSaleOrderBean>() 
                                 .setExtraBundle(bundle)
                                 .setClazz(OrderPayResultFragment::class.java)
                                 .start()
+                        if (payFlag) {
+                            finish()
+                        }
                     }
                 }
             }
@@ -113,9 +120,18 @@ class MainMallOrderItemFragment : AbstractLazyLoadFragment<MallSaleOrderBean>() 
         }
     }
 
+    private val paySubscription by lazy {
+        RxBus.getDefault().toObservable(RefreshData::class.java).subscribe {
+            if (it.isRefresh && it.any == OrderSubmitFragment.PAY_MALL_ORDER_FLAG) {
+                finish()
+            }
+        }
+    }
+
     override fun initView(view: View?) {
         super.initView(view)
         orderSubscription
+        paySubscription
     }
 
     override fun createAdapter(): BaseQuickAdapter<MallSaleOrderBean, BaseViewHolder> =
@@ -205,6 +221,7 @@ class MainMallOrderItemFragment : AbstractLazyLoadFragment<MallSaleOrderBean>() 
                     } else if (view.id == R.id.mBtOrderListItemAction2) {
                         //去支付
                         MallOrderPresent.showPayDialog(mContext) {
+                            payType = it
                             mPresent.getDataByPost(0x2, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_PAY,
                                     RequestParamsHelper.getPayParam(currentOrder!!.order_id, currentOrder!!.product_id, it))
                         }
@@ -278,6 +295,7 @@ class MainMallOrderItemFragment : AbstractLazyLoadFragment<MallSaleOrderBean>() 
 
     override fun onDestroyView() {
         unsubscribe(orderSubscription)
+        unsubscribe(paySubscription)
         super.onDestroyView()
     }
 

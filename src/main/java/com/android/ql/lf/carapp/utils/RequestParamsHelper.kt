@@ -225,12 +225,13 @@ class RequestParamsHelper {
         fun getShopcartParam(page: Int, pageSize: Int = 10) = getWithPageParams(page, pageSize)
 
         val ACT_ADD_SHOPCART = "add_shopcart"
-        fun getAddShopcartParam(gid: String, shopid: String, num: String, specification: String) =
+        fun getAddShopcartParam(gid: String, shopid: String, num: String, specification: String, price: String) =
                 getWithIdParams()
                         .addParam("gid", gid)
                         .addParam("shopid", shopid)
                         .addParam("num", num)
                         .addParam("specification", specification)
+                        .addParam("price", price)
 
 
         //删除购物车商品
@@ -304,7 +305,7 @@ class RequestParamsHelper {
         fun getMyShopHeaderParam() = getWithIdParams()
 
         val ACT_EDIT_MY_SHOP_HEADER = "edit_my_shop_header"
-        fun getEditMyShopHeaderParam(sid: String, name: String, phone: String,address: String, d: String, content: String) =
+        fun getEditMyShopHeaderParam(sid: String, name: String, phone: String, address: String, d: String, content: String) =
                 getWithIdParams()
                         .addParam("sid", sid)
                         .addParam("name", name)
@@ -312,6 +313,9 @@ class RequestParamsHelper {
                         .addParam("address", address)
                         .addParam("d", d)
                         .addParam("content", content)
+
+        val ACT_MY_COMMENT = "my_comment"
+        fun getMyCommentParam(f: String, page: Int) = getWithPageParams(page).addParam("f", f)
 
         /**              member model  end           **/
 

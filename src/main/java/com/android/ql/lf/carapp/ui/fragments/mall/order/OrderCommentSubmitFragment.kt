@@ -66,7 +66,6 @@ class OrderCommentSubmitFragment : BaseNetWorkingFragment() {
                 }
             }
         })
-
         mBtGoodsCommentSubmit.setOnClickListener {
             if (mEtGoodsCommentContent.isEmpty()) {
                 toast("请输入商品评价")
@@ -103,6 +102,7 @@ class OrderCommentSubmitFragment : BaseNetWorkingFragment() {
                         ))
             }
         }
+        mRbOrderCommentForGood.isChecked = true
     }
 
     override fun onRequestStart(requestID: Int) {

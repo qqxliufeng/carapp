@@ -224,7 +224,7 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
                     RequestParamsHelper.ACT_PERSONAL,
                     RequestParamsHelper.getPersonalParam(UserInfo.getInstance().memberId))
         } else {
-            onRequestEnd(-1)
+            onRequestEnd(0x0)
         }
     }
 

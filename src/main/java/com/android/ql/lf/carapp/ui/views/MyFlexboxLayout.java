@@ -33,6 +33,9 @@ public class MyFlexboxLayout extends LinearLayout {
 
     private String selectName = "";
 
+    private int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
+
+
     public MyFlexboxLayout(Context context) {
         this(context, null);
     }
@@ -71,13 +74,15 @@ public class MyFlexboxLayout extends LinearLayout {
         tvTitle.setText(title);
     }
 
-    public void addItems(final ArrayList<String> items) {
-        if (items != null && !items.isEmpty()) {
-            int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
-            for (final String item : items) {
+    public void addItems(final ArrayList<String> items, final ArrayList<String> status) {
+        if (items != null && !items.isEmpty() && status != null && items.size() == status.size()) {
+            for (int i = 0; i < items.size(); i++) {
+                final String item = items.get(i);
                 final CheckedTextView tv = new CheckedTextView(flexboxLayout.getContext());
                 FlexboxLayout.LayoutParams params = new FlexboxLayout.LayoutParams(FlexboxLayout.LayoutParams.WRAP_CONTENT, FlexboxLayout.LayoutParams.WRAP_CONTENT);
                 params.setMargins(margin, margin, margin, margin);
+                // 1 为选中
+                tv.setChecked("1".equals(status.get(i)));
                 tv.setText(item);
                 tv.setLayoutParams(params);
                 tv.setBackgroundResource(R.drawable.selector_tv_bg1);

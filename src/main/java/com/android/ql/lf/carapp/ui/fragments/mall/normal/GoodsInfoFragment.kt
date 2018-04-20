@@ -133,7 +133,7 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
                         goodsInfoBean!!.result!!.product_name,
                         goodsInfoBean!!.result!!.product_pic[0],
                         goodsInfoBean!!.result!!.product_specification)
-                paramsDialog!!.setOnGoodsConfirmClickListener { specification, picPath, num ->
+                paramsDialog!!.setOnGoodsConfirmClickListener { specification, picPath, num ,key,price->
                     if (actionMode == ACTION_MODE.SHOPPING_CAR) {
                         mPresent.getDataByPost(0x2,
                                 RequestParamsHelper.MEMBER_MODEL,
@@ -142,7 +142,8 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
                                         goodsInfoBean!!.result!!.product_id,
                                         goodsInfoBean!!.arr1!!.wholesale_shop_id,
                                         num,
-                                        picPath + "," + specification
+                                        picPath + "," + specification,
+                                        price
                                 ))
                     } else {
                         val shoppingCarItem = ShoppingCarItemBean()

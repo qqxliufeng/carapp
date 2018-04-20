@@ -61,7 +61,7 @@
 
         <activity
             android:name=".ui.activities.MainActivity"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask" />
 
         <activity android:name=".ui.activities.SplashActivity">
             <intent-filter>
@@ -175,6 +175,8 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
+
+        <activity android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity" />
 
     </application>
 
