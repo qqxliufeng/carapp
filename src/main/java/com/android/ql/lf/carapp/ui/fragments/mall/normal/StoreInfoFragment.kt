@@ -1,10 +1,13 @@
 package com.android.ql.lf.carapp.ui.fragments.mall.normal
 
+import android.content.Context
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import com.android.ql.lf.carapp.R
+import com.android.ql.lf.carapp.application.CarApplication
 import com.android.ql.lf.carapp.data.GoodsBean
 import com.android.ql.lf.carapp.data.StoreInfoBean
 import com.android.ql.lf.carapp.data.UserInfo
@@ -45,6 +48,11 @@ class StoreInfoFragment : BaseRecyclerViewFragment<GoodsBean>() {
     private val storeInfoBean by lazy {
         arguments.classLoader = this@StoreInfoFragment.javaClass.classLoader
         arguments.getParcelable<StoreInfoBean>(STORE_ID_FLAG)
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        CarApplication.getInstance().activityQueue.addItem(this)
     }
 
     override fun createAdapter(): BaseQuickAdapter<GoodsBean, BaseViewHolder> = GoodsMallItemAdapter(R.layout.adapter_main_mall_item_layout, mArrayList)
@@ -123,7 +131,9 @@ class StoreInfoFragment : BaseRecyclerViewFragment<GoodsBean>() {
             onPostRefresh()
         }
         mTvStoreInfoKeFu.setOnClickListener {
-            ChatActivity.startChat(mContext, storeInfoBean!!.wholesale_shop_name, "13121394518")
+            if (storeInfoBean != null && !TextUtils.isEmpty(storeInfoBean!!.wholesale_shop_hxname)) {
+                ChatActivity.startChat(mContext, storeInfoBean!!.wholesale_shop_name, storeInfoBean!!.wholesale_shop_hxname)
+            }
         }
     }
 
@@ -259,6 +269,11 @@ class StoreInfoFragment : BaseRecyclerViewFragment<GoodsBean>() {
                 .setExtraBundle(bundleOf(Pair(NewGoodsInfoFragment.GOODS_ID_FLAG, goodsBean.product_id)))
                 .setClazz(NewGoodsInfoFragment::class.java)
                 .start()
+    }
+
+    override fun onDestroy() {
+        CarApplication.getInstance().activityQueue.removeItem(this)
+        super.onDestroy()
     }
 
 }

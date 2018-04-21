@@ -74,7 +74,7 @@ class OrderInfoFragment : BaseNetWorkingFragment() {
     private val orderSubscription by lazy {
         RxBus.getDefault().toObservable(RefreshData::class.java).subscribe {
             if (it.isRefresh && it.any == REFRESH_ORDER_FLAG) {
-                if (mallOrderInfoContainer!!.order_token == MallOrderPresent.MallOrderStatus.MALL_ORDER_APPLY_BACK.index) {
+                if (mallOrderInfoContainer!!.order_token == MallOrderPresent.MallOrderStatus.WAITING_FOR_SEND.index) {
                     finish()
                 }
             }

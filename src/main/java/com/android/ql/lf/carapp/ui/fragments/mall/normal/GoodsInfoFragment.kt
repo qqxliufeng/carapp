@@ -143,7 +143,8 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
                                         goodsInfoBean!!.arr1!!.wholesale_shop_id,
                                         num,
                                         picPath + "," + specification,
-                                        price
+                                        price,
+                                        key
                                 ))
                     } else {
                         val shoppingCarItem = ShoppingCarItemBean()

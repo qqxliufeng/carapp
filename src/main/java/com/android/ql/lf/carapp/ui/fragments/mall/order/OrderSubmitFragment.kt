@@ -300,9 +300,7 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
                         }
                     }
                 } else {
-                    if (payType == SelectPayTypeView.ACCOUNT_PAY) {
-                        toast((check.obj as JSONObject).optString(MSG_FLAG))
-                    }
+                    toast((check.obj as JSONObject).optString(MSG_FLAG))
                 }
             }
         }

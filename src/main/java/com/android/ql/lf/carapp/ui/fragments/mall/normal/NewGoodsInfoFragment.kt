@@ -32,7 +32,9 @@ import kotlinx.android.synthetic.main.layout_goods_info_foot_view_layout.*
 import org.jetbrains.anko.bundleOf
 import org.json.JSONObject
 import android.webkit.WebViewClient
+import com.android.ql.lf.carapp.application.CarApplication
 import com.android.ql.lf.carapp.ui.activities.ChatActivity
+import com.android.ql.lf.carapp.ui.fragments.WebViewContentFragment
 import com.android.ql.lf.carapp.ui.views.ScrollLinearLayoutManager
 import com.android.ql.lf.carapp.ui.views.SlideDetailsLayout
 import com.hyphenate.easeui.EaseUI
@@ -81,6 +83,12 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment() {
 
     private var actionMode: ACTION_MODE = ACTION_MODE.SHOPPING_CAR
 
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        CarApplication.getInstance().activityQueue.addItem(this)
+    }
+
     override fun initView(view: View?) {
         mWebGoodsInfo.settings.javaScriptEnabled = true
         mWebGoodsInfo.settings.domStorageEnabled = true
@@ -114,8 +122,8 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment() {
             showGoodsSpe()
         }
         mTvGoodsInfoAskOnline.setOnClickListener {
-            if (goodsInfoBean != null) {
-                ChatActivity.startChat(mContext, goodsInfoBean!!.arr1!!.wholesale_shop_name, "13121394518")
+            if (goodsInfoBean != null && !TextUtils.isEmpty(goodsInfoBean!!.arr1!!.wholesale_shop_hxname)) {
+                ChatActivity.startChat(mContext, goodsInfoBean!!.arr1!!.wholesale_shop_name, goodsInfoBean!!.arr1!!.wholesale_shop_hxname)
             }
         }
         mCBPersonalGoodsInfo!!.setImageLoader(object : ImageLoader() {
@@ -179,7 +187,8 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment() {
                                         goodsInfoBean!!.arr1!!.wholesale_shop_id,
                                         num,
                                         picPath + "," + specification,
-                                        price
+                                        price,
+                                        key
                                 ))
                     } else {
                         val shoppingCarItem = ShoppingCarItemBean()
@@ -283,7 +292,7 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment() {
         mTvGoodsInfoStoreName.text = goodsInfoBean!!.arr1!!.wholesale_shop_name
         mTvGoodsInfoStoreAllGoodsNum.text = goodsInfoBean!!.arr1!!.wholesale_shop_num
         mTvGoodsInfoStoreInfoFocusNum.text = goodsInfoBean!!.arr1!!.wholesale_shop_attention
-        mTvGoodsInfoStoreInfoCommentNum.text = goodsInfoBean!!.arr1!!.wholesale_shop_attention
+        mTvGoodsInfoStoreInfoCommentNum.text = goodsInfoBean!!.arr1!!.wholesale_shop_ping
         footView.findViewById<TextView>(R.id.mTvGoodsInfoEnterStore).setOnClickListener {
             FragmentContainerActivity
                     .from(mContext)
@@ -291,6 +300,16 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment() {
                     .setHiddenToolBar(true)
                     .setClazz(StoreInfoFragment::class.java)
                     .setExtraBundle(bundleOf(Pair(StoreInfoFragment.STORE_ID_FLAG, goodsInfoBean!!.arr1!!)))
+                    .start()
+        }
+        val adIv = footView.findViewById<ImageView>(R.id.mIvGoodsInfoAd)
+        GlideManager.loadImage(mContext, goodsInfoBean!!.arr2!!.ad_pic, footView.findViewById(R.id.mIvGoodsInfoAd))
+        adIv.setOnClickListener {
+            FragmentContainerActivity.from(mContext)
+                    .setNeedNetWorking(true)
+                    .setTitle(goodsInfoBean!!.arr2!!.ad_title)
+                    .setExtraBundle(bundleOf(Pair(WebViewContentFragment.PATH_FLAG, goodsInfoBean!!.arr2!!.ad_content)))
+                    .setClazz(WebViewContentFragment::class.java)
                     .start()
         }
     }
@@ -310,6 +329,11 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment() {
         super.onDestroyView()
     }
 
+    override fun onDestroy() {
+        CarApplication.getInstance().activityQueue.removeItem(this)
+        super.onDestroy()
+    }
+
     class GoodsInfoBean {
         var code: Int = 0
         var msg: String? = null
@@ -319,4 +343,6 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment() {
     }
 
     override fun getLayoutId() = R.layout.fragment_new_goods_info_layout
+
+
 }

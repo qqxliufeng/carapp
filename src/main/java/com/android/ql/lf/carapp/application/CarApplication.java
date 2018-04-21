@@ -5,6 +5,7 @@ import android.support.multidex.MultiDexApplication;
 import com.android.ql.lf.carapp.component.AppComponent;
 import com.android.ql.lf.carapp.component.AppModule;
 import com.android.ql.lf.carapp.component.DaggerAppComponent;
+import com.android.ql.lf.carapp.utils.ActivityQueueUtils;
 import com.android.ql.lf.carapp.utils.Constants;
 import com.hyphenate.easeui.EaseUI;
 import com.tencent.bugly.Bugly;
@@ -21,6 +22,8 @@ public class CarApplication extends MultiDexApplication {
 
     public static CarApplication application;
 
+    private ActivityQueueUtils activityQueueUtils;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -31,7 +34,7 @@ public class CarApplication extends MultiDexApplication {
     }
 
     private void initHX() {
-        EaseUI.getInstance().init(this,null);
+        EaseUI.getInstance().init(this, null);
     }
 
     public static CarApplication getInstance() {
@@ -40,6 +43,20 @@ public class CarApplication extends MultiDexApplication {
 
     public AppComponent getAppComponent() {
         return appComponent;
+    }
+
+    public ActivityQueueUtils getActivityQueue() {
+        if (activityQueueUtils == null) {
+            activityQueueUtils = new ActivityQueueUtils();
+        }
+        return activityQueueUtils;
+    }
+
+    public void exit() {
+        if (activityQueueUtils != null) {
+            activityQueueUtils = null;
+            application = null;
+        }
     }
 
 }

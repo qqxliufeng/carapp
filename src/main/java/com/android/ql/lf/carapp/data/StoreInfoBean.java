@@ -19,6 +19,24 @@ public class StoreInfoBean implements Parcelable {
     private String wholesale_shop_attention;
     private String wholesale_shop_uid;
     private String wholesale_shop_num;
+    private String wholesale_shop_hxname;
+    private String wholesale_shop_ping;
+
+    public String getWholesale_shop_ping() {
+        return wholesale_shop_ping;
+    }
+
+    public void setWholesale_shop_ping(String wholesale_shop_ping) {
+        this.wholesale_shop_ping = wholesale_shop_ping;
+    }
+
+    public String getWholesale_shop_hxname() {
+        return wholesale_shop_hxname;
+    }
+
+    public void setWholesale_shop_hxname(String wholesale_shop_hxname) {
+        this.wholesale_shop_hxname = wholesale_shop_hxname;
+    }
 
     public String getWholesale_shop_id() {
         return wholesale_shop_id;
@@ -84,6 +102,8 @@ public class StoreInfoBean implements Parcelable {
         dest.writeString(this.wholesale_shop_attention);
         dest.writeString(this.wholesale_shop_uid);
         dest.writeString(this.wholesale_shop_num);
+        dest.writeString(this.wholesale_shop_hxname);
+        dest.writeString(this.wholesale_shop_ping);
     }
 
     protected StoreInfoBean(Parcel in) {
@@ -93,6 +113,8 @@ public class StoreInfoBean implements Parcelable {
         this.wholesale_shop_attention = in.readString();
         this.wholesale_shop_uid = in.readString();
         this.wholesale_shop_num = in.readString();
+        this.wholesale_shop_hxname = in.readString();
+        this.wholesale_shop_ping = in.readString();
     }
 
     public static final Creator<StoreInfoBean> CREATOR = new Creator<StoreInfoBean>() {

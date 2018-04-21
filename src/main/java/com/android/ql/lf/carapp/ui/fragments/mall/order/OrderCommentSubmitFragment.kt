@@ -102,7 +102,6 @@ class OrderCommentSubmitFragment : BaseNetWorkingFragment() {
                         ))
             }
         }
-        mRbOrderCommentForGood.isChecked = true
     }
 
     override fun onRequestStart(requestID: Int) {

@@ -108,6 +108,13 @@ public class MyFlexboxLayout extends LinearLayout {
                 });
                 flexboxLayout.addView(tv);
             }
+            for (int i = 0; i < flexboxLayout.getChildCount(); i++) {
+                CheckedTextView checkedTextView = (CheckedTextView) flexboxLayout.getChildAt(i);
+                if (checkedTextView.isChecked()) {
+                    selectName = checkedTextView.getText().toString();
+                    break;
+                }
+            }
             addView(flexboxLayout);
         }
     }

@@ -35,48 +35,6 @@
                 android:stepSize="0.5" />
         </LinearLayout>
 
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#fff"
-            android:orientation="horizontal"
-            android:padding="5dp">
-
-            <RadioButton
-                android:id="@+id/mRbOrderCommentForGood"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:button="@null"
-                android:gravity="center"
-                android:text="好评"
-                android:padding="@dimen/dp_10"
-                android:textColor="@color/select_bt_text_color_3" />
-
-            <RadioButton
-                android:id="@+id/mRbOrderCommentForNormal"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:button="@null"
-                android:gravity="center"
-                android:text="中评"
-                android:padding="@dimen/dp_10"
-                android:textColor="@color/select_bt_text_color_3" />
-
-            <RadioButton
-                android:id="@+id/mRbOrderCommentForLow"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:button="@null"
-                android:gravity="center"
-                android:text="差评"
-                android:padding="@dimen/dp_10"
-                android:textColor="@color/select_bt_text_color_3" />
-
-        </RadioGroup>
-
         <View
             android:layout_width="match_parent"
             android:layout_height="10dp"

@@ -285,6 +285,10 @@ class MainMineFragment : BaseNetWorkingFragment(), SwipeRefreshLayout.OnRefreshL
      */
     override fun onLoginSuccess(it: UserInfo?) {
         if (it != null) {
+            mSrlMainMineContainer.post {
+                mSrlMainMineContainer.isRefreshing = true
+                onRefresh()
+            }
             setUserInfo(it)
             when (UserInfo.loginToken) {
                 MINE_PERSONAL_INFO_TOKEN -> {

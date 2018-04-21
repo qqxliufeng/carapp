@@ -37,7 +37,7 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
 
     private String selectPic;
     private String key = "";
-    private String mPrice = "";
+    private String mPrice = "0.00";
 
 
     private OnGoodsConfirmClickListener onGoodsConfirmClickListener;
@@ -92,7 +92,7 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
                         if (stringBuilder.length() > 0) {
                             stringBuilder.deleteCharAt(stringBuilder.length() - 1);
                         }
-                        onGoodsConfirmClickListener.onGoodsConfirmClick(stringBuilder.toString(), selectPic, tv_goods_num.getText().toString(), key,mPrice);
+                        onGoodsConfirmClickListener.onGoodsConfirmClick(stringBuilder.toString(), selectPic, tv_goods_num.getText().toString(), key, mPrice);
                         dismiss();
                     }
                 } catch (Exception e) {
@@ -123,7 +123,7 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
 
     public void bindDataToView(String price, String releaseCount, String goodsName, String defaultPicPath, ArrayList<SpecificationBean> items) {
         tv_price.setText(price);
-        this.mPrice = price;
+        this.mPrice = price.replace("￥", "");
         tv_release_count.setText(releaseCount);
         tv_goods_name.setText(goodsName);
         selectPic = defaultPicPath;
@@ -137,10 +137,15 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
                 flexboxLayouts.add(myFlexboxLayout);
                 myFlexboxLayout.setTitle(item.getName());
                 //设置默认key
-                if (item.getKey() != null && item.getStatus() != null) {
+                if (item.getKey() != null && item.getStatus() != null && item.getKey().size() == item.getStatus().size()) {
                     for (int i = 0; i < item.getStatus().size(); i++) {
                         if ("1".equals(item.getStatus().get(i))) {
                             key = item.getKey().get(i);
+                            String defaultPicSelect = item.getPic().get(i);
+                            if (TextUtils.isEmpty(defaultPicSelect)){
+                                defaultPicSelect = selectPic;
+                            }
+                            GlideManager.loadRoundImage(getContext(), defaultPicSelect, iv_goods_pic, 15);
                             break;
                         }
                     }
@@ -166,7 +171,7 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
                                 GlideManager.loadRoundImage(getContext(), path, iv_goods_pic, 15);
                             }
                         }
-                        if (item.getKey() != null) {
+                        if (item.getKey() != null && item.getKey().size() > index) {
                             key = item.getKey().get(index);
                         }
                     }
@@ -177,7 +182,7 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
     }
 
     public interface OnGoodsConfirmClickListener {
-        public void onGoodsConfirmClick(String specification, String picPath, String num, String key,String mPrice);
+        public void onGoodsConfirmClick(String specification, String picPath, String num, String key, String mPrice);
     }
 
 }

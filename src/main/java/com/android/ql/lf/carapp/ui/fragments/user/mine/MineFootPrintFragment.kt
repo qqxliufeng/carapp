@@ -40,6 +40,8 @@ class MineFootPrintFragment : BaseRecyclerViewFragment<GoodsBean>() {
         mPresent.getDataByPost(0x0, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_MY_SPOOR, RequestParamsHelper.getMySpoorParmas(currentPage))
     }
 
+    override fun getEmptyMessage() = "暂无足迹~~~"
+
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {
         super.onRequestSuccess(requestID, result)
         processList(result as String, GoodsBean::class.java)

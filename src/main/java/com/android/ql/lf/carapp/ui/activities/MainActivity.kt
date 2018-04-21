@@ -1,19 +1,17 @@
 package com.android.ql.lf.carapp.ui.activities
 
 import android.content.Intent
-import android.net.Uri
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
-import android.util.Log
 import com.android.ql.lf.carapp.R
+import com.android.ql.lf.carapp.application.CarApplication
 import com.android.ql.lf.carapp.data.UserInfo
 import com.android.ql.lf.carapp.ui.fragments.bottom.MainCommunityFragment
 import com.android.ql.lf.carapp.ui.fragments.bottom.MainMallFragment
 import com.android.ql.lf.carapp.ui.fragments.bottom.MainMineFragment
 import com.android.ql.lf.carapp.ui.fragments.bottom.MainOrderHouseFragment
 import com.android.ql.lf.carapp.utils.*
-import com.tencent.bugly.beta.Beta
 import kotlinx.android.synthetic.main.activity_main_layout.*
 
 /**
@@ -71,6 +69,7 @@ class MainActivity : BaseActivity() {
             UserInfo.getInstance().loginOut()
             PreferenceUtils.setPrefBoolean(this, Constants.APP_IS_ALIVE, false)
             finish()
+            CarApplication.getInstance().exit()
         }
     }
 
