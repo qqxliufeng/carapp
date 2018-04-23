@@ -115,7 +115,7 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
 
     private var addressBean: AddressBean? = null
 
-    private val orderList = arrayListOf<MallOrderBean>()
+    private val orderList = arrayListOf<MallSubmitOrderBean>()
 
     private var payType: String = SelectPayTypeView.WX_PAY
 
@@ -193,7 +193,7 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
                 return@setOnClickListener
             }
             mArrayList.forEach {
-                val orderBean = MallOrderBean()
+                val orderBean = MallSubmitOrderBean()
                 orderBean.address = addressBean!!.address_id
                 orderBean.gid = it.shopcart_gid
                 orderBean.cid = it.shopcart_id

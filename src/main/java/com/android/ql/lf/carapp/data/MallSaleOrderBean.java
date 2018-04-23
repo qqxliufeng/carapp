@@ -1,5 +1,8 @@
 package com.android.ql.lf.carapp.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
@@ -8,7 +11,7 @@ import java.util.List;
  * @author lf on 18.3.27
  */
 
-public class MallSaleOrderBean {
+public class MallSaleOrderBean implements Parcelable {
 
     private String product_id;
     private String product_name;
@@ -181,4 +184,69 @@ public class MallSaleOrderBean {
     public void setProduct_shoppic(String product_shoppic) {
         this.product_shoppic = product_shoppic;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.product_id);
+        dest.writeString(this.product_name);
+        dest.writeString(this.product_md);
+        dest.writeString(this.product_mdprice);
+        dest.writeString(this.product_price);
+        dest.writeString(this.product_shopname);
+        dest.writeString(this.product_shoppic);
+        dest.writeString(this.order_num);
+        dest.writeString(this.order_sn);
+        dest.writeString(this.order_oprice);
+        dest.writeString(this.order_fc);
+        dest.writeString(this.order_token);
+        dest.writeString(this.order_id);
+        dest.writeString(this.order_specification);
+        dest.writeString(this.order_uid);
+        dest.writeString(this.order_ctime);
+        dest.writeString(this.order_tn);
+        dest.writeString(this.order_mdprice);
+        dest.writeStringList(this.product_pic);
+    }
+
+    public MallSaleOrderBean() {
+    }
+
+    protected MallSaleOrderBean(Parcel in) {
+        this.product_id = in.readString();
+        this.product_name = in.readString();
+        this.product_md = in.readString();
+        this.product_mdprice = in.readString();
+        this.product_price = in.readString();
+        this.product_shopname = in.readString();
+        this.product_shoppic = in.readString();
+        this.order_num = in.readString();
+        this.order_sn = in.readString();
+        this.order_oprice = in.readString();
+        this.order_fc = in.readString();
+        this.order_token = in.readString();
+        this.order_id = in.readString();
+        this.order_specification = in.readString();
+        this.order_uid = in.readString();
+        this.order_ctime = in.readString();
+        this.order_tn = in.readString();
+        this.order_mdprice = in.readString();
+        this.product_pic = in.createStringArrayList();
+    }
+
+    public static final Parcelable.Creator<MallSaleOrderBean> CREATOR = new Parcelable.Creator<MallSaleOrderBean>() {
+        @Override
+        public MallSaleOrderBean createFromParcel(Parcel source) {
+            return new MallSaleOrderBean(source);
+        }
+
+        @Override
+        public MallSaleOrderBean[] newArray(int size) {
+            return new MallSaleOrderBean[size];
+        }
+    };
 }

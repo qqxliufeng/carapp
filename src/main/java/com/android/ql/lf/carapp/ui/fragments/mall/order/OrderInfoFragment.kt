@@ -11,11 +11,13 @@ import android.text.TextUtils
 import android.view.View
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.MallOrderInfoBean
+import com.android.ql.lf.carapp.data.MallSaleOrderBean
 import com.android.ql.lf.carapp.data.PayResult
 import com.android.ql.lf.carapp.data.RefreshData
 import com.android.ql.lf.carapp.present.MallOrderPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
+import com.android.ql.lf.carapp.ui.fragments.mall.normal.ExpressInfoFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.normal.RefundFragment
 import com.android.ql.lf.carapp.ui.fragments.user.mine.MainMallOrderItemFragment.Companion.REFRESH_ORDER_FLAG
 import com.android.ql.lf.carapp.ui.views.SelectPayTypeView
@@ -218,9 +220,18 @@ class OrderInfoFragment : BaseNetWorkingFragment() {
                 }
                 MallOrderPresent.MallOrderStatus.WAITING_FOR_RECEIVER.index -> {
                     mTvOrderInfoTopStatePic.setImageResource(R.drawable.img_order_status_reveicer)
-                    mBtOrderInfoAction1.visibility = View.GONE
+                    mBtOrderInfoAction1.visibility = View.VISIBLE
                     mBtOrderInfoAction2.visibility = View.VISIBLE
+                    mBtOrderInfoAction1.text = "查看物流"
                     mBtOrderInfoAction2.text = "确认收货"
+                    mBtOrderInfoAction1.setOnClickListener {
+                        val mallSalerOrderBean = MallSaleOrderBean()
+                        mallSalerOrderBean.order_sn = mallOrderInfoContainer!!.order_sn
+                        mallSalerOrderBean.product_name = mallOrderInfoContainer!!.product_name
+                        mallSalerOrderBean.product_pic = mallOrderInfoContainer!!.product_pic
+                        mallSalerOrderBean.order_tn = mallOrderInfoContainer!!.order_tn
+                        FragmentContainerActivity.from(mContext).setTitle("查看物流").setExtraBundle(bundleOf(Pair(ExpressInfoFragment.ORDER_BEAN_FLAG, mallSalerOrderBean))).setNeedNetWorking(true).setClazz(ExpressInfoFragment::class.java).start()
+                    }
                     mBtOrderInfoAction2.setOnClickListener {
                         //确定收货
                         alert("是否要确定收货？", "是", "否") { dialog, which ->

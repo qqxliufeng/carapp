@@ -9,7 +9,7 @@ import android.os.Parcelable;
  * @author lf on 18.3.27
  */
 
-public class MallOrderBean implements Parcelable {
+public class MallSubmitOrderBean implements Parcelable {
 
     private String gid;
     private String cid;
@@ -121,7 +121,7 @@ public class MallOrderBean implements Parcelable {
         this.specification = specification;
     }
 
-    public MallOrderBean() {
+    public MallSubmitOrderBean() {
     }
 
     @Override
@@ -145,7 +145,7 @@ public class MallOrderBean implements Parcelable {
         dest.writeString(this.bbs);
     }
 
-    protected MallOrderBean(Parcel in) {
+    protected MallSubmitOrderBean(Parcel in) {
         this.gid = in.readString();
         this.cid = in.readString();
         this.price = in.readString();
@@ -160,15 +160,15 @@ public class MallOrderBean implements Parcelable {
         this.bbs = in.readString();
     }
 
-    public static final Creator<MallOrderBean> CREATOR = new Creator<MallOrderBean>() {
+    public static final Creator<MallSubmitOrderBean> CREATOR = new Creator<MallSubmitOrderBean>() {
         @Override
-        public MallOrderBean createFromParcel(Parcel source) {
-            return new MallOrderBean(source);
+        public MallSubmitOrderBean createFromParcel(Parcel source) {
+            return new MallSubmitOrderBean(source);
         }
 
         @Override
-        public MallOrderBean[] newArray(int size) {
-            return new MallOrderBean[size];
+        public MallSubmitOrderBean[] newArray(int size) {
+            return new MallSubmitOrderBean[size];
         }
     };
 }

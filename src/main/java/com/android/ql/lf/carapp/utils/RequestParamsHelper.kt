@@ -318,6 +318,15 @@ class RequestParamsHelper {
         val ACT_MY_COMMENT = "my_comment"
         fun getMyCommentParam(f: String, page: Int) = getWithPageParams(page).addParam("f", f)
 
+        //快递查询
+        val ACT_GETLOGISTICS = "getlogistics"
+
+        fun getGetlogisticsParam(num: String): ApiParams {
+            val param = getWithIdParams()
+            param.addParam("nu", num)
+            return param
+        }
+
         /**              member model  end           **/
 
         /**              product model start         **/

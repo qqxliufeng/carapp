@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.support.design.widget.BottomSheetDialog
 import android.text.TextUtils
 import android.view.View
 import com.android.ql.lf.carapp.R
@@ -13,6 +12,7 @@ import com.android.ql.lf.carapp.present.MallOrderPresent
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.adapter.MainMallOrderItemAdapter
 import com.android.ql.lf.carapp.ui.fragments.AbstractLazyLoadFragment
+import com.android.ql.lf.carapp.ui.fragments.mall.normal.ExpressInfoFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.normal.RefundFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.order.OrderCommentSubmitFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.order.OrderInfoFragment
@@ -22,7 +22,6 @@ import com.android.ql.lf.carapp.ui.views.SelectPayTypeView
 import com.android.ql.lf.carapp.utils.*
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import com.google.gson.Gson
 import org.jetbrains.anko.bundleOf
 import org.json.JSONObject
 
@@ -251,6 +250,15 @@ class MainMallOrderItemFragment : AbstractLazyLoadFragment<MallSaleOrderBean>() 
                                     RequestParamsHelper.ACT_EDIT_ORDER_STATUS,
                                     RequestParamsHelper.getEditOrderStatusParam(currentOrder!!.order_id, MallOrderPresent.MallOrderStatus.WAITING_FOR_EVALUATE.index))
                         }
+                    } else if (view.id == R.id.mBtOrderListItemAction1) {
+                        //查看物流
+                        FragmentContainerActivity
+                                .from(mContext)
+                                .setTitle("查看物流")
+                                .setExtraBundle(bundleOf(Pair(ExpressInfoFragment.ORDER_BEAN_FLAG, currentOrder!!)))
+                                .setNeedNetWorking(true)
+                                .setClazz(ExpressInfoFragment::class.java)
+                                .start()
                     }
                 }
                 MallOrderPresent.MallOrderStatus.WAITING_FOR_EVALUATE.index -> {

@@ -32,6 +32,11 @@ class MainActivity : BaseActivity() {
         mMainContent.adapter = MainViewPagerAdapter(supportFragmentManager)
         mMainContent.offscreenPageLimit = 4
         PreferenceUtils.setPrefBoolean(this, Constants.APP_IS_ALIVE, true)
+//        val fileDescriptor = assets.openFd("Rhea.ogg")
+//        val mediaPlayer = MediaPlayer()
+//        mediaPlayer.setDataSource(fileDescriptor.fileDescriptor, fileDescriptor.startOffset, fileDescriptor.length)
+//        mediaPlayer.prepare()
+//        mediaPlayer.start()
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->

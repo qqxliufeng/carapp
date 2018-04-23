@@ -35,7 +35,7 @@ class MainMallOrderItemAdapter(layoutId: Int, list: ArrayList<MallSaleOrderBean>
                     bt_action2.visibility = View.VISIBLE
                     bt_action1.text = "取消订单"
                     bt_action2.text = "支付款"
-                    helper.setText(R.id.mTvShoppingCarItemEditMode,MallOrderPresent.MallOrderStatus.WAITING_FOR_MONEY.description)
+                    helper.setText(R.id.mTvShoppingCarItemEditMode, MallOrderPresent.MallOrderStatus.WAITING_FOR_MONEY.description)
                     helper.addOnClickListener(R.id.mBtOrderListItemAction1)
                     helper.addOnClickListener(R.id.mBtOrderListItemAction2)
                 }
@@ -43,42 +43,44 @@ class MainMallOrderItemAdapter(layoutId: Int, list: ArrayList<MallSaleOrderBean>
                     bt_action1.visibility = View.VISIBLE
                     bt_action2.visibility = View.GONE
                     bt_action1.text = "申请退款"
-                    helper.setText(R.id.mTvShoppingCarItemEditMode,MallOrderPresent.MallOrderStatus.WAITING_FOR_SEND.description)
+                    helper.setText(R.id.mTvShoppingCarItemEditMode, MallOrderPresent.MallOrderStatus.WAITING_FOR_SEND.description)
                     helper.addOnClickListener(R.id.mBtOrderListItemAction1)
                 }
                 MallOrderPresent.MallOrderStatus.WAITING_FOR_RECEIVER.index -> {
-                    bt_action1.visibility = View.GONE
+                    bt_action1.visibility = View.VISIBLE
                     bt_action2.visibility = View.VISIBLE
+                    bt_action1.text = "查看物流"
                     bt_action2.text = "确认收货"
-                    helper.setText(R.id.mTvShoppingCarItemEditMode,MallOrderPresent.MallOrderStatus.WAITING_FOR_RECEIVER.description)
+                    helper.setText(R.id.mTvShoppingCarItemEditMode, MallOrderPresent.MallOrderStatus.WAITING_FOR_RECEIVER.description)
+                    helper.addOnClickListener(R.id.mBtOrderListItemAction1)
                     helper.addOnClickListener(R.id.mBtOrderListItemAction2)
                 }
                 MallOrderPresent.MallOrderStatus.WAITING_FOR_EVALUATE.index -> {
                     bt_action1.visibility = View.GONE
                     bt_action2.visibility = View.VISIBLE
                     bt_action2.text = "去评价"
-                    helper.setText(R.id.mTvShoppingCarItemEditMode,MallOrderPresent.MallOrderStatus.WAITING_FOR_EVALUATE.description)
+                    helper.setText(R.id.mTvShoppingCarItemEditMode, MallOrderPresent.MallOrderStatus.WAITING_FOR_EVALUATE.description)
                     helper.addOnClickListener(R.id.mBtOrderListItemAction2)
                 }
                 MallOrderPresent.MallOrderStatus.MALL_ORDER_COMPLEMENT.index -> {
                     bt_action1.visibility = View.VISIBLE
                     bt_action2.visibility = View.GONE
                     bt_action1.text = "查看订单"
-                    helper.setText(R.id.mTvShoppingCarItemEditMode,MallOrderPresent.MallOrderStatus.MALL_ORDER_COMPLEMENT.description)
+                    helper.setText(R.id.mTvShoppingCarItemEditMode, MallOrderPresent.MallOrderStatus.MALL_ORDER_COMPLEMENT.description)
                     helper.addOnClickListener(R.id.mBtOrderListItemAction1)
                 }
-                MallOrderPresent.MallOrderStatus.MALL_ORDER_CANCEL.index->{
-                    helper.setText(R.id.mTvShoppingCarItemEditMode,MallOrderPresent.MallOrderStatus.MALL_ORDER_CANCEL.description)
+                MallOrderPresent.MallOrderStatus.MALL_ORDER_CANCEL.index -> {
+                    helper.setText(R.id.mTvShoppingCarItemEditMode, MallOrderPresent.MallOrderStatus.MALL_ORDER_CANCEL.description)
                     bt_action1.visibility = View.GONE
                     bt_action2.visibility = View.GONE
                 }
-                MallOrderPresent.MallOrderStatus.MALL_ORDER_HAS_BACK.index->{
-                    helper.setText(R.id.mTvShoppingCarItemEditMode,MallOrderPresent.MallOrderStatus.MALL_ORDER_HAS_BACK.description)
+                MallOrderPresent.MallOrderStatus.MALL_ORDER_HAS_BACK.index -> {
+                    helper.setText(R.id.mTvShoppingCarItemEditMode, MallOrderPresent.MallOrderStatus.MALL_ORDER_HAS_BACK.description)
                     bt_action1.visibility = View.GONE
                     bt_action2.visibility = View.GONE
                 }
-                MallOrderPresent.MallOrderStatus.MALL_ORDER_APPLY_BACK.index->{
-                    helper.setText(R.id.mTvShoppingCarItemEditMode,MallOrderPresent.MallOrderStatus.MALL_ORDER_APPLY_BACK.description)
+                MallOrderPresent.MallOrderStatus.MALL_ORDER_APPLY_BACK.index -> {
+                    helper.setText(R.id.mTvShoppingCarItemEditMode, MallOrderPresent.MallOrderStatus.MALL_ORDER_APPLY_BACK.description)
                     bt_action1.visibility = View.GONE
                     bt_action2.visibility = View.GONE
                 }
