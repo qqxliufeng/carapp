@@ -163,11 +163,12 @@ class RequestParamsHelper {
         }
 
         val ACT_PAYMENT_DEPOSIT = "payment_deposit"
-        fun getPaymentDepositParam(type: String, mid: String, paytype: String): ApiParams {
+        fun getPaymentDepositParam(type: String, mid: String, paytype: String,price:String): ApiParams {
             val param = getWithIdParams()
             param.addParam("type", type)
             param.addParam("mid", mid)
             param.addParam("paytype", paytype)
+            param.addParam("price", price)
             return param
         }
 

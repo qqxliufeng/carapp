@@ -3,6 +3,8 @@ package com.android.ql.lf.carapp.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.media.MediaPlayer;
 import android.util.Log;
 
 import com.android.ql.lf.carapp.data.NewOrderMessageBean;
@@ -10,6 +12,8 @@ import com.android.ql.lf.carapp.ui.activities.SplashActivity;
 import com.android.ql.lf.carapp.utils.Constants;
 import com.android.ql.lf.carapp.utils.PreferenceUtils;
 import com.android.ql.lf.carapp.utils.RxBus;
+
+import java.io.IOException;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -23,15 +27,28 @@ public class NewOrderMessageReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent != null && JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
-            RxBus.getDefault().post(new NewOrderMessageBean(intent.getStringExtra(JPushInterface.EXTRA_EXTRA)));
-            if (!PreferenceUtils.getPrefBoolean(context, Constants.APP_IS_ALIVE, true)) {
-                notify(context);
+        if (intent != null) {
+            if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
+                RxBus.getDefault().post(new NewOrderMessageBean(intent.getStringExtra(JPushInterface.EXTRA_EXTRA)));
+                try {
+                    AssetFileDescriptor fileDescriptor = context.getAssets().openFd("wrjtnofity.mp3");
+                    MediaPlayer mediaPlayer = new MediaPlayer();
+                    mediaPlayer.setDataSource(fileDescriptor.getFileDescriptor(), fileDescriptor.getStartOffset(), fileDescriptor.getLength());
+                    mediaPlayer.prepare();
+                    mediaPlayer.start();
+                } catch (IOException e) {
+                    Log.e("TAG", "提示失败");
+                }
+            }
+            if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
+                if (!PreferenceUtils.getPrefBoolean(context, Constants.APP_IS_ALIVE, true)) {
+                    startSplash(context);
+                }
             }
         }
     }
 
-    private void notify(Context context) {
+    private void startSplash(Context context) {
         Intent forIntent = new Intent(context, SplashActivity.class);
         context.startActivity(forIntent);
 //        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);

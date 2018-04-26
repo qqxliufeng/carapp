@@ -150,7 +150,7 @@
                 <!--Required 用户接收SDK消息的intent-->
                 <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
-
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
                 <category android:name="com.android.ql.lf.carapp" />
             </intent-filter>
         </receiver>

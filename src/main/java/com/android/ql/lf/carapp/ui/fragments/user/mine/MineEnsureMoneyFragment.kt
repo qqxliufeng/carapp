@@ -7,10 +7,12 @@ import android.os.Handler
 import android.os.Message
 import android.support.design.widget.BottomSheetDialog
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.text.Html
 import android.text.TextUtils
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.data.PayResult
@@ -152,7 +154,7 @@ class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment
             when (item.m_p_type) {
                 "1" -> {
                     if (item.member_ismaster_ensure_money == "0") {
-                        pay(item)
+                        showPayMoneyDialog(item)
                     } else {
                         //退师傅保证金
                         refund(item)
@@ -160,7 +162,7 @@ class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment
                 }
                 "2" -> {
                     if (item.member_ismerchant_ensure_money == "0") {
-                        pay(item)
+                        showPayMoneyDialog(item)
                     } else {
                         //退店铺保证金
                         refund(item)
@@ -170,7 +172,33 @@ class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment
         }
     }
 
-    private fun pay(item: EnsureMoneyProduct) {
+    private fun showPayMoneyDialog(item: EnsureMoneyProduct) {
+        val builder = AlertDialog.Builder(mContext)
+        val content = View.inflate(mContext, R.layout.dialog_ensure_money_pay_layout, null)
+        val et_count = content.findViewById<EditText>(R.id.mEtEnsureMoneyPayCount)
+        et_count.setText(item.m_p_price)
+        builder.setView(content)
+        builder.setNegativeButton("取消", null)
+        builder.setPositiveButton("确定") { _, _ ->
+            if (et_count.isEmpty()) {
+                toast("请输入金额")
+                return@setPositiveButton
+            }
+            if (et_count.getTextString().startsWith("0") || et_count.getTextString().startsWith(".")) {
+                toast("请输入合法的金额")
+                return@setPositiveButton
+            }
+            if (et_count.getTextString().toFloat() < item.m_p_price!!.toFloat()) {
+                toast("输入金额必须大于指定最低金额")
+                return@setPositiveButton
+            }
+            pay(item,et_count.getTextString())
+        }
+        builder.setTitle("请输入保证金金额")
+        builder.create().show()
+    }
+
+    private fun pay(item: EnsureMoneyProduct,price:String) {
         payType = SelectPayTypeView.WX_PAY
         val bottomPayDialog = BottomSheetDialog(mContext)
         val contentView = SelectPayTypeView(mContext)
@@ -179,7 +207,7 @@ class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment
             bottomPayDialog.dismiss()
             payType = contentView.payType
             mPresent.getDataByPost(0x1, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_PAYMENT_DEPOSIT,
-                    RequestParamsHelper.getPaymentDepositParam(item.m_p_type!!, item.m_p_id!!, payType))
+                    RequestParamsHelper.getPaymentDepositParam(item.m_p_type!!, item.m_p_id!!, payType,price))
         }
         bottomPayDialog.setContentView(contentView)
         bottomPayDialog.show()
@@ -213,7 +241,7 @@ class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment
                         bt_action.setBackgroundResource(R.drawable.shape_bt_bg1)
                     } else {
                         bt_action.text = "去退款"
-                        bt_action.setTextColor(ContextCompat.getColor(mContext,R.color.text_dark_color))
+                        bt_action.setTextColor(ContextCompat.getColor(mContext, R.color.text_dark_color))
                         bt_action.setBackgroundResource(R.drawable.shape_bt_bg5)
                     }
                 }
@@ -224,7 +252,7 @@ class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment
                         bt_action.setBackgroundResource(R.drawable.shape_bt_bg1)
                     } else {
                         bt_action.text = "去退款"
-                        bt_action.setTextColor(ContextCompat.getColor(mContext,R.color.text_dark_color))
+                        bt_action.setTextColor(ContextCompat.getColor(mContext, R.color.text_dark_color))
                         bt_action.setBackgroundResource(R.drawable.shape_bt_bg5)
                     }
                 }
@@ -244,7 +272,7 @@ class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment
         var member_ismerchant_ensure_money: String? = null
     }
 
-    class WxPaySuccessBean(var payResult:Boolean)
+    class WxPaySuccessBean(var payResult: Boolean)
 
 
 }
