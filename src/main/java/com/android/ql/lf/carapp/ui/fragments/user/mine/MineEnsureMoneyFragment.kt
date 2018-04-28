@@ -26,6 +26,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.gson.Gson
 import org.json.JSONObject
+import java.util.regex.Pattern
 
 /**
  * Created by liufeng on 2018/2/4.
@@ -184,7 +185,7 @@ class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment
                 toast("请输入金额")
                 return@setPositiveButton
             }
-            if (et_count.getTextString().startsWith("0") || et_count.getTextString().startsWith(".")) {
+            if (!isDouble(et_count.getTextString())) {
                 toast("请输入合法的金额")
                 return@setPositiveButton
             }
@@ -196,6 +197,14 @@ class MineEnsureMoneyFragment : BaseRecyclerViewFragment<MineEnsureMoneyFragment
         }
         builder.setTitle("请输入保证金金额")
         builder.create().show()
+    }
+
+    private fun isDouble(str: String?): Boolean {
+        if (null == str || "" == str) {
+            return false
+        }
+        val pattern = Pattern.compile("^[-\\+]?[.\\d]*$")
+        return pattern.matcher(str).matches()
     }
 
     private fun pay(item: EnsureMoneyProduct,price:String) {

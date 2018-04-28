@@ -25,19 +25,35 @@ import cn.jpush.android.api.JPushInterface;
 
 public class NewOrderMessageReceiver extends BroadcastReceiver {
 
+    static boolean isPlaying = false;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent != null) {
             if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
                 RxBus.getDefault().post(new NewOrderMessageBean(intent.getStringExtra(JPushInterface.EXTRA_EXTRA)));
                 try {
-                    AssetFileDescriptor fileDescriptor = context.getAssets().openFd("wrjtnofity.mp3");
-                    MediaPlayer mediaPlayer = new MediaPlayer();
-                    mediaPlayer.setDataSource(fileDescriptor.getFileDescriptor(), fileDescriptor.getStartOffset(), fileDescriptor.getLength());
-                    mediaPlayer.prepare();
-                    mediaPlayer.start();
+                    if (!isPlaying) {
+                        AssetFileDescriptor fileDescriptor = context.getAssets().openFd("wrjtnofity.mp3");
+                        MediaPlayer mediaPlayer = new MediaPlayer();
+                        mediaPlayer.setDataSource(fileDescriptor.getFileDescriptor(), fileDescriptor.getStartOffset(), fileDescriptor.getLength());
+                        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mp) {
+                                isPlaying = false;
+                            }
+                        });
+                        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                            @Override
+                            public void onPrepared(MediaPlayer mp) {
+                                isPlaying = true;
+                            }
+                        });
+                        mediaPlayer.prepare();
+                        mediaPlayer.start();
+                    }
                 } catch (IOException e) {
-                    Log.e("TAG", "提示失败");
+                    Log.e("TAG", "提示失败"+e.getMessage());
                 }
             }
             if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
