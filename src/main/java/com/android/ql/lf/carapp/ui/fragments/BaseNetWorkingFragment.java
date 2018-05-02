@@ -79,6 +79,8 @@ public abstract class BaseNetWorkingFragment extends BaseFragment implements INe
                 GetDataFromNetPresent present = ((FragmentContainerActivity) context).getPresent();
                 if (present != null) {
                     this.mPresent = present;
+                }else {
+                    DaggerApiServerComponent.builder().appComponent(CarApplication.getInstance().getAppComponent()).build().inject(this);
                 }
             } else {
                 DaggerApiServerComponent.builder().appComponent(CarApplication.getInstance().getAppComponent()).build().inject(this);

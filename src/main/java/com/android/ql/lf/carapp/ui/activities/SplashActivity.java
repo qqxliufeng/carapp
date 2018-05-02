@@ -63,6 +63,7 @@ public class SplashActivity extends BaseActivity implements EasyPermissions.Perm
 
     @Override
     public void initView() {
+        setSwipeBackEnable(false);
         DaggerApiServerComponent.builder().apiServerModule(new ApiServerModule()).appComponent(CarApplication.getInstance().getAppComponent()).build().inject(this);
         mPresent.setNetDataPresenter(this);
         if (hasPermissions()) {

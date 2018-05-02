@@ -1,12 +1,8 @@
 package com.android.ql.lf.carapp.present;
 
-import com.android.ql.lf.carapp.action.IViewUserAction;
 import com.android.ql.lf.carapp.action.ViewUserAction;
 import com.android.ql.lf.carapp.data.UserInfo;
 import com.android.ql.lf.carapp.utils.RxBus;
-import com.hyphenate.EMCallBack;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.easeui.EaseUI;
 
 import org.json.JSONObject;
 

@@ -97,14 +97,14 @@ public class GetDataFromNetPresent {
 
                         @Override
                         public void onCompleted() {
-                            if (iNetDataPresenter != null) {
+                            if (iNetDataPresenter != null && iNetDataPresenter.get() != null) {
                                 iNetDataPresenter.get().onRequestEnd(requestId);
                             }
                         }
 
                         @Override
                         public void onError(Throwable e) {
-                            if (iNetDataPresenter != null) {
+                            if (iNetDataPresenter != null && iNetDataPresenter.get() != null) {
                                 iNetDataPresenter.get().onRequestFail(requestId, e);
                                 iNetDataPresenter.get().onRequestEnd(requestId);
                             }
@@ -112,7 +112,7 @@ public class GetDataFromNetPresent {
 
                         @Override
                         public void onNext(String s) {
-                            if (iNetDataPresenter != null) {
+                            if (iNetDataPresenter != null && iNetDataPresenter.get() != null) {
                                 iNetDataPresenter.get().onRequestSuccess(requestId, s);
                             }
                         }
@@ -139,7 +139,7 @@ public class GetDataFromNetPresent {
 
         @Override
         public void call() {
-            if (iNetDataPresenter != null) {
+            if (iNetDataPresenter != null && iNetDataPresenter.get() != null) {
                 iNetDataPresenter.get().onRequestStart(requestId);
             }
         }

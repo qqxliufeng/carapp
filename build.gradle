@@ -118,4 +118,5 @@ dependencies {
     // 此处以JCore 1.1.9 版本为例。
     implementation files('libs/alipaySdk-20170922.jar')
     implementation project(':easeui')
+    implementation 'top.zibin:Luban:1.1.3'
 }
