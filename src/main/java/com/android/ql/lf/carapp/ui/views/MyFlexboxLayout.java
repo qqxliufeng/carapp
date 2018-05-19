@@ -74,15 +74,13 @@ public class MyFlexboxLayout extends LinearLayout {
         tvTitle.setText(title);
     }
 
-    public void addItems(final ArrayList<String> items, final ArrayList<String> status) {
-        if (items != null && !items.isEmpty() && status != null && items.size() == status.size()) {
+    public void addItems(final ArrayList<String> items) {
+        if (items != null && !items.isEmpty()) {
             for (int i = 0; i < items.size(); i++) {
                 final String item = items.get(i);
                 final CheckedTextView tv = new CheckedTextView(flexboxLayout.getContext());
                 FlexboxLayout.LayoutParams params = new FlexboxLayout.LayoutParams(FlexboxLayout.LayoutParams.WRAP_CONTENT, FlexboxLayout.LayoutParams.WRAP_CONTENT);
                 params.setMargins(margin, margin, margin, margin);
-                // 1 为选中
-                tv.setChecked("1".equals(status.get(i)));
                 tv.setText(item);
                 tv.setLayoutParams(params);
                 tv.setBackgroundResource(R.drawable.selector_tv_bg1);
@@ -90,11 +88,12 @@ public class MyFlexboxLayout extends LinearLayout {
                 tv.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (tv.isChecked()) {
-                            tv.setChecked(false);
-                            selectName = "";
-                        } else {
-                            if (onItemClickListener != null) {
+                        if (onItemClickListener != null) {
+                            if (tv.isChecked()) {
+                                tv.setChecked(false);
+                                selectName = "";
+                                onItemClickListener.onUnSelectItemClick(items.indexOf(item));
+                            } else {
                                 for (int i = 0; i < flexboxLayout.getChildCount(); i++) {
                                     CheckedTextView childAt = (CheckedTextView) flexboxLayout.getChildAt(i);
                                     childAt.setChecked(childAt == tv);
@@ -107,13 +106,6 @@ public class MyFlexboxLayout extends LinearLayout {
                     }
                 });
                 flexboxLayout.addView(tv);
-            }
-            for (int i = 0; i < flexboxLayout.getChildCount(); i++) {
-                CheckedTextView checkedTextView = (CheckedTextView) flexboxLayout.getChildAt(i);
-                if (checkedTextView.isChecked()) {
-                    selectName = checkedTextView.getText().toString();
-                    break;
-                }
             }
             addView(flexboxLayout);
         }
@@ -130,6 +122,7 @@ public class MyFlexboxLayout extends LinearLayout {
 
     public interface OnItemClickListener {
         public void onItemClick(int index);
+        public void onUnSelectItemClick(int index);
     }
 
 }

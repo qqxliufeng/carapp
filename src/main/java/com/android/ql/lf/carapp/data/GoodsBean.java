@@ -14,7 +14,7 @@ public class GoodsBean {
     private String product_id;
     private String product_stype;
     private String product_type;
-    private String product_content;
+    private ArrayList<String> product_content;
     private String product_name;
     private String product_price;
     private String product_address;
@@ -33,7 +33,16 @@ public class GoodsBean {
     private String product_hname;
     private String product_uid;
     private ArrayList<String> product_pic;
-    private ArrayList<SpecificationBean> product_specification;
+    private String product_main_pic;
+    private ArrayList<NewSpecificationBean> product_specification;
+
+    public String getProduct_main_pic() {
+        return product_main_pic;
+    }
+
+    public void setProduct_main_pic(String product_main_pic) {
+        this.product_main_pic = product_main_pic;
+    }
 
     public String getProduct_id() {
         return product_id;
@@ -59,11 +68,11 @@ public class GoodsBean {
         this.product_type = product_type;
     }
 
-    public String getProduct_content() {
+    public ArrayList<String> getProduct_content() {
         return product_content;
     }
 
-    public void setProduct_content(String product_content) {
+    public void setProduct_content(ArrayList<String> product_content) {
         this.product_content = product_content;
     }
 
@@ -211,11 +220,11 @@ public class GoodsBean {
         this.product_pic = product_pic;
     }
 
-    public ArrayList<SpecificationBean> getProduct_specification() {
+    public ArrayList<NewSpecificationBean> getProduct_specification() {
         return product_specification;
     }
 
-    public void setProduct_specification(ArrayList<SpecificationBean> product_specification) {
+    public void setProduct_specification(ArrayList<NewSpecificationBean> product_specification) {
         this.product_specification = product_specification;
     }
 }

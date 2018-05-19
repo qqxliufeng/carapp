@@ -163,7 +163,7 @@ class RequestParamsHelper {
         }
 
         val ACT_PAYMENT_DEPOSIT = "payment_deposit"
-        fun getPaymentDepositParam(type: String, mid: String, paytype: String,price:String): ApiParams {
+        fun getPaymentDepositParam(type: String, mid: String, paytype: String, price: String): ApiParams {
             val param = getWithIdParams()
             param.addParam("type", type)
             param.addParam("mid", mid)
@@ -226,11 +226,12 @@ class RequestParamsHelper {
         fun getShopcartParam(page: Int, pageSize: Int = 10) = getWithPageParams(page, pageSize)
 
         val ACT_ADD_SHOPCART = "add_shopcart"
-        fun getAddShopcartParam(gid: String, shopid: String, num: String, specification: String, price: String,key:String) =
+        fun getAddShopcartParam(gid: String, shopid: String, num: String, specification: String, pic: String, price: String, key: String) =
                 getWithIdParams()
                         .addParam("gid", gid)
                         .addParam("shopid", shopid)
                         .addParam("num", num)
+                        .addParam("pic", pic)
                         .addParam("specification", specification)
                         .addParam("price", price)
                         .addParam("key", key)
@@ -269,12 +270,13 @@ class RequestParamsHelper {
                 .addParam("oid", oid)
 
         val ACT_EVALUATE = "evaluate"
-        fun getEvaluateParam(oid: String, gid: String, content: String, f: String): ApiParams {
+        fun getEvaluateParam(oid: String, gid: String, content: String, f: String, sn: String): ApiParams {
             val param = getWithIdParams()
             param.addParam("oid", oid)
             param.addParam("gid", gid)
             param.addParam("content", content)
             param.addParam("f", f)
+            param.addParam("sn", sn)
             return param
         }
 
@@ -399,6 +401,9 @@ class RequestParamsHelper {
         val ACT_ORDER_DETAIL = "order_detail"
         fun getMallOrderDetailParam(oid: String) = getWithIdParams().addParam("oid", oid)
 
+        val ACT_SKU_SELECT = "sku_select"
+        fun getSkuSelect(gid: String, attr: String): ApiParams = getWithIdParams().addParam("gid", gid).addParam("attr", attr)
+
 
         /**              qaa model  start           **/
         val QAA_MODEL = "qaa"
@@ -510,8 +515,9 @@ class RequestParamsHelper {
         fun getMySaleQorderParam(page: Int) = getWithPageParams(page)
 
         val ACT_ADD_ORDER = "add_order"
-        fun getAddOrderParams(paytype: String, post_data: String) =
+        fun getAddOrderParams(invoice: String = "0", paytype: String, post_data: String) =
                 getWithIdParams()
+                        .addParam("invoice", invoice)
                         .addParam("paytype", paytype)
                         .addParam("post_data", post_data)
 

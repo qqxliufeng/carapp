@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by liufeng on 2017/12/4.
  */
-
+@Deprecated
 public class SpecificationBean {
 
     private String  name;

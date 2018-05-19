@@ -36,10 +36,10 @@ class ExpressInfoFragment : BaseNetWorkingFragment() {
     override fun getLayoutId(): Int = R.layout.fragment_express_info_layout
 
     override fun initView(view: View?) {
-        GlideManager.loadImage(mContext, if (orderBean.product_pic.isEmpty()) {
+        GlideManager.loadImage(mContext, if (orderBean.order_sku_pic.isEmpty()) {
             ""
         } else {
-            orderBean.product_pic[0]
+            orderBean.order_sku_pic
         }, mIvExpressGoodsImage)
         mTvExpressGoodsName.text = orderBean.product_name
         mPresent.getDataByPost(0x0, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_GETLOGISTICS,

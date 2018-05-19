@@ -270,7 +270,8 @@ class MainMallOrderItemFragment : AbstractLazyLoadFragment<MallSaleOrderBean>() 
                                 .setNeedNetWorking(true)
                                 .setClazz(OrderCommentSubmitFragment::class.java)
                                 .setExtraBundle(bundleOf(Pair(OrderCommentSubmitFragment.ORDER_ID_FLAG, currentOrder!!.order_id),
-                                        Pair(OrderCommentSubmitFragment.PRODUCT_ID_FLAG, currentOrder!!.product_id)))
+                                        Pair(OrderCommentSubmitFragment.PRODUCT_ID_FLAG, currentOrder!!.product_id),
+                                        Pair(OrderCommentSubmitFragment.ORDER_SN_FLAG, currentOrder!!.order_sn)))
                                 .start()
                     }
                 }

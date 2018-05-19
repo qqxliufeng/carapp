@@ -34,6 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:paddingLeft="@dimen/dp_10"
             android:paddingRight="@dimen/dp_10"
             android:textColor="@color/colorPrimary" />
@@ -58,9 +59,9 @@
             android:scaleType="centerCrop" />
 
         <RelativeLayout
-            android:layout_marginLeft="@dimen/dp_10"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_10">
 
             <TextView
                 android:id="@+id/mTvOrderListItemTitle"
@@ -82,7 +83,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:ellipsize="end"
-                    android:maxLength="9"
                     android:textColor="@color/text_dark_color"
                     android:textSize="12sp" />
 

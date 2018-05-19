@@ -157,16 +157,16 @@ class OrderInfoFragment : BaseNetWorkingFragment() {
             mTvOrderInfoTopState.text = MallOrderPresent.MallOrderStatus.getDescriptionByIndex(mallOrderInfoContainer!!.order_token)
             mTvOrderInfoTopState1.text = mTvOrderInfoTopState.text
             mTvOrderInfoPhone.text = "手机号码  ${mallOrderInfoContainer!!.address_phone}"
-            mTvOrderInfoAddress.text = "收货地址  ${mallOrderInfoContainer!!.address_addres}"
+            mTvOrderInfoAddress.text = "收货地址  ${mallOrderInfoContainer!!.address_addres} ${mallOrderInfoContainer!!.address_detail}"
 
-            GlideManager.loadImage(mContext, mallOrderInfoContainer!!.product_pic[0], mIvOrderListItemPic)
+            GlideManager.loadImage(mContext, mallOrderInfoContainer!!.order_sku_pic, mIvOrderListItemPic)
             mTvOrderListItemTitle.text = mallOrderInfoContainer!!.product_name
             mTvOrderListItemSpecification.text = mallOrderInfoContainer!!.order_specification
             mIvOrderListItemNum.text = "X${mallOrderInfoContainer!!.order_num}"
-            mTvOrderListItemPrice.text = "￥${mallOrderInfoContainer!!.product_price}"
+            mTvOrderListItemPrice.text = "￥${mallOrderInfoContainer!!.order_price}"
             mTvOrderInfoExpressMoney.text = "￥${mallOrderInfoContainer!!.order_mdprice}"
 
-            mTvOrderInfoAllMoney.text = "总价:￥${mallOrderInfoContainer!!.order_num.toInt() * mallOrderInfoContainer!!.product_price.toFloat() + mallOrderInfoContainer!!.order_mdprice.toFloat()}"
+            mTvOrderInfoAllMoney.text = "总价:￥${mallOrderInfoContainer!!.order_oprice}"
             mTvOrderInfoDetailOrderNum.text = mallOrderInfoContainer!!.order_sn
             mTvOrderInfoDetailGoodsOrderTime.text = mallOrderInfoContainer!!.order_ctime
 
@@ -228,7 +228,7 @@ class OrderInfoFragment : BaseNetWorkingFragment() {
                         val mallSalerOrderBean = MallSaleOrderBean()
                         mallSalerOrderBean.order_sn = mallOrderInfoContainer!!.order_sn
                         mallSalerOrderBean.product_name = mallOrderInfoContainer!!.product_name
-                        mallSalerOrderBean.product_pic = mallOrderInfoContainer!!.product_pic
+                        mallSalerOrderBean.order_sku_pic = mallOrderInfoContainer!!.order_sku_pic
                         mallSalerOrderBean.order_tn = mallOrderInfoContainer!!.order_tn
                         FragmentContainerActivity.from(mContext).setTitle("查看物流").setExtraBundle(bundleOf(Pair(ExpressInfoFragment.ORDER_BEAN_FLAG, mallSalerOrderBean))).setNeedNetWorking(true).setClazz(ExpressInfoFragment::class.java).start()
                     }

@@ -34,7 +34,24 @@ public class MallOrderInfoBean {
     private String address_phone;
     private String address_addres;
     private String address_detail;
-    private List<String> product_pic;
+    private String order_sku_pic;
+    private String order_price;
+
+    public String getOrder_price() {
+        return order_price;
+    }
+
+    public void setOrder_price(String order_price) {
+        this.order_price = order_price;
+    }
+
+    public String getOrder_sku_pic() {
+        return order_sku_pic;
+    }
+
+    public void setOrder_sku_pic(String order_sku_pic) {
+        this.order_sku_pic = order_sku_pic;
+    }
 
     public String getProduct_id() {
         return product_id;
@@ -218,14 +235,6 @@ public class MallOrderInfoBean {
 
     public void setAddress_detail(String address_detail) {
         this.address_detail = address_detail;
-    }
-
-    public List<String> getProduct_pic() {
-        return product_pic;
-    }
-
-    public void setProduct_pic(List<String> product_pic) {
-        this.product_pic = product_pic;
     }
 
     public String getOrder_mliuyan() {

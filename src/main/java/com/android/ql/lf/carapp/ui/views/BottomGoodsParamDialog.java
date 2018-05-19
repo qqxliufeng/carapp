@@ -5,19 +5,28 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.ql.lf.carapp.R;
+import com.android.ql.lf.carapp.data.NewSpecificationBean;
 import com.android.ql.lf.carapp.data.SpecificationBean;
 import com.android.ql.lf.carapp.utils.GlideManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author liufeng
@@ -30,7 +39,7 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
     private TextView tv_release_count;
     private TextView tv_goods_name;
 
-    private TextView tv_goods_num;
+    private EditText tv_goods_num;
 
     private LinearLayout llContainer;
     private ImageView iv_goods_pic;
@@ -39,14 +48,30 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
     private String key = "";
     private String mPrice = "0.00";
 
+    private String startCount = "1";
+    private String endCount = "1";
+
+    private TextView tv_delete_count;
+    private TextView tv_add_count;
+    private TextView tv_confirm;
+
+    private ProgressBar pb_select_spe;
+
+    private HashMap<String, String> selectSpe = new HashMap<>();
+
 
     private OnGoodsConfirmClickListener onGoodsConfirmClickListener;
+    private OnGoodsSpeSelectListener onGoodsSpeSelectListener;
 
-    private ArrayList<SpecificationBean> mSpecificationList = null;
+    private ArrayList<NewSpecificationBean> mSpecificationList = null;
     private ArrayList<MyFlexboxLayout> flexboxLayouts = new ArrayList<>();
 
     public void setOnGoodsConfirmClickListener(OnGoodsConfirmClickListener onGoodsConfirmClickListener) {
         this.onGoodsConfirmClickListener = onGoodsConfirmClickListener;
+    }
+
+    public void setOnGoodsSpeSelectListener(OnGoodsSpeSelectListener onGoodsSpeSelectListener) {
+        this.onGoodsSpeSelectListener = onGoodsSpeSelectListener;
     }
 
     public BottomGoodsParamDialog(@NonNull Context context) {
@@ -60,19 +85,42 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         behavior.setPeekHeight(height);
         tv_price = contentView.findViewById(R.id.mTvBottomParamPrice);
+        pb_select_spe = contentView.findViewById(R.id.mPbSpeProgress);
         tv_release_count = contentView.findViewById(R.id.mTvBottomParamReleaseCount);
         tv_goods_name = contentView.findViewById(R.id.mTvBottomParamName);
         tv_goods_num = contentView.findViewById(R.id.mTvBottomParamCount);
         llContainer = contentView.findViewById(R.id.mLlBottomParamRuleContainer);
         iv_goods_pic = contentView.findViewById(R.id.mIvGoodsPic);
+        tv_delete_count = contentView.findViewById(R.id.mTvBottomParamDelete);
+        tv_add_count = contentView.findViewById(R.id.mTvBottomParamAdd);
+        tv_confirm = contentView.findViewById(R.id.mTvBottomParamConfirm);
         tv_goods_num.setText("1");
+        tv_goods_num.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(s.toString()) || (!TextUtils.isEmpty(s.toString()) && s.toString().startsWith("0"))) {
+                    tv_goods_num.setText("1");
+                    tv_goods_num.setSelection(tv_goods_num.getText().toString().length());
+                }
+            }
+        });
         contentView.findViewById(R.id.mTvBottomParamClose).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dismiss();
             }
         });
-        contentView.findViewById(R.id.mTvBottomParamConfirm).setOnClickListener(new View.OnClickListener() {
+        tv_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
@@ -82,7 +130,7 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
                             if (item != null) {
                                 String selectName = item.getSelectName();
                                 if (TextUtils.isEmpty(selectName)) {
-                                    Toast.makeText(getContext(), "请先选择" + item.getTitle(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "请选择  " + item.getTitle() + "  规格", Toast.LENGTH_SHORT).show();
                                     return;
                                 } else {
                                     stringBuilder.append(selectName).append(",");
@@ -92,6 +140,10 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
                         if (stringBuilder.length() > 0) {
                             stringBuilder.deleteCharAt(stringBuilder.length() - 1);
                         }
+                        if (Integer.parseInt(tv_goods_num.getText().toString()) < Integer.parseInt(startCount) || Integer.parseInt(tv_goods_num.getText().toString()) > Integer.parseInt(endCount)) {
+                            Toast.makeText(getContext(), "请输入 " + startCount + " - " + endCount + " 商品数量", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         onGoodsConfirmClickListener.onGoodsConfirmClick(stringBuilder.toString(), selectPic, tv_goods_num.getText().toString(), key, mPrice);
                         dismiss();
                     }
@@ -100,7 +152,7 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
                 }
             }
         });
-        contentView.findViewById(R.id.mTvBottomParamDelete).setOnClickListener(new View.OnClickListener() {
+        tv_delete_count.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int num = Integer.parseInt(tv_goods_num.getText().toString());
@@ -112,7 +164,7 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
             }
         });
 
-        contentView.findViewById(R.id.mTvBottomParamAdd).setOnClickListener(new View.OnClickListener() {
+        tv_add_count.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int num = Integer.parseInt(tv_goods_num.getText().toString());
@@ -121,7 +173,7 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
         });
     }
 
-    public void bindDataToView(String price, String releaseCount, String goodsName, String defaultPicPath, ArrayList<SpecificationBean> items) {
+   /* public void bindDataToView(String price, String releaseCount, String goodsName, String defaultPicPath, ArrayList<SpecificationBean> items) {
         tv_price.setText(price);
         this.mPrice = price.replace("￥", "");
         tv_release_count.setText(releaseCount);
@@ -179,10 +231,91 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
                 llContainer.addView(myFlexboxLayout);
             }
         }
+    }*/
+
+    public void bindNewDataToView(String price, String releaseCount, String goodsName, String defaultPicPath, ArrayList<NewSpecificationBean> items) {
+        tv_price.setText(price);
+        this.mPrice = price.replace("￥", "");
+        tv_release_count.setText(releaseCount);
+        tv_goods_name.setText(goodsName);
+        selectPic = defaultPicPath;
+        GlideManager.loadRoundImage(getContext(), defaultPicPath, iv_goods_pic, 15);
+        if (items != null && !items.isEmpty()) {
+            mSpecificationList = items;
+            llContainer.removeAllViews();
+            flexboxLayouts.clear();
+            for (final NewSpecificationBean item : mSpecificationList) {
+                final MyFlexboxLayout myFlexboxLayout = new MyFlexboxLayout(getContext());
+                flexboxLayouts.add(myFlexboxLayout);
+                myFlexboxLayout.setTitle(item.getTitle());
+                selectSpe.put(item.getTitle(), null);
+                myFlexboxLayout.addItems(item.getItem());
+                myFlexboxLayout.setOnItemClickListener(new MyFlexboxLayout.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int index) {
+                        final String id = item.getItem_id().get(index);
+                        if (!selectSpe.containsValue(id) || selectSpe.get(item.getTitle()) == null) {
+                            selectSpe.put(item.getTitle(), id);
+                        }
+                        String selectName = myFlexboxLayout.getSelectName();
+                        if (!TextUtils.isEmpty(selectName) && selectName.contains("-")) {
+                            String[] splitName = selectName.split("-");
+                            startCount = splitName[0];
+                            endCount = splitName[1];
+                        }
+                        Set<Map.Entry<String, String>> entries = selectSpe.entrySet();
+                        for (Map.Entry<String, String> entry : entries) {
+                            if (entry.getValue() == null) {
+                                return;
+                            }
+                        }
+                        if (onGoodsSpeSelectListener != null) {
+                            onGoodsSpeSelectListener.onGoodsSpeSelect(selectSpe);
+                        }
+                    }
+
+                    @Override
+                    public void onUnSelectItemClick(int index) {
+                        final String id = item.getItem_id().get(index);
+                        if (selectSpe.containsValue(id) || selectSpe.get(item.getTitle()) != null) {
+                            selectSpe.put(item.getTitle(), null);
+                        }
+                    }
+                });
+                llContainer.addView(myFlexboxLayout);
+            }
+        }
     }
+
+    public void reBindData(String price, String releaseCount,String releaseWithInfoCount, String defaultPicPath) {
+        tv_price.setText(price);
+        this.mPrice = price.replace("￥", "");
+        tv_release_count.setText(releaseWithInfoCount);
+        setConfirmBt(!(Integer.parseInt(releaseCount) <= 0));
+        selectPic = defaultPicPath;
+        GlideManager.loadRoundImage(getContext(), defaultPicPath, iv_goods_pic, 15);
+    }
+
+    public void dismissProgress(){
+        pb_select_spe.setVisibility(View.GONE);
+    }
+
+    public void showProgress(){
+        pb_select_spe.setVisibility(View.VISIBLE);
+    }
+
+
+    public void setConfirmBt(boolean isEnable) {
+        tv_confirm.setEnabled(isEnable);
+    }
+
 
     public interface OnGoodsConfirmClickListener {
         public void onGoodsConfirmClick(String specification, String picPath, String num, String key, String mPrice);
+    }
+
+    public interface OnGoodsSpeSelectListener {
+        void onGoodsSpeSelect(HashMap<String, String> speMap);
     }
 
 }

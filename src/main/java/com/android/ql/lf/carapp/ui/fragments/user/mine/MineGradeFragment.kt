@@ -3,6 +3,7 @@ package com.android.ql.lf.carapp.ui.fragments.user.mine
 import android.os.Bundle
 import android.text.Html
 import android.view.View
+import android.webkit.WebSettings
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
@@ -57,7 +58,9 @@ class MineGradeFragment : BaseNetWorkingFragment() {
             mTvMineGradeGrade.text = gradePair[rank]
             mTvMineGradeComment.text = resultJson.optString("member_grade")
             mTvMineGradeOrderNum.text = resultJson.optString("member_order_num")
-            mTvMineGradeGradeIntroduce.text = Html.fromHtml(json.optJSONObject("arr").optString("ptgg_content"))
+            mTvMineGradeGradeIntroduce.settings.layoutAlgorithm = WebSettings.LayoutAlgorithm.SINGLE_COLUMN
+            mTvMineGradeGradeIntroduce.settings.javaScriptEnabled = true
+            mTvMineGradeGradeIntroduce.loadData(json.optJSONObject("arr").optString("ptgg_content"), "text/html; charset=UTF-8", null)
         }
     }
 }

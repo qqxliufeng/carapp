@@ -92,6 +92,14 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
         footerView.findViewById<SelectPayTypeView>(R.id.mStvPay)
     }
 
+    private val invoiceContainer by lazy {
+        footerView.findViewById<RelativeLayout>(R.id.mRlInvoiceContainer)
+    }
+
+    private val selectInvoice by lazy {
+        footerView.findViewById<CheckBox>(R.id.mCbInvoice)
+    }
+
     private val contentView: View by lazy {
         View.inflate(mContext, R.layout.dialog_bbs_layout, null)
     }
@@ -156,7 +164,7 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
         return object : BaseQuickAdapter<ShoppingCarItemBean, BaseViewHolder>(R.layout.adapter_submit_order_info_item_layout, mArrayList) {
             override fun convert(helper: BaseViewHolder?, item: ShoppingCarItemBean?) {
                 val iv_pic = helper!!.getView<ImageView>(R.id.mIvSubmitOrderGoodsPic)
-                GlideManager.loadImage(iv_pic.context, if (item!!.shopcart_pic.isEmpty()) "" else item.shopcart_pic[0], iv_pic)
+                GlideManager.loadImage(iv_pic.context, item!!.sku_pic, iv_pic)
                 helper.setText(R.id.mIvSubmitOrderGoodsName, item.shopcart_name)
                 helper.setText(R.id.mTvSubmitOrderItemStoreName, item.shop_shopname)
                 helper.setText(R.id.mTvSubmitOrderGoodsExpressPrice, "商家配送 ￥${item.shopcart_mdprice}")
@@ -187,6 +195,9 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
         selectAddressContainerView.setOnClickListener {
             FragmentContainerActivity.from(mContext).setTitle("选择地址").setNeedNetWorking(true).setClazz(AddressSelectFragment::class.java).start()
         }
+        invoiceContainer.setOnClickListener {
+            selectInvoice.isChecked = !selectInvoice.isChecked
+        }
         mTvSubmitOrder.setOnClickListener {
             if (addressBean == null) {
                 toast("请选择收货地址")
@@ -203,13 +214,15 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
                 orderBean.price = it.shopcart_price
                 orderBean.mdprice = it.shopcart_mdprice
                 orderBean.bbs = it.bbs
-                orderBean.key = it.key
+                orderBean.key = it.shopcart_key
+                orderBean.pic = it.sku_pic
                 orderList.add(orderBean)
             }
             val json = Gson().toJson(orderList)
             payType = selectTypeView.payType
             mPresent.getDataByPost(0x1, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_ADD_ORDER,
-                    RequestParamsHelper.getAddOrderParams(payType, json))
+                    RequestParamsHelper.getAddOrderParams(invoice = if (selectInvoice.isChecked) "1" else "0", paytype = payType, post_data = json))
+            orderList.clear()
         }
     }
 
@@ -237,6 +250,7 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
             tempList!!.forEach {
                 money += ((it.shopcart_price.toFloat() * it.shopcart_num.toInt()) + it.shopcart_mdprice.toFloat())
                 num += it.shopcart_num.toInt()
+                it.sku_pic = it.shopcart_pic
             }
             mTvSubmitOrderGoodsCount.text = Html.fromHtml("共<span style='color:#78BFFF'> $num </span>件")
             mTvSubmitOrderGoodsPrice.text = "￥ " + DecimalFormat("0.00").format(money)

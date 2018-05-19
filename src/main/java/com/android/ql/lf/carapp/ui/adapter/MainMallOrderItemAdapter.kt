@@ -18,13 +18,11 @@ class MainMallOrderItemAdapter(layoutId: Int, list: ArrayList<MallSaleOrderBean>
 
     override fun convert(helper: BaseViewHolder?, item: MallSaleOrderBean?) {
         GlideManager.loadImage(mContext, item!!.product_shoppic, helper!!.getView(R.id.mIvMallOrderListItemStorePic))
-        if (!item.product_pic.isEmpty()) {
-            GlideManager.loadImage(mContext, item.product_pic[0], helper.getView(R.id.mIvOrderListItemPic))
-        }
+        GlideManager.loadImage(mContext, item.order_sku_pic, helper.getView(R.id.mIvOrderListItemPic))
         helper.setText(R.id.mTvOrderListItemTitle, item.product_name)
         helper.setText(R.id.mTvOrderListItemSpecification, item.order_specification)
         helper.setText(R.id.mIvOrderListItemNum, "X${item.order_num}")
-        helper.setText(R.id.mTvOrderListItemPrice, "￥${item.product_price}")
+        helper.setText(R.id.mTvOrderListItemPrice, "￥${item.order_price}")
         helper.setText(R.id.mTvMallOrderListItemStoreName, item.product_shopname)
         val bt_action1 = helper.getView<Button>(R.id.mBtOrderListItemAction1)
         val bt_action2 = helper.getView<Button>(R.id.mBtOrderListItemAction2)

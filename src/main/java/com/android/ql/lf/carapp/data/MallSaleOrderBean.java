@@ -31,7 +31,24 @@ public class MallSaleOrderBean implements Parcelable {
     private String order_ctime;
     private String order_tn;
     private String order_mdprice;
-    private List<String> product_pic;
+    private String order_sku_pic;
+    private String order_price;
+
+    public String getOrder_price() {
+        return order_price;
+    }
+
+    public void setOrder_price(String order_price) {
+        this.order_price = order_price;
+    }
+
+    public String getOrder_sku_pic() {
+        return order_sku_pic;
+    }
+
+    public void setOrder_sku_pic(String order_sku_pic) {
+        this.order_sku_pic = order_sku_pic;
+    }
 
     public String getProduct_id() {
         return product_id;
@@ -161,14 +178,6 @@ public class MallSaleOrderBean implements Parcelable {
         this.order_mdprice = order_mdprice;
     }
 
-    public List<String> getProduct_pic() {
-        return product_pic;
-    }
-
-    public void setProduct_pic(List<String> product_pic) {
-        this.product_pic = product_pic;
-    }
-
     public String getProduct_shopname() {
         return product_shopname;
     }
@@ -183,6 +192,9 @@ public class MallSaleOrderBean implements Parcelable {
 
     public void setProduct_shoppic(String product_shoppic) {
         this.product_shoppic = product_shoppic;
+    }
+
+    public MallSaleOrderBean() {
     }
 
     @Override
@@ -210,10 +222,8 @@ public class MallSaleOrderBean implements Parcelable {
         dest.writeString(this.order_ctime);
         dest.writeString(this.order_tn);
         dest.writeString(this.order_mdprice);
-        dest.writeStringList(this.product_pic);
-    }
-
-    public MallSaleOrderBean() {
+        dest.writeString(this.order_sku_pic);
+        dest.writeString(this.order_price);
     }
 
     protected MallSaleOrderBean(Parcel in) {
@@ -235,10 +245,11 @@ public class MallSaleOrderBean implements Parcelable {
         this.order_ctime = in.readString();
         this.order_tn = in.readString();
         this.order_mdprice = in.readString();
-        this.product_pic = in.createStringArrayList();
+        this.order_sku_pic = in.readString();
+        this.order_price = in.readString();
     }
 
-    public static final Parcelable.Creator<MallSaleOrderBean> CREATOR = new Parcelable.Creator<MallSaleOrderBean>() {
+    public static final Creator<MallSaleOrderBean> CREATOR = new Creator<MallSaleOrderBean>() {
         @Override
         public MallSaleOrderBean createFromParcel(Parcel source) {
             return new MallSaleOrderBean(source);

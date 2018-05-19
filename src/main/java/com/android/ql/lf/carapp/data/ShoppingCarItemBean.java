@@ -2,6 +2,7 @@ package com.android.ql.lf.carapp.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -17,7 +18,7 @@ public class ShoppingCarItemBean implements Parcelable {
 
     private String shopcart_id;
     private String shopcart_name;
-    private ArrayList<String> shopcart_pic;
+    private String shopcart_pic;
     private String shopcart_specification;
     private String shopcart_price;
     private String shopcart_num;
@@ -28,17 +29,26 @@ public class ShoppingCarItemBean implements Parcelable {
     private String shopcart_mdprice;
     private String shop_shopname;
     private String shop_shoppic;
-    private String key;
+    private String sku_pic;
+    private String shopcart_key;
+
+    public String getShopcart_key() {
+        return shopcart_key;
+    }
+
+    public void setShopcart_key(String shopcart_key) {
+        this.shopcart_key = shopcart_key;
+    }
+
+    public String getSku_pic() {
+        return sku_pic;
+    }
+
+    public void setSku_pic(String sku_pic) {
+        this.sku_pic = sku_pic;
+    }
 
     private String bbs;
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
 
     public String getShopcart_shopid() {
         return shopcart_shopid;
@@ -112,11 +122,11 @@ public class ShoppingCarItemBean implements Parcelable {
         this.shopcart_name = shopcart_name;
     }
 
-    public ArrayList<String> getShopcart_pic() {
+    public String getShopcart_pic() {
         return shopcart_pic;
     }
 
-    public void setShopcart_pic(ArrayList<String> shopcart_pic) {
+    public void setShopcart_pic(String shopcart_pic) {
         this.shopcart_pic = shopcart_pic;
     }
 
@@ -182,7 +192,7 @@ public class ShoppingCarItemBean implements Parcelable {
         dest.writeByte(this.isEditorMode ? (byte) 1 : (byte) 0);
         dest.writeString(this.shopcart_id);
         dest.writeString(this.shopcart_name);
-        dest.writeStringList(this.shopcart_pic);
+        dest.writeString(this.shopcart_pic);
         dest.writeString(this.shopcart_specification);
         dest.writeString(this.shopcart_price);
         dest.writeString(this.shopcart_num);
@@ -193,7 +203,8 @@ public class ShoppingCarItemBean implements Parcelable {
         dest.writeString(this.shopcart_mdprice);
         dest.writeString(this.shop_shopname);
         dest.writeString(this.shop_shoppic);
-        dest.writeString(this.key);
+        dest.writeString(this.sku_pic);
+        dest.writeString(this.shopcart_key);
         dest.writeString(this.bbs);
     }
 
@@ -202,7 +213,7 @@ public class ShoppingCarItemBean implements Parcelable {
         this.isEditorMode = in.readByte() != 0;
         this.shopcart_id = in.readString();
         this.shopcart_name = in.readString();
-        this.shopcart_pic = in.createStringArrayList();
+        this.shopcart_pic = in.readString();
         this.shopcart_specification = in.readString();
         this.shopcart_price = in.readString();
         this.shopcart_num = in.readString();
@@ -213,7 +224,8 @@ public class ShoppingCarItemBean implements Parcelable {
         this.shopcart_mdprice = in.readString();
         this.shop_shopname = in.readString();
         this.shop_shoppic = in.readString();
-        this.key = in.readString();
+        this.sku_pic = in.readString();
+        this.shopcart_key = in.readString();
         this.bbs = in.readString();
     }
 

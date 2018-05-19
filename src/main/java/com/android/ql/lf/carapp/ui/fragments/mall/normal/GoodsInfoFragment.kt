@@ -127,12 +127,12 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
         if (goodsInfoBean != null) {
             if (paramsDialog == null) {
                 paramsDialog = BottomGoodsParamDialog(mContext)
-                paramsDialog!!.bindDataToView(
-                        "￥${goodsInfoBean!!.result!!.product_price}",
-                        "库存${goodsInfoBean!!.result!!.product_entrepot}件",
-                        goodsInfoBean!!.result!!.product_name,
-                        goodsInfoBean!!.result!!.product_pic[0],
-                        goodsInfoBean!!.result!!.product_specification)
+//                paramsDialog!!.bindDataToView(
+//                        "￥${goodsInfoBean!!.result!!.product_price}",
+//                        "库存${goodsInfoBean!!.result!!.product_entrepot}件",
+//                        goodsInfoBean!!.result!!.product_name,
+//                        goodsInfoBean!!.result!!.product_pic[0],
+//                        goodsInfoBean!!.result!!.product_specification)
                 paramsDialog!!.setOnGoodsConfirmClickListener { specification, picPath, num ,key,price->
                     if (actionMode == ACTION_MODE.SHOPPING_CAR) {
                         mPresent.getDataByPost(0x2,
@@ -144,7 +144,8 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
                                         num,
                                         picPath + "," + specification,
                                         price,
-                                        key
+                                        key,
+                                        ""
                                 ))
                     } else {
                         val shoppingCarItem = ShoppingCarItemBean()
@@ -160,11 +161,11 @@ class GoodsInfoFragment : BaseNetWorkingFragment() {
                         }
                         shoppingCarItem.shop_shopname = goodsInfoBean!!.arr1!!.wholesale_shop_name
                         shoppingCarItem.shopcart_id = ""
-                        if (TextUtils.isEmpty(picPath)) {
-                            shoppingCarItem.shopcart_pic = goodsInfoBean!!.result!!.product_pic as ArrayList<String>
-                        } else {
-                            shoppingCarItem.shopcart_pic = arrayListOf(picPath)
-                        }
+//                        if (TextUtils.isEmpty(picPath)) {
+//                            shoppingCarItem.shopcart_pic = goodsInfoBean!!.result!!.product_pic as ArrayList<String>
+//                        } else {
+//                            shoppingCarItem.shopcart_pic = arrayListOf(picPath)
+//                        }
                         shoppingCarItem.shopcart_specification = specification
                         val bundle = Bundle()
                         bundle.putParcelableArrayList(OrderSubmitFragment.GOODS_ID_FLAG, arrayListOf(shoppingCarItem))

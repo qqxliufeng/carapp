@@ -32,8 +32,6 @@ class ShoppingCarItemAdapter(layoutId: Int, list: ArrayList<ShoppingCarItemBean>
         helper.setText(R.id.mTvShoppingCarItemSpe, item.shopcart_specification)
         helper.setText(R.id.mTvShoppingCarNum, item.shopcart_num)
         val goods_pic = helper.getView<ImageView>(R.id.mTvShoppingCarItemPic)
-        if (!item.shopcart_pic.isEmpty()) {
-            GlideManager.loadImage(goods_pic.context, item.shopcart_pic[0], goods_pic)
-        }
+        GlideManager.loadImage(goods_pic.context, item.shopcart_pic, goods_pic)
     }
 }
