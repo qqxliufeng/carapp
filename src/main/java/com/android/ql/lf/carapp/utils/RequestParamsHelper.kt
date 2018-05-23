@@ -330,6 +330,9 @@ class RequestParamsHelper {
             return param
         }
 
+        val ACT_GET_DISCOUNT = "getdiscount"
+        fun getDiscountParam(theme: String) = getWithIdParams().addParam("theme", theme)
+
         /**              member model  end           **/
 
         /**              product model start         **/
@@ -515,10 +518,11 @@ class RequestParamsHelper {
         fun getMySaleQorderParam(page: Int) = getWithPageParams(page)
 
         val ACT_ADD_ORDER = "add_order"
-        fun getAddOrderParams(invoice: String = "0", paytype: String, post_data: String) =
+        fun getAddOrderParams(invoice: String = "0", paytype: String, post_data: String, discount: String) =
                 getWithIdParams()
                         .addParam("invoice", invoice)
                         .addParam("paytype", paytype)
+                        .addParam("discount", discount)
                         .addParam("post_data", post_data)
 
         val ACT_PAY = "pay"
@@ -536,6 +540,15 @@ class RequestParamsHelper {
                         .addParam("phone", phone)
                         .addParam("content", content)
 
+        //优惠券列表
+        val ACT_MY_DISCOUNT = "my_discount"
+
+        fun getMyDiscountParam(shopid: String) = getWithIdParams().addParam("shopid", shopid)
+
+        val ACT_ADDRESS = "address"
+        fun getAddressParams(aid:String,freight:String) = getWithIdParams().addParam("aid",aid).addParam("freight",freight)
+
+
 
         /**              order model end        **/
 
@@ -550,7 +563,7 @@ class RequestParamsHelper {
         val ACT_CITY = "city"
         val ACT_PROVINCE_CITY_AREA = "province_city_area"
 
-        fun getDefaultAddress() = getWithIdParams()
+        fun getDefaultAddress(freight: String) = getWithIdParams().addParam("freight", freight)
 
         fun getProvinceParam() = getBaseParams()
 

@@ -103,12 +103,11 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (TextUtils.isEmpty(s.toString()) || (!TextUtils.isEmpty(s.toString()) && s.toString().startsWith("0"))) {
+                if (!TextUtils.isEmpty(s.toString()) && s.toString().startsWith("0")) {
                     tv_goods_num.setText("1");
                     tv_goods_num.setSelection(tv_goods_num.getText().toString().length());
                 }
@@ -139,6 +138,9 @@ public class BottomGoodsParamDialog extends BottomSheetDialog {
                         }
                         if (stringBuilder.length() > 0) {
                             stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+                        }
+                        if (TextUtils.isEmpty(tv_goods_num.getText().toString())){
+                            tv_goods_num.setText("1");
                         }
                         if (Integer.parseInt(tv_goods_num.getText().toString()) < Integer.parseInt(startCount) || Integer.parseInt(tv_goods_num.getText().toString()) > Integer.parseInt(endCount)) {
                             Toast.makeText(getContext(), "请输入 " + startCount + " - " + endCount + " 商品数量", Toast.LENGTH_SHORT).show();

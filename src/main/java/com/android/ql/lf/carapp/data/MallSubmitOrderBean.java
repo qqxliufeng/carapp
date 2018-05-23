@@ -23,6 +23,15 @@ public class MallSubmitOrderBean implements Parcelable {
     private String mdprice;
     private String key;
     private String pic;
+    private String couponId;
+
+    public String getCouponId() {
+        return couponId;
+    }
+
+    public void setCouponId(String couponId) {
+        this.couponId = couponId;
+    }
 
     public String getPic() {
         return pic;
@@ -152,6 +161,7 @@ public class MallSubmitOrderBean implements Parcelable {
         dest.writeString(this.mdprice);
         dest.writeString(this.key);
         dest.writeString(this.pic);
+        dest.writeString(this.couponId);
         dest.writeString(this.bbs);
     }
 
@@ -168,6 +178,7 @@ public class MallSubmitOrderBean implements Parcelable {
         this.mdprice = in.readString();
         this.key = in.readString();
         this.pic = in.readString();
+        this.couponId = in.readString();
         this.bbs = in.readString();
     }
 

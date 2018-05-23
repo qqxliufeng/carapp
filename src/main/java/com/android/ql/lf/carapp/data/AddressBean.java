@@ -3,6 +3,8 @@ package com.android.ql.lf.carapp.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 /**
  * Created by lf on 2017/12/1 0001.
  *
@@ -84,6 +86,9 @@ public class AddressBean implements Parcelable {
         this.address_postcode = address_postcode;
     }
 
+    public AddressBean() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -99,9 +104,6 @@ public class AddressBean implements Parcelable {
         dest.writeString(this.address_token);
         dest.writeString(this.address_detail);
         dest.writeString(this.address_postcode);
-    }
-
-    public AddressBean() {
     }
 
     protected AddressBean(Parcel in) {

@@ -36,15 +36,15 @@ class MainActivity : BaseActivity() {
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
-            R.id.navigation_home -> {
+            R.id.navigation_notifications -> {
                 mMainContent.currentItem = 0
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_dashboard -> {
+            R.id.navigation_home -> {
                 mMainContent.currentItem = 1
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_notifications -> {
+            R.id.navigation_dashboard -> {
                 mMainContent.currentItem = 2
                 return@OnNavigationItemSelectedListener true
             }
@@ -77,13 +77,13 @@ class MainActivity : BaseActivity() {
 
         override fun getItem(position: Int) = when (position) {
             0 -> {
-                MainOrderHouseFragment.newInstance()
+                MainMallFragment.newInstance()
             }
             1 -> {
-                MainCommunityFragment.newInstance()
+                MainOrderHouseFragment.newInstance()
             }
             2 -> {
-                MainMallFragment.newInstance()
+                MainCommunityFragment.newInstance()
             }
             3 -> {
                 MainMineFragment.newInstance()

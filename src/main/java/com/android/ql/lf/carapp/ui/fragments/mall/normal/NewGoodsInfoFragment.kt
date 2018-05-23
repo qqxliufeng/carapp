@@ -9,6 +9,7 @@ import android.text.TextPaint
 import android.text.TextUtils
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.application.CarApplication
@@ -23,6 +24,7 @@ import com.android.ql.lf.carapp.ui.fragments.WebViewContentFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.order.OrderCommentListFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.order.OrderSubmitFragment
 import com.android.ql.lf.carapp.ui.views.BottomGoodsParamDialog
+import com.android.ql.lf.carapp.ui.views.CouponView
 import com.android.ql.lf.carapp.ui.views.ScrollLinearLayoutManager
 import com.android.ql.lf.carapp.ui.views.SlideDetailsLayout
 import com.android.ql.lf.carapp.utils.GlideManager
@@ -40,6 +42,7 @@ import org.jetbrains.anko.bundleOf
 import org.json.JSONObject
 import java.lang.StringBuilder
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -88,6 +91,7 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment(), BottomGoodsParamDialog.On
 
     private var skuBean: SkuBean? = null
 
+    override fun getLayoutId() = R.layout.fragment_new_goods_info_layout
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -203,10 +207,12 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment(), BottomGoodsParamDialog.On
                         } else {
                             shoppingCarItem.shop_shoppic = ""
                         }
-                        shoppingCarItem.shopcart_pic = picPath
                         shoppingCarItem.shop_shopname = goodsInfoBean!!.arr1!!.wholesale_shop_name
+                        shoppingCarItem.shop_id = goodsInfoBean!!.arr1!!.wholesale_shop_id
+                        shoppingCarItem.shopcart_pic = picPath
                         shoppingCarItem.shopcart_id = ""
                         shoppingCarItem.shopcart_specification = specification
+                        shoppingCarItem.shopcart_freight = goodsInfoBean!!.result!!.product_is_freight
                         val bundle = Bundle()
                         bundle.putParcelableArrayList(OrderSubmitFragment.GOODS_ID_FLAG, arrayListOf(shoppingCarItem))
                         FragmentContainerActivity
@@ -230,11 +236,12 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment(), BottomGoodsParamDialog.On
             0x0 -> getFastProgressDialog("正在加载详情……")
             0x1 -> getFastProgressDialog("正在收藏……")
             0x2 -> getFastProgressDialog("正在添加到购物车……")
-            0x3->{
+            0x3 -> {
                 if (paramsDialog != null && paramsDialog!!.isShowing) {
                     paramsDialog!!.showProgress()
                 }
             }
+            0x4 -> getFastProgressDialog("领取中……")
         }
     }
 
@@ -303,6 +310,11 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment(), BottomGoodsParamDialog.On
                     paramsDialog!!.reBindData("￥${skuBean?.sku_price}", skuBean?.sku_repertory, "库存${skuBean?.sku_repertory}件", skuBean?.sku_pic)
                 }
             }
+            0x4 -> {
+                if (check != null) {
+                    toast((check.obj as JSONObject).optString(MSG_FLAG))
+                }
+            }
         }
     }
 
@@ -341,6 +353,17 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment(), BottomGoodsParamDialog.On
                     .setClazz(WebViewContentFragment::class.java)
                     .start()
         }
+        val mLlCouponContainer = footView.findViewById<LinearLayout>(R.id.mLlCouponContainer)
+        if (goodsInfoBean != null && goodsInfoBean!!.arr3 != null && !goodsInfoBean!!.arr3!!.isEmpty()) {
+            goodsInfoBean!!.arr3!!.forEach { coupon ->
+                val couponView = CouponView(mContext)
+                couponView.setOnClickListener {
+                    mPresent.getDataByPost(0x4, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_GET_DISCOUNT, RequestParamsHelper.getDiscountParam(coupon.discount_id!!))
+                }
+                couponView.bindData(coupon)
+                mLlCouponContainer.addView(couponView)
+            }
+        }
     }
 
     override fun onStart() {
@@ -369,6 +392,7 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment(), BottomGoodsParamDialog.On
         var result: GoodsBean? = null
         var arr1: StoreInfoBean? = null
         var arr2: AdsBean? = null
+        var arr3: ArrayList<CouponBean>? = null
     }
 
     class SkuBean {
@@ -382,6 +406,19 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment(), BottomGoodsParamDialog.On
         var sku_product_id: String? = null
     }
 
-    override fun getLayoutId() = R.layout.fragment_new_goods_info_layout
+    class CouponBean {
+        var discount_id: String? = null
+        var discount_price: String? = null
+        var discount_num: String? = null
+        var discount_validity: String? = null
+        var discount_time: String? = null
+        var discount_shopping: String? = null
+        var discount_type: String? = null
+        var discount_status: String? = null
+        var discount_token: String? = null
+        var discount_fr: String? = null
+        var discount_uid: String? = null
+        var discount_already: String? = null
+    }
 
 }

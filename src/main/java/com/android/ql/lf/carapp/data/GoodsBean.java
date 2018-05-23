@@ -31,6 +31,7 @@ public class GoodsBean {
     private String product_faddish;
     private String product_shopping;
     private String product_hname;
+    private String product_is_freight;
     private String product_uid;
     private ArrayList<String> product_pic;
     private String product_main_pic;
@@ -42,6 +43,14 @@ public class GoodsBean {
 
     public void setProduct_main_pic(String product_main_pic) {
         this.product_main_pic = product_main_pic;
+    }
+
+    public String getProduct_is_freight() {
+        return product_is_freight;
+    }
+
+    public void setProduct_is_freight(String product_is_freight) {
+        this.product_is_freight = product_is_freight;
     }
 
     public String getProduct_id() {
