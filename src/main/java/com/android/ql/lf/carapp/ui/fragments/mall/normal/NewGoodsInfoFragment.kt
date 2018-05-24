@@ -324,7 +324,7 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment(), BottomGoodsParamDialog.On
         mTvGoodsInfoPrice.text = "￥ ${goodsInfoBean!!.result!!.product_price}"
         mTvGoodsInfoOldPrice.paint.flags = TextPaint.STRIKE_THRU_TEXT_FLAG
         mTvGoodsInfoOldPrice.text = "￥ ${goodsInfoBean!!.result!!.product_yprice}"
-        mTvGoodsInfoInfoReleaseCount.text = goodsInfoBean!!.result!!.product_entrepot
+        mTvGoodsInfoInfoReleaseCount.text = goodsInfoBean!!.result!!.product_zrepertory
         mTvGoodsInfoTitle.text = goodsInfoBean!!.result!!.product_name
         mTvGoodsInfoDescription.text = Html.fromHtml(goodsInfoBean!!.result!!.product_description)
         if (goodsInfoBean!!.arr1!!.wholesale_shop_pic != null && !goodsInfoBean!!.arr1!!.wholesale_shop_pic.isEmpty()) {

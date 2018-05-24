@@ -94,7 +94,7 @@ class OrderCommentSubmitFragment : BaseNetWorkingFragment() {
                     override fun onActionStart() {
                         getFastProgressDialog("正在上传……")
                     }
-                }).upload(imageList.filter { it.uriPath != null } as ArrayList<ImageBean>, 150)
+                }).upload(imageList.filter { it.uriPath != null } as ArrayList<ImageBean>)
             } else {
                 mPresent.getDataByPost(0x0, RequestParamsHelper.MEMBER_MODEL, RequestParamsHelper.ACT_EVALUATE,
                         RequestParamsHelper.getEvaluateParam(arguments.getString(ORDER_ID_FLAG, ""),

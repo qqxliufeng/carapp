@@ -303,7 +303,7 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
                         } else {
                             couponName.text = couponBean!!.discount_title
                             var tempMoney = money
-                            tempMoney -= couponBean!!.discount_fr!!.toFloat()
+                            tempMoney -= couponBean!!.discount_price!!.toFloat()
                             mTvSubmitOrderGoodsPrice.text = "￥ " + DecimalFormat("0.00").format(tempMoney)
                         }
                     }

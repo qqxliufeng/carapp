@@ -34,7 +34,7 @@
                         <com.youth.banner.Banner
                             android:id="@+id/mCBPersonalGoodsInfo"
                             android:layout_width="match_parent"
-                            android:layout_height="270dp" />
+                            android:layout_height="300dp" />
 
                         <android.support.design.widget.CheckableImageButton
                             android:id="@+id/mCibGoodsInfoCollection"
@@ -106,7 +106,7 @@
                                 android:paddingTop="2dp"
                                 android:text="1000"
                                 android:textColor="@color/colorPrimary"
-                                android:textSize="10sp" />
+                                tools:textSize="10sp" />
                         </LinearLayout>
 
                     </RelativeLayout>

@@ -23,6 +23,7 @@ public class GoodsBean {
     private String product_token;
     private String product_time;
     private String product_entrepot;
+    private String product_zrepertory;
     private String product_collect;
     private String product_sv;
     private String product_md;
@@ -36,6 +37,14 @@ public class GoodsBean {
     private ArrayList<String> product_pic;
     private String product_main_pic;
     private ArrayList<NewSpecificationBean> product_specification;
+
+    public String getProduct_zrepertory() {
+        return product_zrepertory;
+    }
+
+    public void setProduct_zrepertory(String product_zrepertory) {
+        this.product_zrepertory = product_zrepertory;
+    }
 
     public String getProduct_main_pic() {
         return product_main_pic;
