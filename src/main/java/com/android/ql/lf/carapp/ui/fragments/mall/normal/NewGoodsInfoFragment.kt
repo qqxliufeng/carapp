@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
 import android.text.TextPaint
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -29,6 +30,7 @@ import com.android.ql.lf.carapp.ui.views.ScrollLinearLayoutManager
 import com.android.ql.lf.carapp.ui.views.SlideDetailsLayout
 import com.android.ql.lf.carapp.utils.GlideManager
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
+import com.android.ql.lf.carapp.utils.getScreenSize
 import com.android.ql.lf.carapp.utils.toast
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -127,8 +129,13 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment(), BottomGoodsParamDialog.On
                 ChatActivity.startChat(mContext, goodsInfoBean!!.arr1!!.wholesale_shop_name, goodsInfoBean!!.arr1!!.wholesale_shop_hxname)
             }
         }
+        val params = mCBPersonalGoodsInfo.layoutParams
+        params.width = mContext.getScreenSize().first
+        params.height = params.width
+        mCBPersonalGoodsInfo.layoutParams = params
         mCBPersonalGoodsInfo!!.setImageLoader(object : ImageLoader() {
             override fun displayImage(context: Context?, path: Any?, imageView: ImageView?) {
+                imageView!!.scaleType = ImageView.ScaleType.FIT_XY
                 GlideManager.loadImage(mContext, path as String, imageView)
             }
         })
@@ -154,7 +161,8 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment(), BottomGoodsParamDialog.On
                     if (goodsInfoBean != null && goodsInfoBean!!.result != null && goodsInfoBean!!.result!!.product_content != null) {
                         mRcGoodsInfo.adapter = object : BaseQuickAdapter<String, BaseViewHolder>(R.layout.adapter_goods_info_detail_layout, goodsInfoBean!!.result!!.product_content) {
                             override fun convert(helper: BaseViewHolder?, item: String?) {
-                                GlideManager.loadImage(mContext, item!!, helper!!.getView(R.id.mIvGoodsInfoDetailPic))
+                                val imageView = helper!!.getView<ImageView>(R.id.mIvGoodsInfoDetailPic)
+                                GlideManager.loadImage(mContext, item!!, imageView)
                             }
                         }
                     }

@@ -13,7 +13,8 @@ import com.chad.library.adapter.base.BaseViewHolder
  */
 class GoodsMallItemAdapter(layoutId: Int, list: ArrayList<GoodsBean>) : BaseQuickAdapter<GoodsBean, BaseViewHolder>(layoutId, list) {
     override fun convert(helper: BaseViewHolder?, item: GoodsBean?) {
-        GlideManager.loadImage(mContext, item!!.product_main_pic, helper!!.getView(R.id.mTvGoodsInfoItemPic))
+        val imageView = helper!!.getView<ImageView>(R.id.mTvGoodsInfoItemPic)
+        GlideManager.loadImage(mContext, item!!.product_main_pic, imageView)
         helper.setText(R.id.mTvGoodsInfoItemName, item.product_name)
         helper.setText(R.id.mTvGoodsInfoItemPrice, "￥${item.product_price}")
         val imageCollect = helper.getView<ImageView>(R.id.mIvGoodsInfoItemCollection)
