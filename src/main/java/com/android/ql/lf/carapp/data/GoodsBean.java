@@ -37,6 +37,15 @@ public class GoodsBean {
     private ArrayList<String> product_pic;
     private String product_main_pic;
     private ArrayList<NewSpecificationBean> product_specification;
+    private String product_start_address;
+
+    public String getProduct_start_address() {
+        return product_start_address;
+    }
+
+    public void setProduct_start_address(String product_start_address) {
+        this.product_start_address = product_start_address;
+    }
 
     public String getProduct_zrepertory() {
         return product_zrepertory;

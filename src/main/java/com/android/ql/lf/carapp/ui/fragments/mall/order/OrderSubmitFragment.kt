@@ -124,8 +124,8 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
                 addressBean = it
                 setAddressInfo(addressBean!!)
                 //加载运费模板
-                mPresent.getDataByPost(0x3,RequestParamsHelper.ORDER_MODEL,RequestParamsHelper.ACT_ADDRESS,
-                        RequestParamsHelper.getAddressParams(addressBean!!.address_id,freightId.toString()))
+                mPresent.getDataByPost(0x3, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_ADDRESS,
+                        RequestParamsHelper.getAddressParams(addressBean!!.address_id, freightId.toString()))
             }
         }
     }
@@ -211,6 +211,7 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
                 helper.setText(R.id.mIvSubmitOrderGoodsSpe, item.shopcart_specification)
                 helper.setText(R.id.mIvSubmitOrderGoodsPrice, "￥${item.shopcart_price}")
                 helper.setText(R.id.mIvSubmitOrderGoodsNum, "X${item.shopcart_num}")
+                helper.setText(R.id.mTvSubmitOrderGoodsTotal, Html.fromHtml("共${item.shopcart_num}件商品  小计:<span style='color:#E1332C'>￥${(item.shopcart_price.toFloat() * item.shopcart_num.toInt()) + item.shopcart_mdprice.toFloat()}元</span>"))
                 helper.setText(R.id.mTvSubmitOrderGoodsBBSContent, if (TextUtils.isEmpty(item.bbs)) "选填" else item.bbs)
                 helper.addOnClickListener(R.id.mRlSubmitOrderGoodsBBS)
             }
@@ -394,8 +395,13 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
                 if (check != null && check.code == SUCCESS_CODE) {
                     val resultJson = check.obj as JSONObject
                     addressBean = Gson().fromJson(resultJson.optJSONObject("result").toString(), AddressBean::class.java)
-                    val jsonArray = resultJson.optJSONArray("arr")
-                    if (jsonArray!=null) {
+                } else {
+                    emptyAddressButton.visibility = View.VISIBLE
+                    selectAddressContainerView.visibility = View.GONE
+                }
+                if (check != null) {
+                    val jsonArray = (check.obj as JSONObject).optJSONArray("arr")
+                    if (jsonArray != null) {
                         (0 until jsonArray.length()).forEach {
                             expressList.add(jsonArray.optString(it))
                         }
@@ -403,9 +409,6 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
                     if (addressBean != null) {
                         setAddressInfo(addressBean!!)
                     }
-                } else {
-                    emptyAddressButton.visibility = View.VISIBLE
-                    selectAddressContainerView.visibility = View.GONE
                 }
             } catch (e: Exception) {
                 emptyAddressButton.visibility = View.VISIBLE
@@ -449,10 +452,10 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
                             couponList.add(Gson().fromJson(jsonArray.optJSONObject(it).toString(), OrderCouponBean::class.java))
                         }
                         showCouponList()
-                    }else{
+                    } else {
                         toast("暂无优惠券")
                     }
-                }else{
+                } else {
                     toast("暂无优惠券")
                 }
             } catch (e: Exception) {
@@ -466,7 +469,7 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
         if (requestID == 0x0) {
             emptyAddressButton.visibility = View.VISIBLE
             selectAddressContainerView.visibility = View.GONE
-        }else if (requestID == 0x2){
+        } else if (requestID == 0x2) {
             toast("暂无优惠券")
         }
     }

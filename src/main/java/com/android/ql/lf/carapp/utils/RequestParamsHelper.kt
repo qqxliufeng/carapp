@@ -407,6 +407,9 @@ class RequestParamsHelper {
         val ACT_SKU_SELECT = "sku_select"
         fun getSkuSelect(gid: String, attr: String): ApiParams = getWithIdParams().addParam("gid", gid).addParam("attr", attr)
 
+        val ACT_CARRY_PRODUCT = "carry_product"
+        fun getCarryProductParam(gid: String) = getWithIdParams().addParam("gid", gid)
+
 
         /**              qaa model  start           **/
         val QAA_MODEL = "qaa"
@@ -546,8 +549,7 @@ class RequestParamsHelper {
         fun getMyDiscountParam(shopid: String) = getWithIdParams().addParam("shopid", shopid)
 
         val ACT_ADDRESS = "address"
-        fun getAddressParams(aid:String,freight:String) = getWithIdParams().addParam("aid",aid).addParam("freight",freight)
-
+        fun getAddressParams(aid: String, freight: String) = getWithIdParams().addParam("aid", aid).addParam("freight", freight)
 
 
         /**              order model end        **/
@@ -578,5 +580,9 @@ class RequestParamsHelper {
             param.addParam("cid", cid)
             return param
         }
+
+
+        val ACT_PLATFORM_DISCOUNT = "platform_discount"
+        fun getPlatformDiscountParam() = getBaseParams()
     }
 }

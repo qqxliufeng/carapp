@@ -223,6 +223,7 @@ public class ShoppingCarItemBean implements Parcelable {
         dest.writeString(this.shop_shoppic);
         dest.writeString(this.shop_id);
         dest.writeString(this.sku_pic);
+        dest.writeString(this.shopcart_freight);
         dest.writeString(this.shopcart_key);
         dest.writeString(this.bbs);
     }
@@ -245,6 +246,7 @@ public class ShoppingCarItemBean implements Parcelable {
         this.shop_shoppic = in.readString();
         this.shop_id = in.readString();
         this.sku_pic = in.readString();
+        this.shopcart_freight = in.readString();
         this.shopcart_key = in.readString();
         this.bbs = in.readString();
     }

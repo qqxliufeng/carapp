@@ -14,10 +14,7 @@ import com.android.ql.lf.carapp.ui.activities.MainActivity
 import com.android.ql.lf.carapp.ui.adapter.GoodsMallItemAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
 import com.android.ql.lf.carapp.ui.fragments.DetailContentFragment
-import com.android.ql.lf.carapp.ui.fragments.mall.normal.ExpressInfoFragment
-import com.android.ql.lf.carapp.ui.fragments.mall.normal.GoodsClassifyFragment
-import com.android.ql.lf.carapp.ui.fragments.mall.normal.NewGoodsInfoFragment
-import com.android.ql.lf.carapp.ui.fragments.mall.normal.SearchResultListFragment
+import com.android.ql.lf.carapp.ui.fragments.mall.normal.*
 import com.android.ql.lf.carapp.ui.fragments.mall.shoppingcar.ShoppingCarFragment
 import com.android.ql.lf.carapp.ui.fragments.user.LoginFragment
 import com.android.ql.lf.carapp.ui.views.DividerGridItemDecoration
@@ -30,6 +27,7 @@ import com.google.gson.Gson
 import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
 import com.youth.banner.loader.ImageLoader
+import kotlinx.android.synthetic.main.activity_fragment_container_layout.*
 import kotlinx.android.synthetic.main.fragment_main_mall_layout.*
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.collections.forEachWithIndex
@@ -193,8 +191,9 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
 
     override fun onRequestStart(requestID: Int) {
         super.onRequestStart(requestID)
-        if (requestID == 0x1) {
-            getFastProgressDialog("正在收藏……")
+        when (requestID) {
+            0x1 -> getFastProgressDialog("正在收藏……")
+            0x2 -> getFastProgressDialog("正在搬家……")
         }
     }
 
@@ -217,16 +216,21 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
                             classifyView.isFocusableInTouchMode = false
                             classifyAdapter.notifyDataSetChanged()
                             bannerView!!.setImages(productContainer!!.arr2).setDelayTime(3000).setBannerStyle(BannerConfig.CIRCLE_INDICATOR).setOnBannerListener {
-                                FragmentContainerActivity.from(mContext)
-                                        .setTitle("详情")
-                                        .setNeedNetWorking(true)
-                                        .setClazz(DetailContentFragment::class.java)
-                                        .setExtraBundle(bundleOf(
-                                                Pair(DetailContentFragment.MODEL_NAME_FLAG, RequestParamsHelper.QAA_MODEL),
-                                                Pair(DetailContentFragment.ACT_NAME_FLAG, RequestParamsHelper.ACT_COMMUNITY_LUNBO_DETAIL),
-                                                Pair(DetailContentFragment.PARAM_FLAG, mapOf(Pair("lid", productContainer!!.arr2[it].lunbo_id)))
-                                        ))
-                                        .start()
+                                val bannerImageBean = productContainer!!.arr2[it]
+                                if (!TextUtils.isEmpty(bannerImageBean.lunbo_isdiscount) && TextUtils.isDigitsOnly(bannerImageBean.lunbo_isdiscount) && bannerImageBean.lunbo_isdiscount.toInt() > 0) {
+                                    FragmentContainerActivity.from(mContext).setTitle("优惠券").setNeedNetWorking(true).setClazz(PlatformCouponFragment::class.java).start()
+                                } else {
+                                    FragmentContainerActivity.from(mContext)
+                                            .setTitle("详情")
+                                            .setNeedNetWorking(true)
+                                            .setClazz(DetailContentFragment::class.java)
+                                            .setExtraBundle(bundleOf(
+                                                    Pair(DetailContentFragment.MODEL_NAME_FLAG, RequestParamsHelper.QAA_MODEL),
+                                                    Pair(DetailContentFragment.ACT_NAME_FLAG, RequestParamsHelper.ACT_COMMUNITY_LUNBO_DETAIL),
+                                                    Pair(DetailContentFragment.PARAM_FLAG, mapOf(Pair("lid", bannerImageBean.lunbo_id)))
+                                            ))
+                                            .start()
+                                }
                             }.start()
                             productContainer!!.arr1.forEachWithIndex { index, item ->
                                 hotViewContainer[index].bindData(item.faddish_title, item.faddish_description, item.faddish_pic) {

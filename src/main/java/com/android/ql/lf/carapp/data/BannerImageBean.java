@@ -16,6 +16,15 @@ public class BannerImageBean {
     private String lunbo_sign;
     private String lunbo_sort;
     private String lunbo_content;
+    private String lunbo_isdiscount;
+
+    public String getLunbo_isdiscount() {
+        return lunbo_isdiscount;
+    }
+
+    public void setLunbo_isdiscount(String lunbo_isdiscount) {
+        this.lunbo_isdiscount = lunbo_isdiscount;
+    }
 
     public String getLunbo_id() {
         return lunbo_id;

@@ -8,6 +8,9 @@ import android.text.Html
 import android.text.TextPaint
 import android.text.TextUtils
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -97,6 +100,7 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment(), BottomGoodsParamDialog.On
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
+        setHasOptionsMenu(true)
         CarApplication.getInstance().activityQueue.addItem(this)
     }
 
@@ -250,6 +254,7 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment(), BottomGoodsParamDialog.On
                 }
             }
             0x4 -> getFastProgressDialog("领取中……")
+            0x5 -> getFastProgressDialog("搬家中……")
         }
     }
 
@@ -318,7 +323,7 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment(), BottomGoodsParamDialog.On
                     paramsDialog!!.reBindData("￥${skuBean?.sku_price}", skuBean?.sku_repertory, "库存${skuBean?.sku_repertory}件", skuBean?.sku_pic)
                 }
             }
-            0x4 -> {
+            0x4, 0x5 -> {
                 if (check != null) {
                     toast((check.obj as JSONObject).optString(MSG_FLAG))
                 }
@@ -334,7 +339,9 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment(), BottomGoodsParamDialog.On
         mTvGoodsInfoOldPrice.text = "￥ ${goodsInfoBean!!.result!!.product_yprice}"
         mTvGoodsInfoInfoReleaseCount.text = goodsInfoBean!!.result!!.product_zrepertory
         mTvGoodsInfoTitle.text = goodsInfoBean!!.result!!.product_name
-        mTvGoodsInfoDescription.text = Html.fromHtml(goodsInfoBean!!.result!!.product_description)
+        mTvGoodsInfoDescription.text = Html.fromHtml(goodsInfoBean!!.result!!.product_description.replace("\n", "").replace("\r", "").trim())
+        mTvGoodsInfoSellCount.text = "销量：${goodsInfoBean!!.result!!.product_sv}笔"
+        mTvGoodsInfoAddress.text = goodsInfoBean!!.result!!.product_start_address
         if (goodsInfoBean!!.arr1!!.wholesale_shop_pic != null && !goodsInfoBean!!.arr1!!.wholesale_shop_pic.isEmpty()) {
             GlideManager.loadImage(mContext, goodsInfoBean!!.arr1!!.wholesale_shop_pic[0], mIvGoodsInfoStorePic)
         }
@@ -372,6 +379,18 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment(), BottomGoodsParamDialog.On
                 mLlCouponContainer.addView(couponView)
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater!!.inflate(R.menu.goods_info_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item!!.itemId == R.id.mMenuCarry) {
+            mPresent.getDataByPost(0x5, RequestParamsHelper.PRODUCT_MODEL, RequestParamsHelper.ACT_CARRY_PRODUCT,
+                    RequestParamsHelper.getCarryProductParam(goodsInfoBean!!.result!!.product_id))
+        }
+        return true
     }
 
     override fun onStart() {
