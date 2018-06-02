@@ -16,7 +16,7 @@ public class ViewCommunityAction implements IViewCommunityAction {
     @Override
     public boolean processImage(ArrayList<ImageBean> imageBeans, int maxSize, ImageUploadHelper.OnImageUploadListener uploadListener) {
         try {
-            new ImageUploadHelper(uploadListener).upload(imageBeans, maxSize);
+            new ImageUploadHelper(uploadListener).upload(imageBeans);
             return true;
         } catch (Exception e) {
             return false;

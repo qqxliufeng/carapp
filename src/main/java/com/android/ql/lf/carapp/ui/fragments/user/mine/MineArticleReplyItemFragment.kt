@@ -92,7 +92,7 @@ class MineArticleReplyItemFragment : BaseRecyclerViewFragment<ArticleAnswerBean>
         override fun convert(helper: BaseViewHolder?, item: ArticleAnswerBean?) {
             helper!!.addOnClickListener(R.id.mBtArticleDelete)
             helper.setText(R.id.mTvMyArticleAnswerItemInfoTitle, item!!.answer_title)
-            helper.setText(R.id.mTvMyArticleAnswerItemInfoContent, "回复：${item.answer_title}")
+            helper.setText(R.id.mTvMyArticleAnswerItemInfoContent, "回复：${item.answer_content}")
         }
     }
 }

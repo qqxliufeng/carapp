@@ -191,7 +191,7 @@ class MineApplyMasterInfoSubmitFragment : BaseNetWorkingFragment() {
             override fun onActionFailed() {
                 statueCode = false
             }
-        }).upload(tempList, 150)
+        }).upload(tempList)
     }
 
     override fun <T : Any?> onRequestSuccess(requestID: Int, result: T) {

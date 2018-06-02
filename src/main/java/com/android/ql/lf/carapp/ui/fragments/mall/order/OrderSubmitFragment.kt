@@ -400,6 +400,7 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
                     selectAddressContainerView.visibility = View.GONE
                 }
                 if (check != null) {
+                    expressList.clear()
                     val jsonArray = (check.obj as JSONObject).optJSONArray("arr")
                     if (jsonArray != null) {
                         (0 until jsonArray.length()).forEach {
