@@ -28,6 +28,9 @@
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_toRightOf="@+id/mIvArticleItemUserFace"
             android:textColor="@color/text_deep_dark_color"
+            android:layout_marginRight="100dp"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:textSize="@dimen/sp_14" />
 
         <TextView
