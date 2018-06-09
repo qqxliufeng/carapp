@@ -338,8 +338,8 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
             expressList.forEachIndexed { index, s ->
                 mArrayList[index].shopcart_mdprice = s
             }
+            money = 0.00f
             mArrayList.forEach {
-                money = 0.00f
                 money += ((it.shopcart_price.toFloat() * it.shopcart_num.toInt()) + it.shopcart_mdprice.toFloat())
             }
             mTvSubmitOrderGoodsPrice.text = "￥ " + DecimalFormat("0.00").format(money)
