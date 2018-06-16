@@ -99,7 +99,7 @@ class OrderImageUpLoadFragment : BaseNetWorkingFragment() {
                 override fun onActionFailed() {
                     toast("上传失败……")
                 }
-            }).upload(mArrayList.filter { it.uriPath != null } as ArrayList<ImageBean>, 150)
+            }).upload(mArrayList.filter { it.uriPath != null } as ArrayList<ImageBean>)
         }
         return super.onOptionsItemSelected(item)
     }

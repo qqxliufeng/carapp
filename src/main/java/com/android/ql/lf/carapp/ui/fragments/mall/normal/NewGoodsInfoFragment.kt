@@ -331,6 +331,15 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment(), BottomGoodsParamDialog.On
         }
     }
 
+    override fun onRequestFail(requestID: Int, e: Throwable) {
+        super.onRequestFail(requestID, e)
+        when(requestID){
+            0x5->{
+                toast("搬家失败~~")
+            }
+        }
+    }
+
     private fun bindData() {
         mCBPersonalGoodsInfo.setImages(goodsInfoBean!!.result!!.product_pic).setDelayTime(3000).setBannerStyle(BannerConfig.CIRCLE_INDICATOR).start()
         mCibGoodsInfoCollection.isChecked = goodsInfoBean!!.result!!.product_collect != "0"

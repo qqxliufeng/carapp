@@ -115,6 +115,10 @@ public class ImageUploadHelper {
 
     public void upload(final ArrayList<ImageBean> list){
         if (list!=null  && !list.isEmpty()){
+            File dir = new File(Constants.IMAGE_PATH);
+            if (!dir.exists()){
+                dir.mkdirs();
+            }
             ArrayList<String> tempPath = new ArrayList<>();
             for (ImageBean imageBean : list) {
                 tempPath.add(imageBean.getUriPath());
@@ -165,6 +169,10 @@ public class ImageUploadHelper {
                             builder.addFormDataPart(i + "", file.getName(), RequestBody.create(MultipartBody.FORM, file));
                         }
                         onImageUploadListener.onActionEnd(builder);
+                    }else {
+                        if (onImageUploadListener != null) {
+                            onImageUploadListener.onActionFailed();
+                        }
                     }
                 }
             });

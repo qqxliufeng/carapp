@@ -34,10 +34,11 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginRight="80dp"
                 android:layout_toRightOf="@+id/mIvGoodsInfoCommentItemFace"
                 android:textColor="@color/text_deep_dark_color"
                 android:textSize="@dimen/sp_14"
-                tools:text="this is content " />
+                tools:text="this is content" />
 
             <TextView
                 android:id="@+id/mTvGoodsInfoCommentItemTime"
@@ -58,6 +59,8 @@
             android:layout_marginTop="@dimen/dp_10"
             android:textColor="@color/text_dark_color"
             android:textSize="@dimen/sp_14"
+            android:maxLines="4"
+            android:ellipsize="end"
             tools:text="this is content " />
 
         <com.android.ql.lf.carapp.ui.views.ImageContainerLinearLayout

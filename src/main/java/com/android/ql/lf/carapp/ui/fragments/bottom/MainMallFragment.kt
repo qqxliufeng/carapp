@@ -328,48 +328,31 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
     }
 
     /**
-     * 加入到购物车
-     */
-    private fun addShoppingCar() {
-        mPresent.getDataByPost(0x2,
-                RequestParamsHelper.PRODUCT_MODEL,
-                RequestParamsHelper.ACT_ADD_QUIZ)
-    }
-
-    /**
      * 进入商品详情
      */
     private fun enterGoodsInfo(goodsBean: GoodsBean) {
-//        FragmentContainerActivity.from(mContext)
-//                .setNeedNetWorking(true)
-//                .setTitle("商品详情")
-//                .setExtraBundle(bundleOf(Pair(GoodsInfoFragment.GOODS_ID_FLAG, goodsBean.product_id)))
-//                .setClazz(GoodsInfoFragment::class.java)
-//                .start()
         FragmentContainerActivity.from(mContext).setTitle("详情").setExtraBundle(bundleOf(Pair(NewGoodsInfoFragment.GOODS_ID_FLAG, goodsBean.product_id))).setClazz(NewGoodsInfoFragment::class.java).setNeedNetWorking(true).start()
     }
 
     override fun onLoginSuccess(userInfo: UserInfo?) {
         super.onLoginSuccess(userInfo)
-        when (UserInfo.loginToken) {
-            MAIN_MALL_COLLECTION_FLAG -> {
-                //收藏
-                collectionGoods(tempGoodsBean!!)
-            }
-            MAIN_MALL_SHOPPING_CAR_FLAG -> {
-                //加购物车
-                addShoppingCar()
-            }
-            MAIN_MALL_ENTER_GOODS_INFO_FLAG -> {
-                //进入商品详情
-                enterGoodsInfo(tempGoodsBean!!)
-            }
-            MAIN_MALL_MY_SHOPPING_CAR_FLAG -> {
-                mFabShoppingCar.doClickWithUseStatusEnd()
-            }
-            else -> {
-                if (mArrayList.isEmpty()) {
-                    onPostRefresh()
+        if (tempGoodsBean!=null) {
+            when (UserInfo.loginToken) {
+                MAIN_MALL_COLLECTION_FLAG -> {
+                    //收藏
+                    collectionGoods(tempGoodsBean!!)
+                }
+                MAIN_MALL_ENTER_GOODS_INFO_FLAG -> {
+                    //进入商品详情
+                    enterGoodsInfo(tempGoodsBean!!)
+                }
+                MAIN_MALL_MY_SHOPPING_CAR_FLAG -> {
+                    mFabShoppingCar.doClickWithUseStatusEnd()
+                }
+                else -> {
+                    if (mArrayList.isEmpty()) {
+                        onPostRefresh()
+                    }
                 }
             }
         }
