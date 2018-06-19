@@ -29,7 +29,7 @@ import java.lang.reflect.Field
 class MineApplyMasterFragment : BaseFragment() {
 
     companion object {
-        val TITLES = listOf("修理师傅", "门店商家")
+        val TITLES = listOf("安装门店", "同城商家")
     }
 
     override fun getLayoutId() = R.layout.fragment_mine_apply_master_layout

@@ -190,10 +190,13 @@ class StoreInfoFragment : BaseRecyclerViewFragment<GoodsBean>() {
                 if (check != null) {
                     if (check.code == SUCCESS_CODE) {
                         collectStatus = if (collectStatus == 0) {
+                            storeInfoBean.wholesale_shop_attention = (storeInfoBean.wholesale_shop_attention.toInt() + 1).toString()
                             1
                         } else {
+                            storeInfoBean.wholesale_shop_attention = (storeInfoBean.wholesale_shop_attention.toInt() - 1).toString()
                             0
                         }
+                        mTvStoreInfoFansCount.text = storeInfoBean.wholesale_shop_attention
                         setFocusText()
                     }
                     toast((check.obj as JSONObject).optString(MSG_FLAG))

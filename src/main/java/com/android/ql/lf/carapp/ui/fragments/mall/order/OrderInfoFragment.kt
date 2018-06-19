@@ -195,6 +195,7 @@ class OrderInfoFragment : BaseNetWorkingFragment() {
                     }
                     mBtOrderInfoAction2.setOnClickListener {
                         MallOrderPresent.showPayDialog(mContext) {
+                            payType = it
                             mPresent.getDataByPost(0x2, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_PAY,
                                     RequestParamsHelper.getPayParam(mallOrderInfoContainer!!.order_id, mallOrderInfoContainer!!.product_id, it))
                         }

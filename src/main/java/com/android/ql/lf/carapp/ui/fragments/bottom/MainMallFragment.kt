@@ -221,7 +221,7 @@ class MainMallFragment : BaseRecyclerViewFragment<GoodsBean>() {
                                     FragmentContainerActivity.from(mContext).setTitle("优惠券").setNeedNetWorking(true).setClazz(PlatformCouponFragment::class.java).start()
                                 } else {
                                     FragmentContainerActivity.from(mContext)
-                                            .setTitle("详情")
+                                            .setTitle(if(TextUtils.isEmpty(bannerImageBean.lunbo_title))"详情" else bannerImageBean.lunbo_title)
                                             .setNeedNetWorking(true)
                                             .setClazz(DetailContentFragment::class.java)
                                             .setExtraBundle(bundleOf(

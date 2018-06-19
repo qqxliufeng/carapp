@@ -270,7 +270,11 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
             val json = Gson().toJson(orderList)
             payType = selectTypeView.payType
             mPresent.getDataByPost(0x1, RequestParamsHelper.ORDER_MODEL, RequestParamsHelper.ACT_ADD_ORDER,
-                    RequestParamsHelper.getAddOrderParams(invoice = if (selectInvoice.isChecked) "1" else "0", paytype = payType, post_data = json, discount = if (couponBean == null) "" else couponBean!!.discount_id!!))
+                    RequestParamsHelper.getAddOrderParams(
+                            invoice = if (selectInvoice.isChecked) "1" else "0",
+                            paytype = payType,
+                            post_data = json,
+                            discount = if (couponBean == null) "" else couponBean!!.discount_id!!))
             orderList.clear()
         }
     }
