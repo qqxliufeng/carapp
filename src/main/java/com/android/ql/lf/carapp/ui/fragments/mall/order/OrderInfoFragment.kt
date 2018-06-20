@@ -145,8 +145,9 @@ class OrderInfoFragment : BaseNetWorkingFragment() {
                         toast("收货成功")
                         MallOrderPresent.onOrderReceiver()
                         finish()
+                    }else {
+                        toast((check.obj as JSONObject).optString(MSG_FLAG))
                     }
-                    toast((check.obj as JSONObject).optString(MSG_FLAG))
                 }
             }
         }

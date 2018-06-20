@@ -113,7 +113,7 @@ class MainMallOrderItemFragment : AbstractLazyLoadFragment<MallSaleOrderBean>() 
                     MallOrderPresent.MallOrderStatus.WAITING_FOR_SEND.index,
                     MallOrderPresent.MallOrderStatus.WAITING_FOR_EVALUATE.index,
                     MallOrderPresent.MallOrderStatus.MALL_ORDER_APPLY_BACK.index -> {
-                        onPostRefresh()
+                        onRefresh()
                     }
                 }
             }

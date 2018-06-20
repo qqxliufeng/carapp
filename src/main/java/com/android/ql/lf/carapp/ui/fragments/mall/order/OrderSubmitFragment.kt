@@ -274,7 +274,7 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
                             invoice = if (selectInvoice.isChecked) "1" else "0",
                             paytype = payType,
                             post_data = json,
-                            discount = if (couponBean == null) "" else couponBean!!.discount_id!!))
+                            discount = if (couponBean == null) "" else if(couponBean!!.discount_id == null) "" else couponBean!!.discount_id!!))
             orderList.clear()
         }
     }
@@ -304,6 +304,7 @@ class OrderSubmitFragment : BaseRecyclerViewFragment<ShoppingCarItemBean>() {
                         if (couponBean!!.discount_fr!!.toFloat() > money) {
                             toast("当前订单金额不支持此优惠券")
                             couponName.text = "暂不使用"
+                            couponBean!!.discount_id = null
                             mTvSubmitOrderGoodsPrice.text = "￥ " + DecimalFormat("0.00").format(money)
                         } else {
                             couponName.text = couponBean!!.discount_title
