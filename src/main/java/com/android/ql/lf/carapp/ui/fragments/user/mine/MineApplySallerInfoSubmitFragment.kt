@@ -79,7 +79,6 @@ class MineApplySallerInfoSubmitFragment : BaseNetWorkingFragment() {
     override fun getLayoutId() = R.layout.fragment_mine_apply_master_info_submit_layout
 
     override fun initView(view: View?) {
-        (mContext as FragmentContainerActivity).setSwipeBackEnable(false)
         addressSubscription
         val storeHeaderView = View.inflate(mContext, R.layout.layout_apply_master_add_image_layout, null)
         val idCardHeaderView = View.inflate(mContext, R.layout.layout_apply_master_add_image_layout, null)

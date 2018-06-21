@@ -37,7 +37,10 @@
                 android:layout_toRightOf="@+id/mIvGoodsInfoCommentItemFace"
                 android:textColor="@color/text_deep_dark_color"
                 android:textSize="@dimen/sp_14"
-                tools:text="this is content " />
+                android:layout_marginRight="100dp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:text="this is contentthis is contentthis is contentthis is content " />
 
             <RatingBar
                 android:id="@+id/mRbGoodsInfoCommentItemLevel"

@@ -54,7 +54,6 @@ class WriteArticleFragment : BaseNetWorkingFragment() {
     override fun getLayoutId() = R.layout.fragment_write_article_layout
 
     override fun initView(view: View?) {
-        (mContext as FragmentContainerActivity).setSwipeBackEnable(false)
         images.add(ImageBean(R.drawable.img_icon_add_photo, null))
         val linearLayoutManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
         mRvWriteArticleImages.layoutManager = linearLayoutManager

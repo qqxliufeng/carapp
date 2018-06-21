@@ -76,9 +76,7 @@
             android:id="@+id/mTvAnswerInfoItemContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
             android:lineSpacingExtra="2dp"
-            android:maxLines="4"
             android:textColor="@color/text_deep_dark_color"
             android:textSize="@dimen/sp_14" />
 

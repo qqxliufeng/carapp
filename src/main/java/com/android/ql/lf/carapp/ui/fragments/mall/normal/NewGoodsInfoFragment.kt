@@ -333,8 +333,8 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment(), BottomGoodsParamDialog.On
 
     override fun onRequestFail(requestID: Int, e: Throwable) {
         super.onRequestFail(requestID, e)
-        when(requestID){
-            0x5->{
+        when (requestID) {
+            0x5 -> {
                 toast("搬家失败~~")
             }
         }
@@ -368,6 +368,14 @@ class NewGoodsInfoFragment : BaseNetWorkingFragment(), BottomGoodsParamDialog.On
                     .start()
         }
         val adIv = footView.findViewById<ImageView>(R.id.mIvGoodsInfoAd)
+
+        val adWidth = mContext.getScreenSize().first
+        val adHeight = adWidth / 2
+        val layoutParam = adIv.layoutParams
+        layoutParam.width = adWidth
+        layoutParam.height = adHeight
+        adIv.layoutParams = layoutParam
+
         GlideManager.loadImage(mContext, goodsInfoBean!!.arr2!!.ad_pic, footView.findViewById(R.id.mIvGoodsInfoAd))
         adIv.setOnClickListener {
             FragmentContainerActivity.from(mContext)

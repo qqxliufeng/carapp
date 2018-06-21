@@ -26,7 +26,6 @@ class MainActivity : BaseActivity() {
 
     override fun initView() {
 //        Beta.checkUpgrade(false, false)
-        setSwipeBackEnable(false)
         BottomNavigationViewHelper.disableShiftMode(mMainNavigation)
         mMainNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         mMainContent.adapter = MainViewPagerAdapter(supportFragmentManager)
