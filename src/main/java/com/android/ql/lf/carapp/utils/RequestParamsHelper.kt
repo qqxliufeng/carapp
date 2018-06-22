@@ -373,6 +373,9 @@ class RequestParamsHelper {
                         .addParam("sort", sort)
                         .addParam("type", type)
 
+        val ACT_M_PRODUCT_SEARCH = "m_product_search"
+
+
         val ACT_PRODUCT_TYPE_SEARCH = "product_type_search"
         fun getProductTypeSearchParams(type_id: String, stype_id: String, sort: String, page: Int) =
                 getWithPageParams(page)

@@ -11,6 +11,7 @@ import com.android.ql.lf.carapp.data.ShopInfoBean
 import com.android.ql.lf.carapp.data.StoreInfoBean
 import com.android.ql.lf.carapp.ui.activities.FragmentContainerActivity
 import com.android.ql.lf.carapp.ui.fragments.BaseNetWorkingFragment
+import com.android.ql.lf.carapp.ui.fragments.mall.normal.MyStoreInfoFragment
 import com.android.ql.lf.carapp.ui.fragments.mall.normal.StoreInfoFragment
 import com.android.ql.lf.carapp.utils.GlideManager
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
@@ -78,13 +79,13 @@ class MineStoreInfoFragment : BaseNetWorkingFragment() {
                             storeInfo.wholesale_shop_num = shopInfoBean!!.shop_num
                             storeInfo.wholesale_shop_id = shopInfoBean!!.shop_id
                             storeInfo.wholesale_shop_pic = arrayListOf(shopInfoBean!!.shop_mpic)
-                            storeInfo.wholesale_shop_attention = shopInfoBean!!.shop_atn
+                            storeInfo.wholesale_shop_attention = shopInfoBean!!.shop_attention
                             FragmentContainerActivity.from(mContext)
                                     .setTitle("店铺首页")
-                                    .setClazz(StoreInfoFragment::class.java)
+                                    .setClazz(MyStoreInfoFragment::class.java)
                                     .setNeedNetWorking(true)
                                     .setHiddenToolBar(true)
-                                    .setExtraBundle(bundleOf(Pair(StoreInfoFragment.STORE_ID_FLAG, storeInfo)))
+                                    .setExtraBundle(bundleOf(Pair(MyStoreInfoFragment.STORE_ID_FLAG, storeInfo)))
                                     .start()
                         }
                     }

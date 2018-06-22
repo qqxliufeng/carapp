@@ -32,6 +32,15 @@ public class ShopInfoBean implements Parcelable {
     private String shop_isinsured;
     private String shop_d;
     private String shop_atn;
+    private String shop_attention;
+
+    public String getShop_attention() {
+        return shop_attention;
+    }
+
+    public void setShop_attention(String shop_attention) {
+        this.shop_attention = shop_attention;
+    }
 
     public String getShop_id() {
         return shop_id;
@@ -201,6 +210,9 @@ public class ShopInfoBean implements Parcelable {
         this.shop_atn = shop_atn;
     }
 
+    public ShopInfoBean() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -229,9 +241,7 @@ public class ShopInfoBean implements Parcelable {
         dest.writeString(this.shop_isinsured);
         dest.writeString(this.shop_d);
         dest.writeString(this.shop_atn);
-    }
-
-    public ShopInfoBean() {
+        dest.writeString(this.shop_attention);
     }
 
     protected ShopInfoBean(Parcel in) {
@@ -256,9 +266,10 @@ public class ShopInfoBean implements Parcelable {
         this.shop_isinsured = in.readString();
         this.shop_d = in.readString();
         this.shop_atn = in.readString();
+        this.shop_attention = in.readString();
     }
 
-    public static final Parcelable.Creator<ShopInfoBean> CREATOR = new Parcelable.Creator<ShopInfoBean>() {
+    public static final Creator<ShopInfoBean> CREATOR = new Creator<ShopInfoBean>() {
         @Override
         public ShopInfoBean createFromParcel(Parcel source) {
             return new ShopInfoBean(source);
