@@ -33,6 +33,15 @@ public class ShoppingCarItemBean implements Parcelable {
     private String sku_pic;
     private String shopcart_freight;
     private String shopcart_key;
+    private float singleGoodsPrice;
+
+    public float getSingleGoodsPrice() {
+        return singleGoodsPrice;
+    }
+
+    public void setSingleGoodsPrice(float singleGoodsPrice) {
+        this.singleGoodsPrice = singleGoodsPrice;
+    }
 
     public String getShopcart_freight() {
         return shopcart_freight;
@@ -225,6 +234,7 @@ public class ShoppingCarItemBean implements Parcelable {
         dest.writeString(this.sku_pic);
         dest.writeString(this.shopcart_freight);
         dest.writeString(this.shopcart_key);
+        dest.writeFloat(this.singleGoodsPrice);
         dest.writeString(this.bbs);
     }
 
@@ -248,6 +258,7 @@ public class ShoppingCarItemBean implements Parcelable {
         this.sku_pic = in.readString();
         this.shopcart_freight = in.readString();
         this.shopcart_key = in.readString();
+        this.singleGoodsPrice = in.readFloat();
         this.bbs = in.readString();
     }
 

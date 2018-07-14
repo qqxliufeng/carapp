@@ -36,6 +36,15 @@ public class MallOrderInfoBean {
     private String address_detail;
     private String order_sku_pic;
     private String order_price;
+    private String order_dprice;
+
+    public String getOrder_dprice() {
+        return order_dprice;
+    }
+
+    public void setOrder_dprice(String order_dprice) {
+        this.order_dprice = order_dprice;
+    }
 
     public String getOrder_price() {
         return order_price;

@@ -16,6 +16,6 @@ class SystemMessageListAdapter(layoutId: Int, list: ArrayList<SystemMessageListF
         helper.setText(R.id.mTvSystemMessageItemDescription, item.message_content)
         helper.setText(R.id.mTvSystemMessageItemTime, item.message_time)
         val ctvNotify = helper.getView<CheckedTextView>(R.id.mCtvSystemMessageItemNotify)
-        ctvNotify.isChecked = !item.isRead
+        ctvNotify.isChecked = item.message_status == "0" //0 未读 1//已读
     }
 }

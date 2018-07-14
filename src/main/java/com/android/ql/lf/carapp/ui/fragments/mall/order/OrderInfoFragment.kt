@@ -99,6 +99,7 @@ class OrderInfoFragment : BaseNetWorkingFragment() {
     override fun onRequestStart(requestID: Int) {
         super.onRequestStart(requestID)
         when (requestID) {
+            0x0 -> getFastProgressDialog("正在加载详情……")
             0x1 -> getFastProgressDialog("正在取消订单……")
             0x2 -> getFastProgressDialog("正在支付……")
             0x4 -> getFastProgressDialog("正在收货……")
@@ -169,7 +170,16 @@ class OrderInfoFragment : BaseNetWorkingFragment() {
             mIvOrderListItemNum.text = "X${mallOrderInfoContainer!!.order_num}"
             mTvOrderListItemPrice.text = "￥${mallOrderInfoContainer!!.order_price}"
             mTvOrderInfoExpressMoney.text = "￥${mallOrderInfoContainer!!.order_mdprice}"
-
+            if (!TextUtils.isEmpty(mallOrderInfoContainer!!.order_dprice)){
+                if ("0.00" != mallOrderInfoContainer!!.order_dprice){
+                    mTvOrderInfoCouponPrice.visibility = View.VISIBLE
+                    mTvOrderInfoCouponPrice.text = "优惠券：￥${mallOrderInfoContainer!!.order_dprice}"
+                }else{
+                    mTvOrderInfoCouponPrice.visibility = View.GONE
+                }
+            }else{
+                mTvOrderInfoCouponPrice.visibility = View.GONE
+            }
             mTvOrderInfoAllMoney.text = "总价:￥${mallOrderInfoContainer!!.order_oprice}"
             mTvOrderInfoDetailOrderNum.text = mallOrderInfoContainer!!.order_sn
             mTvOrderInfoDetailGoodsOrderTime.text = mallOrderInfoContainer!!.order_ctime

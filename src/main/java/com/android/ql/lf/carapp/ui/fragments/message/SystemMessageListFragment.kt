@@ -5,7 +5,6 @@ import com.android.ql.lf.carapp.R
 import com.android.ql.lf.carapp.ui.adapter.SystemMessageListAdapter
 import com.android.ql.lf.carapp.ui.fragments.BaseRecyclerViewFragment
 import com.android.ql.lf.carapp.utils.RequestParamsHelper
-import com.android.ql.lf.carapp.utils.RxBus
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 
@@ -40,16 +39,10 @@ class SystemMessageListFragment : BaseRecyclerViewFragment<SystemMessageListFrag
         super.onRequestSuccess(requestID, result)
         if (requestID == 0x0) {
             processList(result as String, SystemMessageItem::class.java)
-            if (!mArrayList.isEmpty()) {
-                mArrayList.forEach {
-                    it.isRead = it.message_status == "1"
-                }
-                mBaseAdapter.notifyDataSetChanged()
-            }
         } else if (requestID == 0x1) {
             val check = checkResultCode(result)
             if (check != null && check.code == SUCCESS_CODE) {
-                mArrayList[currentItemIndex].isRead = true
+                mArrayList[currentItemIndex].message_status = "1"
                 mBaseAdapter.notifyItemChanged(currentItemIndex)
             }
         }
@@ -70,9 +63,8 @@ class SystemMessageListFragment : BaseRecyclerViewFragment<SystemMessageListFrag
         var message_time: String? = null
         var message_uid: String? = null
         var message_qid: String? = null
-        var message_status: String? = null
         var message_token: String? = null
         var message_sym: String? = null
-        var isRead: Boolean = false
+        var message_status: String = "0"
     }
 }
